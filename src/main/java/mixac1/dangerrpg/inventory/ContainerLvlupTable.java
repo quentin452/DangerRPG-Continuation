@@ -1,16 +1,17 @@
 package mixac1.dangerrpg.inventory;
 
-import net.minecraft.world.*;
-import net.minecraft.inventory.*;
-import cpw.mods.fml.relauncher.*;
 import net.minecraft.entity.player.*;
-import mixac1.dangerrpg.util.*;
+import net.minecraft.inventory.*;
 import net.minecraft.item.*;
-import mixac1.dangerrpg.item.gem.*;
-import mixac1.dangerrpg.capability.*;
+import net.minecraft.world.*;
 
-public class ContainerLvlupTable extends Container
-{
+import cpw.mods.fml.relauncher.*;
+import mixac1.dangerrpg.capability.*;
+import mixac1.dangerrpg.item.gem.*;
+import mixac1.dangerrpg.util.*;
+
+public class ContainerLvlupTable extends Container {
+
     public static int playerInvX;
     public static int playerInvY;
     public static int fastInvX;
@@ -37,30 +38,48 @@ public class ContainerLvlupTable extends Container
         this.invTable = new InventoryLvlupTable(this);
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
-                this.addSlotToContainer(new Slot(playerInv, j + i * 9 + 9, ContainerLvlupTable.playerInvX + j * 18, ContainerLvlupTable.playerInvY + i * 18));
+                this.addSlotToContainer(
+                    new Slot(
+                        playerInv,
+                        j + i * 9 + 9,
+                        ContainerLvlupTable.playerInvX + j * 18,
+                        ContainerLvlupTable.playerInvY + i * 18));
             }
         }
         for (int i = 0; i < 9; ++i) {
-            this.addSlotToContainer(new Slot(playerInv, i, ContainerLvlupTable.fastInvX + i * 18, ContainerLvlupTable.fastInvY));
+            this.addSlotToContainer(
+                new Slot(playerInv, i, ContainerLvlupTable.fastInvX + i * 18, ContainerLvlupTable.fastInvY));
         }
         this.staticSize = this.inventorySlots.size();
-        this.addSlotToContainer((Slot)new SlotE((IInventory)this.invTable, 0, this.staticSize, ContainerLvlupTable.mainX, ContainerLvlupTable.mainY));
+        this.addSlotToContainer(
+            (Slot) new SlotE(
+                (IInventory) this.invTable,
+                0,
+                this.staticSize,
+                ContainerLvlupTable.mainX,
+                ContainerLvlupTable.mainY));
         for (int i = 1; i < this.invTable.inv.length; ++i) {
-            this.addSlotToContainer((Slot)new SlotE((IInventory)this.invTable, i, this.staticSize, ContainerLvlupTable.extX + (i - 1) * 18, ContainerLvlupTable.extY));
+            this.addSlotToContainer(
+                (Slot) new SlotE(
+                    (IInventory) this.invTable,
+                    i,
+                    this.staticSize,
+                    ContainerLvlupTable.extX + (i - 1) * 18,
+                    ContainerLvlupTable.extY));
         }
-        this.onCraftMatrixChanged((IInventory)this.invTable);
+        this.onCraftMatrixChanged((IInventory) this.invTable);
     }
 
     public void addCraftingToCrafters(final ICrafting craft) {
         super.addCraftingToCrafters(craft);
-        craft.sendProgressBarUpdate((Container)this, 0, this.expToUp);
+        craft.sendProgressBarUpdate((Container) this, 0, this.expToUp);
     }
 
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
         for (int i = 0; i < this.crafters.size(); ++i) {
             final ICrafting iCrafting = (ICrafting) this.crafters.get(i);
-            iCrafting.sendProgressBarUpdate((Container)this, 0, this.expToUp);
+            iCrafting.sendProgressBarUpdate((Container) this, 0, this.expToUp);
         }
     }
 
@@ -68,8 +87,7 @@ public class ContainerLvlupTable extends Container
     public void updateProgressBar(final int par1, final int par2) {
         if (par1 == 0) {
             this.expToUp = par2;
-        }
-        else {
+        } else {
             super.updateProgressBar(par1, par2);
         }
     }
@@ -95,16 +113,14 @@ public class ContainerLvlupTable extends Container
                 if (!this.mergeItemStack(stack2, 27, 36, false)) {
                     return null;
                 }
-            }
-            else if (fromSlot >= 27 && fromSlot < 36) {
+            } else if (fromSlot >= 27 && fromSlot < 36) {
                 if (this.tryTransfer(this.staticSize, this.inventoryItemStacks.size(), slot)) {
                     return null;
                 }
                 if (!this.mergeItemStack(stack2, 0, 27, false)) {
                     return null;
                 }
-            }
-            else {
+            } else {
                 if (fromSlot < this.staticSize || fromSlot >= this.inventoryItemStacks.size()) {
                     return null;
                 }
@@ -113,9 +129,8 @@ public class ContainerLvlupTable extends Container
                 }
             }
             if (stack2.stackSize == 0) {
-                slot.putStack((ItemStack)null);
-            }
-            else {
+                slot.putStack((ItemStack) null);
+            } else {
                 slot.onSlotChanged();
             }
             if (stack2.stackSize == stack.stackSize) {
@@ -131,7 +146,7 @@ public class ContainerLvlupTable extends Container
             final Slot tmp = this.getSlot(i);
             if (tmp.getStack() == null && tmp.isItemValid(slot.getStack())) {
                 tmp.putStack(slot.getStack());
-                slot.putStack((ItemStack)null);
+                slot.putStack((ItemStack) null);
                 return true;
             }
         }
@@ -160,7 +175,7 @@ public class ContainerLvlupTable extends Container
             }
             if (b1 && !this.worldPointer.isRemote && !ItemAttributes.LEVEL.isMax(stack)) {
                 if (stack.getItem() instanceof Gem) {
-                    this.expToUp = (int)ItemAttributes.LEVEL.get(stack);
+                    this.expToUp = (int) ItemAttributes.LEVEL.get(stack);
                     this.detectAndSendChanges();
                     return;
                 }
@@ -168,8 +183,7 @@ public class ContainerLvlupTable extends Container
                 final float maxExp = ItemAttributes.MAX_EXP.get(stack);
                 this.expToUp = Math.round(maxExp - currExp) + 1;
                 this.detectAndSendChanges();
-            }
-            else {
+            } else {
                 this.expToUp = -1;
             }
         }
@@ -191,7 +205,7 @@ public class ContainerLvlupTable extends Container
                         this.burnItems();
                     }
                     RPGItemHelper.instantLvlUp(stack);
-                    this.onCraftMatrixChanged((IInventory)this.invTable);
+                    this.onCraftMatrixChanged((IInventory) this.invTable);
                 }
                 return true;
             }
@@ -203,17 +217,16 @@ public class ContainerLvlupTable extends Container
                         RPGHelper.rebuildPlayerExp(player);
                         RPGItemHelper.instantLvlUp(stack);
                         this.burnItems();
-                        this.onCraftMatrixChanged((IInventory)this.invTable);
+                        this.onCraftMatrixChanged((IInventory) this.invTable);
                     }
                     return true;
                 }
-            }
-            else if (player.experienceTotal >= this.expToUp) {
+            } else if (player.experienceTotal >= this.expToUp) {
                 if (!this.worldPointer.isRemote) {
                     player.addExperience(-this.expToUp);
                     RPGHelper.rebuildPlayerLvl(player);
                     RPGItemHelper.instantLvlUp(stack);
-                    this.onCraftMatrixChanged((IInventory)this.invTable);
+                    this.onCraftMatrixChanged((IInventory) this.invTable);
                 }
                 return true;
             }

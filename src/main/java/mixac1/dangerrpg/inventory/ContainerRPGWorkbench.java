@@ -1,14 +1,15 @@
 package mixac1.dangerrpg.inventory;
 
-import net.minecraft.world.*;
-import mixac1.dangerrpg.init.*;
-import net.minecraft.inventory.*;
-import net.minecraft.item.crafting.*;
-import net.minecraft.item.*;
 import net.minecraft.entity.player.*;
+import net.minecraft.inventory.*;
+import net.minecraft.item.*;
+import net.minecraft.item.crafting.*;
+import net.minecraft.world.*;
 
-public class ContainerRPGWorkbench extends Container
-{
+import mixac1.dangerrpg.init.*;
+
+public class ContainerRPGWorkbench extends Container {
+
     public static int craftSize;
     public static int playerInvX;
     public static int playerInvY;
@@ -26,31 +27,56 @@ public class ContainerRPGWorkbench extends Container
     protected int posZ;
 
     public ContainerRPGWorkbench(final InventoryPlayer inv, final World world, final int x, final int y, final int z) {
-        this.craftMatrix = new InventoryRPGCrafting(this, ContainerRPGWorkbench.craftSize, ContainerRPGWorkbench.craftSize);
-        this.craftResult = (IInventory)new InventoryCraftResult();
+        this.craftMatrix = new InventoryRPGCrafting(
+            this,
+            ContainerRPGWorkbench.craftSize,
+            ContainerRPGWorkbench.craftSize);
+        this.craftResult = (IInventory) new InventoryCraftResult();
         this.worldObj = world;
         this.posX = x;
         this.posY = y;
         this.posZ = z;
         for (int m = 0; m < 3; ++m) {
             for (int n = 0; n < 9; ++n) {
-                this.addSlotToContainer(new Slot((IInventory)inv, m * 9 + n + 9, ContainerRPGWorkbench.playerInvX + n * 18, ContainerRPGWorkbench.playerInvY + m * 18));
+                this.addSlotToContainer(
+                    new Slot(
+                        (IInventory) inv,
+                        m * 9 + n + 9,
+                        ContainerRPGWorkbench.playerInvX + n * 18,
+                        ContainerRPGWorkbench.playerInvY + m * 18));
             }
         }
         for (int m = 0; m < 9; ++m) {
-            this.addSlotToContainer(new Slot((IInventory)inv, m, ContainerRPGWorkbench.fastInvX + m * 18, ContainerRPGWorkbench.fastInvY));
+            this.addSlotToContainer(
+                new Slot((IInventory) inv, m, ContainerRPGWorkbench.fastInvX + m * 18, ContainerRPGWorkbench.fastInvY));
         }
         for (int m = 0; m < ContainerRPGWorkbench.craftSize; ++m) {
             for (int n = 0; n < ContainerRPGWorkbench.craftSize; ++n) {
-                this.addSlotToContainer(new Slot((IInventory)this.craftMatrix, ContainerRPGWorkbench.craftSize * m + n, ContainerRPGWorkbench.craftX + n * 18, ContainerRPGWorkbench.craftY + m * 18));
+                this.addSlotToContainer(
+                    new Slot(
+                        (IInventory) this.craftMatrix,
+                        ContainerRPGWorkbench.craftSize * m + n,
+                        ContainerRPGWorkbench.craftX + n * 18,
+                        ContainerRPGWorkbench.craftY + m * 18));
             }
         }
-        this.addSlotToContainer((Slot)new SlotCrafting(inv.player, (IInventory)this.craftMatrix, this.craftResult, 0, ContainerRPGWorkbench.craftResX, ContainerRPGWorkbench.craftResY));
-        this.onCraftMatrixChanged((IInventory)this.craftMatrix);
+        this.addSlotToContainer(
+            (Slot) new SlotCrafting(
+                inv.player,
+                (IInventory) this.craftMatrix,
+                this.craftResult,
+                0,
+                ContainerRPGWorkbench.craftResX,
+                ContainerRPGWorkbench.craftResY));
+        this.onCraftMatrixChanged((IInventory) this.craftMatrix);
     }
 
     public void onCraftMatrixChanged(final IInventory inv) {
-        ItemStack stack = RPGRecipes.ownFindMatchingRecipe((InventoryCrafting)this.craftMatrix, this.worldObj, ContainerRPGWorkbench.craftSize, ContainerRPGWorkbench.craftSize);
+        ItemStack stack = RPGRecipes.ownFindMatchingRecipe(
+            (InventoryCrafting) this.craftMatrix,
+            this.worldObj,
+            ContainerRPGWorkbench.craftSize,
+            ContainerRPGWorkbench.craftSize);
         this.craftResult.setInventorySlotContents(0, stack);
         if (stack != null) {
             return;
@@ -58,7 +84,8 @@ public class ContainerRPGWorkbench extends Container
         for (int i = 0; i < ContainerRPGWorkbench.craftSize - 2; ++i) {
             for (int j = 0; j < ContainerRPGWorkbench.craftSize - 2; ++j) {
                 if (this.craftMatrix.isValidCrafting(j, i)) {
-                    stack = CraftingManager.getInstance().findMatchingRecipe(this.craftMatrix.getCrafting(j, i), this.worldObj);
+                    stack = CraftingManager.getInstance()
+                        .findMatchingRecipe(this.craftMatrix.getCrafting(j, i), this.worldObj);
                     this.craftResult.setInventorySlotContents(0, stack);
                     return;
                 }
@@ -93,24 +120,20 @@ public class ContainerRPGWorkbench extends Container
                     return null;
                 }
                 slot.onSlotChange(newStack, stack);
-            }
-            else if (index >= 0 && index < 27) {
+            } else if (index >= 0 && index < 27) {
                 if (!this.mergeItemStack(newStack, 27, 36, false)) {
                     return null;
                 }
-            }
-            else if (index >= 27 && index < 36) {
+            } else if (index >= 27 && index < 36) {
                 if (!this.mergeItemStack(newStack, 0, 27, false)) {
                     return null;
                 }
-            }
-            else if (!this.mergeItemStack(newStack, 0, 36, false)) {
+            } else if (!this.mergeItemStack(newStack, 0, 36, false)) {
                 return null;
             }
             if (newStack.stackSize == 0) {
-                slot.putStack((ItemStack)null);
-            }
-            else {
+                slot.putStack((ItemStack) null);
+            } else {
                 slot.onSlotChanged();
             }
             if (newStack.stackSize == stack.stackSize) {

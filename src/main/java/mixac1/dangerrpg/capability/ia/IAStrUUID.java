@@ -1,12 +1,14 @@
 package mixac1.dangerrpg.capability.ia;
 
-import net.minecraft.item.*;
-import mixac1.dangerrpg.init.*;
-import mixac1.dangerrpg.item.gem.*;
 import java.util.*;
 
-public class IAStrUUID
-{
+import net.minecraft.item.*;
+
+import mixac1.dangerrpg.init.*;
+import mixac1.dangerrpg.item.gem.*;
+
+public class IAStrUUID {
+
     public final String name;
 
     public IAStrUUID(final String name) {
@@ -14,7 +16,8 @@ public class IAStrUUID
     }
 
     public boolean hasIt(final ItemStack stack) {
-        return RPGCapability.rpgItemRegistr.isActivated(stack.getItem()) && stack.getItem() instanceof GemPassiveAttribute;
+        return RPGCapability.rpgItemRegistr.isActivated(stack.getItem())
+            && stack.getItem() instanceof GemPassiveAttribute;
     }
 
     public void setUUID(final ItemStack stack, final UUID uuid) {

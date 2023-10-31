@@ -1,25 +1,29 @@
 package mixac1.dangerrpg.capability.data;
 
-import net.minecraft.item.*;
-import mixac1.dangerrpg.util.*;
-import mixac1.dangerrpg.api.item.*;
-import java.util.*;
-import mixac1.dangerrpg.init.*;
 import java.io.*;
-import mixac1.dangerrpg.*;
+import java.util.*;
 
-public class RPGItemRegister extends RPGDataRegister<Item, RPGItemRegister.RPGItemData, Integer, Tuple.Pair<HashMap<Integer, RPGItemRegister.ItemAttrParams>, HashMap<Integer, Integer>>>
-{
+import net.minecraft.item.*;
+
+import mixac1.dangerrpg.*;
+import mixac1.dangerrpg.api.item.*;
+import mixac1.dangerrpg.init.*;
+import mixac1.dangerrpg.util.*;
+
+public class RPGItemRegister extends
+    RPGDataRegister<Item, RPGItemRegister.RPGItemData, Integer, Tuple.Pair<HashMap<Integer, RPGItemRegister.ItemAttrParams>, HashMap<Integer, Integer>>> {
+
     protected Integer codingKey(final Item key) {
         return Item.getIdFromItem(key);
     }
 
     protected Item decodingKey(final Integer key) {
-        return Item.getItemById((int)key);
+        return Item.getItemById((int) key);
     }
 
-    public static class RPGItemData extends RPGDataRegister.ElementData<Item, Tuple.Pair<HashMap<Integer, ItemAttrParams>, HashMap<Integer, Integer>>>
-    {
+    public static class RPGItemData extends
+        RPGDataRegister.ElementData<Item, Tuple.Pair<HashMap<Integer, ItemAttrParams>, HashMap<Integer, Integer>>> {
+
         public HashMap<ItemAttribute, ItemAttrParams> attributes;
         public HashMap<GemType, Tuple.Stub<Integer>> gems;
         public IRPGItem rpgComponent;
@@ -34,11 +38,11 @@ public class RPGItemRegister extends RPGDataRegister<Item, RPGItemRegister.RPGIt
         }
 
         public void registerIAStatic(final IAStatic attr, final float value) {
-            this.attributes.put((ItemAttribute)attr, new ItemAttrParams(value, null));
+            this.attributes.put((ItemAttribute) attr, new ItemAttrParams(value, null));
         }
 
         public void registerIADynamic(final IADynamic attr, final float value, final IMultiplier.Multiplier mul) {
-            this.attributes.put((ItemAttribute)attr, new ItemAttrParams(value, mul));
+            this.attributes.put((ItemAttribute) attr, new ItemAttrParams(value, mul));
         }
 
         public void registerGT(final GemType gemType, final int count) {
@@ -63,7 +67,8 @@ public class RPGItemRegister extends RPGDataRegister<Item, RPGItemRegister.RPGIt
             return new Tuple.Pair<HashMap<Integer, ItemAttrParams>, HashMap<Integer, Integer>>(tmp1, tmp2);
         }
 
-        public void unpackTransferData(final Tuple.Pair<HashMap<Integer, ItemAttrParams>, HashMap<Integer, Integer>> data) {
+        public void unpackTransferData(
+            final Tuple.Pair<HashMap<Integer, ItemAttrParams>, HashMap<Integer, Integer>> data) {
             for (final Map.Entry<Integer, ItemAttrParams> entry : data.value1.entrySet()) {
                 if (RPGCapability.mapIntToItemAttribute.containsKey(entry.getKey())) {
                     final ItemAttribute attr = RPGCapability.mapIntToItemAttribute.get(entry.getKey());
@@ -87,8 +92,8 @@ public class RPGItemRegister extends RPGDataRegister<Item, RPGItemRegister.RPGIt
         }
     }
 
-    public static class ItemAttrParams implements Serializable
-    {
+    public static class ItemAttrParams implements Serializable {
+
         public float value;
         public IMultiplier.Multiplier mul;
 
@@ -102,8 +107,8 @@ public class RPGItemRegister extends RPGDataRegister<Item, RPGItemRegister.RPGIt
         }
     }
 
-    public enum ItemType
-    {
+    public enum ItemType {
+
         MELEE_WPN,
         TOOL,
         ARMOR,
@@ -112,7 +117,10 @@ public class RPGItemRegister extends RPGDataRegister<Item, RPGItemRegister.RPGIt
         STAFF;
 
         public String getDisplayName() {
-            return DangerRPG.trans("it.".concat(this.name().toLowerCase()));
+            return DangerRPG.trans(
+                "it.".concat(
+                    this.name()
+                        .toLowerCase()));
         }
 
         public static String getDisplayNameAll() {

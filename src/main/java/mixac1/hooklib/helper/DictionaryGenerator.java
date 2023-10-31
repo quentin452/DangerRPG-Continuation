@@ -1,13 +1,14 @@
 package mixac1.hooklib.helper;
 
-import org.apache.commons.io.*;
 import java.io.*;
 import java.util.*;
 
-public class DictionaryGenerator
-{
+import org.apache.commons.io.*;
+
+public class DictionaryGenerator {
+
     public static void main(final String[] args) throws Exception {
-        final List<String> lines = (List<String>)FileUtils.readLines(new File("methods.csv"));
+        final List<String> lines = (List<String>) FileUtils.readLines(new File("methods.csv"));
         lines.remove(0);
         final HashMap<Integer, String> map = new HashMap<Integer, String>();
         for (final String str : lines) {

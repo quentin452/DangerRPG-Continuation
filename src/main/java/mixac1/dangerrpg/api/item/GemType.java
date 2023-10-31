@@ -1,18 +1,20 @@
 package mixac1.dangerrpg.api.item;
 
-import mixac1.dangerrpg.init.*;
-import mixac1.dangerrpg.capability.*;
-import mixac1.dangerrpg.item.gem.*;
-import net.minecraft.nbt.*;
-import net.minecraft.entity.player.*;
-import mixac1.dangerrpg.util.*;
-import mixac1.dangerrpg.*;
-import mixac1.dangerrpg.capability.data.*;
-import net.minecraft.item.*;
 import java.util.*;
 
-public abstract class GemType
-{
+import net.minecraft.entity.player.*;
+import net.minecraft.item.*;
+import net.minecraft.nbt.*;
+
+import mixac1.dangerrpg.*;
+import mixac1.dangerrpg.capability.*;
+import mixac1.dangerrpg.capability.data.*;
+import mixac1.dangerrpg.init.*;
+import mixac1.dangerrpg.item.gem.*;
+import mixac1.dangerrpg.util.*;
+
+public abstract class GemType {
+
     public final String name;
     public final int hash;
 
@@ -23,7 +25,8 @@ public abstract class GemType
     }
 
     public boolean hasIt(final ItemStack stack) {
-        return RPGCapability.rpgItemRegistr.isActivated(stack.getItem()) && RPGCapability.rpgItemRegistr.get(stack.getItem()).gems.containsKey(this);
+        return RPGCapability.rpgItemRegistr.isActivated(stack.getItem())
+            && RPGCapability.rpgItemRegistr.get(stack.getItem()).gems.containsKey(this);
     }
 
     public void checkIt(final ItemStack stack) {
@@ -34,7 +37,8 @@ public abstract class GemType
     }
 
     public boolean isTrueGem(final Gem gem, final ItemStack stack) {
-        return this == gem.getGemType() && (gem.itemTypes.isEmpty() || gem.itemTypes.contains(RPGCapability.rpgItemRegistr.get(stack.getItem()).itemType));
+        return this == gem.getGemType() && (gem.itemTypes.isEmpty()
+            || gem.itemTypes.contains(RPGCapability.rpgItemRegistr.get(stack.getItem()).itemType));
     }
 
     public void attach(final ItemStack dest, final ItemStack... src) {
@@ -43,15 +47,16 @@ public abstract class GemType
 
     public void attach(final ItemStack dest, final List<ItemStack> src) {
         final NBTTagList tagList = new NBTTagList();
-        for (int max = RPGCapability.rpgItemRegistr.get(dest.getItem()).gems.get(this).value1, i = 0; i < src.size() && i < max; ++i) {
+        for (int max = RPGCapability.rpgItemRegistr.get(dest.getItem()).gems.get(this).value1, i = 0; i < src.size()
+            && i < max; ++i) {
             final ItemStack stack = src.get(i);
-            if (stack != null && stack.getItem() instanceof Gem && this.isTrueGem((Gem)stack.getItem(), dest)) {
+            if (stack != null && stack.getItem() instanceof Gem && this.isTrueGem((Gem) stack.getItem(), dest)) {
                 final NBTTagCompound nbt = new NBTTagCompound();
                 stack.writeToNBT(nbt);
-                tagList.appendTag((NBTBase)nbt);
+                tagList.appendTag((NBTBase) nbt);
             }
         }
-        dest.stackTagCompound.setTag(this.name, (NBTBase)tagList);
+        dest.stackTagCompound.setTag(this.name, (NBTBase) tagList);
     }
 
     public List<ItemStack> detach(final ItemStack dest) {
@@ -66,19 +71,21 @@ public abstract class GemType
             final Iterator<ItemStack> it = stacks.iterator();
             while (it.hasNext()) {
                 final ItemStack itStack = it.next();
-                if (itStack == null || !(itStack.getItem() instanceof Gem) || !this.isTrueGem((Gem)itStack.getItem(), stack)) {
+                if (itStack == null || !(itStack.getItem() instanceof Gem)
+                    || !this.isTrueGem((Gem) itStack.getItem(), stack)) {
                     it.remove();
                 }
             }
             return stacks;
         }
-        return (List<ItemStack>)Collections.EMPTY_LIST;
+        return (List<ItemStack>) Collections.EMPTY_LIST;
     }
 
     public List<ItemStack> getRaw(final ItemStack stack) {
         final NBTTagList nbtList = stack.stackTagCompound.getTagList(this.name, 10);
         final List<ItemStack> stacks = new ArrayList<ItemStack>(nbtList.tagCount());
-        for (int max = RPGCapability.rpgItemRegistr.get(stack.getItem()).gems.get(this).value1, i = 0; i < nbtList.tagCount() && i < max; ++i) {
+        for (int max = RPGCapability.rpgItemRegistr.get(stack.getItem()).gems.get(this).value1,
+            i = 0; i < nbtList.tagCount() && i < max; ++i) {
             stacks.add(i, ItemStack.loadItemStackFromNBT(nbtList.getCompoundTagAt(i)));
         }
         return stacks;

@@ -1,13 +1,15 @@
 package mixac1.hooklib.asm;
 
 import java.io.*;
-import mixac1.dangerrpg.*;
-import mixac1.dangerrpg.util.*;
 import java.util.*;
+
 import org.objectweb.asm.*;
 
-public class HookContainerParser
-{
+import mixac1.dangerrpg.*;
+import mixac1.dangerrpg.util.*;
+
+public class HookContainerParser {
+
     private HookClassTransformer transformer;
     private String currentClassName;
     private String currentMethodName;
@@ -34,7 +36,8 @@ public class HookContainerParser
     }
 
     private void invalidHook(final String message) {
-        DangerRPG.logger.warn(Utils.toString(new Object[] { "Found invalid hook ", this.currentClassName, "#", this.currentMethodName }));
+        DangerRPG.logger.warn(
+            Utils.toString(new Object[] { "Found invalid hook ", this.currentClassName, "#", this.currentMethodName }));
         DangerRPG.logger.warn(message);
     }
 
@@ -48,18 +51,19 @@ public class HookContainerParser
             return;
         }
         if (argumentTypes.length < 1) {
-            this.invalidHook("Hook method has no parameters. First parameter of a hook method must belong the type of the target class.");
+            this.invalidHook(
+                "Hook method has no parameters. First parameter of a hook method must belong the type of the target class.");
             return;
         }
         if (argumentTypes[0].getSort() != 10) {
-            this.invalidHook("First parameter of the hook method is not an object. First parameter of a hook method must belong the type of the target class.");
+            this.invalidHook(
+                "First parameter of the hook method is not an object. First parameter of a hook method must belong the type of the target class.");
             return;
         }
         builder.setTargetClass(argumentTypes[0].getClassName());
         if (this.annotationValues.containsKey("targetMethod")) {
-            builder.setTargetMethod((String)this.annotationValues.get("targetMethod"));
-        }
-        else {
+            builder.setTargetMethod((String) this.annotationValues.get("targetMethod"));
+        } else {
             builder.setTargetMethod(this.currentMethodName);
         }
         builder.setHookClass(this.currentClassName);
@@ -74,12 +78,10 @@ public class HookContainerParser
                 if (localId == -1) {
                     builder.setTargetMethodReturnType(argType);
                     builder.addReturnValueToHookMethodParameters();
-                }
-                else {
+                } else {
                     builder.addHookMethodParameter(argType, localId);
                 }
-            }
-            else {
+            } else {
                 builder.addTargetMethodParameters(new Type[] { argType });
                 builder.addHookMethodParameter(argType, currentParameterId);
                 currentParameterId += ((argType == Type.LONG_TYPE || argType == Type.DOUBLE_TYPE) ? 2 : 1);
@@ -90,10 +92,10 @@ public class HookContainerParser
         }
         if (this.annotationValues.containsKey("injectOnLine")) {
             final int line = (int) this.annotationValues.get("injectOnLine");
-            builder.setInjectorFactory((HookInjectorFactory)new HookInjectorFactory.LineNumber(line));
+            builder.setInjectorFactory((HookInjectorFactory) new HookInjectorFactory.LineNumber(line));
         }
         if (this.annotationValues.containsKey("returnType")) {
-            builder.setTargetMethodReturnType((String)this.annotationValues.get("returnType"));
+            builder.setTargetMethodReturnType((String) this.annotationValues.get("returnType"));
         }
         ReturnCondition returnCondition = ReturnCondition.NEVER;
         if (this.annotationValues.containsKey("returnCondition")) {
@@ -105,15 +107,12 @@ public class HookContainerParser
             if (primitiveConstant != null) {
                 builder.setReturnValue(ReturnValue.PRIMITIVE_CONSTANT);
                 builder.setPrimitiveConstant(primitiveConstant);
-            }
-            else if (Boolean.TRUE.equals(this.annotationValues.get("returnNull"))) {
+            } else if (Boolean.TRUE.equals(this.annotationValues.get("returnNull"))) {
                 builder.setReturnValue(ReturnValue.NULL);
-            }
-            else if (this.annotationValues.containsKey("returnAnotherMethod")) {
+            } else if (this.annotationValues.containsKey("returnAnotherMethod")) {
                 builder.setReturnValue(ReturnValue.ANOTHER_METHOD_RETURN_VALUE);
-                builder.setReturnMethod((String)this.annotationValues.get("returnAnotherMethod"));
-            }
-            else if (methodType.getReturnType() != Type.VOID_TYPE) {
+                builder.setReturnMethod((String) this.annotationValues.get("returnAnotherMethod"));
+            } else if (methodType.getReturnType() != Type.VOID_TYPE) {
                 builder.setReturnValue(ReturnValue.HOOK_RETURN_VALUE);
             }
         }
@@ -121,7 +120,11 @@ public class HookContainerParser
             this.invalidHook("Hook method must return boolean if returnCodition is ON_TRUE.");
             return;
         }
-        if ((returnCondition == ReturnCondition.ON_NULL || returnCondition == ReturnCondition.ON_NOT_NULL) && methodType.getReturnType().getSort() != 10 && methodType.getReturnType().getSort() != 9) {
+        if ((returnCondition == ReturnCondition.ON_NULL || returnCondition == ReturnCondition.ON_NOT_NULL)
+            && methodType.getReturnType()
+                .getSort() != 10
+            && methodType.getReturnType()
+                .getSort() != 9) {
             this.invalidHook("Hook method must return object if returnCodition is ON_NULL or ON_NOT_NULL.");
             return;
         }
@@ -134,7 +137,8 @@ public class HookContainerParser
 
     private Object getPrimitiveConstant() {
         for (final Map.Entry<String, Object> entry : this.annotationValues.entrySet()) {
-            if (entry.getKey().endsWith("Constant")) {
+            if (entry.getKey()
+                .endsWith("Constant")) {
                 return entry.getValue();
             }
         }
@@ -142,22 +146,24 @@ public class HookContainerParser
     }
 
     static {
-        HOOK_DESC = Type.getDescriptor((Class)Hook.class);
-        LOCAL_DESC = Type.getDescriptor((Class)Hook.LocalVariable.class);
-        RETURN_DESC = Type.getDescriptor((Class)Hook.ReturnValue.class);
+        HOOK_DESC = Type.getDescriptor((Class) Hook.class);
+        LOCAL_DESC = Type.getDescriptor((Class) Hook.LocalVariable.class);
+        RETURN_DESC = Type.getDescriptor((Class) Hook.ReturnValue.class);
     }
 
-    private class HookClassVisitor extends ClassVisitor
-    {
+    private class HookClassVisitor extends ClassVisitor {
+
         public HookClassVisitor() {
             super(327680);
         }
 
-        public void visit(final int version, final int access, final String name, final String signature, final String superName, final String[] interfaces) {
+        public void visit(final int version, final int access, final String name, final String signature,
+            final String superName, final String[] interfaces) {
             HookContainerParser.this.currentClassName = name.replace('/', '.');
         }
 
-        public MethodVisitor visitMethod(final int access, final String name, final String desc, final String signature, final String[] exceptions) {
+        public MethodVisitor visitMethod(final int access, final String name, final String desc, final String signature,
+            final String[] exceptions) {
             HookContainerParser.this.currentMethodName = name;
             HookContainerParser.this.currentMethodDesc = desc;
             HookContainerParser.this.currentMethodPublicStatic = ((access & 0x1) != 0x0 && (access & 0x8) != 0x0);
@@ -165,26 +171,28 @@ public class HookContainerParser
         }
     }
 
-    private class HookMethodVisitor extends MethodVisitor
-    {
+    private class HookMethodVisitor extends MethodVisitor {
+
         public HookMethodVisitor() {
             super(327680);
         }
 
         public AnnotationVisitor visitAnnotation(final String desc, final boolean visible) {
             if (HookContainerParser.HOOK_DESC.equals(desc)) {
-                HookContainerParser.this.annotationValues = (HashMap<String, Object>)new HashMap();
+                HookContainerParser.this.annotationValues = (HashMap<String, Object>) new HashMap();
                 HookContainerParser.this.inHookAnnotation = true;
             }
             return new HookAnnotationVisitor();
         }
 
-        public AnnotationVisitor visitParameterAnnotation(final int parameter, final String desc, final boolean visible) {
+        public AnnotationVisitor visitParameterAnnotation(final int parameter, final String desc,
+            final boolean visible) {
             if (HookContainerParser.RETURN_DESC.equals(desc)) {
                 HookContainerParser.this.parameterAnnotations.put(parameter, -1);
             }
             if (HookContainerParser.LOCAL_DESC.equals(desc)) {
                 return new AnnotationVisitor(327680) {
+
                     public void visit(final String name, final Object value) {
                         HookContainerParser.this.parameterAnnotations.put(parameter, (Integer) value);
                     }
@@ -204,8 +212,8 @@ public class HookContainerParser
         }
     }
 
-    private class HookAnnotationVisitor extends AnnotationVisitor
-    {
+    private class HookAnnotationVisitor extends AnnotationVisitor {
+
         public HookAnnotationVisitor() {
             super(327680);
         }

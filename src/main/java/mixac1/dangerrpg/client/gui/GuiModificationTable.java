@@ -1,20 +1,22 @@
 package mixac1.dangerrpg.client.gui;
 
-import net.minecraft.client.gui.inventory.*;
-import cpw.mods.fml.relauncher.*;
 import java.util.*;
-import mixac1.dangerrpg.api.item.*;
+
+import net.minecraft.client.gui.inventory.*;
 import net.minecraft.entity.player.*;
-import net.minecraft.world.*;
 import net.minecraft.inventory.*;
-import mixac1.dangerrpg.inventory.*;
-import mixac1.dangerrpg.init.*;
 import net.minecraft.util.*;
+import net.minecraft.world.*;
+
+import cpw.mods.fml.relauncher.*;
+import mixac1.dangerrpg.api.item.*;
 import mixac1.dangerrpg.capability.*;
+import mixac1.dangerrpg.init.*;
+import mixac1.dangerrpg.inventory.*;
 
 @SideOnly(Side.CLIENT)
-public class GuiModificationTable extends GuiContainer
-{
+public class GuiModificationTable extends GuiContainer {
+
     public static final ResourceLocation TEXTURE;
     public static int slotU;
     public static int slotV;
@@ -25,23 +27,38 @@ public class GuiModificationTable extends GuiContainer
     private IInventory playerInv;
     private static HashMap<GemType, Integer> iconMap;
 
-    public GuiModificationTable(final InventoryPlayer inventory, final World world, final int x, final int y, final int z) {
-        super((Container)new ContainerModificationTable((IInventory)inventory, world, x, y, z));
-        this.playerInv = (IInventory)inventory;
+    public GuiModificationTable(final InventoryPlayer inventory, final World world, final int x, final int y,
+        final int z) {
+        super((Container) new ContainerModificationTable((IInventory) inventory, world, x, y, z));
+        this.playerInv = (IInventory) inventory;
         this.xSize = 176;
         this.ySize = 227;
     }
 
     protected void drawGuiContainerBackgroundLayer(final float partialTicks, final int mouseX, final int mouseY) {
-        this.mc.getTextureManager().bindTexture(GuiModificationTable.TEXTURE);
+        this.mc.getTextureManager()
+            .bindTexture(GuiModificationTable.TEXTURE);
         this.drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
-        final ContainerModificationTable cmt = (ContainerModificationTable)this.inventorySlots;
+        final ContainerModificationTable cmt = (ContainerModificationTable) this.inventorySlots;
         for (int i = cmt.staticSize + 1; i < cmt.inventorySlots.size(); ++i) {
             final Slot slot = (Slot) cmt.inventorySlots.get(i);
-            this.drawTexturedModalRect(this.guiLeft + slot.xDisplayPosition - 1, this.guiTop + slot.yDisplayPosition - 1, GuiModificationTable.slotU, GuiModificationTable.slotV, 18, 18);
+            this.drawTexturedModalRect(
+                this.guiLeft + slot.xDisplayPosition - 1,
+                this.guiTop + slot.yDisplayPosition - 1,
+                GuiModificationTable.slotU,
+                GuiModificationTable.slotV,
+                18,
+                18);
             if (!slot.getHasStack()) {
-                final int iconIndex = this.getGemTypeIconIndex(((InventoryModificationTable)slot.inventory).getGemTypeSlot(slot.getSlotIndex()));
-                this.drawTexturedModalRect(this.guiLeft + slot.xDisplayPosition, this.guiTop + slot.yDisplayPosition, GuiModificationTable.iconU, GuiModificationTable.iconV + 16 * iconIndex, 16, 16);
+                final int iconIndex = this.getGemTypeIconIndex(
+                    ((InventoryModificationTable) slot.inventory).getGemTypeSlot(slot.getSlotIndex()));
+                this.drawTexturedModalRect(
+                    this.guiLeft + slot.xDisplayPosition,
+                    this.guiTop + slot.yDisplayPosition,
+                    GuiModificationTable.iconU,
+                    GuiModificationTable.iconV + 16 * iconIndex,
+                    16,
+                    16);
             }
         }
     }
@@ -69,9 +86,10 @@ public class GuiModificationTable extends GuiContainer
         GuiModificationTable.invStrX = 8;
         GuiModificationTable.invStrY = 133;
         GuiModificationTable.iconMap = new HashMap<GemType, Integer>() {
+
             {
-                this.put((GemType)GemTypes.PA, 1);
-                this.put((GemType)GemTypes.AM, 2);
+                this.put((GemType) GemTypes.PA, 1);
+                this.put((GemType) GemTypes.AM, 2);
             }
         };
     }

@@ -1,17 +1,18 @@
 package mixac1.dangerrpg.api.entity;
 
 import net.minecraft.entity.*;
+import net.minecraft.item.*;
+import net.minecraft.nbt.*;
+
+import cpw.mods.fml.common.network.simpleimpl.*;
+import mixac1.dangerrpg.*;
 import mixac1.dangerrpg.capability.data.*;
 import mixac1.dangerrpg.init.*;
 import mixac1.dangerrpg.network.*;
-import cpw.mods.fml.common.network.simpleimpl.*;
-import net.minecraft.nbt.*;
-import mixac1.dangerrpg.*;
 import mixac1.dangerrpg.util.*;
-import net.minecraft.item.*;
 
-public class EntityAttribute<Type>
-{
+public class EntityAttribute<Type> {
+
     public final String name;
     public final int hash;
     public final ITypeProvider<Type> typeProvider;
@@ -40,7 +41,8 @@ public class EntityAttribute<Type>
     }
 
     public boolean hasIt(final EntityLivingBase entity) {
-        return RPGCapability.rpgEntityRegistr.isActivated(entity) && RPGCapability.rpgEntityRegistr.get(entity).attributes.containsKey(this);
+        return RPGCapability.rpgEntityRegistr.isActivated(entity)
+            && RPGCapability.rpgEntityRegistr.get(entity).attributes.containsKey(this);
     }
 
     public boolean isValid(final Type value) {
@@ -57,7 +59,7 @@ public class EntityAttribute<Type>
 
     @Deprecated
     public Type getValueRaw(final EntityLivingBase entity) {
-        return (Type)this.getEntityData(entity).attributeMap.get(this.hash).value1;
+        return (Type) this.getEntityData(entity).attributeMap.get(this.hash).value1;
     }
 
     @Deprecated
@@ -102,7 +104,7 @@ public class EntityAttribute<Type>
 
     public void sync(final EntityLivingBase entity) {
         if (RPGEntityProperties.isServerSide(entity)) {
-            RPGNetwork.net.sendToAll((IMessage)new MsgSyncEA(this, entity));
+            RPGNetwork.net.sendToAll((IMessage) new MsgSyncEA(this, entity));
         }
     }
 
@@ -113,19 +115,18 @@ public class EntityAttribute<Type>
         if (lvlProvider != null) {
             tmp.setInteger("lvl", lvlProvider.getLvl(entity));
         }
-        nbt.setTag(this.name, (NBTBase)tmp);
+        nbt.setTag(this.name, (NBTBase) tmp);
     }
 
     public void fromNBT(final NBTTagCompound nbt, final EntityLivingBase entity) {
-        final NBTTagCompound tmp = (NBTTagCompound)nbt.getTag(this.name);
+        final NBTTagCompound tmp = (NBTTagCompound) nbt.getTag(this.name);
         if (tmp != null) {
             this.setValueRaw(this.typeProvider.fromNBT("value", tmp), entity);
             final LvlEAProvider lvlProvider = this.getLvlProvider(entity);
             if (lvlProvider != null) {
                 lvlProvider.setLvl(tmp.getInteger("lvl"), entity);
             }
-        }
-        else {
+        } else {
             this.serverInit(entity);
         }
     }
@@ -163,43 +164,43 @@ public class EntityAttribute<Type>
         return this.hash;
     }
 
-    public static class EABoolean extends EntityAttribute<Boolean>
-    {
+    public static class EABoolean extends EntityAttribute<Boolean> {
+
         public EABoolean(final String name) {
             super(ITypeProvider.BOOLEAN, name);
         }
     }
 
-    public static class EAInteger extends EntityAttribute<Integer>
-    {
+    public static class EAInteger extends EntityAttribute<Integer> {
+
         public EAInteger(final String name) {
             super(ITypeProvider.INTEGER, name);
         }
     }
 
-    public static class EAFloat extends EntityAttribute<Float>
-    {
+    public static class EAFloat extends EntityAttribute<Float> {
+
         public EAFloat(final String name) {
             super(ITypeProvider.FLOAT, name);
         }
     }
 
-    public static class EAString extends EntityAttribute<String>
-    {
+    public static class EAString extends EntityAttribute<String> {
+
         public EAString(final String name) {
             super(ITypeProvider.STRING, name);
         }
     }
 
-    public static class EANBT extends EntityAttribute<NBTTagCompound>
-    {
+    public static class EANBT extends EntityAttribute<NBTTagCompound> {
+
         public EANBT(final String name) {
             super(ITypeProvider.NBT_TAG, name);
         }
     }
 
-    public static class EAItemStack extends EntityAttribute<ItemStack>
-    {
+    public static class EAItemStack extends EntityAttribute<ItemStack> {
+
         public EAItemStack(final String name) {
             super(ITypeProvider.ITEM_STACK, name);
         }

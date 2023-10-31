@@ -1,20 +1,23 @@
 package mixac1.dangerrpg.api.item;
 
-import mixac1.dangerrpg.init.*;
-import mixac1.dangerrpg.capability.*;
-import mixac1.dangerrpg.capability.data.*;
-import net.minecraft.item.*;
 import java.util.*;
 
-public class IADynamic extends ItemAttribute
-{
+import net.minecraft.item.*;
+
+import mixac1.dangerrpg.capability.*;
+import mixac1.dangerrpg.capability.data.*;
+import mixac1.dangerrpg.init.*;
+
+public class IADynamic extends ItemAttribute {
+
     public IADynamic(final String name) {
         super(name);
     }
 
     @Override
     public boolean hasIt(final ItemStack stack) {
-        return RPGCapability.rpgItemRegistr.isActivated(stack.getItem()) && RPGCapability.rpgItemRegistr.get(stack.getItem()).attributes.containsKey(this);
+        return RPGCapability.rpgItemRegistr.isActivated(stack.getItem())
+            && RPGCapability.rpgItemRegistr.get(stack.getItem()).attributes.containsKey(this);
     }
 
     @Override
@@ -43,6 +46,9 @@ public class IADynamic extends ItemAttribute
 
     @Override
     public void lvlUp(final ItemStack stack) {
-        this.set(stack, RPGCapability.rpgItemRegistr.get(stack.getItem()).attributes.get(this).up(this.get(stack)));
+        this.set(
+            stack,
+            RPGCapability.rpgItemRegistr.get(stack.getItem()).attributes.get(this)
+                .up(this.get(stack)));
     }
 }

@@ -1,35 +1,38 @@
 package mixac1.dangerrpg.entity.projectile;
 
-import mixac1.dangerrpg.entity.projectile.core.*;
-import net.minecraft.world.*;
-import net.minecraft.item.*;
 import net.minecraft.entity.*;
-import mixac1.dangerrpg.*;
-import mixac1.dangerrpg.world.*;
+import net.minecraft.item.*;
 import net.minecraft.util.*;
+import net.minecraft.world.*;
 
-public class EntityMagicOrb extends EntityCommonMagic
-{
+import mixac1.dangerrpg.*;
+import mixac1.dangerrpg.entity.projectile.core.*;
+import mixac1.dangerrpg.world.*;
+
+public class EntityMagicOrb extends EntityCommonMagic {
+
     public EntityMagicOrb(final World world) {
         super(world);
     }
-    
+
     public EntityMagicOrb(final World world, final ItemStack stack) {
         super(world);
     }
-    
+
     public EntityMagicOrb(final World world, final ItemStack stack, final double x, final double y, final double z) {
         super(world, stack, x, y, z);
     }
-    
-    public EntityMagicOrb(final World world, final EntityLivingBase thrower, final ItemStack stack, final float speed, final float deviation) {
+
+    public EntityMagicOrb(final World world, final EntityLivingBase thrower, final ItemStack stack, final float speed,
+        final float deviation) {
         super(world, thrower, stack, speed, deviation);
     }
-    
-    public EntityMagicOrb(final World world, final EntityLivingBase thrower, final EntityLivingBase target, final ItemStack stack, final float speed, final float deviation) {
+
+    public EntityMagicOrb(final World world, final EntityLivingBase thrower, final EntityLivingBase target,
+        final ItemStack stack, final float speed, final float deviation) {
         super(world, thrower, target, stack, speed, deviation);
     }
-    
+
     public void onEntityUpdate() {
         super.onEntityUpdate();
         if (this.worldObj.isRemote && this.lifespan > 1) {
@@ -42,7 +45,7 @@ public class EntityMagicOrb extends EntityCommonMagic
             }
         }
     }
-    
+
     public void preInpact(final MovingObjectPosition mop) {
         super.preInpact(mop);
         if (this.worldObj.isRemote) {

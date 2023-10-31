@@ -1,23 +1,27 @@
 package mixac1.dangerrpg.util;
 
-import net.minecraft.entity.player.*;
-import net.minecraft.client.*;
-import mixac1.dangerrpg.item.*;
-import mixac1.dangerrpg.capability.data.*;
-import mixac1.dangerrpg.init.*;
-import mixac1.dangerrpg.api.item.*;
-import net.minecraft.item.*;
-import mixac1.dangerrpg.item.gem.*;
-import mixac1.dangerrpg.capability.*;
 import java.util.*;
+
+import net.minecraft.client.*;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.*;
-import com.google.common.collect.*;
+import net.minecraft.entity.player.*;
+import net.minecraft.item.*;
 import net.minecraft.util.*;
 
-public abstract class RPGHelper
-{
-    public static void knockBack(final EntityLivingBase entityliving, final EntityLivingBase attacker, final float knockback) {
+import com.google.common.collect.*;
+
+import mixac1.dangerrpg.api.item.*;
+import mixac1.dangerrpg.capability.*;
+import mixac1.dangerrpg.capability.data.*;
+import mixac1.dangerrpg.init.*;
+import mixac1.dangerrpg.item.*;
+import mixac1.dangerrpg.item.gem.*;
+
+public abstract class RPGHelper {
+
+    public static void knockBack(final EntityLivingBase entityliving, final EntityLivingBase attacker,
+        final float knockback) {
         final double i = Math.sqrt(knockback);
         final double x = -MathHelper.sin(attacker.rotationYaw / 180.0f * 3.1415927f) * 0.4;
         final double z = MathHelper.cos(attacker.rotationYaw / 180.0f * 3.1415927f) * 0.4;
@@ -27,7 +31,7 @@ public abstract class RPGHelper
 
     public static void rebuildPlayerExp(final EntityPlayer player) {
         final int lvl = player.experienceLevel;
-        final int exp = (int)(player.xpBarCap() * player.experience);
+        final int exp = (int) (player.xpBarCap() * player.experience);
         player.experience = 0.0f;
         player.experienceTotal = 0;
         player.experienceLevel = 0;
@@ -49,7 +53,7 @@ public abstract class RPGHelper
         final Minecraft mc = Minecraft.getMinecraft();
         MovingObjectPosition mop = null;
         if (mc.renderViewEntity != null && mc.theWorld != null) {
-            mop = mc.renderViewEntity.rayTrace((double)dist, frame);
+            mop = mc.renderViewEntity.rayTrace((double) dist, frame);
             final Vec3 pos = mc.renderViewEntity.getPosition(frame);
             double calcDist = dist;
             if (mop != null) {
@@ -59,12 +63,16 @@ public abstract class RPGHelper
             look = Vec3.createVectorHelper(look.xCoord * dist, look.yCoord * dist, look.zCoord * dist);
             final Vec3 vec = pos.addVector(look.xCoord, look.yCoord, look.zCoord);
             Entity pointedEntity = null;
-            final List<Entity> list = (List<Entity>)mc.theWorld.getEntitiesWithinAABBExcludingEntity((Entity)mc.renderViewEntity, mc.renderViewEntity.boundingBox.addCoord(look.xCoord, look.yCoord, look.zCoord).expand(1.0, 1.0, 1.0));
+            final List<Entity> list = (List<Entity>) mc.theWorld.getEntitiesWithinAABBExcludingEntity(
+                (Entity) mc.renderViewEntity,
+                mc.renderViewEntity.boundingBox.addCoord(look.xCoord, look.yCoord, look.zCoord)
+                    .expand(1.0, 1.0, 1.0));
             double d = calcDist;
             for (final Entity entity : list) {
                 if (entity.canBeCollidedWith()) {
                     final float borderSize = entity.getCollisionBorderSize();
-                    final AxisAlignedBB aabb = entity.boundingBox.expand((double)borderSize, (double)borderSize, (double)borderSize);
+                    final AxisAlignedBB aabb = entity.boundingBox
+                        .expand((double) borderSize, (double) borderSize, (double) borderSize);
                     final MovingObjectPosition mop2 = aabb.calculateIntercept(pos, vec);
                     if (aabb.isVecInside(pos)) {
                         if (0.0 > d) {
@@ -72,8 +80,7 @@ public abstract class RPGHelper
                         }
                         pointedEntity = entity;
                         d = 0.0;
-                    }
-                    else {
+                    } else {
                         if (mop2 == null) {
                             continue;
                         }
@@ -93,7 +100,8 @@ public abstract class RPGHelper
         return mop;
     }
 
-    public static float getUsePower(final EntityPlayer player, final ItemStack stack, final int useDuration, final float defMaxPow, final float defMinPow) {
+    public static float getUsePower(final EntityPlayer player, final ItemStack stack, final int useDuration,
+        final float defMaxPow, final float defMinPow) {
         final float power = getUsePower(player, stack, useDuration, defMaxPow);
         final float minPower = ItemAttributes.MIN_CUST_TIME.getSafe(stack, player, defMinPow);
         if (power < minPower) {
@@ -102,7 +110,8 @@ public abstract class RPGHelper
         return power;
     }
 
-    public static float getUsePower(final EntityPlayer player, final ItemStack stack, final int useDuration, final float defMaxPow) {
+    public static float getUsePower(final EntityPlayer player, final ItemStack stack, final int useDuration,
+        final float defMaxPow) {
         float power = useDuration / ItemAttributes.SHOT_SPEED.getSafe(stack, player, defMaxPow);
         power = (power * power + power * 2.0f) / 3.0f;
         if (power > 1.0f) {
@@ -113,12 +122,13 @@ public abstract class RPGHelper
 
     public static IMaterialSpecial getMaterialSpecial(final ItemStack stack) {
         if (stack != null && RPGItemHelper.isRPGable(stack)) {
-            final IRPGItem ilvl = ((RPGItemRegister.RPGItemData)RPGCapability.rpgItemRegistr.get((Object)stack.getItem())).rpgComponent;
+            final IRPGItem ilvl = ((RPGItemRegister.RPGItemData) RPGCapability.rpgItemRegistr
+                .get((Object) stack.getItem())).rpgComponent;
             if (ilvl instanceof IRPGItem.IRPGItemArmor) {
-                return (IMaterialSpecial)((IRPGItem.IRPGItemArmor)ilvl).getArmorMaterial(stack.getItem());
+                return (IMaterialSpecial) ((IRPGItem.IRPGItemArmor) ilvl).getArmorMaterial(stack.getItem());
             }
             if (ilvl instanceof IRPGItem.IRPGItemTool) {
-                return (IMaterialSpecial)((IRPGItem.IRPGItemTool)ilvl).getToolMaterial(stack.getItem());
+                return (IMaterialSpecial) ((IRPGItem.IRPGItemTool) ilvl).getToolMaterial(stack.getItem());
             }
         }
         return null;
@@ -166,7 +176,8 @@ public abstract class RPGHelper
         return false;
     }
 
-    public static ArrayList<String> getItemNames(final Collection<Item> items, final boolean needSort, final boolean withGems) {
+    public static ArrayList<String> getItemNames(final Collection<Item> items, final boolean needSort,
+        final boolean withGems) {
         final ArrayList<String> names = new ArrayList<String>();
         for (final Item item : items) {
             if (withGems || !(item instanceof Gem)) {
@@ -179,11 +190,13 @@ public abstract class RPGHelper
         return names;
     }
 
-    public static ArrayList<String> getEntityNames(final Collection<Class<? extends EntityLivingBase>> set, final boolean needSort) {
+    public static ArrayList<String> getEntityNames(final Collection<Class<? extends EntityLivingBase>> set,
+        final boolean needSort) {
         final ArrayList<String> names = new ArrayList<String>();
         for (final Class item : set) {
             final String tmp;
-            if (EntityList.classToStringMapping.containsKey(item) && (tmp = (String) EntityList.classToStringMapping.get(item)) != null) {
+            if (EntityList.classToStringMapping.containsKey(item)
+                && (tmp = (String) EntityList.classToStringMapping.get(item)) != null) {
                 names.add(tmp);
             }
         }
@@ -195,25 +208,29 @@ public abstract class RPGHelper
 
     public static float getMeleeDamageHook(final EntityLivingBase entity, final float defaultDamage) {
         if (RPGEntityHelper.isRPGable(entity)) {
-            return (float)RPGCapability.rpgEntityRegistr.get(entity).rpgComponent.getEAMeleeDamage(entity).getValue(entity);
+            return (float) RPGCapability.rpgEntityRegistr.get(entity).rpgComponent.getEAMeleeDamage(entity)
+                .getValue(entity);
         }
         return defaultDamage;
     }
 
     public static float getRangeDamageHook(final EntityLivingBase entity, final float defaultDamage) {
         if (RPGEntityHelper.isRPGable(entity)) {
-            return (float)RPGCapability.rpgEntityRegistr.get(entity).rpgComponent.getEARangeDamage(entity).getValue(entity);
+            return (float) RPGCapability.rpgEntityRegistr.get(entity).rpgComponent.getEARangeDamage(entity)
+                .getValue(entity);
         }
         return defaultDamage;
     }
 
     public static float getItemDamage(final ItemStack stack, final EntityPlayer player) {
         float value = 0.0f;
-        final Multimap map = stack.getItem().getAttributeModifiers(stack);
+        final Multimap map = stack.getItem()
+            .getAttributeModifiers(stack);
         Collection<? extends Map.Entry<?, ?>> entries = map.entries();
 
-        for(Map.Entry<?, ?> entry : entries) {
-            if(entry.getKey().equals(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName())) {
+        for (Map.Entry<?, ?> entry : entries) {
+            if (entry.getKey()
+                .equals(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName())) {
                 AttributeModifier modifier = (AttributeModifier) entry.getValue();
                 value += (float) modifier.getAmount();
             }
@@ -222,7 +239,8 @@ public abstract class RPGHelper
     }
 
     public static float getPlayerDamage(final ItemStack stack, final EntityPlayer player) {
-        return getItemDamage(stack, player) + PlayerAttributes.STRENGTH.getValue(player) * ItemAttributes.STR_MUL.get(stack);
+        return getItemDamage(stack, player)
+            + PlayerAttributes.STRENGTH.getValue(player) * ItemAttributes.STR_MUL.get(stack);
     }
 
     public static float multyMul(float value, final int count, final IMultiplier.Multiplier mul) {

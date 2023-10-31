@@ -1,10 +1,12 @@
 package mixac1.dangerrpg.capability.data;
 
 import java.util.*;
+
 import mixac1.dangerrpg.util.*;
 
-public abstract class RPGDataRegister<Key, Data extends RPGDataRegister.ElementData<Key, TransferData>, TransferKey, TransferData> extends HashMap<Key, Data>
-{
+public abstract class RPGDataRegister<Key, Data extends RPGDataRegister.ElementData<Key, TransferData>, TransferKey, TransferData>
+    extends HashMap<Key, Data> {
+
     private byte[] transferData;
 
     public boolean isActivated(final Key key) {
@@ -31,10 +33,15 @@ public abstract class RPGDataRegister<Key, Data extends RPGDataRegister.ElementD
 
     public void createTransferData() {
         final LinkedList<Tuple.Pair<TransferKey, TransferData>> list = new LinkedList<Tuple.Pair<TransferKey, TransferData>>();
-        for (final Map.Entry<Key, Data> entry : this.getActiveElements().entrySet()) {
+        for (final Map.Entry<Key, Data> entry : this.getActiveElements()
+            .entrySet()) {
             final TransferKey key = this.codingKey(entry.getKey());
             if (key != null) {
-                list.add(new Tuple.Pair<TransferKey, TransferData>(key, (entry.getValue() != null) ? entry.getValue().getTransferData(entry.getKey()) : null));
+                list.add(
+                    new Tuple.Pair<TransferKey, TransferData>(
+                        key,
+                        (entry.getValue() != null) ? entry.getValue()
+                            .getTransferData(entry.getKey()) : null));
             }
         }
         this.transferData = Utils.serialize(list);
@@ -53,15 +60,16 @@ public abstract class RPGDataRegister<Key, Data extends RPGDataRegister.ElementD
             final Key key = this.decodingKey(data.value1);
             if (key != null && this.containsKey(key)) {
                 if (data.value2 != null) {
-                    this.get(key).unpackTransferData(data.value2);
+                    this.get(key)
+                        .unpackTransferData(data.value2);
                 }
                 this.get(key).isActivated = true;
             }
         }
     }
 
-    public abstract static class ElementData<Key, TransferData>
-    {
+    public abstract static class ElementData<Key, TransferData> {
+
         public boolean isActivated;
         public boolean isSupported;
 

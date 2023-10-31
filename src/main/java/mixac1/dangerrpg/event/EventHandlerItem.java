@@ -1,41 +1,43 @@
 package mixac1.dangerrpg.event;
 
-import mixac1.dangerrpg.api.event.*;
-import mixac1.dangerrpg.util.Tuple;
-import net.minecraft.entity.player.*;
-import cpw.mods.fml.common.eventhandler.*;
-import mixac1.dangerrpg.capability.*;
-import mixac1.dangerrpg.*;
-import mixac1.dangerrpg.api.item.*;
-import mixac1.dangerrpg.capability.data.*;
-import net.minecraft.item.*;
 import java.util.*;
-import cpw.mods.fml.relauncher.*;
-import cpw.mods.fml.common.gameevent.*;
-import mixac1.dangerrpg.util.*;
-import cpw.mods.fml.client.*;
+
+import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.*;
+import net.minecraft.entity.player.*;
+import net.minecraft.item.*;
 import net.minecraft.util.*;
-import net.minecraftforge.event.entity.player.*;
 import net.minecraftforge.common.*;
+import net.minecraftforge.event.entity.player.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.*;
-import net.minecraft.entity.*;
-import mixac1.dangerrpg.init.*;
-import net.minecraft.entity.ai.attributes.*;
 
-public class EventHandlerItem
-{
+import cpw.mods.fml.client.*;
+import cpw.mods.fml.common.eventhandler.*;
+import cpw.mods.fml.common.gameevent.*;
+import cpw.mods.fml.relauncher.*;
+import mixac1.dangerrpg.*;
+import mixac1.dangerrpg.api.event.*;
+import mixac1.dangerrpg.api.item.*;
+import mixac1.dangerrpg.capability.*;
+import mixac1.dangerrpg.capability.data.*;
+import mixac1.dangerrpg.init.*;
+import mixac1.dangerrpg.util.*;
+import mixac1.dangerrpg.util.Tuple;
+
+public class EventHandlerItem {
+
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onHitEntityPre(final ItemStackEvent.HitEntityEvent e) {
         if (e.attacker instanceof EntityPlayer) {
-            final EntityPlayer player = (EntityPlayer)e.attacker;
+            final EntityPlayer player = (EntityPlayer) e.attacker;
             if (RPGItemHelper.isRPGable(e.stack)) {
                 if (!e.isRangeed) {
                     final float speed = ItemAttributes.MELEE_SPEED.getSafe(e.stack, player, 10.0f);
-                    PlayerAttributes.SPEED_COUNTER.setValue(((speed < 0.0f) ? 0.0f : speed), (EntityLivingBase)player);
-                }
-                else {
-                    e.newDamage += (float)PlayerAttributes.STRENGTH.getValue((EntityLivingBase)player) * ItemAttributes.STR_MUL.getSafe(e.stack, player, 0.0f);
+                    PlayerAttributes.SPEED_COUNTER.setValue(((speed < 0.0f) ? 0.0f : speed), (EntityLivingBase) player);
+                } else {
+                    e.newDamage += (float) PlayerAttributes.STRENGTH.getValue((EntityLivingBase) player)
+                        * ItemAttributes.STR_MUL.getSafe(e.stack, player, 0.0f);
                 }
                 e.entity.hurtResistantTime = 0;
                 e.knockback += ItemAttributes.KNOCKBACK.getSafe(e.stack, player, 0.0f);
@@ -46,7 +48,7 @@ public class EventHandlerItem
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onHitEntityPost(final ItemStackEvent.HitEntityEvent e) {
         if (!e.attacker.worldObj.isRemote && e.attacker instanceof EntityPlayer) {
-            final EntityPlayer player = (EntityPlayer)e.attacker;
+            final EntityPlayer player = (EntityPlayer) e.attacker;
             if (RPGItemHelper.isRPGable(e.stack)) {
                 final Tuple.Stub<Float> damage = Tuple.Stub.create(e.newDamage);
                 GemTypes.AM.activate1All(e.stack, player, new Object[] { e.entity, damage });
@@ -61,17 +63,29 @@ public class EventHandlerItem
         if (RPGItemHelper.isRPGable(e.itemStack)) {
             final Item item = e.itemStack.getItem();
             e.toolTip.add("");
-            e.toolTip.add(Utils.toString(EnumChatFormatting.GOLD, ItemAttributes.LEVEL.getDispayName(), ": ", (int)ItemAttributes.LEVEL.get(e.itemStack)));
+            e.toolTip.add(
+                Utils.toString(
+                    EnumChatFormatting.GOLD,
+                    ItemAttributes.LEVEL.getDispayName(),
+                    ": ",
+                    (int) ItemAttributes.LEVEL.get(e.itemStack)));
             if (ItemAttributes.LEVEL.isMax(e.itemStack)) {
                 e.toolTip.add(Utils.toString(EnumChatFormatting.GRAY, DangerRPG.trans("rpgstr.max")));
-            }
-            else if (ItemAttributes.MAX_EXP.hasIt(e.itemStack)) {
-                e.toolTip.add(Utils.toString(EnumChatFormatting.GRAY, ItemAttributes.CURR_EXP.getDispayName(), ": ", (int)ItemAttributes.CURR_EXP.get(e.itemStack), "/", (int)ItemAttributes.MAX_EXP.get(e.itemStack)));
+            } else if (ItemAttributes.MAX_EXP.hasIt(e.itemStack)) {
+                e.toolTip.add(
+                    Utils.toString(
+                        EnumChatFormatting.GRAY,
+                        ItemAttributes.CURR_EXP.getDispayName(),
+                        ": ",
+                        (int) ItemAttributes.CURR_EXP.get(e.itemStack),
+                        "/",
+                        (int) ItemAttributes.MAX_EXP.get(e.itemStack)));
             }
             final HashMap<GemType, List<ItemStack>> map = new HashMap<GemType, List<ItemStack>>();
-            final Set<GemType> set = ((RPGItemRegister.RPGItemData)RPGCapability.rpgItemRegistr.get((Object)item)).gems.keySet();
+            final Set<GemType> set = ((RPGItemRegister.RPGItemData) RPGCapability.rpgItemRegistr
+                .get((Object) item)).gems.keySet();
             for (final GemType gemType : set) {
-                final List<ItemStack> list = (List<ItemStack>)gemType.get(e.itemStack);
+                final List<ItemStack> list = (List<ItemStack>) gemType.get(e.itemStack);
                 if (!list.isEmpty()) {
                     map.put(gemType, list);
                 }
@@ -79,9 +93,14 @@ public class EventHandlerItem
             if (!map.isEmpty()) {
                 e.toolTip.add("");
                 for (final Map.Entry<GemType, List<ItemStack>> entry : map.entrySet()) {
-                    e.toolTip.add(Utils.toString(entry.getKey().getDispayName(), ":"));
+                    e.toolTip.add(
+                        Utils.toString(
+                            entry.getKey()
+                                .getDispayName(),
+                            ":"));
                     for (final ItemStack it : entry.getValue()) {
-                        e.toolTip.add(Utils.toString(" - ", it.getDisplayName(), " (", (int)ItemAttributes.LEVEL.get(it), ")"));
+                        e.toolTip.add(
+                            Utils.toString(" - ", it.getDisplayName(), " (", (int) ItemAttributes.LEVEL.get(it), ")"));
                     }
                 }
             }
@@ -94,9 +113,13 @@ public class EventHandlerItem
         if (e.phase == TickEvent.Phase.END && e.player.swingProgressInt == 1) {
             final ItemStack stack = e.player.getCurrentEquippedItem();
             if (stack != null && ItemAttributes.REACH.hasIt(stack)) {
-                final MovingObjectPosition object = RPGHelper.getMouseOver(0.0f, ItemAttributes.REACH.get(stack) + 4.0f);
-                if (object != null && object.entityHit != null && object.entityHit != e.player && object.entityHit.hurtResistantTime == 0) {
-                    FMLClientHandler.instance().getClient().playerController.attackEntity(e.player, object.entityHit);
+                final MovingObjectPosition object = RPGHelper
+                    .getMouseOver(0.0f, ItemAttributes.REACH.get(stack) + 4.0f);
+                if (object != null && object.entityHit != null
+                    && object.entityHit != e.player
+                    && object.entityHit.hurtResistantTime == 0) {
+                    FMLClientHandler.instance()
+                        .getClient().playerController.attackEntity(e.player, object.entityHit);
                 }
             }
         }
@@ -105,7 +128,7 @@ public class EventHandlerItem
     @SubscribeEvent
     public void onBreakSpeed(final PlayerEvent.BreakSpeed e) {
         if (ForgeHooks.canToolHarvestBlock(e.block, e.metadata, e.entityPlayer.inventory.getCurrentItem())) {
-            e.newSpeed += (float)PlayerAttributes.EFFICIENCY.getValue((EntityLivingBase)e.entityPlayer);
+            e.newSpeed += (float) PlayerAttributes.EFFICIENCY.getValue((EntityLivingBase) e.entityPlayer);
         }
     }
 
@@ -127,7 +150,12 @@ public class EventHandlerItem
 
     @SubscribeEvent
     public void onBreak(final BlockEvent.BreakEvent e) {
-        RPGItemHelper.upEquipment(e.getPlayer(), e.getPlayer().getCurrentEquippedItem(), e.block.getBlockHardness(e.world, e.x, e.y, e.z), true);
+        RPGItemHelper.upEquipment(
+            e.getPlayer(),
+            e.getPlayer()
+                .getCurrentEquippedItem(),
+            e.block.getBlockHardness(e.world, e.x, e.y, e.z),
+            true);
     }
 
     @SubscribeEvent
@@ -139,7 +167,12 @@ public class EventHandlerItem
                 attr.removeModifier(mod);
             }
             if (e.stack != null && RPGItemHelper.isRPGable(e.stack) && ItemAttributes.STR_MUL.hasIt(e.stack)) {
-                final AttributeModifier newMod = new AttributeModifier(RPGOther.RPGUUIDs.ADD_STR_DAMAGE, "Strenght damage", (double)((float)PlayerAttributes.STRENGTH.getValue((EntityLivingBase)e.player) * ItemAttributes.STR_MUL.get(e.stack)), 0).setSaved(true);
+                final AttributeModifier newMod = new AttributeModifier(
+                    RPGOther.RPGUUIDs.ADD_STR_DAMAGE,
+                    "Strenght damage",
+                    (double) ((float) PlayerAttributes.STRENGTH.getValue((EntityLivingBase) e.player)
+                        * ItemAttributes.STR_MUL.get(e.stack)),
+                    0).setSaved(true);
                 attr.applyModifier(newMod);
             }
         }
@@ -154,7 +187,8 @@ public class EventHandlerItem
     @SubscribeEvent
     public void onUpMaxLevel(final ItemStackEvent.UpMaxLevelEvent e) {
         if (ItemAttributes.MAX_DURABILITY.hasIt(e.stack)) {
-            e.stack.getTagCompound().setBoolean("Unbreakable", true);
+            e.stack.getTagCompound()
+                .setBoolean("Unbreakable", true);
         }
     }
 }

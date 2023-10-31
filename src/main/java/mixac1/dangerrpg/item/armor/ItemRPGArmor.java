@@ -1,27 +1,29 @@
 package mixac1.dangerrpg.item.armor;
 
-import mixac1.dangerrpg.api.item.*;
-import mixac1.dangerrpg.item.*;
-import mixac1.dangerrpg.util.*;
-import mixac1.dangerrpg.init.*;
+import net.minecraft.client.model.*;
 import net.minecraft.client.renderer.texture.*;
-import cpw.mods.fml.relauncher.*;
+import net.minecraft.entity.*;
 import net.minecraft.entity.player.*;
 import net.minecraft.item.*;
-import mixac1.dangerrpg.capability.data.*;
-import mixac1.dangerrpg.capability.*;
-import net.minecraft.entity.*;
-import net.minecraft.client.model.*;
 
-public class ItemRPGArmor extends ItemArmor implements IRPGItem.IRPGItemArmor, IHasBooksInfo
-{
+import cpw.mods.fml.relauncher.*;
+import mixac1.dangerrpg.api.item.*;
+import mixac1.dangerrpg.capability.*;
+import mixac1.dangerrpg.capability.data.*;
+import mixac1.dangerrpg.init.*;
+import mixac1.dangerrpg.item.*;
+import mixac1.dangerrpg.util.*;
+
+public class ItemRPGArmor extends ItemArmor implements IRPGItem.IRPGItemArmor, IHasBooksInfo {
+
     protected static String[] ARMOR_TYPES;
     protected RPGArmorMaterial armorMaterial;
     protected RPGItemComponent.RPGArmorComponent armorComponent;
     protected String name;
     protected String modelTexture;
-    
-    public ItemRPGArmor(final RPGArmorMaterial armorMaterial, final RPGItemComponent.RPGArmorComponent armorComponent, final int renderIndex, final int armorType) {
+
+    public ItemRPGArmor(final RPGArmorMaterial armorMaterial, final RPGItemComponent.RPGArmorComponent armorComponent,
+        final int renderIndex, final int armorType) {
         super(armorMaterial.material, renderIndex, armorType);
         this.armorMaterial = armorMaterial;
         this.armorComponent = armorComponent;
@@ -31,41 +33,46 @@ public class ItemRPGArmor extends ItemArmor implements IRPGItem.IRPGItemArmor, I
         this.setTextureName(Utils.toString("dangerrpg", ":armors/", this.unlocalizedName));
         this.setCreativeTab(RPGOther.RPGCreativeTabs.tabRPGAmmunitions);
     }
-    
-    public static ItemRPGArmor[] createFullSet(final RPGArmorMaterial armorMaterial, final RPGItemComponent.RPGArmorComponent armorComponent) {
-        return new ItemRPGArmor[] { new ItemRPGArmor(armorMaterial, armorComponent, 0, 0), new ItemRPGArmor(armorMaterial, armorComponent, 0, 1), new ItemRPGArmor(armorMaterial, armorComponent, 0, 2), new ItemRPGArmor(armorMaterial, armorComponent, 0, 3) };
+
+    public static ItemRPGArmor[] createFullSet(final RPGArmorMaterial armorMaterial,
+        final RPGItemComponent.RPGArmorComponent armorComponent) {
+        return new ItemRPGArmor[] { new ItemRPGArmor(armorMaterial, armorComponent, 0, 0),
+            new ItemRPGArmor(armorMaterial, armorComponent, 0, 1),
+            new ItemRPGArmor(armorMaterial, armorComponent, 0, 2),
+            new ItemRPGArmor(armorMaterial, armorComponent, 0, 3) };
     }
-    
+
     @SideOnly(Side.CLIENT)
     public void registerIcons(final IIconRegister iconRegister) {
         this.itemIcon = iconRegister.registerIcon(this.getIconString());
     }
-    
+
     public String getInformationToInfoBook(final ItemStack item, final EntityPlayer player) {
         return null;
     }
-    
+
     public void registerAttributes(final Item item, final RPGItemRegister.RPGItemData map) {
         RPGItemHelper.registerParamsItemArmor(item, map);
     }
-    
+
     public RPGItemComponent.RPGArmorComponent getItemComponent(final Item item) {
         return this.armorComponent;
     }
-    
+
     public RPGArmorMaterial getArmorMaterial(final Item item) {
         return this.armorMaterial;
     }
-    
+
     public String getArmorTexture(final ItemStack stack, final Entity entity, final int slot, final String type) {
         return Utils.toString(this.modelTexture, (slot == 2) ? 2 : 1, ".png");
     }
-    
+
     @SideOnly(Side.CLIENT)
-    public ModelBiped getArmorModel(final EntityLivingBase entityLiving, final ItemStack itemStack, final int armorSlot) {
+    public ModelBiped getArmorModel(final EntityLivingBase entityLiving, final ItemStack itemStack,
+        final int armorSlot) {
         return null;
     }
-    
+
     static {
         ItemRPGArmor.ARMOR_TYPES = new String[] { "_helmet", "_chestplate", "_leggings", "_boots" };
     }

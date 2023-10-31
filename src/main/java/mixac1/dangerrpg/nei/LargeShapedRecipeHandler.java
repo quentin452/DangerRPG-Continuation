@@ -1,29 +1,32 @@
 package mixac1.dangerrpg.nei;
 
-import codechicken.nei.recipe.*;
+import java.util.*;
+
 import net.minecraft.client.gui.inventory.*;
-import mixac1.dangerrpg.client.gui.*;
-import mixac1.dangerrpg.recipe.*;
-import mixac1.dangerrpg.*;
-import mixac1.dangerrpg.init.*;
+import net.minecraft.item.*;
 import net.minecraft.item.crafting.*;
 import net.minecraftforge.oredict.*;
-import net.minecraft.item.*;
-import codechicken.core.*;
-import mixac1.dangerrpg.util.*;
-import org.lwjgl.opengl.*;
-import codechicken.lib.gui.*;
-import java.util.*;
-import codechicken.nei.*;
-import mixac1.dangerrpg.inventory.*;
 
-public class LargeShapedRecipeHandler extends TemplateRecipeHandler
-{
+import org.lwjgl.opengl.*;
+
+import codechicken.core.*;
+import codechicken.lib.gui.*;
+import codechicken.nei.*;
+import codechicken.nei.recipe.*;
+import mixac1.dangerrpg.*;
+import mixac1.dangerrpg.client.gui.*;
+import mixac1.dangerrpg.init.*;
+import mixac1.dangerrpg.inventory.*;
+import mixac1.dangerrpg.recipe.*;
+import mixac1.dangerrpg.util.*;
+
+public class LargeShapedRecipeHandler extends TemplateRecipeHandler {
+
     public static int offsetX;
     public static int offsetY;
 
     public Class<? extends GuiContainer> getGuiClass() {
-        return (Class<? extends GuiContainer>)GuiRPGWorkbench.class;
+        return (Class<? extends GuiContainer>) GuiRPGWorkbench.class;
     }
 
     public String getRecipeName() {
@@ -32,18 +35,20 @@ public class LargeShapedRecipeHandler extends TemplateRecipeHandler
 
     public void loadCraftingRecipes(String outputId, Object... results) {
         if (outputId.equals("crafting") && this.getClass() == LargeShapedRecipeHandler.class) {
-            Iterator var3 = CraftingManager.getInstance().getRecipeList().iterator();
+            Iterator var3 = CraftingManager.getInstance()
+                .getRecipeList()
+                .iterator();
 
-            while(var3.hasNext()) {
-                IRecipe irecipe = (IRecipe)var3.next();
+            while (var3.hasNext()) {
+                IRecipe irecipe = (IRecipe) var3.next();
                 CachedLargeShapedRecipe recipe = null;
                 if (irecipe instanceof LargeShapedRecipe) {
-                    recipe = new CachedLargeShapedRecipe((LargeShapedRecipe)irecipe);
+                    recipe = new CachedLargeShapedRecipe((LargeShapedRecipe) irecipe);
                 } else if (RPGConfig.ClientConfig.d.neiShowShapedRecipe) {
                     if (irecipe instanceof ShapedRecipes) {
-                        recipe = new CachedLargeShapedRecipe((ShapedRecipes)irecipe);
+                        recipe = new CachedLargeShapedRecipe((ShapedRecipes) irecipe);
                     } else if (irecipe instanceof ShapedOreRecipe) {
-                        recipe = this.forgeShapedRecipe((ShapedOreRecipe)irecipe);
+                        recipe = this.forgeShapedRecipe((ShapedOreRecipe) irecipe);
                     }
                 }
 
@@ -59,7 +64,8 @@ public class LargeShapedRecipeHandler extends TemplateRecipeHandler
     }
 
     public void loadCraftingRecipes(final ItemStack result) {
-        for (final Object recipeObj : CraftingManager.getInstance().getRecipeList()) {
+        for (final Object recipeObj : CraftingManager.getInstance()
+            .getRecipeList()) {
             if (recipeObj instanceof IRecipe) {
                 IRecipe irecipe = (IRecipe) recipeObj;
                 if (NEIServerUtils.areStacksSameTypeCrafting(irecipe.getRecipeOutput(), result)) {
@@ -84,18 +90,20 @@ public class LargeShapedRecipeHandler extends TemplateRecipeHandler
     }
 
     public void loadUsageRecipes(ItemStack ingredient) {
-        Iterator var2 = CraftingManager.getInstance().getRecipeList().iterator();
+        Iterator var2 = CraftingManager.getInstance()
+            .getRecipeList()
+            .iterator();
 
-        while(var2.hasNext()) {
-            IRecipe irecipe = (IRecipe)var2.next();
+        while (var2.hasNext()) {
+            IRecipe irecipe = (IRecipe) var2.next();
             CachedLargeShapedRecipe recipe = null;
             if (irecipe instanceof LargeShapedRecipe) {
-                recipe = new CachedLargeShapedRecipe((LargeShapedRecipe)irecipe);
+                recipe = new CachedLargeShapedRecipe((LargeShapedRecipe) irecipe);
             } else if (RPGConfig.ClientConfig.d.neiShowShapedRecipe) {
                 if (irecipe instanceof ShapedRecipes) {
-                    recipe = new CachedLargeShapedRecipe((ShapedRecipes)irecipe);
+                    recipe = new CachedLargeShapedRecipe((ShapedRecipes) irecipe);
                 } else if (irecipe instanceof ShapedOreRecipe) {
-                    recipe = this.forgeShapedRecipe((ShapedOreRecipe)irecipe);
+                    recipe = this.forgeShapedRecipe((ShapedOreRecipe) irecipe);
                 }
             }
 
@@ -115,15 +123,14 @@ public class LargeShapedRecipeHandler extends TemplateRecipeHandler
         try {
             width = ReflectionManager.getField(ShapedOreRecipe.class, Integer.class, recipe, 4);
             height = ReflectionManager.getField(ShapedOreRecipe.class, Integer.class, recipe, 5);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             NEIClientConfig.logger.error("Error loading recipe", e);
             return null;
         }
         final Object[] input;
         final Object[] items = input = recipe.getInput();
         for (final Object item : input) {
-            if (item instanceof List && ((List)item).isEmpty()) {
+            if (item instanceof List && ((List) item).isEmpty()) {
                 return null;
             }
         }
@@ -131,13 +138,15 @@ public class LargeShapedRecipeHandler extends TemplateRecipeHandler
     }
 
     public String getGuiTexture() {
-        return Utils.toString(GuiRPGWorkbench.TEXTURE.getResourceDomain(), ":", GuiRPGWorkbench.TEXTURE.getResourcePath());
+        return Utils
+            .toString(GuiRPGWorkbench.TEXTURE.getResourceDomain(), ":", GuiRPGWorkbench.TEXTURE.getResourcePath());
     }
 
     public void drawBackground(final int recipe) {
         GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
         GuiDraw.changeTexture(this.getGuiTexture());
-        GuiDraw.drawTexturedModalRect(0, 0, LargeShapedRecipeHandler.offsetX, LargeShapedRecipeHandler.offsetY, 166, 100);
+        GuiDraw
+            .drawTexturedModalRect(0, 0, LargeShapedRecipeHandler.offsetX, LargeShapedRecipeHandler.offsetY, 166, 100);
     }
 
     public int recipiesPerPage() {
@@ -149,14 +158,17 @@ public class LargeShapedRecipeHandler extends TemplateRecipeHandler
         LargeShapedRecipeHandler.offsetY = 11;
     }
 
-    public class CachedLargeShapedRecipe extends TemplateRecipeHandler.CachedRecipe
-    {
+    public class CachedLargeShapedRecipe extends TemplateRecipeHandler.CachedRecipe {
+
         public ArrayList<PositionedStack> ingredients;
         public PositionedStack result;
 
         public CachedLargeShapedRecipe(final int width, final int height, final Object[] items, final ItemStack out) {
             super();
-            this.result = new PositionedStack(out, ContainerRPGWorkbench.craftResX - LargeShapedRecipeHandler.offsetX, ContainerRPGWorkbench.craftResY - LargeShapedRecipeHandler.offsetY);
+            this.result = new PositionedStack(
+                out,
+                ContainerRPGWorkbench.craftResX - LargeShapedRecipeHandler.offsetX,
+                ContainerRPGWorkbench.craftResY - LargeShapedRecipeHandler.offsetY);
             this.ingredients = new ArrayList<PositionedStack>();
             this.setIngredients(width, height, items);
         }
@@ -173,7 +185,11 @@ public class LargeShapedRecipeHandler extends TemplateRecipeHandler
             for (int x = 0; x < width; ++x) {
                 for (int y = 0; y < height; ++y) {
                     if (items[y * width + x] != null) {
-                        final PositionedStack stack = new PositionedStack(items[y * width + x], ContainerRPGWorkbench.craftX + x * 18 - LargeShapedRecipeHandler.offsetX, ContainerRPGWorkbench.craftY + y * 18 - LargeShapedRecipeHandler.offsetY, false);
+                        final PositionedStack stack = new PositionedStack(
+                            items[y * width + x],
+                            ContainerRPGWorkbench.craftX + x * 18 - LargeShapedRecipeHandler.offsetX,
+                            ContainerRPGWorkbench.craftY + y * 18 - LargeShapedRecipeHandler.offsetY,
+                            false);
                         stack.setMaxSize(1);
                         this.ingredients.add(stack);
                     }

@@ -1,43 +1,47 @@
 package mixac1.hooklib.minecraft;
 
-import net.minecraft.launchwrapper.*;
-import mixac1.hooklib.asm.*;
 import java.util.*;
-import org.objectweb.asm.*;
-import cpw.mods.fml.common.asm.transformers.deobf.*;
 
-public class PrimaryClassTransformer extends HookClassTransformer implements IClassTransformer
-{
+import net.minecraft.launchwrapper.*;
+
+import org.objectweb.asm.*;
+
+import cpw.mods.fml.common.asm.transformers.deobf.*;
+import mixac1.hooklib.asm.*;
+
+public class PrimaryClassTransformer extends HookClassTransformer implements IClassTransformer {
+
     static PrimaryClassTransformer instance;
     boolean registeredSecondTransformer;
-    
+
     public PrimaryClassTransformer() {
         if (PrimaryClassTransformer.instance != null) {
             this.hooksMap.putAll(PrimaryClassTransformer.instance.getHooksMap());
-            PrimaryClassTransformer.instance.getHooksMap().clear();
-        }
-        else {
+            PrimaryClassTransformer.instance.getHooksMap()
+                .clear();
+        } else {
             this.registerHookContainer(SecondaryTransformerHook.class.getName());
         }
         PrimaryClassTransformer.instance = this;
     }
-    
+
     public byte[] transform(final String oldName, final String newName, final byte[] bytecode) {
         return this.transform(newName, bytecode);
     }
-    
+
     protected HookInjectorClassVisitor createInjectorClassVisitor(final ClassWriter cw, final List<AsmHook> hooks) {
         return new HookInjectorClassVisitor(cw, hooks) {
+
             protected boolean isTargetMethod(final AsmHook hook, final String name, final String desc) {
                 return super.isTargetMethod(hook, name, PrimaryClassTransformer.mapDesc(desc));
             }
         };
     }
-    
+
     HashMap<String, List<AsmHook>> getHooksMap() {
-        return (HashMap<String, List<AsmHook>>)this.hooksMap;
+        return (HashMap<String, List<AsmHook>>) this.hooksMap;
     }
-    
+
     static String mapDesc(final String desc) {
         if (!HookLibPlugin.getObfuscated()) {
             return desc;
@@ -51,7 +55,7 @@ public class PrimaryClassTransformer extends HookClassTransformer implements ICl
         }
         return Type.getMethodDescriptor(mappedReturnType, mappedArgTypes);
     }
-    
+
     static Type map(final Type type) {
         if (!HookLibPlugin.getObfuscated()) {
             return type;
@@ -75,7 +79,7 @@ public class PrimaryClassTransformer extends HookClassTransformer implements ICl
         }
         throw new IllegalArgumentException("Can not map method type!");
     }
-    
+
     static {
         PrimaryClassTransformer.instance = new PrimaryClassTransformer();
     }

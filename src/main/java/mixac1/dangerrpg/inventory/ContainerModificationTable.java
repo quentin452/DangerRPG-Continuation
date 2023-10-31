@@ -1,12 +1,12 @@
 package mixac1.dangerrpg.inventory;
 
-import net.minecraft.world.*;
-import net.minecraft.inventory.*;
 import net.minecraft.entity.player.*;
+import net.minecraft.inventory.*;
 import net.minecraft.item.*;
+import net.minecraft.world.*;
 
-public class ContainerModificationTable extends Container
-{
+public class ContainerModificationTable extends Container {
+
     public static int playerInvX;
     public static int playerInvY;
     public static int fastInvX;
@@ -21,7 +21,8 @@ public class ContainerModificationTable extends Container
     protected int posZ;
     public int staticSize;
 
-    public ContainerModificationTable(final IInventory playerInv, final World world, final int x, final int y, final int z) {
+    public ContainerModificationTable(final IInventory playerInv, final World world, final int x, final int y,
+        final int z) {
         this.worldObj = world;
         this.posX = x;
         this.posY = y;
@@ -29,15 +30,31 @@ public class ContainerModificationTable extends Container
         this.invTable = new InventoryModificationTable(this);
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
-                this.addSlotToContainer(new Slot(playerInv, j + i * 9 + 9, ContainerModificationTable.playerInvX + j * 18, ContainerModificationTable.playerInvY + i * 18));
+                this.addSlotToContainer(
+                    new Slot(
+                        playerInv,
+                        j + i * 9 + 9,
+                        ContainerModificationTable.playerInvX + j * 18,
+                        ContainerModificationTable.playerInvY + i * 18));
             }
         }
         for (int i = 0; i < 9; ++i) {
-            this.addSlotToContainer(new Slot(playerInv, i, ContainerModificationTable.fastInvX + i * 18, ContainerModificationTable.fastInvY));
+            this.addSlotToContainer(
+                new Slot(
+                    playerInv,
+                    i,
+                    ContainerModificationTable.fastInvX + i * 18,
+                    ContainerModificationTable.fastInvY));
         }
         this.staticSize = this.inventorySlots.size();
-        this.addSlotToContainer((Slot)new SlotE((IInventory)this.invTable, 0, this.staticSize, ContainerModificationTable.mainX, ContainerModificationTable.mainY));
-        this.onCraftMatrixChanged((IInventory)this.invTable);
+        this.addSlotToContainer(
+            (Slot) new SlotE(
+                (IInventory) this.invTable,
+                0,
+                this.staticSize,
+                ContainerModificationTable.mainX,
+                ContainerModificationTable.mainY));
+        this.onCraftMatrixChanged((IInventory) this.invTable);
     }
 
     protected Slot setSlotToContainer(final int index, final Slot slot) {
@@ -67,7 +84,14 @@ public class ContainerModificationTable extends Container
         while (i < sizes.length) {
             final int dynamicX = ContainerModificationTable.mainX - (sizes[i] - 1) * 9;
             for (int j = 0; j < sizes[i]; ++j, ++k) {
-                this.setSlotToContainer(k + this.staticSize + 1, new SlotE((IInventory)this.invTable, k + 1, this.staticSize, dynamicX + j * 18, ContainerModificationTable.dynamicY + i * 18));
+                this.setSlotToContainer(
+                    k + this.staticSize + 1,
+                    new SlotE(
+                        (IInventory) this.invTable,
+                        k + 1,
+                        this.staticSize,
+                        dynamicX + j * 18,
+                        ContainerModificationTable.dynamicY + i * 18));
             }
             ++i;
         }
@@ -90,16 +114,14 @@ public class ContainerModificationTable extends Container
                 if (!this.mergeItemStack(stack2, 27, 36, false)) {
                     return null;
                 }
-            }
-            else if (fromSlot >= 27 && fromSlot < 36) {
+            } else if (fromSlot >= 27 && fromSlot < 36) {
                 if (this.tryTransfer(this.staticSize, this.inventoryItemStacks.size(), slot)) {
                     return null;
                 }
                 if (!this.mergeItemStack(stack2, 0, 27, false)) {
                     return null;
                 }
-            }
-            else {
+            } else {
                 if (fromSlot < this.staticSize || fromSlot >= this.inventoryItemStacks.size()) {
                     return null;
                 }
@@ -108,9 +130,8 @@ public class ContainerModificationTable extends Container
                 }
             }
             if (stack2.stackSize == 0) {
-                slot.putStack((ItemStack)null);
-            }
-            else {
+                slot.putStack((ItemStack) null);
+            } else {
                 slot.onSlotChanged();
             }
             if (stack2.stackSize == stack.stackSize) {
@@ -126,7 +147,7 @@ public class ContainerModificationTable extends Container
             final Slot tmp = this.getSlot(i);
             if (tmp.getStack() == null && tmp.isItemValid(slot.getStack())) {
                 tmp.putStack(slot.getStack());
-                slot.putStack((ItemStack)null);
+                slot.putStack((ItemStack) null);
                 return true;
             }
         }

@@ -1,20 +1,22 @@
 package mixac1.dangerrpg.client.render.entity;
 
+import net.minecraft.client.renderer.*;
 import net.minecraft.entity.*;
 import net.minecraft.util.*;
-import mixac1.dangerrpg.client.gui.*;
-import org.lwjgl.opengl.*;
-import net.minecraft.client.renderer.*;
 
-public class RenderBit extends RenderProjectile
-{
+import org.lwjgl.opengl.*;
+
+import mixac1.dangerrpg.client.gui.*;
+
+public class RenderBit extends RenderProjectile {
+
     public static final RenderBit INSTANCE;
-    
+
     @Override
     protected ResourceLocation getEntityTexture(final Entity entity) {
         return GuiInfoBook.TEXTURE;
     }
-    
+
     @Override
     protected void doRender(final Entity entity) {
         final Tessellator tess = Tessellator.instance;
@@ -32,7 +34,7 @@ public class RenderBit extends RenderProjectile
         ItemRenderer.renderItemIn2D(tess, b, a, a, b, 256, 256, 0.0625f);
         GL11.glPopMatrix();
     }
-    
+
     static {
         INSTANCE = new RenderBit();
     }

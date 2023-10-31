@@ -1,23 +1,26 @@
 package mixac1.dangerrpg.client;
 
-import cpw.mods.fml.relauncher.*;
 import net.minecraft.client.*;
-import net.minecraft.util.*;
-import org.lwjgl.opengl.*;
-import net.minecraft.client.renderer.*;
 import net.minecraft.client.model.*;
+import net.minecraft.client.renderer.*;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.*;
 import net.minecraft.item.*;
+import net.minecraft.util.*;
+
+import org.lwjgl.opengl.*;
+
 import cpw.mods.fml.client.*;
+import cpw.mods.fml.relauncher.*;
 
 @SideOnly(Side.CLIENT)
-public abstract class RPGRenderHelper
-{
+public abstract class RPGRenderHelper {
+
     public static Minecraft mc;
     public static final ResourceLocation ENCHANTMENT_GLINT;
-    
-    public static void renderEnchantEffect(final Tessellator tessellator, final ItemStack item, final int iconwidth, final int iconheight, final float thickness) {
+
+    public static void renderEnchantEffect(final Tessellator tessellator, final ItemStack item, final int iconwidth,
+        final int iconheight, final float thickness) {
         if (item != null && item.hasEffect(0)) {
             GL11.glDepthFunc(514);
             GL11.glDisable(2896);
@@ -48,7 +51,7 @@ public abstract class RPGRenderHelper
             GL11.glDepthFunc(515);
         }
     }
-    
+
     public static void copyModelBiped(final ModelBiped from, final ModelBiped to) {
         to.bipedBody.showModel = from.bipedBody.showModel;
         to.bipedHead.showModel = from.bipedHead.showModel;
@@ -58,14 +61,14 @@ public abstract class RPGRenderHelper
         to.bipedRightArm.showModel = from.bipedRightArm.showModel;
         to.bipedRightLeg.showModel = from.bipedRightLeg.showModel;
     }
-    
+
     public static void copyModelRenderer(final ModelRenderer from, final ModelRenderer to) {
         to.rotateAngleX = from.rotateAngleX;
         to.rotateAngleY = from.rotateAngleY;
         to.rotateAngleZ = from.rotateAngleZ;
         to.setRotationPoint(from.rotationPointX, from.rotationPointY, from.rotationPointZ);
     }
-    
+
     public static ModelBiped modelBipedInit(final EntityLivingBase entity, final ModelBiped model, final int slot) {
         model.bipedHead.showModel = (slot == 0);
         model.bipedHeadwear.showModel = (slot == 0);
@@ -79,12 +82,11 @@ public abstract class RPGRenderHelper
         final ItemStack stack = entity.getHeldItem();
         if (stack != null) {
             model.heldItemRight = 1;
-            if (entity instanceof EntityPlayer && ((EntityPlayer)entity).getItemInUseCount() > 0) {
+            if (entity instanceof EntityPlayer && ((EntityPlayer) entity).getItemInUseCount() > 0) {
                 final EnumAction enumaction = stack.getItemUseAction();
                 if (enumaction == EnumAction.block) {
                     model.heldItemRight = 3;
-                }
-                else if (enumaction == EnumAction.bow) {
+                } else if (enumaction == EnumAction.bow) {
                     model.aimedBow = true;
                 }
             }
@@ -94,24 +96,25 @@ public abstract class RPGRenderHelper
         model.isChild = entity.isChild();
         return model;
     }
-    
+
     static {
-        RPGRenderHelper.mc = FMLClientHandler.instance().getClient();
+        RPGRenderHelper.mc = FMLClientHandler.instance()
+            .getClient();
         ENCHANTMENT_GLINT = new ResourceLocation("minecraft", "textures/misc/enchanted_item_glint.png");
     }
-    
-    public enum Color
-    {
-        R(2), 
-        G(1), 
+
+    public enum Color {
+
+        R(2),
+        G(1),
         B(0);
-        
+
         private int i;
-        
+
         private Color(final int i) {
             this.i = i;
         }
-        
+
         public float get(final int color) {
             return (color >> 8 * this.i & 0xFF) / 255.0f;
         }

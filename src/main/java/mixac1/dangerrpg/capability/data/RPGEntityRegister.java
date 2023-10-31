@@ -1,15 +1,18 @@
 package mixac1.dangerrpg.capability.data;
 
-import net.minecraft.entity.player.*;
-import net.minecraft.entity.*;
-import mixac1.dangerrpg.api.entity.*;
-import mixac1.dangerrpg.util.*;
-import java.util.*;
-import mixac1.dangerrpg.init.*;
 import java.io.*;
+import java.util.*;
 
-public class RPGEntityRegister extends RPGDataRegister<Class<? extends EntityLivingBase>, RPGEntityRegister.RPGEntityData, String, HashMap<Integer, RPGEntityRegister.EntityTransferData>>
-{
+import net.minecraft.entity.*;
+import net.minecraft.entity.player.*;
+
+import mixac1.dangerrpg.api.entity.*;
+import mixac1.dangerrpg.init.*;
+import mixac1.dangerrpg.util.*;
+
+public class RPGEntityRegister extends
+    RPGDataRegister<Class<? extends EntityLivingBase>, RPGEntityRegister.RPGEntityData, String, HashMap<Integer, RPGEntityRegister.EntityTransferData>> {
+
     public Class<? extends EntityLivingBase> getClass(final EntityLivingBase entity) {
         return (entity instanceof EntityPlayer) ? EntityPlayer.class : entity.getClass();
     }
@@ -19,7 +22,7 @@ public class RPGEntityRegister extends RPGDataRegister<Class<? extends EntityLiv
     }
 
     public RPGEntityData get(final EntityLivingBase entity) {
-        return (RPGEntityData)super.get(this.getClass(entity));
+        return (RPGEntityData) super.get(this.getClass(entity));
     }
 
     public void put(final EntityLivingBase entity, final RPGEntityData data) {
@@ -27,15 +30,19 @@ public class RPGEntityRegister extends RPGDataRegister<Class<? extends EntityLiv
     }
 
     protected String codingKey(final Class<? extends EntityLivingBase> key) {
-        return EntityList.classToStringMapping.containsKey(key) ? (String) EntityList.classToStringMapping.get(key) : (EntityPlayer.class.isAssignableFrom(key) ? "player" : null);
+        return EntityList.classToStringMapping.containsKey(key) ? (String) EntityList.classToStringMapping.get(key)
+            : (EntityPlayer.class.isAssignableFrom(key) ? "player" : null);
     }
 
     protected Class<? extends EntityLivingBase> decodingKey(final String key) {
-        return (Class<? extends EntityLivingBase>)(EntityList.stringToClassMapping.containsKey(key) ? EntityList.stringToClassMapping.get(key) : ("player".equals(key) ? EntityPlayer.class : null));
+        return (Class<? extends EntityLivingBase>) (EntityList.stringToClassMapping.containsKey(key)
+            ? EntityList.stringToClassMapping.get(key)
+            : ("player".equals(key) ? EntityPlayer.class : null));
     }
 
-    public static class RPGEntityData extends RPGDataRegister.ElementData<Class<? extends EntityLivingBase>, HashMap<Integer, EntityTransferData>>
-    {
+    public static class RPGEntityData
+        extends RPGDataRegister.ElementData<Class<? extends EntityLivingBase>, HashMap<Integer, EntityTransferData>> {
+
         public HashMap<EntityAttribute, EntityAttrParams> attributes;
         public List<LvlEAProvider> lvlProviders;
         public IRPGEntity rpgComponent;
@@ -47,11 +54,13 @@ public class RPGEntityRegister extends RPGDataRegister<Class<? extends EntityLiv
             this.isSupported = isSupported;
         }
 
-        public <T> void registerEALvlable(final EntityAttribute<T> attr, final T startValue, final LvlEAProvider<T> lvlProvider) {
+        public <T> void registerEALvlable(final EntityAttribute<T> attr, final T startValue,
+            final LvlEAProvider<T> lvlProvider) {
             this.registerEALvlable(attr, startValue, lvlProvider, null);
         }
 
-        public <T> void registerEALvlable(final EntityAttribute<T> attr, final T startValue, final LvlEAProvider<T> lvlProvider, final IMultiplier.Multiplier staticMul) {
+        public <T> void registerEALvlable(final EntityAttribute<T> attr, final T startValue,
+            final LvlEAProvider<T> lvlProvider, final IMultiplier.Multiplier staticMul) {
             lvlProvider.attr = attr;
             this.attributes.put(attr, new EntityAttrParams(startValue, lvlProvider, staticMul));
             this.lvlProviders.add(lvlProvider);
@@ -61,7 +70,8 @@ public class RPGEntityRegister extends RPGDataRegister<Class<? extends EntityLiv
             this.registerEA(attr, startValue, null);
         }
 
-        public <T> void registerEA(final EntityAttribute<T> attr, final T startValue, final IMultiplier.Multiplier staticMul) {
+        public <T> void registerEA(final EntityAttribute<T> attr, final T startValue,
+            final IMultiplier.Multiplier staticMul) {
             this.attributes.put(attr, new EntityAttrParams(startValue, null, staticMul));
         }
 
@@ -95,8 +105,8 @@ public class RPGEntityRegister extends RPGDataRegister<Class<? extends EntityLiv
         }
     }
 
-    public static class EntityTransferData implements Serializable
-    {
+    public static class EntityTransferData implements Serializable {
+
         public IMultiplier.IMultiplierE mulValue;
         public int maxLvl;
         public int startExpCost;
@@ -110,14 +120,15 @@ public class RPGEntityRegister extends RPGDataRegister<Class<? extends EntityLiv
         }
     }
 
-    public static class EntityAttrParams<Type>
-    {
+    public static class EntityAttrParams<Type> {
+
         public Type startValue;
         public LvlEAProvider<Type> lvlProvider;
         public IMultiplier.Multiplier mulValue;
         private static final IMultiplier.Multiplier MUL_0d1;
 
-        public EntityAttrParams(final Type startValue, final LvlEAProvider<Type> lvlProvider, final IMultiplier.Multiplier mulValue) {
+        public EntityAttrParams(final Type startValue, final LvlEAProvider<Type> lvlProvider,
+            final IMultiplier.Multiplier mulValue) {
             this.startValue = startValue;
             this.lvlProvider = lvlProvider;
             this.mulValue = ((mulValue == null) ? EntityAttrParams.MUL_0d1 : mulValue);

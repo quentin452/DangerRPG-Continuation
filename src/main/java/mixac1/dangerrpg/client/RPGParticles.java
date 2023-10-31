@@ -1,15 +1,17 @@
 package mixac1.dangerrpg.client;
 
-import cpw.mods.fml.relauncher.*;
-import net.minecraft.world.*;
 import net.minecraft.client.particle.*;
+import net.minecraft.world.*;
+
+import cpw.mods.fml.relauncher.*;
 
 @SideOnly(Side.CLIENT)
-public abstract class RPGParticles
-{
-    public static class EntityAuraFXE extends EntityAuraFX
-    {
-        public EntityAuraFXE(final World world, final double x, final double y, final double z, final double motionX, final double motionY, final double motionZ) {
+public abstract class RPGParticles {
+
+    public static class EntityAuraFXE extends EntityAuraFX {
+
+        public EntityAuraFXE(final World world, final double x, final double y, final double z, final double motionX,
+            final double motionY, final double motionZ) {
             super(world, x, y, z, motionX, motionY, motionZ);
             this.motionX *= 0.10000000149011612;
             this.motionY *= 0.10000000149011612;
@@ -18,11 +20,11 @@ public abstract class RPGParticles
             this.motionY += motionY;
             this.motionZ += motionZ;
         }
-        
+
         public int getBrightnessForRender(final float par) {
             return 15728880;
         }
-        
+
         public void onUpdate() {
             this.prevPosX = this.posX;
             this.prevPosY = this.posY;
@@ -36,10 +38,11 @@ public abstract class RPGParticles
             }
         }
     }
-    
-    public static class EntityReddustFXE extends EntityReddustFX
-    {
-        public EntityReddustFXE(final World world, final double x, final double y, final double z, final float motionX, final float motionY, final float motionZ) {
+
+    public static class EntityReddustFXE extends EntityReddustFX {
+
+        public EntityReddustFXE(final World world, final double x, final double y, final double z, final float motionX,
+            final float motionY, final float motionZ) {
             super(world, x, y, z, motionX, motionY, motionZ);
             this.motionX *= 0.10000000149011612;
             this.motionY *= 0.10000000149011612;
@@ -48,11 +51,11 @@ public abstract class RPGParticles
             this.motionY += motionY;
             this.motionZ += motionZ;
         }
-        
+
         public int getBrightnessForRender(final float par) {
             return 15728880;
         }
-        
+
         public void onUpdate() {
             this.prevPosX = this.posX;
             this.prevPosY = this.posY;
@@ -67,13 +70,14 @@ public abstract class RPGParticles
             this.motionZ *= 0.95;
         }
     }
-    
-    public static class EntitySmokeFXE extends EntitySmokeFX
-    {
-        public EntitySmokeFXE(final World world, final double x, final double y, final double z, final float motionX, final float motionY, final float motionZ) {
-            super(world, x, y, z, (double)motionX, (double)motionY, (double)motionZ);
+
+    public static class EntitySmokeFXE extends EntitySmokeFX {
+
+        public EntitySmokeFXE(final World world, final double x, final double y, final double z, final float motionX,
+            final float motionY, final float motionZ) {
+            super(world, x, y, z, (double) motionX, (double) motionY, (double) motionZ);
         }
-        
+
         public int getBrightnessForRender(final float par) {
             return 15728880;
         }

@@ -1,23 +1,26 @@
 package mixac1.dangerrpg.recipe;
 
-import net.minecraft.item.crafting.*;
-import net.minecraft.inventory.*;
-import net.minecraft.world.*;
-import mixac1.dangerrpg.inventory.*;
-import net.minecraft.nbt.*;
 import java.util.*;
-import net.minecraft.item.*;
-import net.minecraft.block.*;
 
-public class LargeShapedRecipe implements IRecipe
-{
+import net.minecraft.block.*;
+import net.minecraft.inventory.*;
+import net.minecraft.item.*;
+import net.minecraft.item.crafting.*;
+import net.minecraft.nbt.*;
+import net.minecraft.world.*;
+
+import mixac1.dangerrpg.inventory.*;
+
+public class LargeShapedRecipe implements IRecipe {
+
     public static String NAME;
     public final int recipeWidth;
     public final int recipeHeight;
     public final ItemStack[] recipeItems;
     private ItemStack recipeOutput;
 
-    public LargeShapedRecipe(final int recipeWidth, final int recipeHeight, final ItemStack[] recipeItems, final ItemStack recipeOutput) {
+    public LargeShapedRecipe(final int recipeWidth, final int recipeHeight, final ItemStack[] recipeItems,
+        final ItemStack recipeOutput) {
         this.recipeWidth = recipeWidth;
         this.recipeHeight = recipeHeight;
         this.recipeItems = recipeItems;
@@ -51,8 +54,7 @@ public class LargeShapedRecipe implements IRecipe
                 if (i1 >= 0 && j1 >= 0 && i1 < this.recipeWidth && j1 < this.recipeHeight) {
                     if (par) {
                         itemstack = this.recipeItems[this.recipeWidth - i1 - 1 + j1 * this.recipeWidth];
-                    }
-                    else {
+                    } else {
                         itemstack = this.recipeItems[i1 + j1 * this.recipeWidth];
                     }
                 }
@@ -74,11 +76,12 @@ public class LargeShapedRecipe implements IRecipe
     }
 
     public ItemStack getCraftingResult(final InventoryCrafting inv) {
-        final ItemStack itemstack = this.getRecipeOutput().copy();
+        final ItemStack itemstack = this.getRecipeOutput()
+            .copy();
         for (int i = 0; i < inv.getSizeInventory(); ++i) {
             final ItemStack itemstack2 = inv.getStackInSlot(i);
             if (itemstack2 != null && itemstack2.hasTagCompound()) {
-                itemstack.setTagCompound((NBTTagCompound)itemstack2.stackTagCompound.copy());
+                itemstack.setTagCompound((NBTTagCompound) itemstack2.stackTagCompound.copy());
             }
         }
         return itemstack;
@@ -95,16 +98,15 @@ public class LargeShapedRecipe implements IRecipe
         int k = 0;
         if (objs[i] instanceof String[]) {
             final String[] array;
-            final String[] astring = array = (String[])objs[i++];
+            final String[] astring = array = (String[]) objs[i++];
             for (final String s2 : array) {
                 ++k;
                 j = s2.length();
                 s += s2;
             }
-        }
-        else {
+        } else {
             while (objs[i] instanceof String) {
-                final String s3 = (String)objs[i++];
+                final String s3 = (String) objs[i++];
                 ++k;
                 j = s3.length();
                 s += s3;
@@ -112,16 +114,14 @@ public class LargeShapedRecipe implements IRecipe
         }
         final HashMap hashmap = new HashMap();
         while (i < objs.length) {
-            final Character character = (Character)objs[i];
+            final Character character = (Character) objs[i];
             ItemStack itemstack1 = null;
             if (objs[i + 1] instanceof Item) {
-                itemstack1 = new ItemStack((Item)objs[i + 1]);
-            }
-            else if (objs[i + 1] instanceof Block) {
-                itemstack1 = new ItemStack((Block)objs[i + 1], 1, 32767);
-            }
-            else if (objs[i + 1] instanceof ItemStack) {
-                itemstack1 = (ItemStack)objs[i + 1];
+                itemstack1 = new ItemStack((Item) objs[i + 1]);
+            } else if (objs[i + 1] instanceof Block) {
+                itemstack1 = new ItemStack((Block) objs[i + 1], 1, 32767);
+            } else if (objs[i + 1] instanceof ItemStack) {
+                itemstack1 = (ItemStack) objs[i + 1];
             }
             hashmap.put(character, itemstack1);
             i += 2;
@@ -130,9 +130,8 @@ public class LargeShapedRecipe implements IRecipe
         for (int i2 = 0; i2 < j * k; ++i2) {
             final char c0 = s.charAt(i2);
             if (hashmap.containsKey(c0)) {
-                aitemstack[i2] = ((ItemStack)hashmap.get(c0)).copy();
-            }
-            else {
+                aitemstack[i2] = ((ItemStack) hashmap.get(c0)).copy();
+            } else {
                 aitemstack[i2] = null;
             }
         }

@@ -1,11 +1,11 @@
 package mixac1.dangerrpg.network;
 
+import cpw.mods.fml.common.network.simpleimpl.*;
 import io.netty.buffer.*;
 import mixac1.dangerrpg.init.*;
-import cpw.mods.fml.common.network.simpleimpl.*;
 
-public class MsgSyncConfig implements IMessage
-{
+public class MsgSyncConfig implements IMessage {
+
     public void fromBytes(final ByteBuf buf) {
         byte[] bytes = this.bytesFromBytes(buf);
         if (bytes != null) {
@@ -43,7 +43,7 @@ public class MsgSyncConfig implements IMessage
             RPGConfig.entityConfig.extractTransferData(bytes);
         }
     }
-    
+
     public void toBytes(final ByteBuf buf) {
         this.bytesToBytes(buf, RPGCapability.rpgItemRegistr.getTransferData());
         this.bytesToBytes(buf, RPGCapability.rpgEntityRegistr.getTransferData());
@@ -51,17 +51,16 @@ public class MsgSyncConfig implements IMessage
         this.bytesToBytes(buf, RPGConfig.itemConfig.getTransferData());
         this.bytesToBytes(buf, RPGConfig.entityConfig.getTransferData());
     }
-    
+
     public void bytesToBytes(final ByteBuf buf, final byte[] bytes) {
         if (bytes != null && bytes.length != 0) {
             buf.writeInt(bytes.length);
             buf.writeBytes(bytes);
-        }
-        else {
+        } else {
             buf.writeInt(0);
         }
     }
-    
+
     public byte[] bytesFromBytes(final ByteBuf buf) {
         byte[] bytes = null;
         final int size;
@@ -71,9 +70,9 @@ public class MsgSyncConfig implements IMessage
         }
         return bytes;
     }
-    
-    public static class Handler implements IMessageHandler<MsgSyncConfig, IMessage>
-    {
+
+    public static class Handler implements IMessageHandler<MsgSyncConfig, IMessage> {
+
         public IMessage onMessage(final MsgSyncConfig msg, final MessageContext ctx) {
             return null;
         }
