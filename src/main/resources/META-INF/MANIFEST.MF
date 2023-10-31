@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+FMLAT: dangerrpg_at.cfg
+FMLCorePlugin: mixac1.dangerrpg.hook.RPGHookLoader
+FMLCorePluginContainsFMLMod: true
+
