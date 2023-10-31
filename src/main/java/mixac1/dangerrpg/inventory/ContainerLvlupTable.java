@@ -27,7 +27,7 @@ public class ContainerLvlupTable extends Container
     public int expToUp;
     public InventoryLvlupTable invTable;
     public int staticSize;
-    
+
     public ContainerLvlupTable(final IInventory playerInv, final World world, final int x, final int y, final int z) {
         this.firstUse = true;
         this.worldPointer = world;
@@ -50,20 +50,20 @@ public class ContainerLvlupTable extends Container
         }
         this.onCraftMatrixChanged((IInventory)this.invTable);
     }
-    
+
     public void addCraftingToCrafters(final ICrafting craft) {
         super.addCraftingToCrafters(craft);
         craft.sendProgressBarUpdate((Container)this, 0, this.expToUp);
     }
-    
+
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
         for (int i = 0; i < this.crafters.size(); ++i) {
-            final ICrafting iCrafting = this.crafters.get(i);
+            final ICrafting iCrafting = (ICrafting) this.crafters.get(i);
             iCrafting.sendProgressBarUpdate((Container)this, 0, this.expToUp);
         }
     }
-    
+
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(final int par1, final int par2) {
         if (par1 == 0) {
@@ -73,7 +73,7 @@ public class ContainerLvlupTable extends Container
             super.updateProgressBar(par1, par2);
         }
     }
-    
+
     public boolean canInteractWith(final EntityPlayer player) {
         if (this.firstUse) {
             RPGHelper.rebuildPlayerExp(player);
@@ -81,10 +81,10 @@ public class ContainerLvlupTable extends Container
         }
         return player.getDistance(this.posX + 0.5, this.posY + 0.5, this.posZ + 0.5) <= 64.0;
     }
-    
+
     public ItemStack transferStackInSlot(final EntityPlayer player, final int fromSlot) {
         ItemStack stack = null;
-        final Slot slot = this.inventorySlots.get(fromSlot);
+        final Slot slot = (Slot) this.inventorySlots.get(fromSlot);
         if (slot != null && slot.getHasStack()) {
             final ItemStack stack2 = slot.getStack();
             stack = stack2.copy();
@@ -125,7 +125,7 @@ public class ContainerLvlupTable extends Container
         }
         return stack;
     }
-    
+
     public boolean tryTransfer(final int from, final int to, final Slot slot) {
         for (int i = from; i < to; ++i) {
             final Slot tmp = this.getSlot(i);
@@ -137,7 +137,7 @@ public class ContainerLvlupTable extends Container
         }
         return false;
     }
-    
+
     public void onContainerClosed(final EntityPlayer player) {
         super.onContainerClosed(player);
         if (!this.worldPointer.isRemote) {
@@ -148,14 +148,14 @@ public class ContainerLvlupTable extends Container
             }
         }
     }
-    
+
     public void onCraftMatrixChanged(final IInventory inventory) {
         if (inventory == this.invTable) {
             final ItemStack stack = inventory.getStackInSlot(0);
             final boolean b1 = stack != null && RPGItemHelper.isRPGable(stack);
             final boolean b2 = b1 && stack.getItem() instanceof Gem;
             for (int i = 1; i < this.invTable.inv.length; ++i) {
-                final Slot slot = this.inventorySlots.get(this.staticSize + i);
+                final Slot slot = (Slot) this.inventorySlots.get(this.staticSize + i);
                 slot.xDisplayPosition = (b2 ? (ContainerLvlupTable.extX + (i - 1) * 18) : 1000);
             }
             if (b1 && !this.worldPointer.isRemote && !ItemAttributes.LEVEL.isMax(stack)) {
@@ -174,7 +174,7 @@ public class ContainerLvlupTable extends Container
             }
         }
     }
-    
+
     public boolean enchantItem(final EntityPlayer player, final int flag) {
         final ItemStack stack = this.invTable.getStackInSlot(0);
         if (stack != null && flag == 0 && this.expToUp >= 0) {
@@ -220,20 +220,20 @@ public class ContainerLvlupTable extends Container
         }
         return false;
     }
-    
+
     private void burnItems() {
         for (int i = 1; i < this.invTable.inv.length; ++i) {
             this.invTable.inv[i] = null;
         }
     }
-    
+
     public ItemStack slotClick(final int index, final int par2, final int par3, final EntityPlayer player) {
         if (index >= this.staticSize && !this.invTable.isItemValidForSlot(index - this.staticSize, null)) {
             return null;
         }
         return super.slotClick(index, par2, par3, player);
     }
-    
+
     static {
         ContainerLvlupTable.playerInvX = 8;
         ContainerLvlupTable.playerInvY = 129;

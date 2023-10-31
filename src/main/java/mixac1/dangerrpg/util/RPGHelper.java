@@ -24,7 +24,7 @@ public abstract class RPGHelper
         final double y = -MathHelper.sin(attacker.rotationPitch / 180.0f * 3.1415927f) * 0.1;
         entityliving.addVelocity(x * i, y * i, z * i);
     }
-    
+
     public static void rebuildPlayerExp(final EntityPlayer player) {
         final int lvl = player.experienceLevel;
         final int exp = (int)(player.xpBarCap() * player.experience);
@@ -36,7 +36,7 @@ public abstract class RPGHelper
         }
         player.addExperience(exp);
     }
-    
+
     public static void rebuildPlayerLvl(final EntityPlayer player) {
         final int exp = player.experienceTotal;
         player.experience = 0.0f;
@@ -44,7 +44,7 @@ public abstract class RPGHelper
         player.experienceLevel = 0;
         player.addExperience(exp);
     }
-    
+
     public static MovingObjectPosition getMouseOver(final float frame, final float dist) {
         final Minecraft mc = Minecraft.getMinecraft();
         MovingObjectPosition mop = null;
@@ -92,7 +92,7 @@ public abstract class RPGHelper
         }
         return mop;
     }
-    
+
     public static float getUsePower(final EntityPlayer player, final ItemStack stack, final int useDuration, final float defMaxPow, final float defMinPow) {
         final float power = getUsePower(player, stack, useDuration, defMaxPow);
         final float minPower = ItemAttributes.MIN_CUST_TIME.getSafe(stack, player, defMinPow);
@@ -101,7 +101,7 @@ public abstract class RPGHelper
         }
         return power;
     }
-    
+
     public static float getUsePower(final EntityPlayer player, final ItemStack stack, final int useDuration, final float defMaxPow) {
         float power = useDuration / ItemAttributes.SHOT_SPEED.getSafe(stack, player, defMaxPow);
         power = (power * power + power * 2.0f) / 3.0f;
@@ -110,7 +110,7 @@ public abstract class RPGHelper
         }
         return power;
     }
-    
+
     public static IMaterialSpecial getMaterialSpecial(final ItemStack stack) {
         if (stack != null && RPGItemHelper.isRPGable(stack)) {
             final IRPGItem ilvl = ((RPGItemRegister.RPGItemData)RPGCapability.rpgItemRegistr.get((Object)stack.getItem())).rpgComponent;
@@ -123,7 +123,7 @@ public abstract class RPGHelper
         }
         return null;
     }
-    
+
     public static int getSpecialColor(final ItemStack stack, final int defaultColor) {
         final IMaterialSpecial mat = getMaterialSpecial(stack);
         if (mat != null && mat.hasSpecialColor()) {
@@ -131,7 +131,7 @@ public abstract class RPGHelper
         }
         return defaultColor;
     }
-    
+
     public static Vec3 getFirePoint(final EntityLivingBase thrower) {
         final Vec3 getLookVec;
         final Vec3 tmp = getLookVec = thrower.getLookVec();
@@ -154,18 +154,18 @@ public abstract class RPGHelper
         vec10.zCoord -= MathHelper.sin(thrower.rotationYaw / 180.0f * 3.1415927f) * 0.22f;
         return tmp;
     }
-    
+
     public static boolean spendMana(final EntityPlayer player, final float mana) {
         if (player.capabilities.isCreativeMode) {
             return true;
         }
-        if ((float)PlayerAttributes.CURR_MANA.getValue((EntityLivingBase)player) >= mana) {
-            PlayerAttributes.CURR_MANA.addValue((Object)(-mana), (EntityLivingBase)player);
+        if (PlayerAttributes.CURR_MANA.getValue(player) >= mana) {
+            PlayerAttributes.CURR_MANA.addValue((-mana), player);
             return true;
         }
         return false;
     }
-    
+
     public static ArrayList<String> getItemNames(final Collection<Item> items, final boolean needSort, final boolean withGems) {
         final ArrayList<String> names = new ArrayList<String>();
         for (final Item item : items) {
@@ -178,12 +178,12 @@ public abstract class RPGHelper
         }
         return names;
     }
-    
+
     public static ArrayList<String> getEntityNames(final Collection<Class<? extends EntityLivingBase>> set, final boolean needSort) {
         final ArrayList<String> names = new ArrayList<String>();
         for (final Class item : set) {
             final String tmp;
-            if (EntityList.classToStringMapping.containsKey(item) && (tmp = EntityList.classToStringMapping.get(item)) != null) {
+            if (EntityList.classToStringMapping.containsKey(item) && (tmp = (String) EntityList.classToStringMapping.get(item)) != null) {
                 names.add(tmp);
             }
         }
@@ -192,50 +192,53 @@ public abstract class RPGHelper
         }
         return names;
     }
-    
+
     public static float getMeleeDamageHook(final EntityLivingBase entity, final float defaultDamage) {
         if (RPGEntityHelper.isRPGable(entity)) {
             return (float)RPGCapability.rpgEntityRegistr.get(entity).rpgComponent.getEAMeleeDamage(entity).getValue(entity);
         }
         return defaultDamage;
     }
-    
+
     public static float getRangeDamageHook(final EntityLivingBase entity, final float defaultDamage) {
         if (RPGEntityHelper.isRPGable(entity)) {
             return (float)RPGCapability.rpgEntityRegistr.get(entity).rpgComponent.getEARangeDamage(entity).getValue(entity);
         }
         return defaultDamage;
     }
-    
+
     public static float getItemDamage(final ItemStack stack, final EntityPlayer player) {
         float value = 0.0f;
         final Multimap map = stack.getItem().getAttributeModifiers(stack);
-        for (final Map.Entry entry : map.entries()) {
-            if (entry.getKey().equals(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName())) {
-                value += (float)entry.getValue().getAmount();
+        Collection<? extends Map.Entry<?, ?>> entries = map.entries();
+
+        for(Map.Entry<?, ?> entry : entries) {
+            if(entry.getKey().equals(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName())) {
+                AttributeModifier modifier = (AttributeModifier) entry.getValue();
+                value += (float) modifier.getAmount();
             }
         }
         return value;
     }
-    
+
     public static float getPlayerDamage(final ItemStack stack, final EntityPlayer player) {
-        return getItemDamage(stack, player) + (float)PlayerAttributes.STRENGTH.getValue((EntityLivingBase)player) * ItemAttributes.STR_MUL.get(stack);
+        return getItemDamage(stack, player) + PlayerAttributes.STRENGTH.getValue(player) * ItemAttributes.STR_MUL.get(stack);
     }
-    
+
     public static float multyMul(float value, final int count, final IMultiplier.Multiplier mul) {
         if (mul instanceof IMultiplier.MultiplierAdd) {
-            return ((IMultiplier.MultiplierAdd)mul).mul * count + value;
+            return mul.mul * count + value;
         }
         if (mul instanceof IMultiplier.MultiplierMul) {
-            return ((IMultiplier.MultiplierMul)mul).mul * count * value + value;
+            return mul.mul * count * value + value;
         }
         for (int i = 0; i < count; ++i) {
-            value = (float)mul.up((Object)value, new Object[0]);
+            value = mul.up(value);
         }
         return value;
     }
-    
+
     public static void msgToChat(final EntityPlayer player, final Object... objs) {
-        player.addChatMessage((IChatComponent)new ChatComponentText(Utils.toString(objs)));
+        player.addChatMessage(new ChatComponentText(Utils.toString(objs)));
     }
 }

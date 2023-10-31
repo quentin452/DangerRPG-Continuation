@@ -13,18 +13,18 @@ public class LargeShapelessRecipe implements IRecipe
     public static String NAME;
     private final ItemStack recipeOutput;
     public final List recipeItems;
-    
+
     public LargeShapelessRecipe(final ItemStack recipeOutput, final List recipeItems) {
         this.recipeOutput = recipeOutput;
         this.recipeItems = recipeItems;
     }
-    
+
     public ItemStack getRecipeOutput() {
         return this.recipeOutput;
     }
-    
-    public boolean matches(final InventoryCrafting inv, final World world) {
-        final ArrayList list = new ArrayList(this.recipeItems);
+
+    public boolean matches(InventoryCrafting inv, World world) {
+        final ArrayList<ItemStack> list = new ArrayList<>(this.recipeItems);
         for (int i = 0; i < ContainerRPGWorkbench.craftSize; ++i) {
             for (int j = 0; j < ContainerRPGWorkbench.craftSize; ++j) {
                 final ItemStack stack = inv.getStackInRowAndColumn(j, i);
@@ -45,15 +45,15 @@ public class LargeShapelessRecipe implements IRecipe
         }
         return list.isEmpty();
     }
-    
+
     public ItemStack getCraftingResult(final InventoryCrafting inv) {
         return this.recipeOutput.copy();
     }
-    
+
     public int getRecipeSize() {
         return this.recipeItems.size();
     }
-    
+
     public static LargeShapelessRecipe create(final ItemStack stack, final Object... objs) {
         final ArrayList arraylist = new ArrayList();
         final Object[] aobject = objs;
@@ -74,7 +74,7 @@ public class LargeShapelessRecipe implements IRecipe
         }
         return new LargeShapelessRecipe(stack, arraylist);
     }
-    
+
     static {
         LargeShapelessRecipe.NAME = "large_shapeless";
     }

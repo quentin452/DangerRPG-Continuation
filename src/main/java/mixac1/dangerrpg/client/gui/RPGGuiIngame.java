@@ -62,7 +62,7 @@ public class RPGGuiIngame extends Gui
     private int chargeV;
     private GuiMode.GuiModeType mode;
     private boolean isInvert;
-    
+
     public RPGGuiIngame() {
         this.mc = Minecraft.getMinecraft();
         this.fr = this.mc.fontRenderer;
@@ -72,7 +72,7 @@ public class RPGGuiIngame extends Gui
         this.update(GuiMode.GuiModeType.NORMAL);
         this.update(GuiMode.curr());
     }
-    
+
     public void update(final GuiMode.GuiModeType type) {
         this.mode = type;
         if (!this.mode.isSimple) {
@@ -121,7 +121,7 @@ public class RPGGuiIngame extends Gui
             this.barY = this.barIconY + 2;
         }
     }
-    
+
     public void renderGameOverlay(final ScaledResolution res) {
         this.mc.mcProfiler.startSection("rpgBar");
         GL11.glPushMatrix();
@@ -137,7 +137,7 @@ public class RPGGuiIngame extends Gui
         GL11.glPopMatrix();
         this.mc.mcProfiler.endSection();
     }
-    
+
     private void renderEntityBar(final EntityLivingBase entity, int offsetX, final int offsetY, final boolean isInverted, final ScaledResolution res) {
         this.isInvert = isInverted;
         if (isInverted) {
@@ -296,11 +296,11 @@ public class RPGGuiIngame extends Gui
             this.fr.drawStringWithShadow(s, offsetX + this.getOffsetX(s, this.part3X, this.part3W, isInverted), offsetY + this.part3Y + (this.part3H - this.fr.FONT_HEIGHT) / 2 + 1, 16777215);
         }
     }
-    
+
     private void renderHealthBar(final EntityLivingBase entity, final int offsetX, final int offsetY, final boolean isInverted) {
         final float curr = entity.getHealth();
         final float absorbHealth = entity.getAbsorptionAmount();
-        final float max = (float)EntityAttributes.HEALTH.getSafe(entity, (Object)(entity.getMaxHealth() + absorbHealth));
+        final float max = (float)EntityAttributes.HEALTH.getSafe(entity, (entity.getMaxHealth() + absorbHealth));
         if (max > 0.0f) {
             final int proc = this.getProcent(curr, max, this.barW);
             final int procAbsorb = this.getProcent(absorbHealth, max, this.barW);
@@ -322,7 +322,7 @@ public class RPGGuiIngame extends Gui
             }
         }
     }
-    
+
     private void renderManaBar(final EntityLivingBase entity, final int offsetX, final int offsetY, final boolean isInverted) {
         final float curr = (float)PlayerAttributes.CURR_MANA.getValue(entity);
         final float max = (float)PlayerAttributes.MANA.getValue(entity);
@@ -333,7 +333,7 @@ public class RPGGuiIngame extends Gui
             }
         }
     }
-    
+
     private void renderFoodBar(final EntityLivingBase entity, final int offsetX, final int offsetY, final boolean isInverted) {
         final float curr = (float)this.mc.thePlayer.getFoodStats().getFoodLevel();
         final int proc = this.getProcent(curr, 20.0f, this.barW);
@@ -347,7 +347,7 @@ public class RPGGuiIngame extends Gui
             }
         }
     }
-    
+
     private void renderAirBar(final EntityLivingBase entity, final int offsetX, final int offsetY, final boolean isInverted) {
         final float curr = (float)this.mc.thePlayer.getAir();
         final int proc = this.getProcent(curr, 300.0f, this.barW);
@@ -356,7 +356,7 @@ public class RPGGuiIngame extends Gui
             this.drawTexturedModalRect(offsetX + this.invert(this.barX), offsetY + this.barY, this.barU, this.barV + this.barH * 10, proc, this.barH, isInverted);
         }
     }
-    
+
     public void renderChargeBar(final int offsetX, final int offsetY) {
         final ItemStack stack;
         if ((stack = this.mc.thePlayer.getItemInUse()) != null && stack.getItemUseAction() == EnumAction.bow && ItemAttributes.SHOT_SPEED.hasIt(stack)) {
@@ -378,7 +378,7 @@ public class RPGGuiIngame extends Gui
             }
         }
     }
-    
+
     private void renderEnemyBar(final int offsetX, final int offsetY, final boolean isInverted, final ScaledResolution res) {
         final MovingObjectPosition mop = RPGHelper.getMouseOver(0.0f, 10.0f);
         if (mop != null && mop.entityHit != null) {
@@ -392,12 +392,12 @@ public class RPGGuiIngame extends Gui
             }
         }
     }
-    
+
     private int getProcent(float curr, final float max, final int width) {
         curr = ((curr > max) ? max : ((curr < -max) ? (-max) : curr));
         return (int)Utils.alignment(curr / max * width, (float)(-width), (float)width);
     }
-    
+
     private String genValueStr(final float value) {
         if (value < 100.0f) {
             return String.format("%.1f", value);
@@ -425,15 +425,15 @@ public class RPGGuiIngame extends Gui
         }
         return String.format("%dM", Math.round(value) / 1000000);
     }
-    
+
     private double invert(final double value) {
         return Utils.invert(value, this.isInvert);
     }
-    
+
     private int invert(final int value) {
         return (int)Utils.invert(value, this.isInvert);
     }
-    
+
     private int getOffsetX(String s, final int offset, final int width, final boolean isInverted) {
         s = this.fr.trimStringToWidth(s, width);
         final int size = this.fr.getStringWidth(s);
@@ -443,7 +443,7 @@ public class RPGGuiIngame extends Gui
         }
         return value;
     }
-    
+
     private int getOffsetX(final String s, final int offset, final boolean isInverted) {
         if (isInverted) {
             final int size = this.fr.getStringWidth(s);
@@ -451,14 +451,14 @@ public class RPGGuiIngame extends Gui
         }
         return offset;
     }
-    
+
     private void renderTestString(final int x, final int y, final Object... str) {
         int i = 0;
         for (final Object tmp : str) {
             this.fr.drawStringWithShadow(tmp.toString(), x, y + this.fr.FONT_HEIGHT * i++, 16777215);
         }
     }
-    
+
     public void drawTexturedModalRect(final int x, final int y, final int u, final int v, final int width, final int heght, final boolean isInverted) {
         final float f = 0.00390625f;
         final Tessellator tessellator = Tessellator.instance;
@@ -477,7 +477,7 @@ public class RPGGuiIngame extends Gui
         }
         tessellator.draw();
     }
-    
+
     static {
         INSTANCE = new RPGGuiIngame();
         TEXTURE = new ResourceLocation("dangerrpg", "textures/gui/gui_in_game.png");

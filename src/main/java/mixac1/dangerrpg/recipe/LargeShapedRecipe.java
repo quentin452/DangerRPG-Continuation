@@ -16,18 +16,18 @@ public class LargeShapedRecipe implements IRecipe
     public final int recipeHeight;
     public final ItemStack[] recipeItems;
     private ItemStack recipeOutput;
-    
+
     public LargeShapedRecipe(final int recipeWidth, final int recipeHeight, final ItemStack[] recipeItems, final ItemStack recipeOutput) {
         this.recipeWidth = recipeWidth;
         this.recipeHeight = recipeHeight;
         this.recipeItems = recipeItems;
         this.recipeOutput = recipeOutput;
     }
-    
+
     public ItemStack getRecipeOutput() {
         return this.recipeOutput;
     }
-    
+
     public boolean matches(final InventoryCrafting inv, final World world) {
         for (int i = 0; i <= ContainerRPGWorkbench.craftSize - this.recipeWidth; ++i) {
             for (int j = 0; j <= ContainerRPGWorkbench.craftSize - this.recipeHeight; ++j) {
@@ -41,7 +41,7 @@ public class LargeShapedRecipe implements IRecipe
         }
         return false;
     }
-    
+
     private boolean checkMatch(final InventoryCrafting inv, final int column, final int row, final boolean par) {
         for (int k = 0; k < ContainerRPGWorkbench.craftSize; ++k) {
             for (int l = 0; l < ContainerRPGWorkbench.craftSize; ++l) {
@@ -72,7 +72,7 @@ public class LargeShapedRecipe implements IRecipe
         }
         return true;
     }
-    
+
     public ItemStack getCraftingResult(final InventoryCrafting inv) {
         final ItemStack itemstack = this.getRecipeOutput().copy();
         for (int i = 0; i < inv.getSizeInventory(); ++i) {
@@ -83,11 +83,11 @@ public class LargeShapedRecipe implements IRecipe
         }
         return itemstack;
     }
-    
+
     public int getRecipeSize() {
         return this.recipeWidth * this.recipeHeight;
     }
-    
+
     public static LargeShapedRecipe create(final ItemStack stack, final Object... objs) {
         String s = "";
         int i = 0;
@@ -130,7 +130,7 @@ public class LargeShapedRecipe implements IRecipe
         for (int i2 = 0; i2 < j * k; ++i2) {
             final char c0 = s.charAt(i2);
             if (hashmap.containsKey(c0)) {
-                aitemstack[i2] = hashmap.get(c0).copy();
+                aitemstack[i2] = ((ItemStack)hashmap.get(c0)).copy();
             }
             else {
                 aitemstack[i2] = null;
@@ -138,7 +138,7 @@ public class LargeShapedRecipe implements IRecipe
         }
         return new LargeShapedRecipe(j, k, aitemstack, stack);
     }
-    
+
     static {
         LargeShapedRecipe.NAME = "large_shaped";
     }

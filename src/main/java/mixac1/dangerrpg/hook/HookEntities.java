@@ -22,7 +22,7 @@ public class HookEntities
     public static void SharedMonsterAttributes(final SharedMonsterAttributes attributes) {
         ((BaseAttribute)SharedMonsterAttributes.attackDamage).setShouldWatch(true);
     }
-    
+
     @Hook(returnCondition = ReturnCondition.ALWAYS)
     public static void attackTargetEntityWithCurrentItem(final EntityPlayer player, final Entity entity) {
         if (MinecraftForge.EVENT_BUS.post((Event)new AttackEntityEvent(player, entity))) {
@@ -121,37 +121,37 @@ public class HookEntities
             }
         }
     }
-    
+
     @Hook(injectOnExit = true, returnCondition = ReturnCondition.ALWAYS)
     public static float getAIMoveSpeed(final EntityPlayer player, @Hook.ReturnValue final float returnValue) {
         if (player.isSneaking()) {
-            return returnValue + (float)PlayerAttributes.SNEAK_SPEED.getSafe((EntityLivingBase)player, (Object)0.0f) * 3.0f;
+            return returnValue + (float)PlayerAttributes.SNEAK_SPEED.getSafe((EntityLivingBase)player,0.0f) * 3.0f;
         }
-        return returnValue + (float)PlayerAttributes.MOVE_SPEED.getSafe((EntityLivingBase)player, (Object)0.0f);
+        return returnValue + (float)PlayerAttributes.MOVE_SPEED.getSafe((EntityLivingBase)player,0.0f);
     }
-    
+
     @Hook(injectOnExit = true, returnCondition = ReturnCondition.ALWAYS)
     public static void onLivingUpdate(final EntityPlayer player) {
-        player.jumpMovementFactor += (float)PlayerAttributes.JUMP_RANGE.getSafe((EntityLivingBase)player, (Object)0.0f);
+        player.jumpMovementFactor += (float)PlayerAttributes.JUMP_RANGE.getSafe((EntityLivingBase)player, 0.0f);
     }
-    
+
     @Hook
     public static void moveEntityWithHeading(final EntityLivingBase entity, final float par1, final float par2) {
         if (entity instanceof EntityPlayer && ((EntityPlayer)entity).capabilities.isFlying && entity.ridingEntity == null) {
-            entity.jumpMovementFactor += (float)PlayerAttributes.FLY_SPEED.getSafe(entity, (Object)0.0f);
+            entity.jumpMovementFactor += (float)PlayerAttributes.FLY_SPEED.getSafe(entity, 0.0f);
         }
     }
-    
+
     @Hook(returnCondition = ReturnCondition.ALWAYS)
     public static void moveFlying(final Entity entity, float par1, float par2, float speed) {
         float f3 = par1 * par1 + par2 * par2;
         if (f3 >= 1.0E-4f) {
             if (entity instanceof EntityPlayer && !((EntityPlayer)entity).capabilities.isFlying) {
                 if (entity.isInWater()) {
-                    speed += (float)PlayerAttributes.SWIM_SPEED.getSafe((EntityLivingBase)entity, (Object)0.0f);
+                    speed += (float)PlayerAttributes.SWIM_SPEED.getSafe((EntityLivingBase)entity,0.0f);
                 }
                 else if (entity.handleLavaMovement()) {
-                    speed += (float)PlayerAttributes.SWIM_SPEED.getSafe((EntityLivingBase)entity, (Object)0.0f) / 2.0f;
+                    speed += (float)PlayerAttributes.SWIM_SPEED.getSafe((EntityLivingBase)entity, 0.0f) / 2.0f;
                 }
             }
             f3 = MathHelper.sqrt_float(f3);

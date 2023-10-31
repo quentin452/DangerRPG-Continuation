@@ -66,7 +66,7 @@ public class HookFixEntityAttributes
             that.setDead();
         }
     }
-    
+
     @Hook(returnCondition = ReturnCondition.ALWAYS)
     public static void attackEntityWithRangedAttack(final EntitySkeleton that, final EntityLivingBase entity, final float value) {
         final EntityRPGArrow entityarrow = new EntityRPGArrow(that.worldObj, (ItemStack)null, (EntityLivingBase)that, entity, 1.6f, (float)(14 - that.worldObj.difficultySetting.getDifficultyId() * 4));
@@ -92,7 +92,7 @@ public class HookFixEntityAttributes
         that.playSound("random.bow", 1.0f, 1.0f / (that.getRNG().nextFloat() * 0.4f + 0.8f));
         that.worldObj.spawnEntityInWorld((Entity)entityarrow);
     }
-    
+
     @Hook(returnCondition = ReturnCondition.ALWAYS)
     public static void onImpact(final EntityLargeFireball that, final MovingObjectPosition mop) {
         if (!that.worldObj.isRemote) {
@@ -104,18 +104,18 @@ public class HookFixEntityAttributes
             that.setDead();
         }
     }
-    
+
     @Hook(returnCondition = ReturnCondition.ALWAYS)
     public static int getAttackStrength(final EntitySlime that) {
         return (int)RPGHelper.getMeleeDamageHook((EntityLivingBase)that, (float)that.getSlimeSize());
     }
-    
+
     @Hook(returnCondition = ReturnCondition.ALWAYS)
     public static boolean attackEntityAsMob(final EntityWolf that, final Entity entity) {
         final int damage = (int)RPGHelper.getMeleeDamageHook((EntityLivingBase)that, that.isTamed() ? 4.0f : 2.0f);
         return that.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)that), (float)damage);
     }
-    
+
     @Hook(returnCondition = ReturnCondition.ALWAYS)
     public static boolean attackEntityAsMob(final EntityIronGolem that, final Entity entity) {
         that.attackTimer = 10;
@@ -128,7 +128,7 @@ public class HookFixEntityAttributes
         that.playSound("mob.irongolem.throw", 1.0f, 1.0f);
         return flag;
     }
-    
+
     @Hook(returnCondition = ReturnCondition.ALWAYS)
     public static void onImpact(final EntityWitherSkull that, final MovingObjectPosition mop) {
         if (!that.worldObj.isRemote) {
@@ -159,12 +159,12 @@ public class HookFixEntityAttributes
             that.setDead();
         }
     }
-    
+
     @Hook(returnCondition = ReturnCondition.ALWAYS)
     public static void attackEntitiesInList(final EntityDragon that, final List list) {
         final float damage = RPGHelper.getMeleeDamageHook((EntityLivingBase)that, 10.0f);
         for (int i = 0; i < list.size(); ++i) {
-            final Entity entity = list.get(i);
+            final Entity entity = (Entity) list.get(i);
             if (entity instanceof EntityLivingBase) {
                 entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)that), damage);
             }

@@ -20,7 +20,7 @@ public class ContainerModificationTable extends Container
     protected int posY;
     protected int posZ;
     public int staticSize;
-    
+
     public ContainerModificationTable(final IInventory playerInv, final World world, final int x, final int y, final int z) {
         this.worldObj = world;
         this.posX = x;
@@ -39,7 +39,7 @@ public class ContainerModificationTable extends Container
         this.addSlotToContainer((Slot)new SlotE((IInventory)this.invTable, 0, this.staticSize, ContainerModificationTable.mainX, ContainerModificationTable.mainY));
         this.onCraftMatrixChanged((IInventory)this.invTable);
     }
-    
+
     protected Slot setSlotToContainer(final int index, final Slot slot) {
         if (index >= this.inventorySlots.size()) {
             return this.addSlotToContainer(slot);
@@ -49,13 +49,13 @@ public class ContainerModificationTable extends Container
         this.inventoryItemStacks.set(index, null);
         return slot;
     }
-    
+
     protected void popSlotFromContainer() {
         final int index = this.inventorySlots.size() - 1;
         this.inventorySlots.remove(index);
         this.inventoryItemStacks.remove(index);
     }
-    
+
     public void onMainSlotChanged(final InventoryModificationTable inv) {
         final int size = inv.getSizeInventory();
         final int[] sizes = inv.getSizes();
@@ -72,14 +72,14 @@ public class ContainerModificationTable extends Container
             ++i;
         }
     }
-    
+
     public boolean canInteractWith(final EntityPlayer player) {
         return player.getDistanceSq(this.posX + 0.5, this.posY + 0.5, this.posZ + 0.5) <= 64.0;
     }
-    
+
     public ItemStack transferStackInSlot(final EntityPlayer player, final int fromSlot) {
         ItemStack stack = null;
-        final Slot slot = this.inventorySlots.get(fromSlot);
+        final Slot slot = (Slot) this.inventorySlots.get(fromSlot);
         if (slot != null && slot.getHasStack()) {
             final ItemStack stack2 = slot.getStack();
             stack = stack2.copy();
@@ -120,7 +120,7 @@ public class ContainerModificationTable extends Container
         }
         return stack;
     }
-    
+
     public boolean tryTransfer(final int from, final int to, final Slot slot) {
         for (int i = from; i < to; ++i) {
             final Slot tmp = this.getSlot(i);
@@ -132,7 +132,7 @@ public class ContainerModificationTable extends Container
         }
         return false;
     }
-    
+
     public void onContainerClosed(final EntityPlayer player) {
         super.onContainerClosed(player);
         if (!this.worldObj.isRemote && this.invTable.main != null) {
@@ -141,14 +141,14 @@ public class ContainerModificationTable extends Container
             player.dropPlayerItemWithRandomChoice(stack, false);
         }
     }
-    
+
     public ItemStack slotClick(final int index, final int par2, final int par3, final EntityPlayer player) {
         if (index >= this.staticSize && !this.invTable.isItemValidForSlot(index - this.staticSize, null)) {
             return null;
         }
         return super.slotClick(index, par2, par3, player);
     }
-    
+
     static {
         ContainerModificationTable.playerInvX = 8;
         ContainerModificationTable.playerInvY = 145;

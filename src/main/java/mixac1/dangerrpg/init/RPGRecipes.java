@@ -65,55 +65,55 @@ public abstract class RPGRecipes
         addLargeShapedRecipe(RPGItems.shadowBow, " 3 ", "302", "1 2", "302", " 3 ", '0', Items.stick, '1', RPGItems.stickDiamond, '2', Items.string, '3', RPGItems.compressedBedrock);
         addLargeShapedRecipe(RPGItems.sniperBow, "0   0", "10 01", "12321", "10 01", "0   0", '0', RPGItems.stickWhiteMatter, '1', Items.string, '2', RPGItems.stickBlackMatter, '3', Items.nether_star);
     }
-    
+
     public static void addShapedRecipe(final Item output, final Object... params) {
         addShapedRecipe(new ItemStack(output), params);
     }
-    
+
     public static void addShapedRecipe(final Block output, final Object... params) {
         addShapedRecipe(new ItemStack(output), params);
     }
-    
+
     public static void addShapedRecipe(final ItemStack output, final Object... params) {
         GameRegistry.addShapedRecipe(output, params);
     }
-    
+
     public static void addShapelessRecipe(final Item output, final Object... params) {
         addShapelessRecipe(new ItemStack(output), params);
     }
-    
+
     public static void addShapelessRecipe(final Block output, final Object... params) {
         addShapelessRecipe(new ItemStack(output), params);
     }
-    
+
     public static void addShapelessRecipe(final ItemStack output, final Object... params) {
         GameRegistry.addShapelessRecipe(output, params);
     }
-    
+
     public static void addLargeShapedRecipe(final Item output, final Object... params) {
         addLargeShapedRecipe(new ItemStack(output), params);
     }
-    
+
     public static void addLargeShapedRecipe(final Block output, final Object... params) {
         addLargeShapedRecipe(new ItemStack(output), params);
     }
-    
+
     public static void addLargeShapedRecipe(final ItemStack output, final Object... params) {
         GameRegistry.addRecipe((IRecipe)LargeShapedRecipe.create(output, params));
     }
-    
+
     public static void addLargeShapelessRecipe(final Item output, final Object... params) {
         addLargeShapelessRecipe(new ItemStack(output), params);
     }
-    
+
     public static void addLargeShapelessRecipe(final Block output, final Object... params) {
         addLargeShapelessRecipe(new ItemStack(output), params);
     }
-    
+
     public static void addLargeShapelessRecipe(final ItemStack output, final Object... params) {
         GameRegistry.addRecipe((IRecipe)LargeShapelessRecipe.create(output, params));
     }
-    
+
     public static ItemStack ownFindMatchingRecipe(final InventoryCrafting inv, final World world, final int invWidth, final int invHeight) {
         int i = 0;
         ItemStack stack = null;
@@ -158,9 +158,9 @@ public abstract class RPGRecipes
         }
         return null;
     }
-    
+
     private static boolean matches(final ShapelessRecipes recipe, final InventoryCrafting inv, final World world, final int invWidth, final int invHeight) {
-        final ArrayList list = new ArrayList(recipe.recipeItems);
+        final ArrayList<ItemStack> list = new ArrayList<>(recipe.recipeItems);
         for (int i = 0; i < invWidth; ++i) {
             for (int j = 0; j < invHeight; ++j) {
                 final ItemStack stack = inv.getStackInRowAndColumn(j, i);

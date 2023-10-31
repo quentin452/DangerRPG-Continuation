@@ -24,7 +24,7 @@ public class ContainerRPGWorkbench extends Container
     protected int posX;
     protected int posY;
     protected int posZ;
-    
+
     public ContainerRPGWorkbench(final InventoryPlayer inv, final World world, final int x, final int y, final int z) {
         this.craftMatrix = new InventoryRPGCrafting(this, ContainerRPGWorkbench.craftSize, ContainerRPGWorkbench.craftSize);
         this.craftResult = (IInventory)new InventoryCraftResult();
@@ -48,7 +48,7 @@ public class ContainerRPGWorkbench extends Container
         this.addSlotToContainer((Slot)new SlotCrafting(inv.player, (IInventory)this.craftMatrix, this.craftResult, 0, ContainerRPGWorkbench.craftResX, ContainerRPGWorkbench.craftResY));
         this.onCraftMatrixChanged((IInventory)this.craftMatrix);
     }
-    
+
     public void onCraftMatrixChanged(final IInventory inv) {
         ItemStack stack = RPGRecipes.ownFindMatchingRecipe((InventoryCrafting)this.craftMatrix, this.worldObj, ContainerRPGWorkbench.craftSize, ContainerRPGWorkbench.craftSize);
         this.craftResult.setInventorySlotContents(0, stack);
@@ -65,7 +65,7 @@ public class ContainerRPGWorkbench extends Container
             }
         }
     }
-    
+
     public void onContainerClosed(final EntityPlayer player) {
         super.onContainerClosed(player);
         if (!this.worldObj.isRemote) {
@@ -77,14 +77,14 @@ public class ContainerRPGWorkbench extends Container
             }
         }
     }
-    
+
     public boolean canInteractWith(final EntityPlayer player) {
         return player.getDistanceSq(this.posX + 0.5, this.posY + 0.5, this.posZ + 0.5) <= 64.0;
     }
-    
+
     public ItemStack transferStackInSlot(final EntityPlayer player, final int index) {
         ItemStack stack = null;
-        final Slot slot = this.inventorySlots.get(index);
+        final Slot slot = (Slot) this.inventorySlots.get(index);
         if (slot != null && slot.getHasStack()) {
             final ItemStack newStack = slot.getStack();
             stack = newStack.copy();
@@ -120,11 +120,11 @@ public class ContainerRPGWorkbench extends Container
         }
         return stack;
     }
-    
+
     public boolean func_94530_a(final ItemStack stack, final Slot slot) {
         return slot.inventory != this.craftResult && super.func_94530_a(stack, slot);
     }
-    
+
     static {
         ContainerRPGWorkbench.craftSize = 5;
         ContainerRPGWorkbench.playerInvX = 8;

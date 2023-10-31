@@ -18,18 +18,18 @@ public abstract class RPGRegister
     public static void registerItemRendererModel(final Item item, final RenderItemModel model, final String resDomain, final String resPath) {
         registerItemRendererModel(item, model, Utils.toString(resDomain, ":", resPath));
     }
-    
+
     @SideOnly(Side.CLIENT)
     public static void registerItemRendererModel(final Item item, final RenderItemModel model, final String resFullPath) {
         MinecraftForgeClient.registerItemRenderer(item, (IItemRenderer)model);
         RPGRenderers.modelTextures.put(item, new ResourceLocation(Utils.toString(resFullPath, item.unlocalizedName, ".png")));
     }
-    
+
     public static void registerRPGItem(final Item item, final IRPGItem iRPG) {
-        RPGCapability.rpgItemRegistr.put((Key)item, (Data)new RPGItemRegister.RPGItemData(iRPG, true));
+        RPGCapability.rpgItemRegistr.put(item, new RPGItemRegister.RPGItemData(iRPG, true));
     }
-    
+
     public static void registerRPGEntity(final Class<? extends EntityLivingBase> entityClass, final IRPGEntity iRPG) {
-        RPGCapability.rpgEntityRegistr.put((Key)entityClass, (Data)new RPGEntityRegister.RPGEntityData(iRPG, true));
+        RPGCapability.rpgEntityRegistr.put(entityClass, new RPGEntityRegister.RPGEntityData(iRPG, true));
     }
 }

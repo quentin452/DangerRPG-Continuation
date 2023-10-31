@@ -16,11 +16,11 @@ import java.util.*;
 public class HookArmorSystem
 {
     public static final float MAX_PHISICAL_ARMOR = 40.0f;
-    
+
     public static float convertPhisicArmor(final float armor) {
         return Utils.alignment(armor * 100.0f / 40.0f, 0.0f, 100.0f);
     }
-    
+
     private static float getArmorValue(final ItemStack stack, final DamageSource source) {
         if (stack != null) {
             if (source.isMagicDamage()) {
@@ -32,7 +32,7 @@ public class HookArmorSystem
         }
         return 0.0f;
     }
-    
+
     @SideOnly(Side.CLIENT)
     public static float getTotalArmor(final DamageSource source) {
         float value = 0.0f;
@@ -49,40 +49,40 @@ public class HookArmorSystem
         value += getPassiveResist((EntityLivingBase)mc.thePlayer, source);
         return Utils.alignment(value, -3.4028235E38f, 1.0f) * 100.0f;
     }
-    
+
     @SideOnly(Side.CLIENT)
     public static float getTotalPhisicArmor() {
         return getTotalArmor(RPGOther.RPGDamageSource.phisic);
     }
-    
+
     @SideOnly(Side.CLIENT)
     public static float getTotalMagicArmor() {
         return getTotalArmor(RPGOther.RPGDamageSource.magic);
     }
-    
+
     @SideOnly(Side.CLIENT)
     public static float getArmor(final ItemStack stack, final DamageSource source) {
         return (float)(getArmorProperties((EntityLivingBase)Minecraft.getMinecraft().thePlayer, stack, 0, source, 5.0).AbsorbRatio * 100.0);
     }
-    
+
     public static float getPassiveResist(final EntityLivingBase entity, final DamageSource source) {
         if (entity instanceof EntityPlayer) {
             if (source == DamageSource.lava) {
-                return (float)PlayerAttributes.LAVA_RESIST.getSafe(entity, (Object)0.0f);
+                return (float)PlayerAttributes.LAVA_RESIST.getSafe(entity,0.0f);
             }
             if (source == DamageSource.inFire || source == DamageSource.onFire) {
-                return (float)PlayerAttributes.FIRE_RESIST.getSafe(entity, (Object)0.0f);
+                return (float)PlayerAttributes.FIRE_RESIST.getSafe(entity,0.0f);
             }
             if (source.isMagicDamage()) {
-                return (float)PlayerAttributes.MAGIC_RESIST.getSafe(entity, (Object)0.0f);
+                return (float)PlayerAttributes.MAGIC_RESIST.getSafe(entity, 0.0f);
             }
             if (!source.isUnblockable()) {
-                return (float)PlayerAttributes.PHYSIC_RESIST.getSafe(entity, (Object)0.0f);
+                return (float)PlayerAttributes.PHYSIC_RESIST.getSafe(entity, 0.0f);
             }
         }
         return 0.0f;
     }
-    
+
     private static ISpecialArmor.ArmorProperties getArmorProperties(final EntityLivingBase entity, final ItemStack stack, final int slot, final DamageSource source, final double damage) {
         if (stack.getItem() instanceof ISpecialArmor) {
             return ((ISpecialArmor)stack.getItem()).getProperties(entity, stack, source, damage, slot).copy();
@@ -92,7 +92,7 @@ public class HookArmorSystem
         }
         return null;
     }
-    
+
     private static ArrayList<ISpecialArmor.ArmorProperties> getArrayArmorProperties(final EntityLivingBase entity, final ItemStack[] inventory, final DamageSource source, final double damage) {
         final ArrayList<ISpecialArmor.ArmorProperties> dmgVals = new ArrayList<ISpecialArmor.ArmorProperties>();
         for (int x = 0; x < inventory.length; ++x) {
@@ -107,7 +107,7 @@ public class HookArmorSystem
         }
         return dmgVals;
     }
-    
+
     @Hook(returnCondition = ReturnCondition.ALWAYS)
     public static float ApplyArmor(final ISpecialArmor.ArmorProperties nullObj, final EntityLivingBase entity, final ItemStack[] inventory, final DamageSource source, double damage) {
         final ArrayList<ISpecialArmor.ArmorProperties> dmgVals = getArrayArmorProperties(entity, inventory, source, damage);
@@ -144,7 +144,7 @@ public class HookArmorSystem
         }
         return (float)(damage / 40.0);
     }
-    
+
     private static void standardizeList(final ISpecialArmor.ArmorProperties[] armor, double damage) {
         Arrays.sort(armor);
         int start = 0;

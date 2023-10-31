@@ -31,39 +31,39 @@ public class GuiLvlupTable extends GuiContainer
     public static int slotU;
     public static int slotV;
     private LevelUpButton but;
-    
+
     public GuiLvlupTable(final InventoryPlayer inventory, final World world, final int x, final int y, final int z) {
         super((Container)new ContainerLvlupTable((IInventory)inventory, world, x, y, z));
         this.xSize = 176;
         this.ySize = 211;
     }
-    
+
     public void setWorldAndResolution(final Minecraft mc, final int width, final int height) {
         super.setWorldAndResolution(mc, width, height);
         this.buttonList.add(this.but = new LevelUpButton(0, (width - this.xSize) / 2 + GuiLvlupTable.butX, (height - this.ySize) / 2 + GuiLvlupTable.butY));
     }
-    
+
     public void updateScreen() {
         super.updateScreen();
     }
-    
+
     protected void drawGuiContainerBackgroundLayer(final float partialTicks, final int mouseX, final int mouseY) {
         this.mc.getTextureManager().bindTexture(GuiLvlupTable.TEXTURE);
         this.drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
         final ContainerLvlupTable clt = (ContainerLvlupTable)this.inventorySlots;
         for (int i = clt.staticSize; i < clt.inventorySlots.size(); ++i) {
-            final Slot slot = clt.inventorySlots.get(i);
+            final Slot slot = (Slot) clt.inventorySlots.get(i);
             this.drawTexturedModalRect(this.guiLeft + slot.xDisplayPosition - 1, this.guiTop + slot.yDisplayPosition - 1, GuiLvlupTable.slotU, GuiLvlupTable.slotV, 18, 18);
         }
     }
-    
+
     protected void drawGuiContainerForegroundLayer(final int mouseX, final int mouseY) {
         final String s1 = StatCollector.translateToLocal(RPGBlocks.lvlupTable.getLocalizedName());
         final String s2 = StatCollector.translateToLocal("key.inventory");
         this.fontRendererObj.drawString(s1, (this.xSize - this.fontRendererObj.getStringWidth(s1)) / 2, 5, 4210752);
         this.fontRendererObj.drawString(s2, GuiLvlupTable.invStrX, GuiLvlupTable.invStrY, 4210752);
     }
-    
+
     static {
         TEXTURE = new ResourceLocation("dangerrpg", "textures/gui/container/gui_lvlup_table.png");
         GuiLvlupTable.invStrX = 8;
@@ -77,13 +77,13 @@ public class GuiLvlupTable extends GuiContainer
         GuiLvlupTable.slotU = 176;
         GuiLvlupTable.slotV = 0;
     }
-    
+
     public class LevelUpButton extends GuiButton
     {
         public LevelUpButton(final int id, final int x, final int y) {
             super(id, x, y, GuiLvlupTable.butW, GuiLvlupTable.butH, DangerRPG.trans("rpgstr.upgrade"));
         }
-        
+
         public void drawButton(final Minecraft mc, final int par1, final int par2) {
             GL11.glDisable(2896);
             if (this.visible) {
@@ -121,7 +121,7 @@ public class GuiLvlupTable extends GuiContainer
                 }
             }
         }
-        
+
         public boolean mousePressed(final Minecraft mc, final int x, final int y) {
             if (super.mousePressed(mc, x, y)) {
                 mc.playerController.sendEnchantPacket(GuiLvlupTable.this.inventorySlots.windowId, 0);

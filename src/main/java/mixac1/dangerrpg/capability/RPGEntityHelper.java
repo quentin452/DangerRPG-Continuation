@@ -15,38 +15,38 @@ public abstract class RPGEntityHelper
 {
     public static final IMultiplier.Multiplier HEALTH_MUL;
     public static final IMultiplier.Multiplier DAMAGE_MUL;
-    
+
     public static boolean isRPGable(final EntityLivingBase entity) {
         return RPGCapability.rpgEntityRegistr.isActivated(entity);
     }
-    
-    public static boolean registerEntity(final Class entityClass) {
+
+    public static boolean registerEntity(final Class<? extends EntityLivingBase> entityClass) {
         if (!EntityLivingBase.class.isAssignableFrom(entityClass)) {
             return false;
         }
-        if (RPGCapability.rpgEntityRegistr.containsKey((Object)entityClass)) {
+        if (!RPGCapability.rpgEntityRegistr.containsKey(entityClass)) {
+            final IRPGEntity iRPG = EntityPlayer.class.isAssignableFrom(entityClass) ? IRPGEntity.DEFAULT_PLAYER : (EntityMob.class.isAssignableFrom(entityClass) ? IRPGEntity.DEFAULT_MOB : IRPGEntity.DEFAULT_LIVING);
+            RPGCapability.rpgEntityRegistr.put(entityClass, new RPGEntityRegister.RPGEntityData(iRPG, false));
             return true;
         }
-        final IRPGEntity iRPG = EntityPlayer.class.isAssignableFrom(entityClass) ? IRPGEntity.DEFAULT_PLAYER : (EntityMob.class.isAssignableFrom(entityClass) ? IRPGEntity.DEFAULT_MOB : IRPGEntity.DEFAULT_LIVING);
-        RPGCapability.rpgEntityRegistr.put((Object)entityClass, (Object)new RPGEntityRegister.RPGEntityData(iRPG, false));
         return true;
     }
-    
+
     public static void registerEntityDefault(final Class<? extends EntityLivingBase> entityClass, final RPGEntityRegister.RPGEntityData map) {
         map.registerEA((EntityAttribute)EntityAttributes.LVL, (Object)1);
         MinecraftForge.EVENT_BUS.post((Event)new RegEAEvent.DefaultEAEvent((Class)entityClass, map));
     }
-    
+
     public static void registerEntityLiving(final Class<? extends EntityLiving> entityClass, final RPGEntityRegister.RPGEntityData map) {
         map.registerEA((EntityAttribute)EntityAttributes.HEALTH, (Object)0.0f, RPGEntityHelper.HEALTH_MUL);
         MinecraftForge.EVENT_BUS.post((Event)new RegEAEvent.EntytyLivingEAEvent((Class)entityClass, map));
     }
-    
+
     public static void registerEntityMob(final Class<? extends EntityMob> entityClass, final RPGEntityRegister.RPGEntityData map) {
         map.registerEA((EntityAttribute)EntityAttributes.MELEE_DAMAGE, (Object)0.0f, RPGEntityHelper.DAMAGE_MUL);
         MinecraftForge.EVENT_BUS.post((Event)new RegEAEvent.EntytyMobEAEvent((Class)entityClass, map));
     }
-    
+
     public static void registerEntityPlayer(final Class<? extends EntityPlayer> entityClass, final RPGEntityRegister.RPGEntityData map) {
         final IMultiplier.Multiplier ADD_1 = IMultiplier.ADD_1;
         final IMultiplier.Multiplier ADD_2 = new IMultiplier.MultiplierAdd(2.0f);
@@ -79,7 +79,7 @@ public abstract class RPGEntityHelper
         map.registerEA((EntityAttribute)PlayerAttributes.SPEED_COUNTER, (Object)0.0f);
         MinecraftForge.EVENT_BUS.post((Event)new RegEAEvent.PlayerEAEvent((Class)entityClass, map));
     }
-    
+
     static {
         HEALTH_MUL = new IMultiplier.MultiplierMul(RPGConfig.EntityConfig.d.entityLvlUpHealthMul);
         DAMAGE_MUL = new IMultiplier.MultiplierMul(RPGConfig.EntityConfig.d.entityLvlUpHealthMul);

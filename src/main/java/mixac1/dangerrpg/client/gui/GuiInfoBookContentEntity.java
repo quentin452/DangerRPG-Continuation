@@ -35,19 +35,19 @@ public class GuiInfoBookContentEntity extends GuiInfoBookContent
     public static int infoI;
     public static int infoW;
     private int currIndex;
-    
+
     public GuiInfoBookContentEntity(final Minecraft mc, final int width, final int height, final int top, final int size, final int left, final GuiInfoBook parent) {
         super(mc, width, height, top, size - GuiInfoBookContentEntity.imageH - GuiInfoBookContentEntity.offset, left, GuiInfoBookContentEntity.sizeContent, parent);
         this.currIndex = -1;
     }
-    
+
     public void init() {
         super.init();
         for (final LvlEAProvider attr : this.parent.attributes) {
             this.list.add(new ContentItem(attr));
         }
     }
-    
+
     public void drawScreen(final int mouseX, final int mouseY, final float par3) {
         super.drawScreen(mouseX, mouseY, par3);
         if (this.currIndex >= 0) {
@@ -92,7 +92,7 @@ public class GuiInfoBookContentEntity extends GuiInfoBookContent
         String s = DangerRPG.trans("rpgstr.stats");
         this.mc.fontRenderer.drawStringWithShadow(s, this.left + (this.listWidth - this.mc.fontRenderer.getStringWidth(s)) / 2, this.top - this.mc.fontRenderer.FONT_HEIGHT - 4, 16777215);
     }
-    
+
     protected void elementClicked(final int index, final boolean doubleClick) {
         if (this.currIndex == index) {
             this.currIndex = -1;
@@ -101,18 +101,18 @@ public class GuiInfoBookContentEntity extends GuiInfoBookContent
             this.currIndex = index;
         }
     }
-    
+
     protected boolean isSelected(final int index) {
         return index == this.currIndex;
     }
-    
+
     protected void drawBackground() {
     }
-    
-    protected void drawSlot(final int var1, final int var2, final int var3, final int var4, final Tessellator var5) {
-        this.list.get(var1).draw(this.left, var3, 16777215, 48896);
+
+    protected void drawSlot(int var1, int var2, int var3, int var4, Tessellator var5) {
+        ((ContentItem)this.list.get(var1)).draw(this.left, var3, 16777215, 48896);
     }
-    
+
     static {
         TEXTURE = new ResourceLocation("DangerRPG:textures/gui/info_book_player_content.png");
         GuiInfoBookContentEntity.imageW = 176;
@@ -134,15 +134,15 @@ public class GuiInfoBookContentEntity extends GuiInfoBookContent
         GuiInfoBookContentEntity.infoI = 2;
         GuiInfoBookContentEntity.infoW = GuiInfoBookContentEntity.imageW - GuiInfoBookContentEntity.infoX * 2;
     }
-    
+
     public class ContentItem
     {
         private LvlEAProvider attr;
-        
+
         public ContentItem(final LvlEAProvider attr) {
             this.attr = attr;
         }
-        
+
         public void draw(final int x, final int y, final int color1, final int color2) {
             String s = GuiInfoBookContentEntity.this.mc.fontRenderer.trimStringToWidth(this.attr.attr.getDisplayName(), GuiInfoBookContentEntity.this.listWidth - 20);
             GuiInfoBookContentEntity.this.mc.fontRenderer.drawStringWithShadow(s, x + (GuiInfoBookContentEntity.this.listWidth - GuiInfoBookContentEntity.this.mc.fontRenderer.getStringWidth(s)) / 2, y + (GuiInfoBookContentEntity.sizeContent - GuiInfoBookContentEntity.this.mc.fontRenderer.FONT_HEIGHT) / 2, 16777215);
@@ -151,18 +151,18 @@ public class GuiInfoBookContentEntity extends GuiInfoBookContent
             GuiInfoBookContentEntity.this.mc.fontRenderer.drawStringWithShadow(s, x + 5, y + (GuiInfoBookContentEntity.sizeContent - GuiInfoBookContentEntity.this.mc.fontRenderer.FONT_HEIGHT) / 2, color3);
         }
     }
-    
+
     public static class LevelUpButton extends GuiButton
     {
         private GuiInfoBookContentEntity parent;
         private boolean isUp;
-        
+
         public LevelUpButton(final int id, final boolean isUp, final int x, final int y, final GuiInfoBookContentEntity parent) {
             super(id, x, y, GuiInfoBookContentEntity.butW, GuiInfoBookContentEntity.butH, isUp ? "+" : "-");
             this.parent = parent;
             this.isUp = isUp;
         }
-        
+
         public void drawButton(final Minecraft mc, final int par1, final int par2) {
             GL11.glDisable(2896);
             if (this.visible && this.parent.currIndex >= 0) {
@@ -186,7 +186,7 @@ public class GuiInfoBookContentEntity extends GuiInfoBookContent
                 mc.fontRenderer.drawStringWithShadow(this.displayString, this.xPosition + (this.width - mc.fontRenderer.getStringWidth(this.displayString)) / 2, this.yPosition + (this.height - mc.fontRenderer.FONT_HEIGHT) / 2, color);
             }
         }
-        
+
         public boolean mousePressed(final Minecraft mc, final int x, final int y) {
             return super.mousePressed(mc, x, y) && this.parent.parent.attributes.get(this.parent.currIndex).tryUp(this.parent.parent.target, this.parent.parent.player, this.isUp);
         }

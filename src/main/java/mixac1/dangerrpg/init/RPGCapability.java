@@ -26,26 +26,29 @@ public abstract class RPGCapability
     public static HashMap<Integer, GemType> mapIntToGemType;
     public static HashMap<Integer, EntityAttribute> mapIntToEntityAttribute;
     public static HashSet<Class<? extends EntityLivingBase>> blackListEntities;
-    
+
     public static void preLoad(final FMLPostInitializationEvent e) {
         registerDefaultRPGItems();
         registerDefaultRPGEntities();
     }
-    
+
     public static void load(final FMLPostInitializationEvent e) {
         loadEntities();
         loadItems();
     }
-    
+
     public static void postLoad(final FMLPostInitializationEvent e) {
         RPGCapability.rpgItemRegistr.createTransferData();
         RPGCapability.rpgEntityRegistr.createTransferData();
     }
-    
+
     private static void registerDefaultRPGItems() {
-        for (final Item item : GameData.getItemRegistry()) {
-            if (item instanceof IRPGItem) {
-                RPGRegister.registerRPGItem(item, (IRPGItem)item);
+        for (Object object : GameData.getItemRegistry()) {
+            if (object instanceof Item) {
+                Item item = (Item) object;
+                if (item instanceof IRPGItem) {
+                    RPGRegister.registerRPGItem(item, (IRPGItem) item);
+                }
             }
         }
         RPGRegister.registerRPGItem(Items.wooden_hoe, (IRPGItem)IRPGItem.DEFAULT_SWORD);
@@ -100,7 +103,7 @@ public abstract class RPGCapability
         RPGRegister.registerRPGItem((Item)Items.diamond_leggings, (IRPGItem)IRPGItem.DEFAULT_ARMOR);
         RPGRegister.registerRPGItem((Item)Items.bow, (IRPGItem)IRPGItem.DEFAULT_BOW);
     }
-    
+
     private static void registerDefaultRPGEntities() {
         RPGRegister.registerRPGEntity((Class)EntityChicken.class, IRPGEntity.DEFAULT_LIVING);
         RPGRegister.registerRPGEntity((Class)EntitySnowman.class, IRPGEntity.DEFAULT_LIVING);
@@ -130,7 +133,7 @@ public abstract class RPGCapability
         RPGRegister.registerRPGEntity((Class)EntityIronGolem.class, (IRPGEntity)new IRPGEntity.RPGCommonEntity(14.0f));
         RPGRegister.registerRPGEntity((Class)EntityDragon.class, (IRPGEntity)new IRPGEntity.RPGCommonEntity(10.0f));
     }
-    
+
     private static void loadEntities() {
         for (final Object obj : EntityList.classToStringMapping.entrySet()) {
             final Map.Entry<Class, String> entry = (Map.Entry<Class, String>)obj;
@@ -154,7 +157,7 @@ public abstract class RPGCapability
         }
         ((RPGEntityRegister.RPGEntityData)RPGCapability.rpgEntityRegistr.get((Object)EntityPlayer.class)).isActivated = true;
     }
-    
+
     private static void loadItems() {
         final Iterator iterator = GameData.getItemRegistry().iterator();
         while (iterator.hasNext()) {
@@ -169,7 +172,7 @@ public abstract class RPGCapability
             }
         }
     }
-    
+
     static {
         RPGCapability.rpgItemRegistr = new RPGItemRegister();
         RPGCapability.rpgEntityRegistr = new RPGEntityRegister();

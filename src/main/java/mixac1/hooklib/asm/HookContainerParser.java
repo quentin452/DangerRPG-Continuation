@@ -19,27 +19,28 @@ public class HookContainerParser
     private static final String HOOK_DESC;
     private static final String LOCAL_DESC;
     private static final String RETURN_DESC;
-    
+
     public HookContainerParser(final HookClassTransformer transformer) {
         this.parameterAnnotations = new HashMap<Integer, Integer>();
         this.transformer = transformer;
     }
-    
+
     protected void parseHooks(final String className) {
         this.parseHooks(ReadClassHelper.getClassData(className));
     }
-    
+
     protected void parseHooks(final InputStream input) {
         ReadClassHelper.acceptVisitor(input, new HookClassVisitor());
     }
-    
+
     private void invalidHook(final String message) {
         DangerRPG.logger.warn(Utils.toString(new Object[] { "Found invalid hook ", this.currentClassName, "#", this.currentMethodName }));
         DangerRPG.logger.warn(message);
     }
-    
+
     private void createHook() {
-        final AsmHook.Builder builder = AsmHook.newBuilder();
+        AsmHook asmHook = new AsmHook();
+        AsmHook.Builder builder = asmHook.newBuilder();
         final Type methodType = Type.getMethodType(this.currentMethodDesc);
         final Type[] argumentTypes = methodType.getArgumentTypes();
         if (!this.currentMethodPublicStatic) {
@@ -88,7 +89,7 @@ public class HookContainerParser
             builder.setInjectorFactory(AsmHook.ON_EXIT_FACTORY);
         }
         if (this.annotationValues.containsKey("injectOnLine")) {
-            final int line = this.annotationValues.get("injectOnLine");
+            final int line = (int) this.annotationValues.get("injectOnLine");
             builder.setInjectorFactory((HookInjectorFactory)new HookInjectorFactory.LineNumber(line));
         }
         if (this.annotationValues.containsKey("returnType")) {
@@ -96,7 +97,7 @@ public class HookContainerParser
         }
         ReturnCondition returnCondition = ReturnCondition.NEVER;
         if (this.annotationValues.containsKey("returnCondition")) {
-            returnCondition = ReturnCondition.valueOf(this.annotationValues.get("returnCondition"));
+            returnCondition = ReturnCondition.valueOf((String) this.annotationValues.get("returnCondition"));
             builder.setReturnCondition(returnCondition);
         }
         if (returnCondition != ReturnCondition.NEVER) {
@@ -125,12 +126,12 @@ public class HookContainerParser
             return;
         }
         if (this.annotationValues.containsKey("priority")) {
-            builder.setPriority(HookPriority.valueOf(this.annotationValues.get("priority")));
+            builder.setPriority(HookPriority.valueOf((String) this.annotationValues.get("priority")));
         }
         builder.setHookMethodReturnType(methodType.getReturnType());
         this.transformer.registerHook(builder.build());
     }
-    
+
     private Object getPrimitiveConstant() {
         for (final Map.Entry<String, Object> entry : this.annotationValues.entrySet()) {
             if (entry.getKey().endsWith("Constant")) {
@@ -139,23 +140,23 @@ public class HookContainerParser
         }
         return null;
     }
-    
+
     static {
         HOOK_DESC = Type.getDescriptor((Class)Hook.class);
         LOCAL_DESC = Type.getDescriptor((Class)Hook.LocalVariable.class);
         RETURN_DESC = Type.getDescriptor((Class)Hook.ReturnValue.class);
     }
-    
+
     private class HookClassVisitor extends ClassVisitor
     {
         public HookClassVisitor() {
             super(327680);
         }
-        
+
         public void visit(final int version, final int access, final String name, final String signature, final String superName, final String[] interfaces) {
             HookContainerParser.this.currentClassName = name.replace('/', '.');
         }
-        
+
         public MethodVisitor visitMethod(final int access, final String name, final String desc, final String signature, final String[] exceptions) {
             HookContainerParser.this.currentMethodName = name;
             HookContainerParser.this.currentMethodDesc = desc;
@@ -163,13 +164,13 @@ public class HookContainerParser
             return new HookMethodVisitor();
         }
     }
-    
+
     private class HookMethodVisitor extends MethodVisitor
     {
         public HookMethodVisitor() {
             super(327680);
         }
-        
+
         public AnnotationVisitor visitAnnotation(final String desc, final boolean visible) {
             if (HookContainerParser.HOOK_DESC.equals(desc)) {
                 HookContainerParser.this.annotationValues = (HashMap<String, Object>)new HashMap();
@@ -177,7 +178,7 @@ public class HookContainerParser
             }
             return new HookAnnotationVisitor();
         }
-        
+
         public AnnotationVisitor visitParameterAnnotation(final int parameter, final String desc, final boolean visible) {
             if (HookContainerParser.RETURN_DESC.equals(desc)) {
                 HookContainerParser.this.parameterAnnotations.put(parameter, -1);
@@ -185,13 +186,13 @@ public class HookContainerParser
             if (HookContainerParser.LOCAL_DESC.equals(desc)) {
                 return new AnnotationVisitor(327680) {
                     public void visit(final String name, final Object value) {
-                        HookContainerParser.this.parameterAnnotations.put(parameter, value);
+                        HookContainerParser.this.parameterAnnotations.put(parameter, (Integer) value);
                     }
                 };
             }
             return null;
         }
-        
+
         public void visitEnd() {
             if (HookContainerParser.this.annotationValues != null) {
                 HookContainerParser.this.createHook();
@@ -202,23 +203,23 @@ public class HookContainerParser
             HookContainerParser.this.annotationValues = null;
         }
     }
-    
+
     private class HookAnnotationVisitor extends AnnotationVisitor
     {
         public HookAnnotationVisitor() {
             super(327680);
         }
-        
+
         public void visit(final String name, final Object value) {
             if (HookContainerParser.this.inHookAnnotation) {
                 HookContainerParser.this.annotationValues.put(name, value);
             }
         }
-        
+
         public void visitEnum(final String name, final String desc, final String value) {
             this.visit(name, value);
         }
-        
+
         public void visitEnd() {
             HookContainerParser.this.inHookAnnotation = false;
         }

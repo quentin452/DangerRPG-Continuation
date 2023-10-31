@@ -20,6 +20,7 @@ import net.minecraft.item.*;
 import net.minecraftforge.common.*;
 import mixac1.dangerrpg.api.event.*;
 import cpw.mods.fml.common.eventhandler.*;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 
 public class EventHandlerEntity
 {
@@ -29,7 +30,7 @@ public class EventHandlerEntity
             RPGEntityProperties.register((EntityLivingBase)e.entity);
         }
     }
-    
+
     @SubscribeEvent
     public void onEntityJoinWorld(final EntityJoinWorldEvent e) {
         if (e.entity instanceof EntityLivingBase && RPGEntityHelper.isRPGable((EntityLivingBase)e.entity)) {
@@ -41,7 +42,7 @@ public class EventHandlerEntity
             }
         }
     }
-    
+
     @SubscribeEvent
     public void onPlayerCloned(final PlayerEvent.Clone e) {
         if (e.wasDeath) {
@@ -51,32 +52,32 @@ public class EventHandlerEntity
         RPGEntityProperties.get((EntityLivingBase)e.original).saveNBTData(nbt);
         RPGEntityProperties.get((EntityLivingBase)e.entityPlayer).loadNBTData(nbt);
     }
-    
+
     @SubscribeEvent
     public void onInitRPGEntity(final InitRPGEntityEvent e) {
         final ChunkCoordinates spawn = e.entity.worldObj.getSpawnPoint();
         final double distance = Utils.getDiagonal(e.entity.posX - spawn.posX, e.entity.posZ - spawn.posZ);
         final int lvl = (int)(distance / RPGConfig.EntityConfig.d.entityLvlUpFrequency);
         if (EntityAttributes.LVL.hasIt(e.entity)) {
-            EntityAttributes.LVL.setValue((Object)(lvl + 1), e.entity);
+            EntityAttributes.LVL.setValue((lvl + 1), e.entity);
         }
         if (EntityAttributes.HEALTH.hasIt(e.entity)) {
             final float health = e.entity.getHealth();
             final IMultiplier.Multiplier mul = RPGCapability.rpgEntityRegistr.get(e.entity).attributes.get(EntityAttributes.HEALTH).mulValue;
-            EntityAttributes.HEALTH.setValue((Object)RPGHelper.multyMul(health, lvl, mul), e.entity);
+            EntityAttributes.HEALTH.setValue(RPGHelper.multyMul(health, lvl, mul), e.entity);
         }
         EntityAttribute.EAFloat attr = RPGCapability.rpgEntityRegistr.get(e.entity).rpgComponent.getEAMeleeDamage(e.entity);
         if (attr != null) {
             final IMultiplier.Multiplier mul = RPGCapability.rpgEntityRegistr.get(e.entity).attributes.get(attr).mulValue;
-            attr.addValue((Object)RPGHelper.multyMul((float)attr.getValue(e.entity), lvl, mul), e.entity);
+            attr.addValue(RPGHelper.multyMul(attr.getValue(e.entity), lvl, mul), e.entity);
         }
         attr = RPGCapability.rpgEntityRegistr.get(e.entity).rpgComponent.getEARangeDamage(e.entity);
         if (attr != null) {
             final IMultiplier.Multiplier mul = RPGCapability.rpgEntityRegistr.get(e.entity).attributes.get(attr).mulValue;
-            attr.addValue((Object)RPGHelper.multyMul((float)attr.getValue(e.entity), lvl, mul), e.entity);
+            attr.addValue(RPGHelper.multyMul((float)attr.getValue(e.entity), lvl, mul), e.entity);
         }
     }
-    
+
     @SubscribeEvent
     public void onLivingJump(final LivingEvent.LivingJumpEvent e) {
         if (e.entityLiving instanceof EntityPlayer) {
@@ -84,14 +85,14 @@ public class EventHandlerEntity
             entityLiving.motionY += (float)PlayerAttributes.JUMP_HEIGHT.getValue(e.entityLiving) * 14.0f;
         }
     }
-    
+
     @SubscribeEvent
     public void onLivingFall(final LivingFallEvent e) {
         if (e.entityLiving instanceof EntityPlayer) {
             e.distance -= (float)PlayerAttributes.FALL_RESIST.getValue(e.entityLiving) * 10.0f;
         }
     }
-    
+
     @SubscribeEvent
     public void onPlayerTick(final TickEvent.PlayerTickEvent e) {
         if (e.phase == TickEvent.Phase.START) {
@@ -100,7 +101,7 @@ public class EventHandlerEntity
                 final float tmp1;
                 final float tmp2;
                 if (DangerRPG.proxy.getTick(e.side) % 20 == 0 && (tmp1 = (float)PlayerAttributes.CURR_MANA.getValue((EntityLivingBase)e.player)) < (float)PlayerAttributes.MANA.getValue((EntityLivingBase)e.player) && (tmp2 = (float)PlayerAttributes.MANA_REGEN.getValue((EntityLivingBase)e.player)) != 0.0f) {
-                    PlayerAttributes.CURR_MANA.setValue((Object)(tmp1 + tmp2), (EntityLivingBase)e.player);
+                    PlayerAttributes.CURR_MANA.setValue((tmp1 + tmp2), (EntityLivingBase)e.player);
                 }
                 if (DangerRPG.proxy.getTick(e.side) % 100 == 0) {
                     e.player.heal((float)PlayerAttributes.HEALTH_REGEN.getValue((EntityLivingBase)e.player));
@@ -118,10 +119,10 @@ public class EventHandlerEntity
                 e.player.setHealth(tmp1);
             }
             if ((float)PlayerAttributes.CURR_MANA.getValue((EntityLivingBase)e.player) > (tmp1 = (float)PlayerAttributes.MANA.getValue((EntityLivingBase)e.player))) {
-                PlayerAttributes.CURR_MANA.setValue((Object)tmp1, (EntityLivingBase)e.player);
+                PlayerAttributes.CURR_MANA.setValue(tmp1, (EntityLivingBase)e.player);
             }
             if (e.player != null && (tmp1 = (float)PlayerAttributes.SPEED_COUNTER.getValue((EntityLivingBase)e.player)) > 0.0f) {
-                PlayerAttributes.SPEED_COUNTER.setValue((Object)(tmp1 - 1.0f), (EntityLivingBase)e.player);
+                PlayerAttributes.SPEED_COUNTER.setValue((tmp1 - 1.0f), (EntityLivingBase)e.player);
             }
         }
     }

@@ -72,7 +72,7 @@ public class HookFixEntityMotion
             buf.writeBytes(tmpBuf);
         }
     }
-    
+
     @Hook(returnCondition = ReturnCondition.ALWAYS)
     public static void sendLocationToAllClients(final EntityTrackerEntry tracker, final List list) {
         tracker.playerEntitiesUpdated = false;
@@ -191,7 +191,7 @@ public class HookFixEntityMotion
             tracker.myEntity.velocityChanged = false;
         }
     }
-    
+
     @Hook(returnCondition = ReturnCondition.ALWAYS)
     public static void tryStartWachingThis(final EntityTrackerEntry tracker, final EntityPlayerMP player) {
         if (player != tracker.myEntity) {
@@ -245,9 +245,11 @@ public class HookFixEntityMotion
                         }
                     }
                     if (tracker.myEntity instanceof EntityLivingBase) {
-                        final EntityLivingBase entitylivingbase = (EntityLivingBase)tracker.myEntity;
-                        for (final PotionEffect potioneffect : entitylivingbase.getActivePotionEffects()) {
-                            player.playerNetServerHandler.sendPacket((Packet)new S1DPacketEntityEffect(tracker.myEntity.getEntityId(), potioneffect));
+                        EntityLivingBase entitylivingbase = (EntityLivingBase)tracker.myEntity;
+
+                        for (Object o : entitylivingbase.getActivePotionEffects()) {
+                            PotionEffect potioneffect = (PotionEffect) o;
+                            player.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(tracker.myEntity.getEntityId(), potioneffect));
                         }
                     }
                     ForgeEventFactory.onStartEntityTracking(tracker.myEntity, (EntityPlayer)player);
@@ -260,7 +262,7 @@ public class HookFixEntityMotion
             }
         }
     }
-    
+
     private static S12PacketEntityVelocity createVelocityPacket(final int entityId, final double motionX, final double motionY, final double motionZ) {
         final S12PacketEntityVelocity packet = new S12PacketEntityVelocity();
         packet.field_149417_a = entityId;
@@ -269,7 +271,7 @@ public class HookFixEntityMotion
         packet.field_149414_d = (int)(motionZ * 8000.0);
         return packet;
     }
-    
+
     @Hook(returnCondition = ReturnCondition.ALWAYS)
     public static void readPacketData(final S12PacketEntityVelocity packet, final PacketBuffer buf) throws IOException {
         packet.field_149417_a = buf.readInt();
@@ -277,7 +279,7 @@ public class HookFixEntityMotion
         packet.field_149416_c = buf.readInt();
         packet.field_149414_d = buf.readInt();
     }
-    
+
     @Hook(returnCondition = ReturnCondition.ALWAYS)
     public static void writePacketData(final S12PacketEntityVelocity packet, final PacketBuffer buf) throws IOException {
         buf.writeInt(packet.field_149417_a);
