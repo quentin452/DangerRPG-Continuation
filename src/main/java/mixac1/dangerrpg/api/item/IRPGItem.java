@@ -15,11 +15,11 @@ import net.minecraft.entity.*;
 
 public interface IRPGItem
 {
-    public static final IRPGItem DEFAULT_ITEM = new IRPGItem() {
+    IRPGItem DEFAULT_ITEM = new IRPGItem() {
         public void registerAttributes(Item item, RPGItemRegister.RPGItemData map) {
         }
     };
-    public static final IRPGItem DEFAULT_ITEM_MOD = new IRPGItemMod() {
+    IRPGItem DEFAULT_ITEM_MOD = new IRPGItemMod() {
         public void registerAttributes(Item item, RPGItemRegister.RPGItemData map) {
             RPGItemHelper.registerParamsItemMod(item, map);
         }
@@ -28,7 +28,7 @@ public interface IRPGItem
             return null;
         }
     };
-    public static final IRPGItemTool DEFAULT_SWORD = new IRPGItemTool() {
+    IRPGItemTool DEFAULT_SWORD = new IRPGItemTool() {
         public void registerAttributes(Item item, RPGItemRegister.RPGItemData map) {
             RPGItemHelper.registerParamsItemSword(item, map);
         }
@@ -41,7 +41,7 @@ public interface IRPGItem
             return RPGToolMaterial.toolMaterialHook(Item.ToolMaterial.valueOf(((ItemSword)item).getToolMaterialName()));
         }
     };
-    public static final IRPGItemTool DEFAULT_TOOL = new IRPGItemTool() {
+    IRPGItemTool DEFAULT_TOOL = new IRPGItemTool() {
         public void registerAttributes(Item item, RPGItemRegister.RPGItemData map) {
             RPGItemHelper.registerParamsItemTool(item, map);
         }
@@ -66,7 +66,7 @@ public interface IRPGItem
             }
         }
     };
-    public static final IRPGItemArmor DEFAULT_ARMOR = new IRPGItemArmor() {
+    IRPGItemArmor DEFAULT_ARMOR = new IRPGItemArmor() {
         public void registerAttributes(Item item, RPGItemRegister.RPGItemData map) {
             RPGItemHelper.registerParamsItemArmor(item, map);
         }
@@ -79,7 +79,7 @@ public interface IRPGItem
             return RPGArmorMaterial.armorMaterialHook(((ItemArmor)item).getArmorMaterial());
         }
     };
-    public static final IRPGItemBow DEFAULT_BOW = new IRPGItemBow() {
+    IRPGItemBow DEFAULT_BOW = new IRPGItemBow() {
         public void registerAttributes(Item item, RPGItemRegister.RPGItemData map) {
             RPGItemHelper.registerParamsItemBow(item, map);
         }
@@ -124,38 +124,38 @@ public interface IRPGItem
 
     void registerAttributes(final Item p0, final RPGItemRegister.RPGItemData p1);
 
-    public interface IRPGItemTool extends IRPGItemMod
+    interface IRPGItemTool extends IRPGItemMod
     {
         RPGItemComponent.RPGToolComponent getItemComponent(Item var1);
 
         RPGToolMaterial getToolMaterial(Item var1);
     }
 
-    public interface IRPGItemArmor extends IRPGItemMod
+    interface IRPGItemArmor extends IRPGItemMod
     {
         RPGItemComponent.RPGArmorComponent getItemComponent(Item var1);
 
         RPGArmorMaterial getArmorMaterial(Item var1);
     }
 
-    public interface IRPGItemGun extends IRPGItemTool
+    interface IRPGItemGun extends IRPGItemTool
     {
         RPGItemComponent.RPGGunComponent getItemComponent(Item var1);
     }
 
-    public interface IRPGItemStaff extends IRPGItemGun
+    interface IRPGItemStaff extends IRPGItemGun
     {
         RPGItemComponent.RPGStaffComponent getItemComponent(Item var1);
     }
 
-    public interface IRPGItemBow extends IRPGItemGun
+    interface IRPGItemBow extends IRPGItemGun
     {
         void onStoppedUsing(ItemStack var1, World var2, EntityPlayer var3, int var4);
 
         RPGItemComponent.RPGBowComponent getItemComponent(Item var1);
     }
 
-    public interface IRPGItemMod extends IRPGItem
+    interface IRPGItemMod extends IRPGItem
     {
         RPGItemComponent getItemComponent(Item var1);
     }
