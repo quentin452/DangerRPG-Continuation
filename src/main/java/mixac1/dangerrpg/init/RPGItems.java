@@ -248,7 +248,7 @@ public abstract class RPGItems {
     }
 
     public static void registerItem(final Item item) {
-        GameRegistry.registerItem(item, item.unlocalizedName);
+        GameRegistry.registerItem(item, item.getUnlocalizedName(), "dangerrpg");
     }
 
     public static void registerItemArray(final Item[] array) {

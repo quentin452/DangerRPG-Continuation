@@ -16,11 +16,11 @@ import mixac1.dangerrpg.util.*;
 
 public class ItemRPGArmor extends ItemArmor implements IRPGItem.IRPGItemArmor, IHasBooksInfo {
 
-    protected static String[] ARMOR_TYPES;
-    protected RPGArmorMaterial armorMaterial;
-    protected RPGItemComponent.RPGArmorComponent armorComponent;
-    protected String name;
-    protected String modelTexture;
+    public static String[] ARMOR_TYPES;
+    public RPGArmorMaterial armorMaterial;
+    public RPGItemComponent.RPGArmorComponent armorComponent;
+    public String name;
+    public String modelTexture;
 
     public ItemRPGArmor(final RPGArmorMaterial armorMaterial, final RPGItemComponent.RPGArmorComponent armorComponent,
         final int renderIndex, final int armorType) {
@@ -30,7 +30,7 @@ public class ItemRPGArmor extends ItemArmor implements IRPGItem.IRPGItemArmor, I
         this.name = RPGItems.getRPGName(armorComponent, armorMaterial);
         this.modelTexture = Utils.toString("DangerRPG:textures/models/armors/", this.name, "_layer_");
         this.setUnlocalizedName(this.name.concat(ItemRPGArmor.ARMOR_TYPES[armorType]));
-        this.setTextureName(Utils.toString("dangerrpg", ":armors/", this.unlocalizedName));
+        this.setTextureName(Utils.toString("dangerrpg", ":armors/", getUnlocalizedName()));
         this.setCreativeTab(RPGOther.RPGCreativeTabs.tabRPGAmmunitions);
     }
 

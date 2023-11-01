@@ -33,7 +33,7 @@ public abstract class GemAttackModifier extends Gem {
         final Tuple.Stub<Float> p3, final HashSet<Class<? extends GemAttackModifier>> p4);
 
     public String getInformationToInfoBook(final ItemStack item, final EntityPlayer player) {
-        return DangerRPG.trans(this.unlocalizedName.concat(".info"));
+        return DangerRPG.trans(getUnlocalizedName().concat(".info"));
     }
 
     protected static boolean checkDisabling(final HashSet<Class<? extends GemAttackModifier>> set,

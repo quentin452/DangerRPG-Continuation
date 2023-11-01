@@ -26,7 +26,7 @@ public abstract class RPGRegister {
         final String resFullPath) {
         MinecraftForgeClient.registerItemRenderer(item, (IItemRenderer) model);
         RPGRenderers.modelTextures
-            .put(item, new ResourceLocation(Utils.toString(resFullPath, item.unlocalizedName, ".png")));
+            .put(item, new ResourceLocation(Utils.toString(resFullPath, item.getUnlocalizedName(), ".png")));
     }
 
     public static void registerRPGItem(final Item item, final IRPGItem iRPG) {

@@ -15,7 +15,7 @@ public abstract class ItemRPGThrowable extends ItemRPGWeapon implements IUseItem
 
     public ItemRPGThrowable(final RPGToolMaterial toolMaterial, final RPGItemComponent.RPGToolComponent toolComponent) {
         super(toolMaterial, toolComponent);
-        this.setTextureName(Utils.toString("dangerrpg", ":weapons/throwable/", this.unlocalizedName));
+        this.setTextureName(Utils.toString("dangerrpg", ":weapons/throwable/", getUnlocalizedName()));
     }
 
     public ItemStack onItemUseExtra(final ItemStack stack, final World world, final EntityPlayer player) {

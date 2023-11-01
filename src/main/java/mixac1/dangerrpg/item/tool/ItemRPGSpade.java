@@ -19,7 +19,7 @@ public class ItemRPGSpade extends ItemSpade implements IRPGItem.IRPGItemTool, IH
         this.toolMaterial = toolMaterial;
         this.setUnlocalizedName(
             RPGItems.getRPGName(this.getItemComponent((Item) this), this.getToolMaterial((Item) this)));
-        this.setTextureName(Utils.toString("dangerrpg", ":tools/", this.unlocalizedName));
+        this.setTextureName(Utils.toString("dangerrpg", ":tools/", getUnlocalizedName()));
         this.setCreativeTab(RPGOther.RPGCreativeTabs.tabRPGAmmunitions);
         this.setMaxStackSize(1);
     }

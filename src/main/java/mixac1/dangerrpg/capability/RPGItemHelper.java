@@ -1,20 +1,26 @@
 package mixac1.dangerrpg.capability;
 
-import java.util.*;
-
-import net.minecraft.entity.player.*;
-import net.minecraft.item.*;
-import net.minecraft.nbt.*;
-import net.minecraftforge.common.*;
-
-import cpw.mods.fml.common.eventhandler.*;
-import mixac1.dangerrpg.api.event.*;
+import cpw.mods.fml.common.eventhandler.Event;
+import mixac1.dangerrpg.DangerRPG;
+import mixac1.dangerrpg.api.event.ItemStackEvent;
+import mixac1.dangerrpg.api.event.RegIAEvent;
+import mixac1.dangerrpg.api.event.UpEquipmentEvent;
 import mixac1.dangerrpg.api.item.*;
-import mixac1.dangerrpg.capability.data.*;
-import mixac1.dangerrpg.hook.*;
-import mixac1.dangerrpg.init.*;
-import mixac1.dangerrpg.item.*;
-import mixac1.dangerrpg.util.*;
+import mixac1.dangerrpg.capability.data.RPGItemRegister;
+import mixac1.dangerrpg.hook.HookArmorSystem;
+import mixac1.dangerrpg.init.RPGCapability;
+import mixac1.dangerrpg.init.RPGConfig;
+import mixac1.dangerrpg.item.RPGArmorMaterial;
+import mixac1.dangerrpg.item.RPGItemComponent;
+import mixac1.dangerrpg.item.RPGToolMaterial;
+import mixac1.dangerrpg.util.IMultiplier;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.*;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.MinecraftForge;
+
+import java.util.ArrayList;
+import java.util.Set;
 
 public abstract class RPGItemHelper {
 
@@ -22,7 +28,7 @@ public abstract class RPGItemHelper {
     public static final IMultiplier.Multiplier DUR_MUL;
 
     public static boolean registerRPGItem(final Item item) {
-        if (item != null && !(item instanceof ItemBlock) && item.unlocalizedName != null) {
+        if (item != null && !(item instanceof ItemBlock) && item.getUnlocalizedName() != null) {
             if (RPGCapability.rpgItemRegistr.containsKey((Object) item)) {
                 return true;
             }
@@ -74,9 +80,13 @@ public abstract class RPGItemHelper {
             : IRPGItem.DEFAULT_SWORD;
         final RPGItemComponent.RPGToolComponent comp = iRPG.getItemComponent(item);
         final RPGToolMaterial mat = iRPG.getToolMaterial(item);
-        map.registerIAStatic(
-            (IAStatic) ItemAttributes.MELEE_DAMAGE,
-            comp.meleeDamage + mat.material.getDamageVsEntity() * comp.strMul * 2.0f);
+        if (mat != null) {
+            map.registerIAStatic(
+                (IAStatic) ItemAttributes.MELEE_DAMAGE,
+                comp.meleeDamage + mat.material.getDamageVsEntity() * comp.strMul * 2.0f);
+        } else {
+            DangerRPG.logger.error("Tool material is null for item {}", item);
+        }
         map.registerIAStatic((IAStatic) ItemAttributes.MELEE_SPEED, comp.meleeSpeed);
         map.registerIAStatic(ItemAttributes.STR_MUL, comp.strMul);
         map.registerIAStatic(ItemAttributes.AGI_MUL, comp.agiMul);

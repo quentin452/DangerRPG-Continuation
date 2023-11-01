@@ -21,7 +21,7 @@ public class ItemRPGWeapon extends ItemSword implements IRPGItem.IRPGItemTool, I
         this.toolComponent = toolComponent;
         this.setUnlocalizedName(
             RPGItems.getRPGName(this.getItemComponent((Item) this), this.getToolMaterial((Item) this)));
-        this.setTextureName(Utils.toString("dangerrpg", ":weapons/melee/", this.unlocalizedName));
+        this.setTextureName(Utils.toString("dangerrpg", ":weapons/melee/", getUnlocalizedName()));
         this.setCreativeTab(RPGOther.RPGCreativeTabs.tabRPGAmmunitions);
         this.setMaxStackSize(1);
     }
@@ -30,7 +30,7 @@ public class ItemRPGWeapon extends ItemSword implements IRPGItem.IRPGItemTool, I
         final String name) {
         this(toolMaterial, toolComponent);
         this.setUnlocalizedName(name);
-        this.setTextureName("dangerrpg:weapons/melee/" + this.unlocalizedName);
+        this.setTextureName("dangerrpg:weapons/melee/" + getUnlocalizedName());
     }
 
     public String getInformationToInfoBook(final ItemStack item, final EntityPlayer player) {

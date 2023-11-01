@@ -1,5 +1,6 @@
 package mixac1.dangerrpg.item.armor;
 
+import mixac1.dangerrpg.DangerRPG;
 import net.minecraft.client.model.*;
 import net.minecraft.client.renderer.texture.*;
 import net.minecraft.entity.*;
@@ -29,16 +30,13 @@ public class ItemMageArmor extends ItemRPGArmor implements IColorArmor {
             new ItemMageArmor(armorMaterial, armorComponent, 1), new ItemMageArmor(armorMaterial, armorComponent, 2),
             new ItemMageArmor(armorMaterial, armorComponent, 3) };
     }
-
+    // todo fix crash when enabling this.overlayIcon
     @SideOnly(Side.CLIENT)
-    @Override
-    public void registerIcons(final IIconRegister iconRegister) {
-        final String tmp = "dangerrpg".concat(":armors/");
-        this.itemIcon = iconRegister
-            .registerIcon(Utils.toString(tmp, this.armorComponent.name, ItemMageArmor.ARMOR_TYPES[this.armorType]));
-        this.overlayIcon = iconRegister.registerIcon(Utils.toString(tmp, this.unlocalizedName, "_overlay"));
+    public void registerIcons(IIconRegister iconRegister) {
+        String tmp = "dangerrpg".concat(":armors/");
+        this.itemIcon = iconRegister.registerIcon(Utils.toString(tmp, this.armorComponent.name, ARMOR_TYPES[this.armorType]));
+      // this.overlayIcon = iconRegister.registerIcon(Utils.toString(tmp, this.getUnlocalizedName(), "_overlay"));
     }
-
     @SideOnly(Side.CLIENT)
     public boolean requiresMultipleRenderPasses() {
         return true;
@@ -68,7 +66,7 @@ public class ItemMageArmor extends ItemRPGArmor implements IColorArmor {
     public ModelBiped getArmorModel(final EntityLivingBase entity, final ItemStack stack, final int slot) {
         final ModelBiped tmp = RPGRenderHelper.modelBipedInit(
             entity,
-            (ModelBiped) ((slot == 2) ? ModelMageArmor.INSTANCE_LEGGINGS : ModelMageArmor.INSTANCE_ARMOR),
+            (slot == 2) ? ModelMageArmor.INSTANCE_LEGGINGS : ModelMageArmor.INSTANCE_ARMOR,
             slot);
         return tmp;
     }

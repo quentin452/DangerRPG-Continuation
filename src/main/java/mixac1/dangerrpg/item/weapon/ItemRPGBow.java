@@ -18,7 +18,7 @@ public class ItemRPGBow extends ItemBow implements IRPGItem.IRPGItemBow, IHasBoo
 
     public ItemRPGBow(final RPGItemComponent.RPGBowComponent bowComponent, final EnumRarity rarity) {
         this.setUnlocalizedName(bowComponent.name);
-        this.setTextureName(Utils.toString("dangerrpg", ":weapons/range/", this.unlocalizedName));
+        this.setTextureName(Utils.toString("dangerrpg", ":weapons/range/", getUnlocalizedName()));
         this.setCreativeTab(RPGOther.RPGCreativeTabs.tabRPGAmmunitions);
         this.bowComponent = bowComponent;
         this.rarity = rarity;
