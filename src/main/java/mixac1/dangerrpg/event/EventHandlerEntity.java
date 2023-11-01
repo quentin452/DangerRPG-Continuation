@@ -103,40 +103,54 @@ public class EventHandlerEntity {
 
     @SubscribeEvent
     public void onPlayerTick(final TickEvent.PlayerTickEvent e) {
-        if (e.phase == TickEvent.Phase.START) {
-            DangerRPG.proxy.fireTick(e.side);
-            if (!e.player.worldObj.isRemote) {
-                final float tmp1;
-                final float tmp2;
-                if (DangerRPG.proxy.getTick(e.side) % 20 == 0
-                    && (tmp1 = (float) PlayerAttributes.CURR_MANA.getValue((EntityLivingBase) e.player))
-                        < (float) PlayerAttributes.MANA.getValue((EntityLivingBase) e.player)
-                    && (tmp2 = (float) PlayerAttributes.MANA_REGEN.getValue((EntityLivingBase) e.player)) != 0.0f) {
-                    PlayerAttributes.CURR_MANA.setValue((tmp1 + tmp2), (EntityLivingBase) e.player);
-                }
-                if (DangerRPG.proxy.getTick(e.side) % 100 == 0) {
-                    e.player.heal((float) PlayerAttributes.HEALTH_REGEN.getValue((EntityLivingBase) e.player));
-                }
-                for (int i = 0; i < 5; ++i) {
-                    final ItemStack oldStack = e.player.previousEquipment[i];
-                    final ItemStack newStack = e.player.getEquipmentInSlot(i);
-                    if (!ItemStack.areItemStacksEqual(newStack, oldStack)) {
-                        MinecraftForge.EVENT_BUS
-                            .post((Event) new ItemStackEvent.StackChangedEvent(newStack, oldStack, i, e.player));
-                    }
+        if (e.phase == TickEvent.Phase.START && !e.player.worldObj.isRemote) {
+            final int tick = DangerRPG.proxy.getTick(e.side);
+            EntityPlayer player = (EntityPlayer) e.player;
+
+            // Handle mana regeneration every 20 ticks
+            if (tick % 20 == 0) {
+                final float currMana = PlayerAttributes.CURR_MANA.getValue(player);
+                final float maxMana = PlayerAttributes.MANA.getValue(player);
+                final float manaRegen = PlayerAttributes.MANA_REGEN.getValue(player);
+
+                if (currMana < maxMana && manaRegen != 0.0f) {
+                    PlayerAttributes.CURR_MANA.setValue(currMana + manaRegen, player);
                 }
             }
-            float tmp1;
-            if (e.player.getHealth() > (tmp1 = e.player.getMaxHealth())) {
-                e.player.setHealth(tmp1);
+
+            // Heal the player every 100 ticks
+            if (tick % 100 == 0) {
+                player.heal(PlayerAttributes.HEALTH_REGEN.getValue(player));
             }
-            if ((float) PlayerAttributes.CURR_MANA.getValue((EntityLivingBase) e.player)
-                > (tmp1 = (float) PlayerAttributes.MANA.getValue((EntityLivingBase) e.player))) {
-                PlayerAttributes.CURR_MANA.setValue(tmp1, (EntityLivingBase) e.player);
+
+            // Check for equipment changes
+            for (int i = 0; i < 5; ++i) {
+                final ItemStack oldStack = player.getEquipmentInSlot(i);
+                final ItemStack newStack = player.getEquipmentInSlot(i);
+
+                if (!ItemStack.areItemStacksEqual(newStack, oldStack)) {
+                    MinecraftForge.EVENT_BUS.post(new ItemStackEvent.StackChangedEvent(newStack, oldStack, i, player));
+                }
             }
-            if (e.player != null
-                && (tmp1 = (float) PlayerAttributes.SPEED_COUNTER.getValue((EntityLivingBase) e.player)) > 0.0f) {
-                PlayerAttributes.SPEED_COUNTER.setValue((tmp1 - 1.0f), (EntityLivingBase) e.player);
+
+            // Ensure player health and mana values are within their limits
+            final float maxHealth = player.getMaxHealth();
+            final float currHealth = player.getHealth();
+            final float currMana = PlayerAttributes.CURR_MANA.getValue(player);
+            final float maxMana = PlayerAttributes.MANA.getValue(player);
+
+            if (currHealth > maxHealth) {
+                player.setHealth(maxHealth);
+            }
+
+            if (currMana > maxMana) {
+                PlayerAttributes.CURR_MANA.setValue(maxMana, player);
+            }
+
+            // Decrease speed counter if it's above 0
+            final float speedCounter = PlayerAttributes.SPEED_COUNTER.getValue(player);
+            if (speedCounter > 0.0f) {
+                PlayerAttributes.SPEED_COUNTER.setValue(speedCounter - 1.0f, player);
             }
         }
     }
