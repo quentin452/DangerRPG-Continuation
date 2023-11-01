@@ -18,6 +18,11 @@ public class IADurability extends IAStatic {
     public void checkIt(final ItemStack stack) {}
 
     public float get(final ItemStack stack) {
-        return (float) stack.getItemDamage();
+        if (stack.isItemStackDamageable()) {
+            int remainingDurability = stack.getMaxDamage() - stack.getItemDamage();
+            return (float) remainingDurability;
+        } else {
+            return 0.0f;
+        }
     }
 }
