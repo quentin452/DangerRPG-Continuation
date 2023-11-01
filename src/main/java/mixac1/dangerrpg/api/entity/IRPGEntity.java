@@ -11,19 +11,16 @@ public interface IRPGEntity {
 
     IRPGEntity DEFAULT_PLAYER = new IRPGEntity() {
 
-        @Override
+
         public EntityAttribute.EAFloat getEAMeleeDamage(EntityLivingBase entity) {
             return EntityAttributes.MELEE_DAMAGE;
         }
 
-        @Override
         public EntityAttribute.EAFloat getEARangeDamage(EntityLivingBase entity) {
             return null;
         }
 
-        @Override
-        public void registerAttributes(Class<? extends EntityLivingBase> entityClass,
-            final RPGEntityRegister.RPGEntityData set) {
+        public void registerAttributes(Class<? extends EntityLivingBase> entityClass, RPGEntityRegister.RPGEntityData set) {
             RPGEntityHelper.registerEntityPlayer((Class<? extends EntityPlayer>) entityClass, set);
         }
     };
@@ -38,33 +35,26 @@ public interface IRPGEntity {
 
     class RPGLivingEntity implements IRPGEntity {
 
-        @Override
         public EntityAttribute.EAFloat getEAMeleeDamage(EntityLivingBase entity) {
             return null;
         }
 
-        @Override
         public EntityAttribute.EAFloat getEARangeDamage(EntityLivingBase entity) {
             return null;
         }
 
-        @Override
-        public void registerAttributes(Class<? extends EntityLivingBase> entityClass,
-            final RPGEntityRegister.RPGEntityData set) {
+        public void registerAttributes(Class<? extends EntityLivingBase> entityClass, RPGEntityRegister.RPGEntityData set) {
             RPGEntityHelper.registerEntityLiving((Class<? extends EntityLiving>) entityClass, set);
         }
     }
 
     class RPGEntityMob extends RPGLivingEntity {
 
-        @Override
         public EntityAttribute.EAFloat getEAMeleeDamage(EntityLivingBase entity) {
             return EntityAttributes.MELEE_DAMAGE;
         }
 
-        @Override
-        public void registerAttributes(Class<? extends EntityLivingBase> entityClass,
-            final RPGEntityRegister.RPGEntityData set) {
+        public void registerAttributes(Class<? extends EntityLivingBase> entityClass, RPGEntityRegister.RPGEntityData set) {
             super.registerAttributes(entityClass, set);
             RPGEntityHelper.registerEntityMob((Class<? extends EntityMob>) entityClass, set);
         }
@@ -84,21 +74,16 @@ public interface IRPGEntity {
             this(EntityAttributes.RANGE_DAMAGE, rangeValue);
         }
 
-        @Override
         public EntityAttribute.EAFloat getEARangeDamage(EntityLivingBase entity) {
             return this.rangeAttr;
         }
 
-        @Override
-        public void registerAttributes(Class<? extends EntityLivingBase> entityClass,
-            final RPGEntityRegister.RPGEntityData set) {
+        public void registerAttributes(Class<? extends EntityLivingBase> entityClass, RPGEntityRegister.RPGEntityData set) {
             super.registerAttributes(entityClass, set);
             if (this.rangeAttr != null) {
-                set.registerEA(
-                    this.rangeAttr,
-                    this.rangeValue,
-                    RPGEntityHelper.DAMAGE_MUL);
+                set.registerEA(this.rangeAttr, this.rangeValue, RPGEntityHelper.DAMAGE_MUL);
             }
+
         }
     }
 
@@ -109,8 +94,7 @@ public interface IRPGEntity {
         protected EntityAttribute.EAFloat rangeAttr;
         protected float rangeValue;
 
-        public RPGCommonEntity(EntityAttribute.EAFloat meleeAttr, float meleeValue,
-            final EntityAttribute.EAFloat rangeAttr, final float rangeValue) {
+        public RPGCommonEntity(EntityAttribute.EAFloat meleeAttr, float meleeValue, EntityAttribute.EAFloat rangeAttr, float rangeValue) {
             this.meleeAttr = meleeAttr;
             this.meleeValue = meleeValue;
             this.rangeAttr = rangeAttr;
@@ -118,38 +102,29 @@ public interface IRPGEntity {
         }
 
         public RPGCommonEntity(EntityAttribute.EAFloat meleeAttr, float meleeValue) {
-            this(meleeAttr, meleeValue, null, 0.0f);
+            this(meleeAttr, meleeValue, null, 0.0F);
         }
 
         public RPGCommonEntity(float meleeValue) {
-            this(EntityAttributes.MELEE_DAMAGE_STAB, meleeValue, null, 0.0f);
+            this(EntityAttributes.MELEE_DAMAGE_STAB, meleeValue, null, 0.0F);
         }
 
-        @Override
         public EntityAttribute.EAFloat getEAMeleeDamage(EntityLivingBase entity) {
             return this.meleeAttr;
         }
 
-        @Override
         public EntityAttribute.EAFloat getEARangeDamage(EntityLivingBase entity) {
             return this.rangeAttr;
         }
 
-        @Override
-        public void registerAttributes(Class<? extends EntityLivingBase> entityClass,
-            final RPGEntityRegister.RPGEntityData set) {
+        public void registerAttributes(Class<? extends EntityLivingBase> entityClass, RPGEntityRegister.RPGEntityData set) {
             super.registerAttributes(entityClass, set);
             if (this.meleeAttr != null) {
-                set.registerEA(
-                    this.meleeAttr,
-                    this.meleeValue,
-                    RPGEntityHelper.DAMAGE_MUL);
+                set.registerEA(this.meleeAttr, this.meleeValue, RPGEntityHelper.DAMAGE_MUL);
             }
+
             if (this.rangeAttr != null) {
-                set.registerEA(
-                    this.rangeAttr,
-                    this.rangeValue,
-                    RPGEntityHelper.DAMAGE_MUL);
+                set.registerEA(this.rangeAttr, this.rangeValue, RPGEntityHelper.DAMAGE_MUL);
             }
         }
     }
@@ -157,7 +132,7 @@ public interface IRPGEntity {
     class RPGCommonRangeEntity extends RPGCommonEntity {
 
         public RPGCommonRangeEntity(float value) {
-            super(null, 0.0f, EntityAttributes.RANGE_DAMAGE, value);
+            super(null, 0.0F, EntityAttributes.RANGE_DAMAGE, value);
         }
     }
 }

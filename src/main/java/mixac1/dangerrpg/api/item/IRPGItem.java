@@ -16,128 +16,109 @@ import net.minecraft.entity.*;
 public interface IRPGItem
 {
     public static final IRPGItem DEFAULT_ITEM = new IRPGItem() {
-        @Override
-        public void registerAttributes(final Item item, final RPGItemRegister.RPGItemData map) {
+        public void registerAttributes(Item item, RPGItemRegister.RPGItemData map) {
         }
     };
     public static final IRPGItem DEFAULT_ITEM_MOD = new IRPGItemMod() {
-        @Override
-        public void registerAttributes(final Item item, final RPGItemRegister.RPGItemData map) {
+        public void registerAttributes(Item item, RPGItemRegister.RPGItemData map) {
             RPGItemHelper.registerParamsItemMod(item, map);
         }
 
-        @Override
-        public RPGItemComponent.RPGICWithoutTM getItemComponent(final Item item) {
+        public RPGItemComponent.RPGICWithoutTM getItemComponent(Item item) {
             return null;
         }
     };
     public static final IRPGItemTool DEFAULT_SWORD = new IRPGItemTool() {
-        @Override
-        public void registerAttributes(final Item item, final RPGItemRegister.RPGItemData map) {
+        public void registerAttributes(Item item, RPGItemRegister.RPGItemData map) {
             RPGItemHelper.registerParamsItemSword(item, map);
         }
 
-        @Override
-        public RPGItemComponent.RPGToolComponent getItemComponent(final Item item) {
+        public RPGItemComponent.RPGToolComponent getItemComponent(Item item) {
             return RPGItemComponent.SWORD;
         }
 
-        @Override
-        public RPGToolMaterial getToolMaterial(final Item item) {
+        public RPGToolMaterial getToolMaterial(Item item) {
             return RPGToolMaterial.toolMaterialHook(Item.ToolMaterial.valueOf(((ItemSword)item).getToolMaterialName()));
         }
     };
     public static final IRPGItemTool DEFAULT_TOOL = new IRPGItemTool() {
-        @Override
-        public void registerAttributes(final Item item, final RPGItemRegister.RPGItemData map) {
+        public void registerAttributes(Item item, RPGItemRegister.RPGItemData map) {
             RPGItemHelper.registerParamsItemTool(item, map);
         }
 
-        @Override
-        public RPGItemComponent.RPGToolComponent getItemComponent(final Item item) {
+        public RPGItemComponent.RPGToolComponent getItemComponent(Item item) {
             if (item instanceof ItemAxe) {
                 return RPGItemComponent.AXE;
-            }
-            if (item instanceof ItemHoe) {
+            } else if (item instanceof ItemHoe) {
                 return RPGItemComponent.HOE;
-            }
-            if (item instanceof ItemSpade) {
+            } else if (item instanceof ItemSpade) {
                 return RPGItemComponent.SHOVEL;
+            } else {
+                return item instanceof ItemPickaxe ? RPGItemComponent.PICKAXE : RPGItemComponent.AXE;
             }
-            if (item instanceof ItemPickaxe) {
-                return RPGItemComponent.PICKAXE;
-            }
-            return RPGItemComponent.AXE;
         }
 
-        @Override
-        public RPGToolMaterial getToolMaterial(final Item item) {
+        public RPGToolMaterial getToolMaterial(Item item) {
             if (item instanceof ItemTool) {
                 return RPGToolMaterial.toolMaterialHook(((ItemTool)item).func_150913_i());
-            }
-            if (item instanceof ItemHoe) {
+            } else {
                 return RPGToolMaterial.toolMaterialHook(Item.ToolMaterial.valueOf(((ItemHoe)item).getToolMaterialName()));
             }
-            return null;
         }
     };
     public static final IRPGItemArmor DEFAULT_ARMOR = new IRPGItemArmor() {
-        @Override
-        public void registerAttributes(final Item item, final RPGItemRegister.RPGItemData map) {
+        public void registerAttributes(Item item, RPGItemRegister.RPGItemData map) {
             RPGItemHelper.registerParamsItemArmor(item, map);
         }
 
-        @Override
-        public RPGItemComponent.RPGArmorComponent getItemComponent(final Item item) {
+        public RPGItemComponent.RPGArmorComponent getItemComponent(Item item) {
             return RPGItemComponent.RPGArmorComponent.ARMOR;
         }
 
-        @Override
-        public RPGArmorMaterial getArmorMaterial(final Item item) {
+        public RPGArmorMaterial getArmorMaterial(Item item) {
             return RPGArmorMaterial.armorMaterialHook(((ItemArmor)item).getArmorMaterial());
         }
     };
     public static final IRPGItemBow DEFAULT_BOW = new IRPGItemBow() {
-        @Override
-        public void registerAttributes(final Item item, final RPGItemRegister.RPGItemData map) {
+        public void registerAttributes(Item item, RPGItemRegister.RPGItemData map) {
             RPGItemHelper.registerParamsItemBow(item, map);
         }
 
-        @Override
-        public RPGItemComponent.RPGBowComponent getItemComponent(final Item item) {
+        public RPGItemComponent.RPGBowComponent getItemComponent(Item item) {
             return RPGItemComponent.BOW;
         }
 
-        @Override
-        public RPGToolMaterial getToolMaterial(final Item item) {
+        public RPGToolMaterial getToolMaterial(Item item) {
             return null;
         }
 
-        @Override
-        public void onStoppedUsing(final ItemStack stack, final World world, final EntityPlayer player, final int useDuration) {
-            final boolean flag = player.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, stack) > 0;
+        public void onStoppedUsing(ItemStack stack, World world, EntityPlayer player, int useDuration) {
+            boolean flag = player.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, stack) > 0;
             if (flag || player.inventory.hasItem(Items.arrow)) {
-                final float power = RPGHelper.getUsePower(player, stack, useDuration, 20.0f, 0.3f);
-                if (power < 0.0f) {
+                float power = RPGHelper.getUsePower(player, stack, useDuration, 20.0F, 0.3F);
+                if (power < 0.0F) {
                     return;
                 }
-                final float powerMul = ItemAttributes.SHOT_POWER.getSafe(stack, player, 1.0f);
-                final EntityRPGArrow entity = new EntityRPGArrow(world, stack, (EntityLivingBase)player, power * powerMul, 1.0f);
+
+                float powerMul = ItemAttributes.SHOT_POWER.getSafe(stack, player, 1.0F);
+                EntityRPGArrow entity = new EntityRPGArrow(world, stack, player, power * powerMul, 1.0F);
                 if (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack) > 0) {
                     entity.setFire(100);
                 }
-                stack.damageItem(1, (EntityLivingBase)player);
-                world.playSoundAtEntity((Entity)player, "random.bow", 1.0f, 1.0f / (RPGOther.rand.nextFloat() * 0.4f + 1.2f) + power * 0.5f);
+
+                stack.damageItem(1, player);
+                world.playSoundAtEntity(player, "random.bow", 1.0F, 1.0F / (RPGOther.rand.nextFloat() * 0.4F + 1.2F) + power * 0.5F);
                 if (flag) {
                     entity.pickupMode = 2;
-                }
-                else {
+                } else {
                     player.inventory.consumeInventoryItem(Items.arrow);
                 }
+
                 if (!world.isRemote) {
-                    world.spawnEntityInWorld((Entity)entity);
+                    world.spawnEntityInWorld(entity);
                 }
             }
+
         }
     };
 
@@ -145,37 +126,37 @@ public interface IRPGItem
 
     public interface IRPGItemTool extends IRPGItemMod
     {
-        RPGItemComponent.RPGToolComponent getItemComponent(final Item p0);
+        RPGItemComponent.RPGToolComponent getItemComponent(Item var1);
 
-        RPGToolMaterial getToolMaterial(final Item p0);
+        RPGToolMaterial getToolMaterial(Item var1);
     }
 
     public interface IRPGItemArmor extends IRPGItemMod
     {
-        RPGItemComponent.RPGArmorComponent getItemComponent(final Item p0);
+        RPGItemComponent.RPGArmorComponent getItemComponent(Item var1);
 
-        RPGArmorMaterial getArmorMaterial(final Item p0);
+        RPGArmorMaterial getArmorMaterial(Item var1);
     }
 
     public interface IRPGItemGun extends IRPGItemTool
     {
-        RPGItemComponent.RPGGunComponent getItemComponent(final Item p0);
+        RPGItemComponent.RPGGunComponent getItemComponent(Item var1);
     }
 
     public interface IRPGItemStaff extends IRPGItemGun
     {
-        RPGItemComponent.RPGStaffComponent getItemComponent(final Item p0);
+        RPGItemComponent.RPGStaffComponent getItemComponent(Item var1);
     }
 
     public interface IRPGItemBow extends IRPGItemGun
     {
-        void onStoppedUsing(final ItemStack p0, final World p1, final EntityPlayer p2, final int p3);
+        void onStoppedUsing(ItemStack var1, World var2, EntityPlayer var3, int var4);
 
-        RPGItemComponent.RPGBowComponent getItemComponent(final Item p0);
+        RPGItemComponent.RPGBowComponent getItemComponent(Item var1);
     }
 
     public interface IRPGItemMod extends IRPGItem
     {
-        RPGItemComponent getItemComponent(final Item p0);
+        RPGItemComponent getItemComponent(Item var1);
     }
 }
