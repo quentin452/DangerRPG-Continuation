@@ -1,41 +1,48 @@
 package mixac1.dangerrpg.item.armor;
 
-import mixac1.dangerrpg.DangerRPG;
-import net.minecraft.client.model.*;
-import net.minecraft.client.renderer.texture.*;
-import net.minecraft.entity.*;
-import net.minecraft.entity.player.*;
-import net.minecraft.item.*;
-import net.minecraft.nbt.*;
-
-import cpw.mods.fml.relauncher.*;
-import mixac1.dangerrpg.client.*;
-import mixac1.dangerrpg.client.model.*;
-import mixac1.dangerrpg.item.*;
-import mixac1.dangerrpg.util.*;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import mixac1.dangerrpg.client.RPGRenderHelper;
+import mixac1.dangerrpg.client.model.ModelMageArmor;
+import mixac1.dangerrpg.item.RPGArmorMaterial;
+import mixac1.dangerrpg.item.RPGItemComponent;
+import mixac1.dangerrpg.util.Utils;
+import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IIcon;
 
 public class ItemMageArmor extends ItemRPGArmor implements IColorArmor {
-
+    @SideOnly(Side.CLIENT)
+    private IIcon customOverlayIcon;
     protected int DEFAULT_COLOR;
 
     public ItemMageArmor(final RPGArmorMaterial armorMaterial, final RPGItemComponent.RPGArmorComponent armorComponent,
-        final int armorType) {
+                         final int armorType) {
         super(armorMaterial, armorComponent, 0, armorType);
         this.DEFAULT_COLOR = 3371492;
     }
 
     public static ItemMageArmor[] createFullSet(final RPGArmorMaterial armorMaterial,
-        final RPGItemComponent.RPGArmorComponent armorComponent) {
+                                                final RPGItemComponent.RPGArmorComponent armorComponent) {
         return new ItemMageArmor[] { new ItemMageArmor(armorMaterial, armorComponent, 0),
             new ItemMageArmor(armorMaterial, armorComponent, 1), new ItemMageArmor(armorMaterial, armorComponent, 2),
             new ItemMageArmor(armorMaterial, armorComponent, 3) };
     }
-    // todo fix crash when enabling this.overlayIcon
+
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister iconRegister) {
         String tmp = "dangerrpg".concat(":armors/");
         this.itemIcon = iconRegister.registerIcon(Utils.toString(tmp, this.armorComponent.name, ARMOR_TYPES[this.armorType]));
-      // this.overlayIcon = iconRegister.registerIcon(Utils.toString(tmp, this.getUnlocalizedName(), "_overlay"));
+        this.customOverlayIcon = iconRegister.registerIcon(Utils.toString(tmp, this.getUnlocalizedName(), "_overlay"));
+    }
+    @SideOnly(Side.CLIENT)
+    public IIcon getCustomOverlayIcon() {
+        return customOverlayIcon;
     }
     @SideOnly(Side.CLIENT)
     public boolean requiresMultipleRenderPasses() {
@@ -43,24 +50,22 @@ public class ItemMageArmor extends ItemRPGArmor implements IColorArmor {
     }
 
     @Override
-    public String getInformationToInfoBook(final ItemStack item, final EntityPlayer player) {
-        return null;
-    }
-
-    @Override
-    public String getArmorTexture(final ItemStack stack, final Entity entity, final int slot, final String type) {
+    public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
         final ModelMageArmor model = (slot == 2) ? ModelMageArmor.INSTANCE_LEGGINGS : ModelMageArmor.INSTANCE_ARMOR;
         if (type != null) {
             return Utils.toString(this.modelTexture, (slot == 2) ? 2 : 1, "_", type, ".png");
         }
-        return Utils.toString(
-            "DangerRPG:textures/models/armors/",
-            this.armorComponent.name,
-            "_layer_",
-            (slot == 2) ? 2 : 1,
-            ".png");
+        return Utils.toString("DangerRPG:textures/models/armors/", this.armorComponent.name, "_layer_", (slot == 2) ? 2 : 1, ".png");
     }
-
+    @SideOnly(Side.CLIENT)
+    @Override
+    public IIcon getIcon(ItemStack stack, int pass) {
+        if (pass == 1) {
+            return this.getCustomOverlayIcon();
+        } else {
+            return super.getIcon(stack, pass);
+        }
+    }
     @SideOnly(Side.CLIENT)
     @Override
     public ModelBiped getArmorModel(final EntityLivingBase entity, final ItemStack stack, final int slot) {
@@ -75,8 +80,8 @@ public class ItemMageArmor extends ItemRPGArmor implements IColorArmor {
         return stack.hasTagCompound() && stack.getTagCompound()
             .hasKey("display", 10)
             && stack.getTagCompound()
-                .getCompoundTag("display")
-                .hasKey("color", 3);
+            .getCompoundTag("display")
+            .hasKey("color", 3);
     }
 
     public int getColor(final ItemStack stack) {
