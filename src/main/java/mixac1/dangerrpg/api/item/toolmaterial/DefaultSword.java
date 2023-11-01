@@ -4,6 +4,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemSword;
 
 public class DefaultSword extends ItemSword {
+
     private final Item.ToolMaterial customToolMaterial;
 
     public DefaultSword(Item.ToolMaterial toolMaterial) {

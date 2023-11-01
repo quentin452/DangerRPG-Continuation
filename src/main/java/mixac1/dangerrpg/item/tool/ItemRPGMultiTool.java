@@ -27,7 +27,7 @@ public class ItemRPGMultiTool extends ItemTool implements IRPGItem.IRPGItemTool,
         this.toolMaterial = toolMaterial;
         this.setUnlocalizedName(
             RPGItems.getRPGName(this.getItemComponent((Item) this), this.getToolMaterial((Item) this)));
-        this.setTextureName(Utils.toString("dangerrpg", ":tools/",getUnlocalizedName()));
+        this.setTextureName(Utils.toString("dangerrpg", ":tools/", getUnlocalizedName()));
         this.setCreativeTab(RPGOther.RPGCreativeTabs.tabRPGAmmunitions);
         this.setMaxStackSize(1);
     }

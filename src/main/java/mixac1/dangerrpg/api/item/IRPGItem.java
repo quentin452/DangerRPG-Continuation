@@ -1,6 +1,5 @@
 package mixac1.dangerrpg.api.item;
 
-import mixac1.dangerrpg.api.item.toolmaterial.DefaultSword;
 import net.minecraft.enchantment.*;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.*;
@@ -8,6 +7,7 @@ import net.minecraft.init.*;
 import net.minecraft.item.*;
 import net.minecraft.world.*;
 
+import mixac1.dangerrpg.api.item.toolmaterial.DefaultSword;
 import mixac1.dangerrpg.capability.*;
 import mixac1.dangerrpg.capability.data.*;
 import mixac1.dangerrpg.entity.projectile.*;
@@ -86,9 +86,9 @@ public interface IRPGItem {
             if (item instanceof ItemTool) {
                 return RPGToolMaterial.toolMaterialHook(((ItemTool) item).func_150913_i());
             }
-            if(item instanceof ItemHoe) {
+            if (item instanceof ItemHoe) {
 
-                Item.ToolMaterial material = Item.ToolMaterial.valueOf(((ItemHoe)item).getToolMaterialName());
+                Item.ToolMaterial material = Item.ToolMaterial.valueOf(((ItemHoe) item).getToolMaterialName());
 
                 return RPGToolMaterial.toolMaterialHook(material);
 
