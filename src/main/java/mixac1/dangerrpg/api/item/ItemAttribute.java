@@ -7,84 +7,87 @@ import mixac1.dangerrpg.*;
 import mixac1.dangerrpg.init.*;
 
 public abstract class ItemAttribute {
-
     public final String name;
     public final int hash;
 
-    public ItemAttribute(final String name) {
-        this.name = name;
+    public ItemAttribute(String name) {
+        this.name = "ia.".concat(name);
         this.hash = name.hashCode();
         RPGCapability.mapIntToItemAttribute.put(this.hash, this);
     }
 
-    public boolean isValid(final float value) {
-        return value >= 0.0f;
+    public boolean isValid(float value) {
+        return value >= 0.0F;
     }
 
-    public boolean isValid(final ItemStack stack) {
+    public boolean isValid(ItemStack stack) {
         return this.isValid(this.get(stack));
     }
 
-    public abstract boolean hasIt(final ItemStack p0);
+    public abstract boolean hasIt(ItemStack var1);
 
-    public abstract void checkIt(final ItemStack p0);
+    public abstract void checkIt(ItemStack var1);
 
+    /** @deprecated */
     @Deprecated
-    public abstract float getRaw(final ItemStack p0);
+    public abstract float getRaw(ItemStack var1);
 
-    public float get(final ItemStack stack) {
+    public float get(ItemStack stack) {
         float value = this.getRaw(stack);
         if (!this.isValid(value)) {
             this.init(stack);
             value = this.getRaw(stack);
         }
+
         return value;
     }
 
-    public float get(final ItemStack stack, final EntityPlayer player) {
+    public float get(ItemStack stack, EntityPlayer player) {
         return this.getChecked(stack);
     }
 
-    public float getSafe(final ItemStack stack, final EntityPlayer player, final float defaultValue) {
+    public float getSafe(ItemStack stack, EntityPlayer player, float defaultValue) {
         return this.hasIt(stack) ? this.get(stack, player) : defaultValue;
     }
 
-    public float getChecked(final ItemStack stack) {
+    public float getChecked(ItemStack stack) {
         this.checkIt(stack);
         return this.get(stack);
     }
 
+    /** @deprecated */
     @Deprecated
-    public abstract void setRaw(final ItemStack p0, final float p1);
+    public abstract void setRaw(ItemStack var1, float var2);
 
-    public void set(final ItemStack stack, final float value) {
+    public void set(ItemStack stack, float value) {
         if (this.isValid(value)) {
             this.setRaw(stack, value);
         }
+
     }
 
-    public void setChecked(final ItemStack stack, final float value) {
+    public void setChecked(ItemStack stack, float value) {
         this.checkIt(stack);
         this.setChecked(stack, value);
     }
 
-    public void add(final ItemStack stack, final float value) {
+    public void add(ItemStack stack, float value) {
         this.set(stack, value + this.get(stack));
     }
 
-    public abstract void init(final ItemStack p0);
+    public abstract void init(ItemStack var1);
 
-    public abstract void lvlUp(final ItemStack p0);
+    public abstract void lvlUp(ItemStack var1);
 
     public String getDispayName() {
-        return DangerRPG.trans("ia.".concat(this.name));
+        return DangerRPG.trans(this.name);
     }
 
-    public String getDispayValue(final ItemStack stack, final EntityPlayer player) {
+    public String getDispayValue(ItemStack stack, EntityPlayer player) {
         return String.format("%.2f", this.get(stack, player));
     }
 
-    public boolean isVisibleInInfoBook(final ItemStack stack) {
+    public boolean isVisibleInInfoBook(ItemStack stack) {
         return true;
     }
 
@@ -92,7 +95,6 @@ public abstract class ItemAttribute {
         return true;
     }
 
-    @Override
     public final int hashCode() {
         return this.hash;
     }

@@ -8,34 +8,30 @@ import mixac1.dangerrpg.capability.data.*;
 import mixac1.dangerrpg.init.*;
 
 public class IAStatic extends ItemAttribute {
-
-    public IAStatic(final String name) {
+    public IAStatic(String name) {
         super(name);
     }
 
-    @Override
-    public boolean hasIt(final ItemStack stack) {
-        return RPGCapability.rpgItemRegistr.isActivated(stack.getItem())
-            && RPGCapability.rpgItemRegistr.get(stack.getItem()).attributes.containsKey(this);
+    public boolean hasIt(ItemStack stack) {
+        return RPGCapability.rpgItemRegistr.isActivated(stack.getItem()) && ((RPGItemRegister.RPGItemData)RPGCapability.rpgItemRegistr.get(stack.getItem())).attributes.containsKey(this);
     }
 
-    @Override
-    public void checkIt(final ItemStack stack) {}
-
-    @Override
-    public float getRaw(final ItemStack stack) {
-        return RPGCapability.rpgItemRegistr.get(stack.getItem()).attributes.get(this).value;
+    public void checkIt(ItemStack stack) {
     }
 
-    @Override
-    public void setRaw(final ItemStack stack, final float value) {}
+    public float getRaw(ItemStack stack) {
+        return ((RPGItemRegister.ItemAttrParams)((RPGItemRegister.RPGItemData)RPGCapability.rpgItemRegistr.get(stack.getItem())).attributes.get(this)).value;
+    }
 
-    @Override
-    public final void set(final ItemStack stack, final float value) {}
+    public void setRaw(ItemStack stack, float value) {
+    }
 
-    @Override
-    public final void init(final ItemStack stack) {}
+    public final void set(ItemStack stack, float value) {
+    }
 
-    @Override
-    public final void lvlUp(final ItemStack stack) {}
+    public final void init(ItemStack stack) {
+    }
+
+    public final void lvlUp(ItemStack stack) {
+    }
 }

@@ -1,34 +1,27 @@
 package mixac1.dangerrpg.capability.ia;
 
-import net.minecraft.entity.*;
-import net.minecraft.entity.player.*;
-import net.minecraft.item.*;
-
-import mixac1.dangerrpg.api.item.*;
-import mixac1.dangerrpg.capability.*;
-import mixac1.dangerrpg.capability.data.*;
-import mixac1.dangerrpg.init.*;
+import mixac1.dangerrpg.api.item.IAStatic;
+import mixac1.dangerrpg.capability.ItemAttributes;
+import mixac1.dangerrpg.capability.PlayerAttributes;
+import mixac1.dangerrpg.capability.data.RPGItemRegister;
+import mixac1.dangerrpg.init.RPGCapability;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
 public class IASpeed extends IAStatic {
-
     public float normalValue;
 
-    public IASpeed(final String name, final float normalValue) {
+    public IASpeed(String name, float normalValue) {
         super(name);
         this.normalValue = normalValue;
     }
 
-    public float get(final ItemStack stack) {
-        return ((RPGItemRegister.RPGItemData) RPGCapability.rpgItemRegistr.get((Object) stack.getItem())).attributes
-            .get(this).value;
+    public float get(ItemStack stack) {
+        return ((RPGItemRegister.ItemAttrParams)((RPGItemRegister.RPGItemData)RPGCapability.rpgItemRegistr.get(stack.getItem())).attributes.get(this)).value;
     }
 
-    public float get(final ItemStack stack, final EntityPlayer player) {
-        final float value = this.getChecked(stack)
-            - (float) PlayerAttributes.AGILITY.getValue((EntityLivingBase) player)
-                * ItemAttributes.AGI_MUL.get(stack, player)
-                * this.normalValue
-                / 10.0f;
-        return (value >= 1.0f) ? value : 1.0f;
+    public float get(ItemStack stack, EntityPlayer player) {
+        float value = this.getChecked(stack) - (Float)PlayerAttributes.AGILITY.getValue(player) * ItemAttributes.AGI_MUL.get(stack, player) * this.normalValue / 10.0F;
+        return value >= 1.0F ? value : 1.0F;
     }
 }
