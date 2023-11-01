@@ -470,7 +470,7 @@ public class RPGGuiIngame extends Gui {
                     final String s = Utils.toString(
                         this.genValueStr(entity.getHealth() + entity.getAbsorptionAmount()),
                         "/",
-                        this.genValueStr((float) PlayerAttributes.CURR_MANA.getValue(entity)));
+                        this.genValueStr(entity.getMaxHealth()));
                     this.fr.drawStringWithShadow(
                         s,
                         offsetX + this.getOffsetX(s, this.barX + this.barW + 4, isInverted),
@@ -536,7 +536,7 @@ public class RPGGuiIngame extends Gui {
         final boolean isInverted) {
         final float curr = entity.getHealth();
         final float absorbHealth = entity.getAbsorptionAmount();
-        final float max = (float) EntityAttributes.HEALTH.getSafe(entity, (entity.getMaxHealth() + absorbHealth));
+        final float max = EntityAttributes.HEALTH.getSafe(entity, (entity.getMaxHealth() + absorbHealth));
         if (max > 0.0f) {
             final int proc = this.getProcent(curr, max, this.barW);
             final int procAbsorb = this.getProcent(absorbHealth, max, this.barW);
@@ -565,7 +565,7 @@ public class RPGGuiIngame extends Gui {
                             offsetX + this.invert(this.barX),
                             offsetY + this.barY,
                             this.barU,
-                            this.barV + this.barH * 1,
+                            this.barV + this.barH,
                             proc,
                             this.barH,
                             isInverted);
