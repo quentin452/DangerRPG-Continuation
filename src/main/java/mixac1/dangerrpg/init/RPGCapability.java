@@ -137,21 +137,21 @@ public abstract class RPGCapability {
                 (EntityAttribute.EAFloat) EntityAttributes.MELEE_DAMAGE_SLIME,
                 12.0f));
         RPGRegister.registerRPGEntity(
-            (Class) EntityMagmaCube.class,
-            (IRPGEntity) new IRPGEntity.RPGCommonEntity(
-                (EntityAttribute.EAFloat) EntityAttributes.MELEE_DAMAGE_SLIME,
+            EntityMagmaCube.class,
+            new IRPGEntity.RPGCommonEntity(
+                EntityAttributes.MELEE_DAMAGE_SLIME,
                 16.0f));
-        RPGRegister.registerRPGEntity((Class) EntityWolf.class, (IRPGEntity) new IRPGEntity.RPGCommonEntity(3.0f));
+        RPGRegister.registerRPGEntity(EntityWolf.class, new IRPGEntity.RPGCommonEntity(3.0f));
         RPGRegister
-            .registerRPGEntity((Class) EntityIronGolem.class, (IRPGEntity) new IRPGEntity.RPGCommonEntity(14.0f));
-        RPGRegister.registerRPGEntity((Class) EntityDragon.class, (IRPGEntity) new IRPGEntity.RPGCommonEntity(10.0f));
+            .registerRPGEntity(EntityIronGolem.class, new IRPGEntity.RPGCommonEntity(14.0f));
+        RPGRegister.registerRPGEntity(EntityDragon.class, new IRPGEntity.RPGCommonEntity(10.0f));
     }
 
     private static void loadEntities() {
         for (final Object obj : EntityList.classToStringMapping.entrySet()) {
             final Map.Entry<Class, String> entry = (Map.Entry<Class, String>) obj;
             if (entry.getKey() != null && entry.getValue() != null) {
-                RPGEntityHelper.registerEntity((Class) entry.getKey());
+                RPGEntityHelper.registerEntity(entry.getKey());
             }
         }
         for (final Class<? extends EntityLivingBase> it : RPGCapability.blackListEntities) {
