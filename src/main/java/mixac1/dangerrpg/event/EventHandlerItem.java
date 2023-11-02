@@ -100,7 +100,7 @@ public class EventHandlerItem {
                     e.toolTip.add(
                         Utils.toString(
                             entry.getKey()
-                                .getDispayName(),
+                                .getDisplayName(),
                             ":"));
                     for (final ItemStack it : entry.getValue()) {
                         e.toolTip.add(
@@ -173,8 +173,8 @@ public class EventHandlerItem {
                 final AttributeModifier newMod = new AttributeModifier(
                     RPGOther.RPGUUIDs.ADD_STR_DAMAGE,
                     "Strenght damage",
-                    (double) ((float) PlayerAttributes.STRENGTH.getValue((EntityLivingBase) e.player)
-                        * ItemAttributes.STR_MUL.get(e.stack)),
+                    PlayerAttributes.STRENGTH.getValue(e.player)
+                        * ItemAttributes.STR_MUL.get(e.stack),
                     0).setSaved(true);
                 attr.applyModifier(newMod);
             }

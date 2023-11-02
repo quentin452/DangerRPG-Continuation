@@ -193,7 +193,7 @@ public class GuiInfoBookContentStack extends GuiInfoBookContent {
                 .toUpperCase());
         this.addString("");
         this.addString(Utils.toString(DangerRPG.trans("rpgstr.name"), ": ", stack.getDisplayName()));
-        this.addString(Utils.toString(DangerRPG.trans("rpgstr.type"), ": ", gemType.getDispayName()));
+        this.addString(Utils.toString(DangerRPG.trans("rpgstr.type"), ": ", gemType.getDisplayName()));
         this.addString("");
         final String tmp = ItemAttributes.LEVEL.isMax(stack) ? Utils.toString(" (", DangerRPG.trans("rpgstr.max"), ")")
             : "";
