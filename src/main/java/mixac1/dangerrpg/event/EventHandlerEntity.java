@@ -103,54 +103,44 @@ public class EventHandlerEntity {
 
     @SubscribeEvent
     public void onPlayerTick(final TickEvent.PlayerTickEvent e) {
-        if (e.phase == TickEvent.Phase.START && !e.player.worldObj.isRemote) {
-            final int tick = DangerRPG.proxy.getTick(e.side);
-            EntityPlayer player = (EntityPlayer) e.player;
+        if (e.phase == TickEvent.Phase.START) {
+            DangerRPG.proxy.fireTick(e.side);
+            float tmp1;
+            if (!e.player.worldObj.isRemote) {
+                float tmp2;
+                if (DangerRPG.proxy.getTick(e.side) % 20 == 0 && (tmp1 = PlayerAttributes.CURR_MANA.getValue(e.player)) < PlayerAttributes.MANA.getValue(e.player) && (tmp2 = (Float)PlayerAttributes.MANA_REGEN.getValue(e.player)) != 0.0F) {
+                    PlayerAttributes.CURR_MANA.setValue(tmp1 + tmp2, e.player);
+                }
 
-            // Handle mana regeneration every 20 ticks
-            if (tick % 20 == 0) {
-                final float currMana = PlayerAttributes.CURR_MANA.getValue(player);
-                final float maxMana = PlayerAttributes.MANA.getValue(player);
-                final float manaRegen = PlayerAttributes.MANA_REGEN.getValue(player);
+                if (DangerRPG.proxy.getTick(e.side) % 100 == 0) {
 
-                if (currMana < maxMana && manaRegen != 0.0f) {
-                    PlayerAttributes.CURR_MANA.setValue(currMana + manaRegen, player);
+                    float baseRegen = 1f;
+                    e.player.heal(baseRegen);
+
+                    float regen = PlayerAttributes.HEALTH_REGEN.getValue(e.player);
+                    e.player.heal(regen);
+
+                }
+
+                for (int i = 0; i < 5; ++i) {
+                    ItemStack newStack = e.player.getEquipmentInSlot(i);
+                    ItemStack oldStack = e.player.getHeldItem();
+                    if (!ItemStack.areItemStacksEqual(newStack, oldStack)) {
+                        MinecraftForge.EVENT_BUS.post(new ItemStackEvent.StackChangedEvent(newStack, oldStack, i, e.player));
+                    }
                 }
             }
 
-            // Heal the player every 100 ticks
-            if (tick % 100 == 0) {
-                player.heal(PlayerAttributes.HEALTH_REGEN.getValue(player));
+            if (e.player.getHealth() > (tmp1 = e.player.getMaxHealth())) {
+                e.player.setHealth(tmp1);
             }
 
-            // Check for equipment changes
-            for (int i = 0; i < 5; ++i) {
-                final ItemStack oldStack = player.getEquipmentInSlot(i);
-                final ItemStack newStack = player.getEquipmentInSlot(i);
-
-                if (!ItemStack.areItemStacksEqual(newStack, oldStack)) {
-                    MinecraftForge.EVENT_BUS.post(new ItemStackEvent.StackChangedEvent(newStack, oldStack, i, player));
-                }
+            if (PlayerAttributes.CURR_MANA.getValue(e.player) > (tmp1 = PlayerAttributes.MANA.getValue(e.player))) {
+                PlayerAttributes.CURR_MANA.setValue(tmp1, e.player);
             }
 
-            // Ensure player health and mana values are within their limits
-            final float maxHealth = player.getMaxHealth();
-            final float currHealth = player.getHealth();
-            final float currMana = PlayerAttributes.CURR_MANA.getValue(player);
-            final float maxMana = PlayerAttributes.MANA.getValue(player);
-
-            if (currHealth > maxHealth) {
-                player.setHealth(maxHealth);
-            }
-
-            if (currMana > maxMana) {
-                PlayerAttributes.CURR_MANA.setValue(maxMana, player);
-            }
-
-            // Decrease speed counter if it's above 0
-            final float speedCounter = PlayerAttributes.SPEED_COUNTER.getValue(player);
-            if (speedCounter > 0.0f) {
-                PlayerAttributes.SPEED_COUNTER.setValue(speedCounter - 1.0f, player);
+            if ((tmp1 = PlayerAttributes.SPEED_COUNTER.getValue(e.player)) > 0.0F) {
+                PlayerAttributes.SPEED_COUNTER.setValue(tmp1 - 1.0F, e.player);
             }
         }
     }
