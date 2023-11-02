@@ -133,15 +133,6 @@ public class EventHandlerItem {
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onDealtDamagePre(ItemStackEvent.DealtDamageEvent e) {
-        if (!e.player.worldObj.isRemote && e.stack != null && RPGItemHelper.isRPGable(e.stack)) {
-            final Tuple.Stub<Float> damage = Tuple.Stub.create(e.damage);
-            GemTypes.AM.activate2All(e.stack, e.player, new Object[] { e.target, damage });
-            e.damage = damage.value1;
-        }
-    }
-
     @SubscribeEvent
     public void onEntityDeath(LivingDeathEvent event) {
         if(event.source.getEntity() instanceof EntityPlayer) {
