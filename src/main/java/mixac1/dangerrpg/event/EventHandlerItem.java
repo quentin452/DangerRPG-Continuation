@@ -8,6 +8,7 @@ import net.minecraft.entity.player.*;
 import net.minecraft.item.*;
 import net.minecraft.util.*;
 import net.minecraftforge.common.*;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.*;
@@ -140,12 +141,21 @@ public class EventHandlerItem {
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void onDealtDamagePost(ItemStackEvent.DealtDamageEvent e) {
-        if (!e.player.worldObj.isRemote && e.damage > 0.0f) {
-            RPGItemHelper.upEquipment(e.player, e.stack, e.damage, false);
+    @SubscribeEvent
+    public void onLivingHurt(LivingHurtEvent event) {
+        if (event.entity.worldObj.isRemote) return;
+
+        if (event.source.getEntity() instanceof EntityPlayer && event.entity instanceof EntityLivingBase) {
+            EntityPlayer player = (EntityPlayer) event.source.getEntity();
+            ItemStack heldItem = player.getHeldItem();
+
+            if (RPGItemHelper.isRPGable(heldItem)) {
+                float damage = event.ammount / 2.0f;
+                RPGItemHelper.upEquipment(player, heldItem, damage, false);
+            }
         }
     }
+
 
     @SubscribeEvent
     public void onBreak(BlockEvent.BreakEvent e) {

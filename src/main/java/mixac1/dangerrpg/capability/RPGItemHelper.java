@@ -3,26 +3,32 @@ package mixac1.dangerrpg.capability;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.*;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.MinecraftForge;
-
-import cpw.mods.fml.common.eventhandler.Event;
-import mixac1.dangerrpg.DangerRPG;
 import mixac1.dangerrpg.api.event.ItemStackEvent;
 import mixac1.dangerrpg.api.event.RegIAEvent;
 import mixac1.dangerrpg.api.event.UpEquipmentEvent;
-import mixac1.dangerrpg.api.item.*;
+import mixac1.dangerrpg.api.item.GemType;
+import mixac1.dangerrpg.api.item.IRPGItem;
+import mixac1.dangerrpg.api.item.ItemAttribute;
 import mixac1.dangerrpg.capability.data.RPGItemRegister;
+import mixac1.dangerrpg.capability.data.RPGItemRegister.ItemType;
 import mixac1.dangerrpg.hook.HookArmorSystem;
 import mixac1.dangerrpg.init.RPGCapability;
-import mixac1.dangerrpg.init.RPGConfig;
+import mixac1.dangerrpg.init.RPGConfig.ItemConfig;
 import mixac1.dangerrpg.item.RPGArmorMaterial;
 import mixac1.dangerrpg.item.RPGItemComponent;
 import mixac1.dangerrpg.item.RPGToolMaterial;
 import mixac1.dangerrpg.util.IMultiplier;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemBow;
+import net.minecraft.item.ItemHoe;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
+import net.minecraft.item.ItemTool;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.MinecraftForge;
 
 public abstract class RPGItemHelper {
     public static final IMultiplier.Multiplier EXP_MUL;
@@ -53,7 +59,7 @@ public abstract class RPGItemHelper {
     }
 
     public static void registerParamsItemMod(Item item, RPGItemRegister.RPGItemData map) {
-        map.registerIADynamic(ItemAttributes.MAX_EXP, (float) RPGConfig.ItemConfig.d.startMaxExp, EXP_MUL);
+        map.registerIADynamic(ItemAttributes.MAX_EXP, (float)ItemConfig.d.startMaxExp, EXP_MUL);
         float durab;
         float ench;
         RPGItemComponent comp;
@@ -75,8 +81,8 @@ public abstract class RPGItemHelper {
 
     public static void registerParamsItemSword(Item item, RPGItemRegister.RPGItemData map) {
         registerParamsItemMod(item, map);
-        map.itemType = RPGItemRegister.ItemType.MELEE_WPN;
-        IRPGItem.IRPGItemTool iRPG = (IRPGItem.IRPGItemTool) (item instanceof IRPGItem.IRPGItemTool ? item : IRPGItem.DEFAULT_SWORD);
+        map.itemType = ItemType.MELEE_WPN;
+        IRPGItem.IRPGItemTool iRPG = (IRPGItem.IRPGItemTool)((IRPGItem.IRPGItemTool)(item instanceof IRPGItem.IRPGItemTool ? item : IRPGItem.DEFAULT_SWORD));
         RPGItemComponent.RPGToolComponent comp = iRPG.getItemComponent(item);
         RPGToolMaterial mat = iRPG.getToolMaterial(item);
         map.registerIAStatic(ItemAttributes.MELEE_DAMAGE, comp.meleeDamage + mat.material.getDamageVsEntity() * comp.strMul * 2.0F);
@@ -94,7 +100,7 @@ public abstract class RPGItemHelper {
 
     public static void registerParamsItemTool(Item item, RPGItemRegister.RPGItemData map) {
         registerParamsItemMod(item, map);
-        map.itemType = RPGItemRegister.ItemType.TOOL;
+        map.itemType = ItemType.TOOL;
         IRPGItem.IRPGItemTool iRPG = (IRPGItem.IRPGItemTool)((IRPGItem.IRPGItemTool)(item instanceof IRPGItem.IRPGItemTool ? item : IRPGItem.DEFAULT_TOOL));
         RPGItemComponent.RPGToolComponent comp = iRPG.getItemComponent(item);
         RPGToolMaterial mat = iRPG.getToolMaterial(item);
@@ -114,7 +120,7 @@ public abstract class RPGItemHelper {
 
     public static void registerParamsItemArmor(Item item, RPGItemRegister.RPGItemData map) {
         registerParamsItemMod(item, map);
-        map.itemType = RPGItemRegister.ItemType.ARMOR;
+        map.itemType = ItemType.ARMOR;
         IRPGItem.IRPGItemArmor iRPG = (IRPGItem.IRPGItemArmor)((IRPGItem.IRPGItemArmor)(item instanceof IRPGItem.IRPGItemArmor ? item : IRPGItem.DEFAULT_ARMOR));
         RPGArmorMaterial mat = iRPG.getArmorMaterial(item);
         RPGItemComponent.RPGArmorComponent com = iRPG.getItemComponent(item);
@@ -127,7 +133,7 @@ public abstract class RPGItemHelper {
 
     public static void registerParamsItemBow(Item item, RPGItemRegister.RPGItemData map) {
         registerParamsItemMod(item, map);
-        map.itemType = RPGItemRegister.ItemType.BOW;
+        map.itemType = ItemType.BOW;
         IRPGItem.IRPGItemBow iRPG = (IRPGItem.IRPGItemBow)((IRPGItem.IRPGItemBow)(item instanceof IRPGItem.IRPGItemBow ? item : IRPGItem.DEFAULT_BOW));
         RPGItemComponent.RPGBowComponent comp = iRPG.getItemComponent(item);
         map.registerIAStatic(ItemAttributes.MELEE_DAMAGE, comp.meleeDamage);
@@ -148,7 +154,7 @@ public abstract class RPGItemHelper {
 
     public static void registerParamsItemGun(Item item, RPGItemRegister.RPGItemData map) {
         registerParamsItemMod(item, map);
-        map.itemType = RPGItemRegister.ItemType.RANGE_WPN;
+        map.itemType = ItemType.RANGE_WPN;
         IRPGItem.IRPGItemGun iRPG = (IRPGItem.IRPGItemGun)item;
         RPGItemComponent.RPGGunComponent comp = iRPG.getItemComponent(item);
         RPGToolMaterial mat = iRPG.getToolMaterial(item);
@@ -170,7 +176,7 @@ public abstract class RPGItemHelper {
 
     public static void registerParamsItemStaff(Item item, RPGItemRegister.RPGItemData map) {
         registerParamsItemGun(item, map);
-        map.itemType = RPGItemRegister.ItemType.STAFF;
+        map.itemType = ItemType.STAFF;
         IRPGItem.IRPGItemStaff iRPG = (IRPGItem.IRPGItemStaff)item;
         RPGItemComponent.RPGStaffComponent comp = iRPG.getItemComponent(item);
         iRPG.getToolMaterial(item);
@@ -266,14 +272,14 @@ public abstract class RPGItemHelper {
             }
 
             int level = (int)ItemAttributes.LEVEL.getChecked(stack);
-            if (level < RPGConfig.ItemConfig.d.maxLevel) {
+            if (level < ItemConfig.d.maxLevel) {
                 float currEXP = ItemAttributes.CURR_EXP.getChecked(stack);
                 float maxEXP = ItemAttributes.MAX_EXP.getChecked(stack);
 
                 for(currEXP += value; currEXP >= maxEXP; currEXP -= maxEXP) {
                     instantLvlUp(stack);
                     ++level;
-                    if (level >= RPGConfig.ItemConfig.d.maxLevel) {
+                    if (level >= ItemConfig.d.maxLevel) {
                         currEXP = maxEXP;
                         break;
                     }
@@ -286,43 +292,41 @@ public abstract class RPGItemHelper {
     }
 
     public static void upEquipment(EntityPlayer player, ItemStack stack, float points, boolean onlyCurr) {
+        if (stack == null || !isRPGable(stack) || ItemAttributes.LEVEL.isMax(stack) || !ItemAttributes.MAX_EXP.hasIt(stack)) {
+            return;
+        }
+
         UpEquipmentEvent e = new UpEquipmentEvent(player, stack, points);
         MinecraftForge.EVENT_BUS.post(e);
-        if (e.points > 0.0F) {
-            ArrayList<ItemStack> stacks = new ArrayList();
-            if (e.needUp[0]) {
-                if (stack == null) {
-                    stack = player.getCurrentEquippedItem();
-                }
 
-                if (stack != null && isRPGable(stack) && !ItemAttributes.LEVEL.isMax(stack) && ItemAttributes.MAX_EXP.hasIt(stack)) {
-                    stacks.add(stack);
-                }
+        if (e.points > 0.0F) {
+            ArrayList<ItemStack> stacks = new ArrayList<>();
+
+            if (e.needUp[0]) {
+                stacks.add(stack);
             }
 
             if (!onlyCurr) {
                 ItemStack[] armors = player.inventory.armorInventory;
 
-                for(int i = 0; i < armors.length; ++i) {
+                for (int i = 0; i < armors.length; ++i) {
                     if (e.needUp[i + 1] && armors[i] != null && isRPGable(armors[i]) && !ItemAttributes.LEVEL.isMax(armors[i]) && ItemAttributes.MAX_EXP.hasIt(armors[i])) {
                         stacks.add(armors[i]);
                     }
                 }
             }
 
-            e.points /= (float)stacks.size();
-            Iterator var8 = stacks.iterator();
-
-            while(var8.hasNext()) {
-                ItemStack tmp = (ItemStack)var8.next();
-                addExp(tmp, e.points);
+            if (!stacks.isEmpty()) {
+                e.points /= (float) stacks.size();
+                for (ItemStack tmp : stacks) {
+                    addExp(tmp, e.points);
+                }
             }
         }
-
     }
 
     static {
-        EXP_MUL = new IMultiplier.MultiplierMul(RPGConfig.ItemConfig.d.expMul);
+        EXP_MUL = new IMultiplier.MultiplierMul(ItemConfig.d.expMul);
         DUR_MUL = new IMultiplier.MultiplierSQRT(2.0F);
     }
 }
