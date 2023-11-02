@@ -283,7 +283,7 @@ public abstract class RPGRecipes {
             }
             return new ItemStack(stack.getItem(), 1, i2);
         }
-        for (final Object obj : CraftingManager.getInstance().recipes) {
+        for (final Object obj : CraftingManager.getInstance().getRecipeList()) {
             final IRecipe irecipe = (IRecipe) obj;
             if (irecipe.getClass() == ShapelessRecipes.class) {
                 if (matches((ShapelessRecipes) irecipe, inv, world, invWidth, invHeight)) {
