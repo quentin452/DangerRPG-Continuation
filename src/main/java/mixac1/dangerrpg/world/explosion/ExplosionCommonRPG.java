@@ -14,7 +14,7 @@ import mixac1.dangerrpg.init.*;
 import mixac1.dangerrpg.network.*;
 
 public class ExplosionCommonRPG extends Explosion {
-
+    public World worldObj;
     public float powerMul;
     public float damage;
     public boolean isDependDist;
@@ -36,10 +36,10 @@ public class ExplosionCommonRPG extends Explosion {
         this.damage = damage;
         this.isDependDist = isDependDist;
     }
-
     public void doExplosion() {
+        if(worldObj != null) {
         if (!this.worldObj.isRemote) {
-            if (ForgeEventFactory.onExplosionStart(this.worldObj, (Explosion) this)) {
+            if (ForgeEventFactory.onExplosionStart(this.worldObj, this)) {
                 return;
             }
             if (this.isBlockDestroy) {
@@ -48,14 +48,15 @@ public class ExplosionCommonRPG extends Explosion {
             }
             this.explosionEntities();
             RPGNetwork.net.sendToAll(
-                (IMessage) new MsgExplosion(
+                new MsgExplosion(
                     this.getExplosionEffect()
                         .getId(),
                     this.explosionX,
                     this.explosionY,
                     this.explosionZ,
-                    (double) this.explosionSize,
+                    this.explosionSize,
                     this.getEffectMeta()));
+        }
         }
     }
 

@@ -48,11 +48,14 @@ public class EventHandlerItem {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onHitEntityPost(ItemStackEvent.HitEntityEvent e) {
+        if(e.attacker == null) {
+            return;
+        }
         if (!e.attacker.worldObj.isRemote && e.attacker instanceof EntityPlayer) {
             final EntityPlayer player = (EntityPlayer) e.attacker;
             if (RPGItemHelper.isRPGable(e.stack)) {
                 final Tuple.Stub<Float> damage = Tuple.Stub.create(e.newDamage);
-                GemTypes.AM.activate1All(e.stack, player, new Object[] { e.entity, damage });
+                GemTypes.AM.activate1All(e.stack, player, e.entity, damage);
                 e.newDamage = damage.value1;
             }
         }

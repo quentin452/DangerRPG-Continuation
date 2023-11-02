@@ -39,23 +39,41 @@ public class EntityCommonMagic extends EntityWithStack {
     }
 
     @Override
-    public void applyEntityHitEffects(final EntityLivingBase entity, final float dmgMul) {
+    public void applyEntityHitEffects(EntityLivingBase entity, float dmgMul) {
+
         float points = entity.getHealth();
-        final ItemStack stack = this.getStack();
-        if (stack != null) {
-            if (ItemAttributes.SHOT_DAMAGE.hasIt(stack)) {
-                this.damage = ItemAttributes.SHOT_DAMAGE.get(stack);
+
+        ItemStack stack = this.getStack();
+
+        float damageAmount;
+
+        if(stack != null) {
+
+            if(ItemAttributes.SHOT_DAMAGE.hasIt(stack)) {
+                damageAmount = ItemAttributes.SHOT_DAMAGE.get(stack);
+            } else {
+                damageAmount = 0;
             }
-            final ItemStackEvent.HitEntityEvent event = new ItemStackEvent.HitEntityEvent(
+
+            ItemStackEvent.HitEntityEvent event = new ItemStackEvent.HitEntityEvent(
                 stack,
                 entity,
                 this.thrower,
-                (float) this.damage,
+                damageAmount,
                 0.0f,
-                true);
-            MinecraftForge.EVENT_BUS.post((Event) event);
-            this.damage = event.newDamage;
+                true
+            );
+
+            MinecraftForge.EVENT_BUS.post(event);
+
+            damageAmount = event.newDamage;
+
+        } else {
+            damageAmount = 0;
         }
+
+        setDamage(damageAmount);
+
         super.applyEntityHitEffects(entity, dmgMul);
         points -= entity.getHealth();
         if (this.thrower instanceof EntityPlayer) {

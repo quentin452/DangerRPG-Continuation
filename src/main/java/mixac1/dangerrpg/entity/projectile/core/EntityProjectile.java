@@ -19,15 +19,19 @@ import cpw.mods.fml.relauncher.*;
 import mixac1.dangerrpg.init.*;
 
 public class EntityProjectile extends EntityArrow implements IThrowableEntity {
-
+    public int field_145791_d = -1;
+    public int field_145792_e = -1;
+    public int field_145789_f = -1;
+    public boolean inGround;
     protected boolean beenInGround;
     protected int lifespan;
     public EntityLivingBase thrower;
     protected String throwerName;
-
+    public Block field_145790_g;
+    public int inData;
     public EntityProjectile(final World world) {
         super(world);
-        this.damage = 0.0;
+        setDamage(0.0f);
         this.arrowShake = this.getMaxUntouchability();
         this.ticksExisted = -1;
         this.renderDistanceWeight = 10.0;
@@ -36,7 +40,7 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity {
 
     public EntityProjectile(final World world, final double x, final double y, final double z) {
         super(world, x, y, z);
-        this.damage = 0.0;
+        setDamage(0.0f);
         this.arrowShake = this.getMaxUntouchability();
         this.ticksExisted = -1;
         this.renderDistanceWeight = 10.0;
@@ -69,7 +73,7 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity {
     public EntityProjectile(final World world, final EntityLivingBase thrower, final EntityLivingBase target,
         final float speed, final float deviation) {
         super(world, thrower, target, speed, deviation);
-        this.damage = 0.0;
+        setDamage(0.0f);
         this.arrowShake = this.getMaxUntouchability();
         this.ticksExisted = -1;
         this.renderDistanceWeight = 10.0;
@@ -288,7 +292,12 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity {
                 entity.setFire(1);
             }
         }
-        entity.attackEntityFrom(RPGOther.RPGDamageSource.magic, (float) this.damage * dmgMul);
+        float damageAmount = (float) this.getDamage();
+
+        damageAmount = damageAmount * dmgMul;
+
+        this.setDamage(damageAmount);
+        entity.attackEntityFrom(RPGOther.RPGDamageSource.magic, damageAmount);
         this.playHitSound();
     }
 
@@ -411,8 +420,7 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity {
     }
 
     public boolean needAimRotation() {
-        return this.inGround || (!this.inGround
-            && (!this.canRotation() || (this.getRotationOnYaw() == 0.0f && this.getRotationOnPitch() == 0.0f)));
+        return this.inGround || !this.canRotation() || this.getRotationOnYaw() == 0.0f && this.getRotationOnPitch() == 0.0f;
     }
 
     public int getMaxLifespan() {
