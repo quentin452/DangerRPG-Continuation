@@ -9,6 +9,7 @@ import net.minecraftforge.common.util.EnumHelper;
 
 public class RPGToolMaterial implements IMaterialSpecial {
     public static HashMap<Item.ToolMaterial, RPGToolMaterial> map = new HashMap();
+    public static final RPGToolMaterial SILVER;
     public static final RPGToolMaterial WOOD;
     public static final RPGToolMaterial STONE;
     public static final RPGToolMaterial IRON;
@@ -59,6 +60,7 @@ public class RPGToolMaterial implements IMaterialSpecial {
     }
 
     static {
+        SILVER = new RPGToolMaterial("silver", EnumHelper.addToolMaterial("SILVER", 2, 1000, 4.0F, 2.5F, 6), 12632256, RPGItemRarity.common);
         WOOD = new RPGToolMaterial("wood", ToolMaterial.WOOD);
         STONE = new RPGToolMaterial("stone", ToolMaterial.STONE);
         IRON = new RPGToolMaterial("iron", ToolMaterial.IRON);
@@ -68,6 +70,7 @@ public class RPGToolMaterial implements IMaterialSpecial {
         BEDROCK = new RPGToolMaterial("bedrock", EnumHelper.addToolMaterial("BEDROCK", 4, 4000, 18.0F, 11.0F, 14), 17408, RPGItemRarity.mythic);
         BLACK_MATTER = new RPGToolMaterial("black_matter", EnumHelper.addToolMaterial("BLACK_MATTER", 4, 8000, 36.0F, 21.0F, 19), 0, RPGItemRarity.epic);
         WHITE_MATTER = new RPGToolMaterial("white_matter", EnumHelper.addToolMaterial("WHITE_MATTER", 5, 10000, 48.0F, 36.0F, 22), 16777215, RPGItemRarity.legendary);
+        SILVER.init();
         WOOD.init();
         STONE.init();
         IRON.init();
