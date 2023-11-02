@@ -47,78 +47,78 @@ public abstract class RPGGems {
             "gem_pa_health",
             5.0f,
             new IMultiplier.MultiplierMul(2.0f),
-            new EAWithIAttr[] { PlayerAttributes.HEALTH });
+            PlayerAttributes.HEALTH);
         RPGGems.gemPAMana = new GemPassiveAttribute(
             "gem_pa_mana",
             5.0f,
             new IMultiplier.MultiplierMul(2.0f),
-            new EAWithIAttr[] { PlayerAttributes.MANA });
+            PlayerAttributes.MANA);
         RPGGems.gemPAStr = new GemPassiveAttribute(
             "gem_pa_str",
             3.0f,
             new IMultiplier.MultiplierMul(2.0f),
-            new EAWithIAttr[] { PlayerAttributes.STRENGTH });
+            PlayerAttributes.STRENGTH);
         RPGGems.gemPAAgi = new GemPassiveAttribute(
             "gem_pa_agi",
             3.0f,
             new IMultiplier.MultiplierMul(2.0f),
-            new EAWithIAttr[] { PlayerAttributes.AGILITY });
+            PlayerAttributes.AGILITY);
         RPGGems.gemPAInt = new GemPassiveAttribute(
             "gem_pa_int",
             3.0f,
             new IMultiplier.MultiplierMul(2.0f),
-            new EAWithIAttr[] { PlayerAttributes.INTELLIGENCE });
+            PlayerAttributes.INTELLIGENCE);
         RPGGems.gemPAEffic = new GemPassiveAttribute(
             "gem_pa_effic",
             5.0f,
             new IMultiplier.MultiplierAdd(5.0f),
-            new EAWithIAttr[] { PlayerAttributes.EFFICIENCY });
+            PlayerAttributes.EFFICIENCY);
         RPGGems.gemPAManaRegen = new GemPassiveAttribute(
             "gem_pa_mana_regen",
             0.5f,
             new IMultiplier.MultiplierAdd(0.5f),
-            new EAWithIAttr[] { PlayerAttributes.MANA_REGEN });
+            PlayerAttributes.MANA_REGEN);
         RPGGems.gemPAHealthRegen = new GemPassiveAttribute(
             "gem_pa_health_regen",
             0.5f,
             new IMultiplier.MultiplierAdd(0.5f),
-            new EAWithIAttr[] { PlayerAttributes.HEALTH_REGEN });
+            PlayerAttributes.HEALTH_REGEN);
         RPGGems.gemPAMotionSpeed = new GemPassiveAttribute(
             "gem_pa_motion_speed",
             0.002f,
             new IMultiplier.MultiplierAdd(0.002f),
-            new EAWithIAttr[] { PlayerAttributes.SNEAK_SPEED, PlayerAttributes.MOVE_SPEED, PlayerAttributes.SWIM_SPEED,
-                PlayerAttributes.FLY_SPEED });
+            PlayerAttributes.SNEAK_SPEED, PlayerAttributes.MOVE_SPEED, PlayerAttributes.SWIM_SPEED,
+            PlayerAttributes.FLY_SPEED);
         RPGGems.gemPAJumpStrenght = new GemPassiveAttribute(
             "gem_pa_jump_str",
             0.002f,
             new IMultiplier.MultiplierAdd(0.002f),
-            new EAWithIAttr[] { PlayerAttributes.JUMP_HEIGHT, PlayerAttributes.JUMP_RANGE });
+            PlayerAttributes.JUMP_HEIGHT, PlayerAttributes.JUMP_RANGE);
         RPGGems.gemPAPhysicResist = new GemPassiveAttribute(
             "gem_pa_physic_resist",
             0.01f,
             new IMultiplier.MultiplierAdd(0.01f),
-            new EAWithIAttr[] { PlayerAttributes.PHYSIC_RESIST });
+            PlayerAttributes.PHYSIC_RESIST);
         RPGGems.gemPAMagicResist = new GemPassiveAttribute(
             "gem_pa_magic_resist",
             0.01f,
             new IMultiplier.MultiplierAdd(0.01f),
-            new EAWithIAttr[] { PlayerAttributes.MAGIC_RESIST });
+            PlayerAttributes.MAGIC_RESIST);
         RPGGems.gemPAFallResist = new GemPassiveAttribute(
             "gem_pa_fall_resist",
             0.02f,
             new IMultiplier.MultiplierAdd(0.02f),
-            new EAWithIAttr[] { PlayerAttributes.FALL_RESIST });
+            PlayerAttributes.FALL_RESIST);
         RPGGems.gemPAFireResist = new GemPassiveAttribute(
             "gem_pa_fire_resist",
             0.02f,
             new IMultiplier.MultiplierAdd(0.02f),
-            new EAWithIAttr[] { PlayerAttributes.FIRE_RESIST });
+            PlayerAttributes.FIRE_RESIST);
         RPGGems.gemPALavaResist = new GemPassiveAttribute(
             "gem_pa_lava_resist",
             0.02f,
             new IMultiplier.MultiplierAdd(0.02f),
-            new EAWithIAttr[] { PlayerAttributes.LAVA_RESIST });
+            PlayerAttributes.LAVA_RESIST);
         RPGGems.gemAMVampirism = new GemAMVampirism("gem_am_vampirism");
         RPGGems.gemAMCrit = new GemAMCrit("gem_am_crit");
         RPGGems.gemAMPureDmg = new GemAMPureDamage("gem_am_pure_dmg");

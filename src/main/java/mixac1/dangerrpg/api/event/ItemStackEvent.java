@@ -75,7 +75,7 @@ public class ItemStackEvent extends Event {
         public EntityPlayer player;
         public int slot;
 
-        public StackChangedEvent(final ItemStack newStack, final ItemStack oldStack, final int slot,
+        public StackChangedEvent(ItemStack newStack, ItemStack oldStack,int slot,
             final EntityPlayer player) {
             super(newStack);
             this.oldStack = oldStack;

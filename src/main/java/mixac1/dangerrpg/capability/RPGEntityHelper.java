@@ -1,16 +1,17 @@
 package mixac1.dangerrpg.capability;
 
-import net.minecraft.entity.*;
-import net.minecraft.entity.monster.*;
-import net.minecraft.entity.player.*;
-import net.minecraftforge.common.*;
-
-import cpw.mods.fml.common.eventhandler.*;
-import mixac1.dangerrpg.api.entity.*;
-import mixac1.dangerrpg.api.event.*;
-import mixac1.dangerrpg.capability.data.*;
-import mixac1.dangerrpg.init.*;
-import mixac1.dangerrpg.util.*;
+import mixac1.dangerrpg.api.entity.IRPGEntity;
+import mixac1.dangerrpg.api.entity.LvlEAProvider;
+import mixac1.dangerrpg.api.event.RegEAEvent;
+import mixac1.dangerrpg.capability.data.RPGEntityRegister;
+import mixac1.dangerrpg.init.RPGCapability;
+import mixac1.dangerrpg.init.RPGConfig;
+import mixac1.dangerrpg.util.IMultiplier;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.common.MinecraftForge;
 
 public abstract class RPGEntityHelper {
 
@@ -36,20 +37,20 @@ public abstract class RPGEntityHelper {
 
     public static void registerEntityDefault(final Class<? extends EntityLivingBase> entityClass,
         final RPGEntityRegister.RPGEntityData map) {
-        map.registerEA((EntityAttribute) EntityAttributes.LVL, (Object) 1);
-        MinecraftForge.EVENT_BUS.post((Event) new RegEAEvent.DefaultEAEvent((Class) entityClass, map));
+        map.registerEA(EntityAttributes.LVL,  1);
+        MinecraftForge.EVENT_BUS.post(new RegEAEvent.DefaultEAEvent(entityClass, map));
     }
 
     public static void registerEntityLiving(final Class<? extends EntityLiving> entityClass,
         final RPGEntityRegister.RPGEntityData map) {
-        map.registerEA((EntityAttribute) EntityAttributes.HEALTH, (Object) 0.0f, RPGEntityHelper.HEALTH_MUL);
-        MinecraftForge.EVENT_BUS.post((Event) new RegEAEvent.EntytyLivingEAEvent((Class) entityClass, map));
+        map.registerEA(EntityAttributes.HEALTH, 0.0f, RPGEntityHelper.HEALTH_MUL);
+        MinecraftForge.EVENT_BUS.post(new RegEAEvent.EntytyLivingEAEvent(entityClass, map));
     }
 
     public static void registerEntityMob(final Class<? extends EntityMob> entityClass,
         final RPGEntityRegister.RPGEntityData map) {
-        map.registerEA((EntityAttribute) EntityAttributes.MELEE_DAMAGE, (Object) 0.0f, RPGEntityHelper.DAMAGE_MUL);
-        MinecraftForge.EVENT_BUS.post((Event) new RegEAEvent.EntytyMobEAEvent((Class) entityClass, map));
+        map.registerEA(EntityAttributes.MELEE_DAMAGE, 0.0f, RPGEntityHelper.DAMAGE_MUL);
+        MinecraftForge.EVENT_BUS.post(new RegEAEvent.EntytyMobEAEvent(entityClass, map));
     }
 
     public static void registerEntityPlayer(final Class<? extends EntityPlayer> entityClass,
@@ -63,84 +64,84 @@ public abstract class RPGEntityHelper {
         final float q0 = (float) RPGConfig.EntityConfig.d.playerStartManaValue;
         final float q2 = (float) RPGConfig.EntityConfig.d.playerStartManaRegenValue;
         map.registerEALvlable(
-            (EntityAttribute) PlayerAttributes.HEALTH,
-            (Object) 0.0f,
-            (LvlEAProvider) new LvlEAProvider.DafailtLvlEAProvider(2, 1000, ADD_2));
+            PlayerAttributes.HEALTH,
+            0.0f,
+            new LvlEAProvider.DafailtLvlEAProvider(2, 1000, ADD_2));
         map.registerEALvlable(
-            (EntityAttribute) PlayerAttributes.MANA,
-            (Object) q0,
-            (LvlEAProvider) new LvlEAProvider.DafailtLvlEAProvider(2, 1000, ADD_2));
+            PlayerAttributes.MANA,
+            q0,
+            new LvlEAProvider.DafailtLvlEAProvider(2, 1000, ADD_2));
         map.registerEALvlable(
-            (EntityAttribute) PlayerAttributes.STRENGTH,
-            (Object) 0.0f,
-            (LvlEAProvider) new LvlEAProvider.DafailtLvlEAProvider(2, 1000, ADD_1));
+            PlayerAttributes.STRENGTH,
+            0.0f,
+            new LvlEAProvider.DafailtLvlEAProvider(2, 1000, ADD_1));
         map.registerEALvlable(
-            (EntityAttribute) PlayerAttributes.AGILITY,
-            (Object) 0.0f,
-            (LvlEAProvider) new LvlEAProvider.DafailtLvlEAProvider(2, 1000, ADD_1));
+            PlayerAttributes.AGILITY,
+            0.0f,
+            new LvlEAProvider.DafailtLvlEAProvider(2, 1000, ADD_1));
         map.registerEALvlable(
-            (EntityAttribute) PlayerAttributes.INTELLIGENCE,
-            (Object) 0.0f,
-            (LvlEAProvider) new LvlEAProvider.DafailtLvlEAProvider(2, 1000, ADD_1));
+            PlayerAttributes.INTELLIGENCE,
+            0.0f,
+            new LvlEAProvider.DafailtLvlEAProvider(2, 1000, ADD_1));
         map.registerEALvlable(
-            (EntityAttribute) PlayerAttributes.EFFICIENCY,
-            (Object) 0.0f,
-            (LvlEAProvider) new LvlEAProvider.DafailtLvlEAProvider(2, 1000, ADD_2));
+            PlayerAttributes.EFFICIENCY,
+            0.0f,
+            new LvlEAProvider.DafailtLvlEAProvider(2, 1000, ADD_2));
         map.registerEALvlable(
-            (EntityAttribute) PlayerAttributes.MANA_REGEN,
-            (Object) q2,
-            (LvlEAProvider) new LvlEAProvider.DafailtLvlEAProvider(2, 1000, ADD_0d4));
+            PlayerAttributes.MANA_REGEN,
+            q2,
+            new LvlEAProvider.DafailtLvlEAProvider(2, 1000, ADD_0d4));
         map.registerEALvlable(
-            (EntityAttribute) PlayerAttributes.HEALTH_REGEN,
-            (Object) 0.0f,
-            (LvlEAProvider) new LvlEAProvider.DafailtLvlEAProvider(2, 1000, ADD_0d4));
+            PlayerAttributes.HEALTH_REGEN,
+            0.0f,
+            new LvlEAProvider.DafailtLvlEAProvider(2, 1000, ADD_0d4));
         map.registerEALvlable(
-            (EntityAttribute) PlayerAttributes.MOVE_SPEED,
-            (Object) 0.0f,
-            (LvlEAProvider) new LvlEAProvider.DafailtLvlEAProvider(2, 20, ADD_0d001));
+            PlayerAttributes.MOVE_SPEED,
+            0.0f,
+            new LvlEAProvider.DafailtLvlEAProvider(2, 20, ADD_0d001));
         map.registerEALvlable(
-            (EntityAttribute) PlayerAttributes.SNEAK_SPEED,
-            (Object) 0.0f,
-            (LvlEAProvider) new LvlEAProvider.DafailtLvlEAProvider(2, 20, ADD_0d001));
+            PlayerAttributes.SNEAK_SPEED,
+            0.0f,
+            new LvlEAProvider.DafailtLvlEAProvider(2, 20, ADD_0d001));
         map.registerEALvlable(
-            (EntityAttribute) PlayerAttributes.FLY_SPEED,
-            (Object) 0.0f,
-            (LvlEAProvider) new LvlEAProvider.DafailtLvlEAProvider(2, 20, ADD_0d001));
+            PlayerAttributes.FLY_SPEED,
+             0.0f,
+            new LvlEAProvider.DafailtLvlEAProvider(2, 20, ADD_0d001));
         map.registerEALvlable(
-            (EntityAttribute) PlayerAttributes.SWIM_SPEED,
-            (Object) 0.0f,
-            (LvlEAProvider) new LvlEAProvider.DafailtLvlEAProvider(2, 20, ADD_0d001));
+            PlayerAttributes.SWIM_SPEED,
+            0.0f,
+            new LvlEAProvider.DafailtLvlEAProvider(2, 20, ADD_0d001));
         map.registerEALvlable(
-            (EntityAttribute) PlayerAttributes.JUMP_HEIGHT,
-            (Object) 0.0f,
-            (LvlEAProvider) new LvlEAProvider.DafailtLvlEAProvider(2, 20, ADD_0d001));
+            PlayerAttributes.JUMP_HEIGHT,
+            0.0f,
+            new LvlEAProvider.DafailtLvlEAProvider(2, 20, ADD_0d001));
         map.registerEALvlable(
-            (EntityAttribute) PlayerAttributes.JUMP_RANGE,
-            (Object) 0.0f,
-            (LvlEAProvider) new LvlEAProvider.DafailtLvlEAProvider(2, 20, ADD_0d001));
+            PlayerAttributes.JUMP_RANGE,
+            0.0f,
+            new LvlEAProvider.DafailtLvlEAProvider(2, 20, ADD_0d001));
         map.registerEALvlable(
-            (EntityAttribute) PlayerAttributes.PHYSIC_RESIST,
-            (Object) 0.0f,
-            (LvlEAProvider) new LvlEAProvider.DafailtLvlEAProvider(2, 20, ADD_0d2));
+            PlayerAttributes.PHYSIC_RESIST,
+            0.0f,
+            new LvlEAProvider.DafailtLvlEAProvider(2, 20, ADD_0d2));
         map.registerEALvlable(
-            (EntityAttribute) PlayerAttributes.MAGIC_RESIST,
-            (Object) 0.0f,
-            (LvlEAProvider) new LvlEAProvider.DafailtLvlEAProvider(2, 20, ADD_0d2));
+            PlayerAttributes.MAGIC_RESIST,
+            0.0f,
+            new LvlEAProvider.DafailtLvlEAProvider(2, 20, ADD_0d2));
         map.registerEALvlable(
-            (EntityAttribute) PlayerAttributes.FALL_RESIST,
-            (Object) 0.0f,
-            (LvlEAProvider) new LvlEAProvider.DafailtLvlEAProvider(2, 20, ADD_0d3));
+            PlayerAttributes.FALL_RESIST,
+            0.0f,
+            new LvlEAProvider.DafailtLvlEAProvider(2, 20, ADD_0d3));
         map.registerEALvlable(
-            (EntityAttribute) PlayerAttributes.FIRE_RESIST,
-            (Object) 0.0f,
-            (LvlEAProvider) new LvlEAProvider.DafailtLvlEAProvider(2, 20, ADD_0d3));
+            PlayerAttributes.FIRE_RESIST,
+            0.0f,
+            new LvlEAProvider.DafailtLvlEAProvider(2, 20, ADD_0d3));
         map.registerEALvlable(
-            (EntityAttribute) PlayerAttributes.LAVA_RESIST,
-            (Object) 0.0f,
-            (LvlEAProvider) new LvlEAProvider.DafailtLvlEAProvider(2, 20, ADD_0d3));
-        map.registerEA((EntityAttribute) PlayerAttributes.CURR_MANA, (Object) 0.0f);
-        map.registerEA((EntityAttribute) PlayerAttributes.SPEED_COUNTER, (Object) 0.0f);
-        MinecraftForge.EVENT_BUS.post((Event) new RegEAEvent.PlayerEAEvent((Class) entityClass, map));
+            PlayerAttributes.LAVA_RESIST,
+            0.0f,
+            new LvlEAProvider.DafailtLvlEAProvider(2, 20, ADD_0d3));
+        map.registerEA(PlayerAttributes.CURR_MANA, 0.0f);
+        map.registerEA(PlayerAttributes.SPEED_COUNTER, 0.0f);
+        MinecraftForge.EVENT_BUS.post(new RegEAEvent.PlayerEAEvent(entityClass, map));
     }
 
     static {
