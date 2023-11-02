@@ -1,50 +1,42 @@
 package mixac1.dangerrpg.capability.ea;
 
-import java.util.*;
+import java.util.UUID;
 
-import net.minecraft.entity.*;
-import net.minecraft.nbt.*;
-
-import mixac1.dangerrpg.api.entity.*;
-import mixac1.dangerrpg.capability.*;
+import mixac1.dangerrpg.capability.PlayerAttributes;
+import net.minecraft.entity.EntityLivingBase;
+import mixac1.dangerrpg.api.entity.EAWithIAttr;
 
 public class EAMana extends EAWithIAttr {
 
-    public EAMana(final String name) {
+    public EAMana(String name) {
         super(name);
     }
 
-    @Deprecated
-    public boolean setValueRaw(final Float value, final EntityLivingBase entity) {
-        final float tmp = (float) PlayerAttributes.CURR_MANA.getValue(entity) / (float) this.getValue(entity);
+    @Override
+    public boolean setValueRaw(Float value, EntityLivingBase entity) {
         if (super.setValueRaw(value, entity)) {
-            PlayerAttributes.CURR_MANA.setValue(((float) this.getValue(entity) * tmp), entity);
+            updateCurrentMana(entity);
             return true;
         }
         return false;
     }
 
-    public void setModificatorValue(final Float value, final EntityLivingBase entity, final UUID ID) {
-        if (!entity.worldObj.isRemote) {
-            final float tmp = (float) PlayerAttributes.CURR_MANA.getValue(entity) / (float) this.getValue(entity);
-            super.setModificatorValue(value, entity, ID);
-            PlayerAttributes.CURR_MANA.setValue(((float) this.getValue(entity) * tmp), entity);
-        }
+    @Override
+    public void setModificatorValue(Float value, EntityLivingBase entity, UUID ID) {
+        super.setModificatorValue(value, entity, ID);
+        updateCurrentMana(entity);
     }
 
-    public void removeModificator(final EntityLivingBase entity, final UUID ID) {
-        if (!entity.worldObj.isRemote) {
-            final float tmp = (float) PlayerAttributes.CURR_MANA.getValue(entity) / (float) this.getValue(entity);
-            super.removeModificator(entity, ID);
-            PlayerAttributes.CURR_MANA.setValue(((float) this.getValue(entity) * tmp), entity);
-        }
+    @Override
+    public void removeModificator(EntityLivingBase entity, UUID ID) {
+        super.removeModificator(entity, ID);
+        updateCurrentMana(entity);
     }
 
-    public void toNBTforMsg(final NBTTagCompound nbt, final EntityLivingBase entity) {
-        this.toNBT(nbt, entity);
-    }
-
-    public void fromNBTforMsg(final NBTTagCompound nbt, final EntityLivingBase entity) {
-        this.fromNBT(nbt, entity);
+    private void updateCurrentMana(EntityLivingBase entity) {
+        float manaValue = (float) this.getValue(entity);
+        float maxMana = (float) PlayerAttributes.CURR_MANA.getValue(entity);
+        float newMaxMana = manaValue * maxMana / (float) this.getBaseValue(entity);
+        PlayerAttributes.CURR_MANA.setValue(newMaxMana, entity);
     }
 }
