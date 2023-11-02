@@ -1,10 +1,9 @@
 package mixac1.dangerrpg.api.item;
 
-import net.minecraft.entity.player.*;
-import net.minecraft.item.*;
-
-import mixac1.dangerrpg.*;
-import mixac1.dangerrpg.init.*;
+import mixac1.dangerrpg.DangerRPG;
+import mixac1.dangerrpg.init.RPGCapability;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
 public abstract class ItemAttribute {
     public final String name;

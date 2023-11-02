@@ -20,7 +20,7 @@ import mixac1.dangerrpg.util.*;
 @SideOnly(Side.CLIENT)
 public class GuiInfoBookContentStack extends GuiInfoBookContent {
 
-    private ItemStack stack;
+    private final ItemStack stack;
     private EntityPlayer player;
 
     public GuiInfoBookContentStack(final Minecraft mc, final int width, final int height, final int top, final int size,
@@ -105,12 +105,12 @@ public class GuiInfoBookContentStack extends GuiInfoBookContent {
             this.addString("");
         }
         if (isRPGable) {
-            if (!((RPGItemRegister.RPGItemData) RPGCapability.rpgItemRegistr
-                .get((Object) this.stack.getItem())).isSupported) {
+            if (!RPGCapability.rpgItemRegistr
+                .get(this.stack.getItem()).isSupported) {
                 this.addString(DangerRPG.trans("rpgstr.item_not_supported"));
                 this.addString("");
             }
-            final Set<ItemAttribute> attrs = new LinkedHashSet<ItemAttribute>(
+            final Set<ItemAttribute> attrs = new LinkedHashSet<>(
                 RPGItemHelper.getItemAttributes(this.stack));
             attrs.remove(ItemAttributes.LEVEL);
             attrs.remove(ItemAttributes.MAX_EXP);
@@ -122,30 +122,30 @@ public class GuiInfoBookContentStack extends GuiInfoBookContent {
                         .toUpperCase());
                 this.addString("");
                 boolean flag = false;
-                flag |= this.addAttribute((ItemAttribute) ItemAttributes.PHYSIC_ARMOR, attrs);
-                flag |= this.addAttribute((ItemAttribute) ItemAttributes.MAGIC_ARMOR, attrs);
-                flag |= this.addAttribute((ItemAttribute) ItemAttributes.MELEE_DAMAGE, attrs);
-                flag |= this.addAttribute((ItemAttribute) ItemAttributes.SHOT_DAMAGE, attrs);
-                flag |= this.addAttribute((ItemAttribute) ItemAttributes.SHOT_POWER, attrs);
-                flag |= this.addAttribute((ItemAttribute) ItemAttributes.MELEE_SPEED, attrs);
-                flag |= this.addAttribute((ItemAttribute) ItemAttributes.SHOT_SPEED, attrs);
-                flag |= this.addAttribute((ItemAttribute) ItemAttributes.MANA_COST, attrs);
-                flag |= this.addAttribute((ItemAttribute) ItemAttributes.REACH, attrs);
-                flag |= this.addAttribute((ItemAttribute) ItemAttributes.KNOCKBACK, attrs);
+                flag |= this.addAttribute(ItemAttributes.PHYSIC_ARMOR, attrs);
+                flag |= this.addAttribute(ItemAttributes.MAGIC_ARMOR, attrs);
+                flag |= this.addAttribute(ItemAttributes.MELEE_DAMAGE, attrs);
+                flag |= this.addAttribute(ItemAttributes.SHOT_DAMAGE, attrs);
+                flag |= this.addAttribute(ItemAttributes.SHOT_POWER, attrs);
+                flag |= this.addAttribute(ItemAttributes.MELEE_SPEED, attrs);
+                flag |= this.addAttribute(ItemAttributes.SHOT_SPEED, attrs);
+                flag |= this.addAttribute(ItemAttributes.MANA_COST, attrs);
+                flag |= this.addAttribute(ItemAttributes.REACH, attrs);
+                flag |= this.addAttribute(ItemAttributes.KNOCKBACK, attrs);
                 if (flag) {
                     this.addString("");
                     flag = false;
                 }
-                flag |= this.addAttribute((ItemAttribute) ItemAttributes.STR_MUL, attrs);
-                flag |= this.addAttribute((ItemAttribute) ItemAttributes.AGI_MUL, attrs);
-                flag |= this.addAttribute((ItemAttribute) ItemAttributes.INT_MUL, attrs);
-                flag |= this.addAttribute((ItemAttribute) ItemAttributes.KNBACK_MUL, attrs);
+                flag |= this.addAttribute(ItemAttributes.STR_MUL, attrs);
+                flag |= this.addAttribute(ItemAttributes.AGI_MUL, attrs);
+                flag |= this.addAttribute(ItemAttributes.INT_MUL, attrs);
+                flag |= this.addAttribute(ItemAttributes.KNBACK_MUL, attrs);
                 if (flag) {
                     this.addString("");
                     flag = false;
                 }
-                flag |= this.addAttribute((ItemAttribute) ItemAttributes.EFFICIENCY, attrs);
-                flag |= this.addAttribute((ItemAttribute) ItemAttributes.ENCHANTABILITY, attrs);
+                flag |= this.addAttribute(ItemAttributes.EFFICIENCY, attrs);
+                flag |= this.addAttribute(ItemAttributes.ENCHANTABILITY, attrs);
                 for (final ItemAttribute iter : attrs) {
                     if (iter.isVisibleInInfoBook(this.stack)) {
                         this.addString(
@@ -155,10 +155,10 @@ public class GuiInfoBookContentStack extends GuiInfoBookContent {
                 }
                 this.addString("");
             }
-            final Set<GemType> set = ((RPGItemRegister.RPGItemData) RPGCapability.rpgItemRegistr
-                .get((Object) item)).gems.keySet();
+            final Set<GemType> set = RPGCapability.rpgItemRegistr
+                .get(item).gems.keySet();
             for (final GemType gemType : set) {
-                final List<ItemStack> list = (List<ItemStack>) gemType.get(this.stack);
+                final List<ItemStack> list = gemType.get(this.stack);
                 for (final ItemStack it2 : list) {
                     this.initGem(it2, gemType);
                 }

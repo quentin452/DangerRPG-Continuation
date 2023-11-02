@@ -10,23 +10,21 @@ import mixac1.dangerrpg.util.*;
 
 public class IADamage extends IAStatic {
 
-    public IADamage(final String name) {
+    public IADamage(String name) {
         super(name);
     }
 
-    public float get(final ItemStack stack, final EntityPlayer player) {
-        return this.getChecked(stack) + (float) PlayerAttributes.STRENGTH.getValue((EntityLivingBase) player)
-            * ItemAttributes.STR_MUL.get(stack, player);
+    public float get(ItemStack stack, EntityPlayer player) {
+        return this.getChecked(stack) + PlayerAttributes.STRENGTH.getValue(player) * ItemAttributes.STR_MUL.get(stack, player);
     }
 
     public static class IAMeleeDamage extends IADamage {
 
-        public IAMeleeDamage(final String name) {
+        public IAMeleeDamage(String name) {
             super(name);
         }
 
-        @Override
-        public float get(final ItemStack stack, final EntityPlayer player) {
+        public float get(ItemStack stack, EntityPlayer player) {
             return RPGHelper.getPlayerDamage(stack, player);
         }
     }
