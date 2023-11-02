@@ -8,6 +8,7 @@ import net.minecraft.entity.player.*;
 import net.minecraft.item.*;
 import net.minecraft.util.*;
 import net.minecraftforge.common.*;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -142,16 +143,15 @@ public class EventHandlerItem {
     }
 
     @SubscribeEvent
-    public void onLivingHurt(LivingHurtEvent event) {
-        if (event.entity.worldObj.isRemote) return;
-
-        if (event.source.getEntity() instanceof EntityPlayer && event.entity instanceof EntityLivingBase) {
+    public void onEntityDeath(LivingDeathEvent event) {
+        if(event.source.getEntity() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.source.getEntity();
             ItemStack heldItem = player.getHeldItem();
-
-            if (RPGItemHelper.isRPGable(heldItem)) {
-                float damage = event.ammount / 2.0f;
-                RPGItemHelper.upEquipment(player, heldItem, damage, false);
+            if(RPGItemHelper.isRPGable(heldItem)) {
+                EntityLivingBase entity = event.entityLiving;
+                int maxHealth = (int) entity.getMaxHealth();
+                float xp = maxHealth / 8f;
+                RPGItemHelper.upEquipment(player, heldItem, xp, false);
             }
         }
     }
