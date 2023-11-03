@@ -750,34 +750,28 @@ public class RPGGuiIngame extends Gui {
         return (int) Utils.alignment(curr / max * width, (float) (-width), (float) width);
     }
 
-    private String genValueStr(final float value) {
-        if (value < 100.0f) {
+    private String genValueStr(final double value) {
+        if (value < 100.0) {
             return String.format("%.1f", value);
         }
-        if (value < 1000.0f) {
-            return String.format("%d", Math.round(value));
-        }
-        if (value < 10000.0f) {
-            return String.format("%.2fK", Math.round(value) / 1000.0f);
-        }
-        if (value < 100000.0f) {
-            return String.format("%.1fK", Math.round(value) / 1000.0f);
-        }
-        if (value < 1000000.0f) {
-            return String.format("%dK", Math.round(value) / 1000);
-        }
-        if (value < 10000.0f) {
-            return String.format("%.2fM", Math.round(value) / 1000000.0f);
-        }
-        if (value < 100000.0f) {
-            return String.format("%.1fM", Math.round(value) / 1000000.0f);
-        }
-        if (value < 1000000.0f) {
-            return String.format("%dM", Math.round(value) / 1000000);
-        }
-        return String.format("%dM", Math.round(value) / 1000000);
-    }
 
+        char unit;
+        double scaledValue;
+
+        if (value < 1000.0) {
+            unit = ' ';
+            scaledValue = Math.round(value);
+        } else if (value < 1000000.0) {
+            unit = 'K';
+            scaledValue = Math.round(value) / 1000.0;
+        } else {
+            unit = 'M';
+            scaledValue = Math.round(value) / 1000000.0;
+        }
+
+        return String.format("%.1f%s", scaledValue, unit);
+    }
+    
     private double invert(final double value) {
         return Utils.invert(value, this.isInvert);
     }
