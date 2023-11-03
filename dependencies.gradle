@@ -41,7 +41,7 @@ dependencies {
 
 // this fix is required for the good function of the mod DangerRPG (but gradle is bugged since 7 years so this fix is doesn't work)
 // because the orderer of the manifest is broken since 7 years so the fix is disabled
-/*
+
 jar {
     manifest {
         attributes 'FMLAT': 'dangerrpg_at.cfg'
@@ -49,5 +49,3 @@ jar {
         attributes 'FMLCorePluginContainsFMLMod': 'true'
     }
 }
-
- */
