@@ -1,46 +1,42 @@
 package mixac1.dangerrpg.client.render.item;
 
-import net.minecraft.client.model.*;
-import net.minecraft.client.renderer.*;
-import net.minecraft.entity.*;
-import net.minecraft.entity.player.*;
-import net.minecraft.item.*;
-import net.minecraftforge.client.*;
+import mixac1.dangerrpg.client.model.ModelPowerStaff;
+import mixac1.dangerrpg.client.model.ModelStaff;
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
-import mixac1.dangerrpg.client.model.*;
+public class RenderStaff extends RenderNormalModel
+{
+    public static final RenderStaff INSTANCE = new RenderStaff();
 
-public class RenderStaff extends RenderNormalModel {
-
-    public static final RenderStaff INSTANCE;
-
-    public float specific(final IItemRenderer.ItemRenderType type, final ItemStack stack,
-        final EntityLivingBase entity) {
-        final float tmp = super.specific(type, stack, entity);
-        if (entity instanceof EntityPlayer && ((EntityPlayer) entity).isUsingItem()) {
-            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0f, 240.0f);
+    @Override
+    public float specific(ItemRenderType type, ItemStack stack, EntityLivingBase entity)
+    {
+        float tmp = super.specific(type, stack, entity);
+        if (entity instanceof EntityPlayer
+            && ((EntityPlayer) entity).isUsingItem()) {
+            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
         }
         return tmp;
     }
 
-    public ModelBase getModel() {
-        return (ModelBase) ModelStaff.INSTANCE;
+    @Override
+    public ModelBase getModel()
+    {
+        return ModelStaff.INSTANCE;
     }
 
-    static {
-        INSTANCE = new RenderStaff();
-    }
-
-    public static class RenderPowerStaff extends RenderStaff {
-
-        public static final RenderPowerStaff INSTANCE;
+    public static class RenderPowerStaff extends RenderStaff
+    {
+        public static final RenderPowerStaff INSTANCE = new RenderPowerStaff();
 
         @Override
-        public ModelBase getModel() {
-            return (ModelBase) ModelPowerStaff.INSTANCE;
-        }
-
-        static {
-            INSTANCE = new RenderPowerStaff();
+        public ModelBase getModel()
+        {
+            return ModelPowerStaff.INSTANCE;
         }
     }
 }

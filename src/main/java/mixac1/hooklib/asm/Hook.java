@@ -1,10 +1,11 @@
 package mixac1.hooklib.asm;
 
-import java.lang.annotation.*;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
 
-@Target({ ElementType.METHOD })
-public @interface Hook {
-
+@Target(ElementType.METHOD)
+public @interface Hook
+{
     ReturnCondition returnCondition() default ReturnCondition.NEVER;
 
     HookPriority priority() default HookPriority.NORMAL;
@@ -32,20 +33,22 @@ public @interface Hook {
 
     long longReturnConstant() default 0L;
 
-    float floatReturnConstant() default 0.0f;
+    float floatReturnConstant() default 0.0F;
 
-    double doubleReturnConstant() default 0.0;
+    double doubleReturnConstant() default 0.0D;
 
-    char charReturnConstant() default '\0';
+    char charReturnConstant() default 0;
 
     String stringReturnConstant() default "";
 
-    @Target({ ElementType.PARAMETER })
-    public @interface ReturnValue {}
-
-    @Target({ ElementType.PARAMETER })
-    public @interface LocalVariable {
-
+    @Target(ElementType.PARAMETER)
+    @interface LocalVariable
+    {
         int value();
+    }
+
+    @Target(ElementType.PARAMETER)
+    @interface ReturnValue
+    {
     }
 }

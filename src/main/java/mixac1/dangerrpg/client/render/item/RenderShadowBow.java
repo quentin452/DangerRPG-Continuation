@@ -1,22 +1,18 @@
 package mixac1.dangerrpg.client.render.item;
 
-import net.minecraft.entity.*;
-import net.minecraft.item.*;
-import net.minecraftforge.client.*;
+import org.lwjgl.opengl.GL11;
 
-import org.lwjgl.opengl.*;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 
-public class RenderShadowBow extends RenderBow {
-
-    public static final RenderShadowBow INSTANCE;
-
-    public float specific(final IItemRenderer.ItemRenderType type, final ItemStack stack,
-        final EntityLivingBase entity) {
-        GL11.glScalef(1.1f, 1.1f, 1.1f);
+public class RenderShadowBow extends RenderBow
+{
+    public static final RenderShadowBow INSTANCE = new RenderShadowBow();
+    
+    @Override
+    public float specific(ItemRenderType type, ItemStack stack, EntityLivingBase entity)
+    { 
+        GL11.glScalef(1.1F, 1.1F, 1.1F);
         return super.specific(type, stack, entity) / 1.7f;
-    }
-
-    static {
-        INSTANCE = new RenderShadowBow();
     }
 }

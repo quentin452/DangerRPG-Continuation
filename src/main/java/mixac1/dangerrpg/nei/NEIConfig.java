@@ -1,24 +1,33 @@
 package mixac1.dangerrpg.nei;
 
-import codechicken.nei.api.*;
-import codechicken.nei.recipe.*;
-import mixac1.dangerrpg.client.gui.*;
+import codechicken.nei.api.API;
+import codechicken.nei.api.IConfigureNEI;
+import mixac1.dangerrpg.DangerRPG;
+import mixac1.dangerrpg.client.gui.GuiRPGWorkbench;
 
-public class NEIConfig implements IConfigureNEI {
+public class NEIConfig implements IConfigureNEI
+{
+    @Override
+    public void loadConfig()
+    {
+        API.registerRecipeHandler(new LargeShapedRecipeHandler());
+        API.registerUsageHandler(new LargeShapedRecipeHandler());
 
-    public void loadConfig() {
-        API.registerRecipeHandler((ICraftingHandler) new LargeShapedRecipeHandler());
-        API.registerUsageHandler((IUsageHandler) new LargeShapedRecipeHandler());
-        API.registerRecipeHandler((ICraftingHandler) new LargeShapelessRecipeHandler());
-        API.registerUsageHandler((IUsageHandler) new LargeShapelessRecipeHandler());
-        API.registerGuiOverlay((Class) GuiRPGWorkbench.class, "RPGWorkbench");
+        API.registerRecipeHandler(new LargeShapelessRecipeHandler());
+        API.registerUsageHandler(new LargeShapelessRecipeHandler());
+
+        API.registerGuiOverlay(GuiRPGWorkbench.class, "RPGWorkbench");
     }
 
-    public String getName() {
-        return "DangerRPG";
+    @Override
+    public String getName()
+    {
+        return DangerRPG.MODNAME;
     }
 
-    public String getVersion() {
-        return "1.1.3";
+    @Override
+    public String getVersion()
+    {
+        return DangerRPG.VERSION;
     }
 }

@@ -1,77 +1,90 @@
 package mixac1.dangerrpg.entity.projectile.core;
 
-import net.minecraft.entity.*;
-import net.minecraft.init.*;
-import net.minecraft.item.*;
-import net.minecraft.nbt.*;
-import net.minecraft.world.*;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
-public abstract class EntityWithStack extends EntityProjectile {
-
+public abstract class EntityWithStack extends EntityProjectile
+{
     protected static final int DW_INDEX_STACK = 25;
 
-    public EntityWithStack(final World world) {
+    public EntityWithStack(World world)
+    {
         super(world);
     }
 
-    public EntityWithStack(final World world, final ItemStack stack) {
+    public EntityWithStack(World world, ItemStack stack)
+    {
         this(world);
-        this.setStack(stack);
+        setStack(stack);
     }
 
-    public EntityWithStack(final World world, final ItemStack stack, final double x, final double y, final double z) {
+    public EntityWithStack(World world, ItemStack stack, double x, double y, double z)
+    {
         super(world, x, y, z);
-        this.setStack(stack);
+        setStack(stack);
     }
 
-    public EntityWithStack(final World world, final EntityLivingBase thrower, final ItemStack stack, final float speed,
-        final float deviation) {
+    public EntityWithStack(World world, EntityLivingBase thrower, ItemStack stack, float speed, float deviation)
+    {
         super(world, thrower, speed, deviation);
-        this.setStack(stack);
+        setStack(stack);
     }
 
-    public EntityWithStack(final World world, final EntityLivingBase thrower, final EntityLivingBase target,
-        final ItemStack stack, final float speed, final float deviation) {
+    public EntityWithStack(World world, EntityLivingBase thrower, EntityLivingBase target, ItemStack stack, float speed, float deviation)
+    {
         super(world, thrower, target, speed, deviation);
-        this.setStack(stack);
+        setStack(stack);
     }
 
-    public void entityInit() {
+    @Override
+    public void entityInit()
+    {
         super.entityInit();
-        this.dataWatcher.addObject(25, (Object) new ItemStack(Items.apple, 0));
+        dataWatcher.addObject(DW_INDEX_STACK, new ItemStack(Items.apple, 0));
     }
 
-    public ItemStack getStack() {
-        return this.getStack(25);
+    public ItemStack getStack()
+    {
+        return getStack(DW_INDEX_STACK);
     }
 
-    public ItemStack getStack(final int index) {
-        return this.dataWatcher.getWatchableObjectItemStack(index);
+    public ItemStack getStack(int index)
+    {
+        return dataWatcher.getWatchableObjectItemStack(index);
     }
 
-    public void setStack(final ItemStack stack) {
-        this.setStack(stack, 25);
+    public void setStack(ItemStack stack)
+    {
+        setStack(stack, DW_INDEX_STACK);
     }
 
-    public void setStack(final ItemStack stack, final int index) {
+    public void setStack(ItemStack stack, int index)
+    {
         if (stack != null) {
-            this.dataWatcher.updateObject(index, (Object) stack);
+            dataWatcher.updateObject(index, stack);
         }
     }
 
-    public void writeEntityToNBT(final NBTTagCompound nbt) {
+    @Override
+    public void writeEntityToNBT(NBTTagCompound nbt)
+    {
         super.writeEntityToNBT(nbt);
-        final ItemStack thrownItem = this.getStack();
+        ItemStack thrownItem = getStack();
         if (thrownItem != null) {
-            nbt.setTag("stack", (NBTBase) thrownItem.writeToNBT(new NBTTagCompound()));
+            nbt.setTag("stack", thrownItem.writeToNBT(new NBTTagCompound()));
         }
     }
 
-    public void readEntityFromNBT(final NBTTagCompound nbt) {
+    @Override
+    public void readEntityFromNBT(NBTTagCompound nbt)
+    {
         super.readEntityFromNBT(nbt);
-        final NBTTagCompound tag = nbt.getCompoundTag("stack");
+        NBTTagCompound tag = nbt.getCompoundTag("stack");
         if (tag != null) {
-            this.setStack(ItemStack.loadItemStackFromNBT(tag));
+            setStack(ItemStack.loadItemStackFromNBT(tag));
         }
     }
 }

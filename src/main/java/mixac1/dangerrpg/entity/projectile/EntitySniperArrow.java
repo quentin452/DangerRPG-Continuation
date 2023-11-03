@@ -1,42 +1,51 @@
 package mixac1.dangerrpg.entity.projectile;
 
-import net.minecraft.entity.*;
-import net.minecraft.item.*;
-import net.minecraft.world.*;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
-public class EntitySniperArrow extends EntityRPGArrow {
-
-    public EntitySniperArrow(final World world) {
+public class EntitySniperArrow extends EntityRPGArrow
+{
+    public EntitySniperArrow(World world)
+    {
         super(world);
     }
 
-    public EntitySniperArrow(final World world, final ItemStack stack) {
+    public EntitySniperArrow(World world, ItemStack stack)
+    {
         super(world, stack);
     }
 
-    public EntitySniperArrow(final World world, final ItemStack stack, final double x, final double y, final double z) {
+    public EntitySniperArrow(World world, ItemStack stack, double x, double y, double z)
+    {
         super(world, stack, x, y, z);
     }
 
-    public EntitySniperArrow(final World world, final ItemStack stack, final EntityLivingBase thrower,
-        final float speed, final float deviation) {
+    public EntitySniperArrow(World world, ItemStack stack, EntityLivingBase thrower, float speed, float deviation)
+    {
         super(world, stack, thrower, speed, deviation);
     }
 
-    public EntitySniperArrow(final World world, final ItemStack stack, final EntityLivingBase thrower,
-        final EntityLivingBase target, final float speed, final float deviation) {
+    public EntitySniperArrow(World world, ItemStack stack, EntityLivingBase thrower, EntityLivingBase target, float speed, float deviation)
+    {
         super(world, stack, thrower, target, speed, deviation);
     }
 
-    public float getAirResistance() {
-        return this.beenInGround ? 0.95f : 1.0f;
+    @Override
+    public float getAirResistance()
+    {
+        return beenInGround ? 0.95F : 1F;
     }
 
-    public float getWaterResistance() {
-        return this.beenInGround ? 0.8f : 1.0f;
+    @Override
+    public float getWaterResistance()
+    {
+        return beenInGround ? 0.8F : 1F;
     }
 
-    public float getGravity() {
-        return this.beenInGround ? 0.05f : 0.0f;
+    @Override
+    public float getGravity()
+    {
+        return beenInGround ? 0.05F : 0F;
     }
 }

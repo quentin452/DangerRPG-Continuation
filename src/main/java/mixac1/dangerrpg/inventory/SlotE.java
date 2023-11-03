@@ -1,30 +1,40 @@
 package mixac1.dangerrpg.inventory;
 
-import net.minecraft.inventory.*;
-import net.minecraft.item.*;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
-public class SlotE extends Slot {
-
+public class SlotE extends Slot
+{
     int offset;
 
-    public SlotE(final IInventory inv, final int index, final int offset, final int x, final int y) {
+    public SlotE(IInventory inv, int index, int offset, int x, int y)
+    {
         super(inv, index, x, y);
         this.offset = offset;
     }
 
-    public int getSlotIndex() {
-        return this.slotNumber - this.offset;
+    @Override
+    public int getSlotIndex()
+    {
+        return slotNumber - offset;
     }
 
-    public int getSlotStackLimit() {
+    @Override
+    public int getSlotStackLimit()
+    {
         return 1;
     }
 
-    public void putStack(final ItemStack stack) {
-        this.inventory.setInventorySlotContents(this.getSlotIndex(), stack);
+    @Override
+    public void putStack(ItemStack stack)
+    {
+        inventory.setInventorySlotContents(getSlotIndex(), stack);
     }
 
-    public boolean isItemValid(final ItemStack stack) {
-        return this.inventory.isItemValidForSlot(this.getSlotIndex(), stack);
+    @Override
+    public boolean isItemValid(ItemStack stack)
+    {
+        return inventory.isItemValidForSlot(getSlotIndex(), stack);
     }
 }

@@ -1,83 +1,116 @@
 package mixac1.dangerrpg.proxy;
 
-import net.minecraft.entity.*;
-import net.minecraft.entity.player.*;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import cpw.mods.fml.relauncher.Side;
+import mixac1.dangerrpg.init.RPGAnotherMods;
+import mixac1.dangerrpg.init.RPGBlocks;
+import mixac1.dangerrpg.init.RPGCapability;
+import mixac1.dangerrpg.init.RPGConfig;
+import mixac1.dangerrpg.init.RPGEntities;
+import mixac1.dangerrpg.init.RPGEvents;
+import mixac1.dangerrpg.init.RPGGems;
+import mixac1.dangerrpg.init.RPGGuiHandlers;
+import mixac1.dangerrpg.init.RPGItems;
+import mixac1.dangerrpg.init.RPGNetwork;
+import mixac1.dangerrpg.init.RPGRecipes;
+import mixac1.dangerrpg.util.RPGTicks;
+import mixac1.dangerrpg.world.RPGEntityFXManager.IEntityFXType;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 
-import cpw.mods.fml.common.event.*;
-import cpw.mods.fml.common.network.simpleimpl.*;
-import cpw.mods.fml.relauncher.*;
-import mixac1.dangerrpg.init.*;
-import mixac1.dangerrpg.util.*;
-import mixac1.dangerrpg.world.*;
+public class CommonProxy
+{
+    protected RPGTicks serverTicks = new RPGTicks();
 
-public class CommonProxy {
-
-    protected RPGTicks serverTicks;
-
-    public CommonProxy() {
-        this.serverTicks = new RPGTicks();
-    }
-
-    public void preInit(final FMLPreInitializationEvent e) {
+    public void preInit(FMLPreInitializationEvent e)
+    {
         RPGAnotherMods.load(e);
+
         RPGConfig.load(e);
+
         RPGNetwork.load(e);
+
         RPGItems.load(e);
+
         RPGGems.load();
+
         RPGBlocks.load(e);
+
         RPGRecipes.load(e);
     }
 
-    public void init(final FMLInitializationEvent e) {
+    public void init(FMLInitializationEvent e)
+    {
         RPGEntities.load(e);
+
         RPGGuiHandlers.load(e);
+
         RPGEvents.load(e);
     }
 
-    public void postInit(final FMLPostInitializationEvent e) {
+    public void postInit(FMLPostInitializationEvent e)
+    {
         RPGCapability.preLoad(e);
+
         RPGConfig.postLoadPre(e);
+
         RPGCapability.load(e);
+
         RPGConfig.postLoadPost(e);
+
         RPGCapability.postLoad(e);
     }
 
-    public Side getSide() {
-        return (this instanceof ClientProxy) ? Side.CLIENT : Side.SERVER;
+    public Side getSide()
+    {
+        return this instanceof ClientProxy ? Side.CLIENT : Side.SERVER;
     }
 
-    public EntityPlayer getClientPlayer() {
+    public EntityPlayer getClientPlayer()
+    {
         return null;
     }
 
-    public EntityPlayer getPlayer(final MessageContext ctx) {
-        return (EntityPlayer) ctx.getServerHandler().playerEntity;
+    public EntityPlayer getPlayer(MessageContext ctx)
+    {
+        return ctx.getServerHandler().playerEntity;
     }
 
-    public Entity getEntityByID(final MessageContext ctx, final int entityId) {
-        return this.getPlayer(ctx).worldObj.getEntityByID(entityId);
+    public Entity getEntityByID(MessageContext ctx, int entityId)
+    {
+        return getPlayer(ctx).worldObj.getEntityByID(entityId);
     }
 
-    protected RPGTicks getRPGTicks(final Side side) {
-        return this.serverTicks;
+    protected RPGTicks getRPGTicks(Side side)
+    {
+        return serverTicks;
     }
 
-    public void fireTick(final Side side) {
-        this.getRPGTicks(side)
-            .fireTick();
+    public void fireTick(Side side)
+    {
+        getRPGTicks(side).fireTick();
     }
 
-    public int getTick(final Side side) {
-        return this.getRPGTicks(side)
-            .getTick();
+    public int getTick(Side side)
+    {
+        return getRPGTicks(side).getTick();
     }
 
-    public void spawnEntityFX(final RPGEntityFXManager.IEntityFXType fx, final double x, final double y, final double z,
-        final double motionX, final double motionY, final double motionZ) {}
+    public void spawnEntityFX(IEntityFXType fx, double x, double y, double z, double motionX, double motionY, double motionZ)
+    {
 
-    public void spawnEntityFX(final RPGEntityFXManager.IEntityFXType fx, final double x, final double y, final double z,
-        final double motionX, final double motionY, final double motionZ, final int color) {}
+    }
 
-    public void spawnEntityFX(final RPGEntityFXManager.IEntityFXType fx, final double x, final double y, final double z,
-        final double motionX, final double motionY, final double motionZ, final int color, final int maxAge) {}
+    public void spawnEntityFX(IEntityFXType fx, double x, double y, double z, double motionX, double motionY, double motionZ, int color)
+    {
+
+    }
+
+    public void spawnEntityFX(IEntityFXType fx, double x, double y, double z, double motionX, double motionY, double motionZ, int color, int maxAge)
+    {
+
+    }
 }

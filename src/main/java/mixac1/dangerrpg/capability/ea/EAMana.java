@@ -34,9 +34,9 @@ public class EAMana extends EAWithIAttr {
     }
 
     private void updateCurrentMana(EntityLivingBase entity) {
-        float manaValue = (float) this.getValue(entity);
-        float maxMana = (float) PlayerAttributes.CURR_MANA.getValue(entity);
-        float newMaxMana = manaValue * maxMana / (float) this.getBaseValue(entity);
+        float manaValue = this.getValue(entity);
+        float maxMana = PlayerAttributes.CURR_MANA.getValue(entity);
+        float newMaxMana = manaValue * maxMana / this.getBaseValue(entity);
         PlayerAttributes.CURR_MANA.setValue(newMaxMana, entity);
     }
 }

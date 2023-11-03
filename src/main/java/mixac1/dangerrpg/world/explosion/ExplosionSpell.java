@@ -1,17 +1,18 @@
 package mixac1.dangerrpg.world.explosion;
 
-import net.minecraft.entity.*;
+import mixac1.dangerrpg.entity.projectile.core.EntityCommonMagic;
+import net.minecraft.entity.EntityLivingBase;
 
-import mixac1.dangerrpg.entity.projectile.core.*;
-
-public class ExplosionSpell extends ExplosionCommonRPG {
-
-    public ExplosionSpell(final EntityCommonMagic entity, final double x, final double y, final double z,
-        final float explosionSize) {
-        super((Entity) entity, x, y, z, explosionSize);
+public class ExplosionSpell extends ExplosionCommonRPG
+{
+    public ExplosionSpell(EntityCommonMagic entity, double x, double y, double z, float explosionSize)
+    {
+        super(entity, x, y, z, explosionSize);
     }
 
-    public void applyEntityHitEffects(final EntityLivingBase entity, final float power) {
-        ((EntityCommonMagic) this.exploder).applyEntityHitEffects(entity, this.isDependDist ? power : 1.0f);
+    @Override
+    public void applyEntityHitEffects(EntityLivingBase entity, float power)
+    {
+        ((EntityCommonMagic) exploder).applyEntityHitEffects(entity, isDependDist ? power : 1);
     }
 }

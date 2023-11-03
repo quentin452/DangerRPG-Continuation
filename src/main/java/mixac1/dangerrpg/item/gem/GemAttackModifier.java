@@ -1,44 +1,49 @@
 package mixac1.dangerrpg.item.gem;
 
-import java.util.*;
+import java.util.HashSet;
 
-import net.minecraft.entity.*;
-import net.minecraft.entity.player.*;
-import net.minecraft.item.*;
+import mixac1.dangerrpg.DangerRPG;
+import mixac1.dangerrpg.api.item.GemType;
+import mixac1.dangerrpg.capability.GemTypes;
+import mixac1.dangerrpg.capability.data.RPGItemRegister.RPGItemData;
+import mixac1.dangerrpg.util.Tuple.Stub;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
-import mixac1.dangerrpg.*;
-import mixac1.dangerrpg.api.item.*;
-import mixac1.dangerrpg.capability.*;
-import mixac1.dangerrpg.capability.data.*;
-import mixac1.dangerrpg.util.*;
-
-public abstract class GemAttackModifier extends Gem {
-
-    public GemAttackModifier(final String name) {
+public abstract class GemAttackModifier extends Gem
+{
+    public GemAttackModifier(String name)
+    {
         super(name);
     }
 
-    public GemType getGemType() {
-        return (GemType) GemTypes.AM;
+    @Override
+    public GemType getGemType()
+    {
+        return GemTypes.AM;
     }
 
-    public void registerAttributes(final Item item, final RPGItemRegister.RPGItemData map) {
+    @Override
+    public void registerAttributes(Item item, RPGItemData map)
+    {
         super.registerAttributes(item, map);
     }
 
-    public abstract void onEntityHit(final ItemStack p0, final EntityPlayer p1, final EntityLivingBase p2,
-        final Tuple.Stub<Float> p3, final HashSet<Class<? extends GemAttackModifier>> p4);
+    public abstract void onEntityHit(ItemStack gem, EntityPlayer player, EntityLivingBase target, Stub<Float> damage, HashSet<Class<? extends GemAttackModifier>> disableSet);
 
-    public abstract void onDealtDamage(final ItemStack p0, final EntityPlayer p1, final EntityLivingBase p2,
-        final Tuple.Stub<Float> p3, final HashSet<Class<? extends GemAttackModifier>> p4);
+    public abstract void onDealtDamage(ItemStack gem, EntityPlayer player, EntityLivingBase target, Stub<Float> damage, HashSet<Class<? extends GemAttackModifier>> disableSet);
 
-    public String getInformationToInfoBook(final ItemStack item, final EntityPlayer player) {
-        return DangerRPG.trans(getUnlocalizedName().concat(".info"));
+    @Override
+    public String getInformationToInfoBook(ItemStack item, EntityPlayer player)
+    {
+        return DangerRPG.trans(unlocalizedName.concat(".info"));
     }
 
-    protected static boolean checkDisabling(final HashSet<Class<? extends GemAttackModifier>> set,
-        final Class<? extends GemAttackModifier> obj) {
-        for (final Class<? extends GemAttackModifier> it : set) {
+    protected static boolean checkDisabling(HashSet<Class<? extends GemAttackModifier>> set, Class<? extends GemAttackModifier> obj)
+    {
+        for (Class<? extends GemAttackModifier> it : set) {
             if (it.isAssignableFrom(obj)) {
                 return true;
             }

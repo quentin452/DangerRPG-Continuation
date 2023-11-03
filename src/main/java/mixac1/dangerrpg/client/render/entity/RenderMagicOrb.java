@@ -1,38 +1,33 @@
 package mixac1.dangerrpg.client.render.entity;
 
-import net.minecraft.entity.*;
+import org.lwjgl.opengl.GL11;
 
-import org.lwjgl.opengl.*;
+import cpw.mods.fml.relauncher.Side;
+import mixac1.dangerrpg.DangerRPG;
+import mixac1.dangerrpg.client.RPGRenderHelper.Color;
+import mixac1.dangerrpg.client.model.ModelOrb;
+import mixac1.dangerrpg.client.model.ModelProjectile;
+import mixac1.dangerrpg.entity.projectile.EntityMagicOrb;
+import net.minecraft.entity.Entity;
 
-import cpw.mods.fml.relauncher.*;
-import mixac1.dangerrpg.*;
-import mixac1.dangerrpg.client.*;
-import mixac1.dangerrpg.client.model.*;
-import mixac1.dangerrpg.entity.projectile.*;
-
-public class RenderMagicOrb extends RenderModel {
-
-    public static final RenderMagicOrb INSTANCE;
+public class RenderMagicOrb extends RenderModel
+{
+    public static final RenderMagicOrb INSTANCE = new RenderMagicOrb();
 
     @Override
-    protected float modelSpecific(final Entity entity) {
-        final EntityMagicOrb orb = (EntityMagicOrb) entity;
-        final int color = orb.getColor();
-        GL11.glColor3f(
-            RPGRenderHelper.Color.R.get(color),
-            RPGRenderHelper.Color.G.get(color),
-            RPGRenderHelper.Color.B.get(color));
+    protected float modelSpecific(Entity entity)
+    {
+        EntityMagicOrb orb = (EntityMagicOrb) entity;
+        int color = orb.getColor();
+        GL11.glColor3f(Color.R.get(color), Color.G.get(color), Color.B.get(color));
         GL11.glScalef(0.5f, 0.5f, 0.5f);
-        GL11.glRotatef((float) (DangerRPG.proxy.getTick(Side.CLIENT) * 25), 1.0f, 0.0f, 0.0f);
+        GL11.glRotatef(DangerRPG.proxy.getTick(Side.CLIENT) * 25, 1, 0, 0);
         return super.modelSpecific(entity);
     }
 
     @Override
-    protected ModelProjectile getModel() {
-        return (ModelProjectile) ModelOrb.INSTANCE;
-    }
-
-    static {
-        INSTANCE = new RenderMagicOrb();
+    protected ModelProjectile getModel()
+    {
+        return ModelOrb.INSTANCE;
     }
 }

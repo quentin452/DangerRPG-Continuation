@@ -1,27 +1,32 @@
 package mixac1.hooklib.asm;
 
-import java.io.*;
+import java.io.InputStream;
 
-import org.objectweb.asm.*;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
 
-public class ReadClassHelper {
-
-    public static InputStream getClassData(final String className) {
-        final String classResourceName = '/' + className.replace('.', '/') + ".class";
+public class ReadClassHelper
+{
+    public static InputStream getClassData(String className)
+    {
+        String classResourceName = '/' + className.replace('.', '/') + ".class";
         return ReadClassHelper.class.getResourceAsStream(classResourceName);
     }
 
-    public static void acceptVisitor(final InputStream classData, final ClassVisitor visitor) {
+    public static void acceptVisitor(InputStream classData, ClassVisitor visitor)
+    {
         try {
-            final ClassReader reader = new ClassReader(classData);
+            ClassReader reader = new ClassReader(classData);
             reader.accept(visitor, 0);
             classData.close();
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             throw new RuntimeException(ex);
         }
     }
 
-    public static void acceptVisitor(final String className, final ClassVisitor visitor) {
+    public static void acceptVisitor(String className, ClassVisitor visitor)
+    {
         acceptVisitor(getClassData(className), visitor);
     }
 }

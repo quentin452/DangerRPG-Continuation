@@ -1,23 +1,19 @@
 package mixac1.dangerrpg.client.render.item;
 
-import net.minecraft.entity.*;
-import net.minecraft.item.*;
-import net.minecraftforge.client.*;
+import org.lwjgl.opengl.GL11;
 
-import org.lwjgl.opengl.*;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 
-public class RenderLongItem extends RenderItemIcon {
-
-    public static final RenderLongItem INSTANCE;
-
-    public float specific(final IItemRenderer.ItemRenderType type, final ItemStack stack,
-        final EntityLivingBase entity) {
-        GL11.glTranslatef(-0.5f, -0.5f, 0.0f);
-        GL11.glScalef(2.0f, 2.0f, 1.0f);
-        return 0.0625f;
-    }
-
-    static {
-        INSTANCE = new RenderLongItem();
+public class RenderLongItem extends RenderItemIcon
+{    
+    public static final RenderLongItem INSTANCE = new RenderLongItem();
+    
+    @Override
+    public float specific(ItemRenderType type, ItemStack stack, EntityLivingBase entity)
+    {
+        GL11.glTranslatef(-0.5F, -0.5F, 0F);
+        GL11.glScalef(2.0F, 2.0F, 1F);
+        return 0.0625F;
     }
 }

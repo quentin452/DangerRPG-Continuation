@@ -1,37 +1,38 @@
 package mixac1.dangerrpg.capability;
 
-import net.minecraft.entity.player.*;
-import net.minecraft.item.*;
+import mixac1.dangerrpg.api.item.IADynamic;
+import mixac1.dangerrpg.capability.ia.IAStrUUID;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
-import mixac1.dangerrpg.api.item.*;
-import mixac1.dangerrpg.capability.ia.*;
+public abstract class GemAttributes
+{
+    public static final IAStrUUID UUID = new IAStrUUID("uuid");
 
-public abstract class GemAttributes {
+    public static final IADynamic AMOUNT = new IADynamic("amount")
+    {
+        @Override
+        public String getDispayValue(ItemStack stack, EntityPlayer player)
+        {
+            return String.format("%.3f", getSafe(stack, player, 0));
+        }
+    };
 
-    public static final IAStrUUID UUID;
-    public static final IADynamic AMOUNT;
-    public static final IADynamic PERCENT;
-    public static final IADynamic CHANCE;
+    public static final IADynamic PERCENT = new IADynamic("percent")
+    {
+        @Override
+        public String getDispayValue(ItemStack stack, EntityPlayer player)
+        {
+            return ItemAttributes.getStringProcentage(get(stack, player));
+        }
+    };
 
-    static {
-        UUID = new IAStrUUID("uuid");
-        AMOUNT = new IADynamic("amount") {
-
-            public String getDispayValue(final ItemStack stack, final EntityPlayer player) {
-                return String.format("%.3f", this.getSafe(stack, player, 0.0f));
-            }
-        };
-        PERCENT = new IADynamic("percent") {
-
-            public String getDispayValue(final ItemStack stack, final EntityPlayer player) {
-                return ItemAttributes.getStringProcentage(this.get(stack, player));
-            }
-        };
-        CHANCE = new IADynamic("chance") {
-
-            public String getDispayValue(final ItemStack stack, final EntityPlayer player) {
-                return ItemAttributes.getStringProcentage(this.get(stack, player));
-            }
-        };
-    }
+    public static final IADynamic CHANCE = new IADynamic("chance")
+    {
+        @Override
+        public String getDispayValue(ItemStack stack, EntityPlayer player)
+        {
+            return ItemAttributes.getStringProcentage(get(stack, player));
+        }
+    };
 }

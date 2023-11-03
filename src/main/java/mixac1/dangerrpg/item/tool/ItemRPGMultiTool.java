@@ -1,96 +1,106 @@
 package mixac1.dangerrpg.item.tool;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
-import net.minecraft.block.*;
-import net.minecraft.block.material.*;
-import net.minecraft.entity.player.*;
-import net.minecraft.init.*;
-import net.minecraft.item.*;
-import net.minecraft.world.*;
+import mixac1.dangerrpg.DangerRPG;
+import mixac1.dangerrpg.api.item.IRPGItem.IRPGItemTool;
+import mixac1.dangerrpg.capability.RPGItemHelper;
+import mixac1.dangerrpg.capability.data.RPGItemRegister.RPGItemData;
+import mixac1.dangerrpg.init.RPGItems;
+import mixac1.dangerrpg.init.RPGOther.RPGCreativeTabs;
+import mixac1.dangerrpg.item.IHasBooksInfo;
+import mixac1.dangerrpg.item.RPGItemComponent;
+import mixac1.dangerrpg.item.RPGItemComponent.RPGToolComponent;
+import mixac1.dangerrpg.item.RPGToolMaterial;
+import mixac1.dangerrpg.util.Utils;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTool;
+import net.minecraft.world.World;
 
-import mixac1.dangerrpg.api.item.*;
-import mixac1.dangerrpg.capability.*;
-import mixac1.dangerrpg.capability.data.*;
-import mixac1.dangerrpg.init.*;
-import mixac1.dangerrpg.item.*;
-import mixac1.dangerrpg.util.*;
-
-public class ItemRPGMultiTool extends ItemTool implements IRPGItem.IRPGItemTool, IHasBooksInfo {
-
+public class ItemRPGMultiTool extends ItemTool implements IRPGItemTool, IHasBooksInfo
+{
     RPGToolMaterial toolMaterial;
-    private static final Set<String> TOOL_CLASSES;
-    private static final Set<Material> HARVEST_MATERIALS;
 
-    public ItemRPGMultiTool(final RPGToolMaterial toolMaterial) {
-        super(3.0f, toolMaterial.material, (Set) null);
+    private static final Set<String> TOOL_CLASSES = new HashSet<String>()
+    {{
+        add("pickaxe");
+        add("axe");
+        add("shovel");
+    }};
+
+    private static final Set<Material> HARVEST_MATERIALS = new HashSet<Material>()
+    {{
+        addAll(Arrays.asList(new Material[] {Material.ground, Material.wood, Material.rock, Material.iron, Material.anvil, Material.sand, Material.web}));
+    }};
+
+    public ItemRPGMultiTool(RPGToolMaterial toolMaterial)
+    {
+        super(3.0F, toolMaterial.material, null);
         this.toolMaterial = toolMaterial;
-        this.setUnlocalizedName(
-            RPGItems.getRPGName(this.getItemComponent((Item) this), this.getToolMaterial((Item) this)));
-        this.setTextureName(Utils.toString("dangerrpg", ":tools/", getUnlocalizedName()));
-        this.setCreativeTab(RPGOther.RPGCreativeTabs.tabRPGAmmunitions);
-        this.setMaxStackSize(1);
+        setUnlocalizedName(RPGItems.getRPGName(getItemComponent(this), getToolMaterial(this)));
+        setTextureName(Utils.toString(DangerRPG.MODID, ":tools/", unlocalizedName));
+        setCreativeTab(RPGCreativeTabs.tabRPGAmmunitions);
+        setMaxStackSize(1);
     }
 
-    public float func_150893_a(final ItemStack stack, final Block block) {
-        return this.efficiencyOnProperMaterial;
+    @Override
+    public float func_150893_a(ItemStack stack, Block block)
+    {
+        return efficiencyOnProperMaterial;
     }
 
-    public int getHarvestLevel(final ItemStack stack, final String toolClass) {
+    @Override
+    public int getHarvestLevel(ItemStack stack, String toolClass)
+    {
         return super.toolMaterial.getHarvestLevel();
     }
 
-    public Set<String> getToolClasses(final ItemStack stack) {
-        return ItemRPGMultiTool.TOOL_CLASSES;
+    @Override
+    public Set<String> getToolClasses(ItemStack stack)
+    {
+        return TOOL_CLASSES;
     }
 
-    public boolean canHarvestBlock(final Block block, final ItemStack stack) {
-        return ItemRPGMultiTool.HARVEST_MATERIALS.contains(block.getMaterial());
+    @Override
+    public boolean canHarvestBlock(Block block, ItemStack stack)
+    {
+        return HARVEST_MATERIALS.contains(block.getMaterial());
     }
 
-    public boolean onItemUse(final ItemStack stack, final EntityPlayer player, final World world, final int par4,
-        final int par5, final int par6, final int par7, final float par8, final float par9, final float par10) {
+    @Override
+    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int par4, int par5, int par6, int par7, float par8, float par9, float par10)
+    {
         return Items.diamond_hoe.onItemUse(stack, player, world, par4, par5, par6, par7, par8, par9, par10);
     }
 
-    public String getInformationToInfoBook(final ItemStack item, final EntityPlayer player) {
+    @Override
+    public String getInformationToInfoBook(ItemStack item, EntityPlayer player)
+    {
         return null;
     }
 
-    public RPGItemComponent.RPGToolComponent getItemComponent(final Item item) {
+    @Override
+    public RPGToolComponent getItemComponent(Item item)
+    {
         return RPGItemComponent.MULTITOOL;
     }
 
-    public RPGToolMaterial getToolMaterial(final Item item) {
-        return this.toolMaterial;
+    @Override
+    public RPGToolMaterial getToolMaterial(Item item)
+    {
+        return toolMaterial;
     }
 
-    public void registerAttributes(final Item item, final RPGItemRegister.RPGItemData map) {
+    @Override
+    public void registerAttributes(Item item, RPGItemData map)
+    {
         RPGItemHelper.registerParamsItemTool(item, map);
-    }
-
-    static {
-        TOOL_CLASSES = new HashSet<String>() {
-
-            {
-                this.add("pickaxe");
-                this.add("axe");
-                this.add("shovel");
-            }
-        };
-        HARVEST_MATERIALS = new HashSet<Material>() {
-
-            {
-                this.addAll(
-                    Arrays.asList(
-                        Material.ground,
-                        Material.wood,
-                        Material.rock,
-                        Material.iron,
-                        Material.anvil,
-                        Material.sand,
-                        Material.web));
-            }
-        };
     }
 }

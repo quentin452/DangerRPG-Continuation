@@ -1,24 +1,34 @@
 package mixac1.dangerrpg.capability.gt;
 
-import net.minecraft.entity.player.*;
-import net.minecraft.item.*;
+import mixac1.dangerrpg.api.item.GemType;
+import mixac1.dangerrpg.item.gem.GemPassiveAttribute;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
-import mixac1.dangerrpg.api.item.*;
-import mixac1.dangerrpg.item.gem.*;
-
-public class GTPassiveAttribute extends GemType {
-
-    public GTPassiveAttribute() {
+public class GTPassiveAttribute extends GemType
+{
+    public GTPassiveAttribute()
+    {
         super("pa");
     }
 
-    public void activate1(final ItemStack stack, final EntityPlayer player, final Object... meta) {
+    /**
+     * Activate
+     */
+    @Override
+    public void activate1(ItemStack stack, EntityPlayer player, Object... meta)
+    {
         if (stack.getItem() instanceof GemPassiveAttribute) {
             ((GemPassiveAttribute) stack.getItem()).activate(stack, player);
         }
     }
 
-    public void activate2(final ItemStack stack, final EntityPlayer player, final Object... meta) {
+    /**
+     * Deactivate
+     */
+    @Override
+    public void activate2(ItemStack stack, EntityPlayer player, Object... meta)
+    {
         if (stack.getItem() instanceof GemPassiveAttribute) {
             ((GemPassiveAttribute) stack.getItem()).deactivate(stack, player);
         }

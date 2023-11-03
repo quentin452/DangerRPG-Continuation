@@ -1,43 +1,51 @@
 package mixac1.dangerrpg.network;
 
-import net.minecraft.entity.*;
-import net.minecraft.nbt.*;
+import cpw.mods.fml.common.network.ByteBufUtils;
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import io.netty.buffer.ByteBuf;
+import mixac1.dangerrpg.DangerRPG;
+import mixac1.dangerrpg.api.entity.EntityAttribute;
+import mixac1.dangerrpg.capability.data.RPGEntityProperties;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.nbt.NBTTagCompound;
 
-import cpw.mods.fml.common.network.*;
-import cpw.mods.fml.common.network.simpleimpl.*;
-import io.netty.buffer.*;
-import mixac1.dangerrpg.*;
-import mixac1.dangerrpg.api.entity.*;
-import mixac1.dangerrpg.capability.data.*;
-
-public class MsgSyncEA implements IMessage {
-
+public class MsgSyncEA implements IMessage
+{
     public NBTTagCompound nbt;
 
     public MsgSyncEA() {}
 
-    public MsgSyncEA(final EntityAttribute attr, final EntityLivingBase entity) {
-        (this.nbt = new NBTTagCompound()).setInteger("hash", attr.hash);
-        this.nbt.setInteger("id", entity.getEntityId());
-        attr.toNBTforMsg(this.nbt, entity);
+    public MsgSyncEA(EntityAttribute attr, EntityLivingBase entity)
+    {
+        nbt = new NBTTagCompound();
+
+        nbt.setInteger("hash", attr.hash);
+        nbt.setInteger("id", entity.getEntityId());
+        attr.toNBTforMsg(nbt, entity);
     }
 
-    public void toBytes(final ByteBuf buf) {
-        ByteBufUtils.writeTag(buf, this.nbt);
+    @Override
+    public void toBytes(ByteBuf buf)
+    {
+        ByteBufUtils.writeTag(buf, nbt);
     }
 
-    public void fromBytes(final ByteBuf buf) {
-        this.nbt = ByteBufUtils.readTag(buf);
+    @Override
+    public void fromBytes(ByteBuf buf)
+    {
+        nbt = ByteBufUtils.readTag(buf);
     }
 
-    public static class Handler implements IMessageHandler<MsgSyncEA, IMessage> {
-
-        public IMessage onMessage(final MsgSyncEA msg, final MessageContext ctx) {
-            final EntityLivingBase entity = (EntityLivingBase) DangerRPG.proxy
-                .getEntityByID(ctx, msg.nbt.getInteger("id"));
+    public static class Handler implements IMessageHandler<MsgSyncEA, IMessage>
+    {
+        @Override
+        public IMessage onMessage(MsgSyncEA msg, MessageContext ctx)
+        {
+            EntityLivingBase entity = (EntityLivingBase) DangerRPG.proxy.getEntityByID(ctx, msg.nbt.getInteger("id"));
             if (entity != null) {
-                final EntityAttribute attr = RPGEntityProperties.get(entity)
-                    .getEntityAttribute(msg.nbt.getInteger("hash"));
+                EntityAttribute attr = RPGEntityProperties.get(entity).getEntityAttribute(msg.nbt.getInteger("hash"));
                 if (attr != null) {
                     attr.fromNBTforMsg(msg.nbt, entity);
                 }
@@ -46,3 +54,4 @@ public class MsgSyncEA implements IMessage {
         }
     }
 }
+

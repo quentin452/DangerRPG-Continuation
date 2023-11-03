@@ -1,15 +1,15 @@
 package mixac1.hooklib.minecraft;
 
-import net.minecraft.launchwrapper.*;
+import cpw.mods.fml.common.Loader;
+import mixac1.hooklib.asm.Hook;
+import net.minecraft.launchwrapper.LaunchClassLoader;
 
-import cpw.mods.fml.common.*;
-import mixac1.hooklib.asm.*;
-
-public class SecondaryTransformerHook {
-
+public class SecondaryTransformerHook
+{
     @Hook
-    public static void injectData(final Loader loader, final Object... data) {
-        final LaunchClassLoader classLoader = (LaunchClassLoader) SecondaryTransformerHook.class.getClassLoader();
+    public static void injectData(Loader loader, Object... data)
+    {
+        LaunchClassLoader classLoader = (LaunchClassLoader) SecondaryTransformerHook.class.getClassLoader();
         classLoader.registerTransformer(MinecraftClassTransformer.class.getName());
     }
 }

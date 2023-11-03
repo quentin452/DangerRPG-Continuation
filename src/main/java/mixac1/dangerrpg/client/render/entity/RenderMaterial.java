@@ -1,54 +1,45 @@
 package mixac1.dangerrpg.client.render.entity;
 
-import net.minecraft.client.renderer.*;
-import net.minecraft.entity.*;
-import net.minecraft.item.*;
-import net.minecraft.util.*;
+import org.lwjgl.opengl.GL11;
 
-import org.lwjgl.opengl.*;
-
-import cpw.mods.fml.relauncher.*;
-import mixac1.dangerrpg.client.*;
-import mixac1.dangerrpg.entity.projectile.core.*;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import mixac1.dangerrpg.client.RPGRenderHelper;
+import mixac1.dangerrpg.entity.projectile.core.EntityMaterial;
+import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.ResourceLocation;
 
 @SideOnly(Side.CLIENT)
-public class RenderMaterial extends RenderProjectile {
-
-    public static final RenderMaterial INSTANCE;
+public class RenderMaterial extends RenderProjectile
+{
+    public static final RenderMaterial INSTANCE = new RenderMaterial();
 
     @Override
-    protected ResourceLocation getEntityTexture(final Entity entity) {
-        return RPGRenderHelper.mc.getTextureManager()
-            .getResourceLocation(1);
+    protected ResourceLocation getEntityTexture(Entity entity)
+    {
+        return RPGRenderHelper.mc.getTextureManager().getResourceLocation(1);
     }
 
     @Override
-    protected void doRender(final Entity entity) {
+    protected void doRender(Entity entity)
+    {
         if (entity instanceof EntityMaterial) {
-            final Tessellator tess = Tessellator.instance;
-            final ItemStack stack = ((EntityMaterial) entity).getStack();
-            final IIcon icon = stack.getItem()
-                .getIconFromDamage(0);
-            final float tickness = this.itemSpecific(stack);
-            ItemRenderer.renderItemIn2D(
-                tess,
-                icon.getMaxU(),
-                icon.getMinV(),
-                icon.getMinU(),
-                icon.getMaxV(),
-                icon.getIconWidth(),
-                icon.getIconHeight(),
-                tickness);
+            Tessellator tess = Tessellator.instance;
+            ItemStack stack = ((EntityMaterial) entity).getStack();
+            IIcon icon = stack.getItem().getIconFromDamage(0);
+            float tickness = itemSpecific(stack);
+            ItemRenderer.renderItemIn2D(tess, icon.getMaxU(), icon.getMinV(), icon.getMinU(), icon.getMaxV(), icon.getIconWidth(), icon.getIconHeight(), tickness);
             RPGRenderHelper.renderEnchantEffect(tess, stack, 256, 256, tickness);
         }
     }
 
-    protected float itemSpecific(final ItemStack stack) {
-        GL11.glTranslatef(-1.0f, 0.0f, 0.0f);
-        return 0.0625f;
-    }
-
-    static {
-        INSTANCE = new RenderMaterial();
+    protected float itemSpecific(ItemStack stack)
+    {
+        GL11.glTranslatef(-1F, 0F, 0F);
+        return 0.0625F;
     }
 }

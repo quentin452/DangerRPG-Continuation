@@ -1,49 +1,67 @@
 package mixac1.hooklib.minecraft;
 
-import java.lang.reflect.*;
-import java.util.*;
+import java.lang.reflect.Field;
+import java.util.Map;
 
-import cpw.mods.fml.relauncher.*;
+import cpw.mods.fml.relauncher.CoreModManager;
+import cpw.mods.fml.relauncher.FMLRelaunchLog;
+import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 
-public class HookLibPlugin implements IFMLLoadingPlugin {
-
+public class HookLibPlugin implements IFMLLoadingPlugin
+{
     private static boolean obf;
     private static boolean cheched;
 
-    public String[] getLibraryRequestClass() {
+    // 1.6.x only
+    public String[] getLibraryRequestClass()
+    {
         return null;
     }
 
-    public String getAccessTransformerClass() {
+    // 1.7.x only
+    @Override
+    public String getAccessTransformerClass()
+    {
         return null;
     }
 
-    public String[] getASMTransformerClass() {
+    @Override
+    public String[] getASMTransformerClass()
+    {
         return new String[] { PrimaryClassTransformer.class.getName() };
     }
 
-    public String getModContainerClass() {
+    @Override
+    public String getModContainerClass()
+    {
         return null;
     }
 
-    public String getSetupClass() {
+    @Override
+    public String getSetupClass()
+    {
         return null;
     }
 
-    public void injectData(final Map<String, Object> data) {}
+    @Override
+    public void injectData(Map<String, Object> data)
+    {
+    }
 
-    public static boolean getObfuscated() {
-        if (!HookLibPlugin.cheched) {
+    public static boolean getObfuscated()
+    {
+        if (!cheched) {
             try {
-                final Field deobfField = CoreModManager.class.getDeclaredField("deobfuscatedEnvironment");
+                Field deobfField = CoreModManager.class.getDeclaredField("deobfuscatedEnvironment");
                 deobfField.setAccessible(true);
-                HookLibPlugin.obf = !deobfField.getBoolean(null);
-                FMLRelaunchLog.info("[HOOKLIB]  Obfuscated: " + HookLibPlugin.obf, new Object[0]);
-            } catch (Exception e) {
+                obf = !deobfField.getBoolean(null);
+                FMLRelaunchLog.info("[HOOKLIB] " + " Obfuscated: " + obf);
+            }
+            catch (Exception e) {
                 e.printStackTrace();
             }
-            HookLibPlugin.cheched = true;
+            cheched = true;
         }
-        return HookLibPlugin.obf;
+        return obf;
     }
 }

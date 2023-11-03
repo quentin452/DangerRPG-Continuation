@@ -1,96 +1,86 @@
 package mixac1.dangerrpg.client.gui;
 
-import java.util.*;
+import java.util.HashMap;
 
-import net.minecraft.client.gui.inventory.*;
-import net.minecraft.entity.player.*;
-import net.minecraft.inventory.*;
-import net.minecraft.util.*;
-import net.minecraft.world.*;
-
-import cpw.mods.fml.relauncher.*;
-import mixac1.dangerrpg.api.item.*;
-import mixac1.dangerrpg.capability.*;
-import mixac1.dangerrpg.init.*;
-import mixac1.dangerrpg.inventory.*;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import mixac1.dangerrpg.DangerRPG;
+import mixac1.dangerrpg.api.item.GemType;
+import mixac1.dangerrpg.capability.GemTypes;
+import mixac1.dangerrpg.init.RPGBlocks;
+import mixac1.dangerrpg.inventory.ContainerModificationTable;
+import mixac1.dangerrpg.inventory.InventoryModificationTable;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
+import net.minecraft.world.World;
 
 @SideOnly(Side.CLIENT)
-public class GuiModificationTable extends GuiContainer {
+public class GuiModificationTable extends GuiContainer
+{
+    public static final ResourceLocation TEXTURE = new ResourceLocation(DangerRPG.MODID, "textures/gui/container/gui_modification_table.png");
 
-    public static final ResourceLocation TEXTURE;
-    public static int slotU;
-    public static int slotV;
-    public static int iconU;
-    public static int iconV;
-    public static int invStrX;
-    public static int invStrY;
+    public static int slotU = 176;
+    public static int slotV = 0;
+
+    public static int iconU = 194;
+    public static int iconV = 0;
+
+    public static int invStrX = 8;
+    public static int invStrY = 133;
+
     private IInventory playerInv;
-    private static HashMap<GemType, Integer> iconMap;
 
-    public GuiModificationTable(final InventoryPlayer inventory, final World world, final int x, final int y,
-        final int z) {
-        super((Container) new ContainerModificationTable((IInventory) inventory, world, x, y, z));
-        this.playerInv = (IInventory) inventory;
-        this.xSize = 176;
-        this.ySize = 227;
+    private static HashMap<GemType, Integer> iconMap = new HashMap<GemType, Integer>()
+    {{
+        put(GemTypes.PA, 1);
+        put(GemTypes.AM, 2);
+    }};
+
+    public GuiModificationTable(InventoryPlayer inventory, World world, int x, int y, int z)
+    {
+        super(new ContainerModificationTable(inventory, world, x, y, z));
+
+        playerInv = inventory;
+
+        xSize = 176;
+        ySize = 227;
     }
 
-    protected void drawGuiContainerBackgroundLayer(final float partialTicks, final int mouseX, final int mouseY) {
-        this.mc.getTextureManager()
-            .bindTexture(GuiModificationTable.TEXTURE);
-        this.drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
-        final ContainerModificationTable cmt = (ContainerModificationTable) this.inventorySlots;
+    @Override
+    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
+    {
+        mc.getTextureManager().bindTexture(TEXTURE);
+        drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+
+        ContainerModificationTable cmt = (ContainerModificationTable) inventorySlots;
         for (int i = cmt.staticSize + 1; i < cmt.inventorySlots.size(); ++i) {
-            final Slot slot = (Slot) cmt.inventorySlots.get(i);
-            this.drawTexturedModalRect(
-                this.guiLeft + slot.xDisplayPosition - 1,
-                this.guiTop + slot.yDisplayPosition - 1,
-                GuiModificationTable.slotU,
-                GuiModificationTable.slotV,
-                18,
-                18);
+            Slot slot = (Slot) cmt.inventorySlots.get(i);
+            drawTexturedModalRect(guiLeft + slot.xDisplayPosition - 1, guiTop + slot.yDisplayPosition - 1, slotU, slotV, 18, 18);
             if (!slot.getHasStack()) {
-                final int iconIndex = this.getGemTypeIconIndex(
-                    ((InventoryModificationTable) slot.inventory).getGemTypeSlot(slot.getSlotIndex()));
-                this.drawTexturedModalRect(
-                    this.guiLeft + slot.xDisplayPosition,
-                    this.guiTop + slot.yDisplayPosition,
-                    GuiModificationTable.iconU,
-                    GuiModificationTable.iconV + 16 * iconIndex,
-                    16,
-                    16);
+                int iconIndex = getGemTypeIconIndex(((InventoryModificationTable) slot.inventory).getGemTypeSlot(slot.getSlotIndex()));
+                drawTexturedModalRect(guiLeft + slot.xDisplayPosition, guiTop + slot.yDisplayPosition, iconU, iconV + 16 * iconIndex, 16, 16);
             }
         }
     }
 
-    protected void drawGuiContainerForegroundLayer(final int mouseX, final int mouseY) {
-        final String s1 = StatCollector.translateToLocal(RPGBlocks.modificationTable.getLocalizedName());
-        final String s2 = StatCollector.translateToLocal("key.inventory");
-        this.fontRendererObj.drawString(s1, (this.xSize - this.fontRendererObj.getStringWidth(s1)) / 2, 5, 4210752);
-        this.fontRendererObj.drawString(s2, GuiModificationTable.invStrX, GuiModificationTable.invStrY, 4210752);
+    @Override
+    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
+    {
+        String s1 = StatCollector.translateToLocal(RPGBlocks.modificationTable.getLocalizedName());
+        String s2 = StatCollector.translateToLocal("key.inventory");
+        fontRendererObj.drawString(s1, (xSize - fontRendererObj.getStringWidth(s1)) / 2, 5, 0x404040);
+        fontRendererObj.drawString(s2, invStrX, invStrY, 0x404040);
     }
 
-    private int getGemTypeIconIndex(final GemType gemType) {
-        if (gemType != null && GuiModificationTable.iconMap.containsKey(gemType)) {
-            return GuiModificationTable.iconMap.get(gemType);
+    private int getGemTypeIconIndex(GemType gemType)
+    {
+        if (gemType != null && iconMap.containsKey(gemType)) {
+            return iconMap.get(gemType);
         }
         return 0;
-    }
-
-    static {
-        TEXTURE = new ResourceLocation("dangerrpg", "textures/gui/container/gui_modification_table.png");
-        GuiModificationTable.slotU = 176;
-        GuiModificationTable.slotV = 0;
-        GuiModificationTable.iconU = 194;
-        GuiModificationTable.iconV = 0;
-        GuiModificationTable.invStrX = 8;
-        GuiModificationTable.invStrY = 133;
-        GuiModificationTable.iconMap = new HashMap<GemType, Integer>() {
-
-            {
-                this.put((GemType) GemTypes.PA, 1);
-                this.put((GemType) GemTypes.AM, 2);
-            }
-        };
     }
 }

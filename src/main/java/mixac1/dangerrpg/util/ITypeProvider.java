@@ -1,248 +1,307 @@
 package mixac1.dangerrpg.util;
 
-import net.minecraft.item.*;
-import net.minecraft.nbt.*;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
-public interface ITypeProvider<Type> {
+/**
+ * Object of this interface helps load and save type <T> to {@link NBTTagCompound}.
+ * Also, helps with some other problems
+ */
+public interface ITypeProvider<Type>
+{
+    public void toNBT(Type value, String key, NBTTagCompound nbt);
 
-    public static final ITypeProvider<Boolean> BOOLEAN = new ITypeProvider<Boolean>() {
+    public Type fromNBT(String key, NBTTagCompound nbt);
 
+    public Type getEmpty();
+
+    public boolean isValid(Type value);
+
+    public Type sum(Type value1, Type value2);
+
+    public Type dif(Type value1, Type value2);
+
+    public String toString(Type value);
+
+    /*******************************************************/
+
+    public static final ITypeProvider<Boolean> BOOLEAN = new ITypeProvider<Boolean>()
+    {
         @Override
-        public void toNBT(final Boolean value, final String key, final NBTTagCompound nbt) {
-            nbt.setBoolean(key, (boolean) value);
+        public void toNBT(Boolean value, String key, NBTTagCompound nbt)
+        {
+            nbt.setBoolean(key, value);
         }
 
         @Override
-        public Boolean fromNBT(final String key, final NBTTagCompound nbt) {
+        public Boolean fromNBT(String key, NBTTagCompound nbt)
+        {
             return nbt.getBoolean(key);
         }
 
         @Override
-        public boolean isValid(final Boolean value) {
+        public boolean isValid(Boolean value)
+        {
             return true;
         }
 
         @Override
-        public Boolean sum(final Boolean value1, final Boolean value2) {
+        public Boolean sum(Boolean value1, Boolean value2)
+        {
             return value1 || value2;
         }
 
         @Override
-        public Boolean dif(final Boolean value1, final Boolean value2) {
-            return !value2 && value1;
+        public Boolean dif(Boolean value1, Boolean value2)
+        {
+            return value2 ? false : value1;
         }
 
         @Override
-        public String toString(final Boolean value) {
+        public String toString(Boolean value)
+        {
             return value.toString();
         }
 
         @Override
-        public Boolean getEmpty() {
+        public Boolean getEmpty()
+        {
             return false;
         }
     };
-    public static final ITypeProvider<Integer> INTEGER = new ITypeProvider<Integer>() {
 
+    public static final ITypeProvider<Integer> INTEGER = new ITypeProvider<Integer>()
+    {
         @Override
-        public void toNBT(final Integer value, final String key, final NBTTagCompound nbt) {
-            nbt.setInteger(key, (int) value);
+        public void toNBT(Integer value, String key, NBTTagCompound nbt)
+        {
+            nbt.setInteger(key, value);
         }
 
         @Override
-        public Integer fromNBT(final String key, final NBTTagCompound nbt) {
+        public Integer fromNBT(String key, NBTTagCompound nbt)
+        {
             return nbt.getInteger(key);
         }
 
         @Override
-        public boolean isValid(final Integer value) {
+        public boolean isValid(Integer value)
+        {
             return true;
         }
 
         @Override
-        public Integer sum(final Integer value1, final Integer value2) {
+        public Integer sum(Integer value1, Integer value2)
+        {
             return value1 + value2;
         }
 
         @Override
-        public Integer dif(final Integer value1, final Integer value2) {
+        public Integer dif(Integer value1, Integer value2)
+        {
             return value1 - value2;
         }
 
         @Override
-        public String toString(final Integer value) {
+        public String toString(Integer value)
+        {
             return value.toString();
         }
 
         @Override
-        public Integer getEmpty() {
+        public Integer getEmpty()
+        {
             return 0;
         }
     };
-    public static final ITypeProvider<Float> FLOAT = new ITypeProvider<Float>() {
 
+    public static final ITypeProvider<Float> FLOAT = new ITypeProvider<Float>()
+    {
         @Override
-        public void toNBT(final Float value, final String key, final NBTTagCompound nbt) {
-            nbt.setFloat(key, (float) value);
+        public void toNBT(Float value, String key, NBTTagCompound nbt)
+        {
+            nbt.setFloat(key, value);
         }
 
         @Override
-        public Float fromNBT(final String key, final NBTTagCompound nbt) {
+        public Float fromNBT(String key, NBTTagCompound nbt)
+        {
             return nbt.getFloat(key);
         }
 
         @Override
-        public boolean isValid(final Float value) {
+        public boolean isValid(Float value)
+        {
             return true;
         }
 
         @Override
-        public Float sum(final Float value1, final Float value2) {
+        public Float sum(Float value1, Float value2)
+        {
             return value1 + value2;
         }
 
         @Override
-        public Float dif(final Float value1, final Float value2) {
+        public Float dif(Float value1, Float value2)
+        {
             return value1 - value2;
         }
 
         @Override
-        public String toString(final Float value) {
+        public String toString(Float value)
+        {
             return String.format("%.1f", value);
         }
 
         @Override
-        public Float getEmpty() {
-            return 0.0f;
+        public Float getEmpty()
+        {
+            return 0F;
         }
     };
-    public static final ITypeProvider<String> STRING = new ITypeProvider<String>() {
 
+    public static final ITypeProvider<String> STRING = new ITypeProvider<String>()
+    {
         @Override
-        public void toNBT(final String value, final String key, final NBTTagCompound nbt) {
+        public void toNBT(String value, String key, NBTTagCompound nbt)
+        {
             nbt.setString(key, value);
         }
 
         @Override
-        public String fromNBT(final String key, final NBTTagCompound nbt) {
+        public String fromNBT(String key, NBTTagCompound nbt)
+        {
             return nbt.getString(key);
         }
 
         @Override
-        public boolean isValid(final String value) {
+        public boolean isValid(String value)
+        {
             return value != null && value != "";
         }
 
         @Override
-        public String sum(final String value1, final String value2) {
+        public String sum(String value1, String value2)
+        {
             return value1.concat(value2);
         }
 
         @Override
-        public String dif(final String value1, final String value2) {
+        public String dif(String value1, String value2)
+        {
             return value1.replaceFirst(value2, "");
         }
 
         @Override
-        public String toString(final String value) {
+        public String toString(String value)
+        {
             return value;
         }
 
         @Override
-        public String getEmpty() {
+        public String getEmpty()
+        {
             return "";
         }
     };
-    public static final ITypeProvider<NBTTagCompound> NBT_TAG = new ITypeProvider<NBTTagCompound>() {
 
+    public static final ITypeProvider<NBTTagCompound> NBT_TAG = new ITypeProvider<NBTTagCompound>()
+    {
         @Override
-        public void toNBT(final NBTTagCompound value, final String key, final NBTTagCompound nbt) {
-            nbt.setTag(key, (NBTBase) value);
+        public void toNBT(NBTTagCompound value, String key, NBTTagCompound nbt)
+        {
+            nbt.setTag(key, value);
         }
 
         @Override
-        public NBTTagCompound fromNBT(final String key, final NBTTagCompound nbt) {
+        public NBTTagCompound fromNBT(String key, NBTTagCompound nbt)
+        {
             return (NBTTagCompound) nbt.getTag(key);
         }
 
         @Override
-        public boolean isValid(final NBTTagCompound value) {
+        public boolean isValid(NBTTagCompound value)
+        {
             return value != null;
         }
 
+        /**
+         * Not implemented (specific method)
+         */
         @Deprecated
         @Override
-        public NBTTagCompound sum(final NBTTagCompound value1, final NBTTagCompound value2) {
+        public NBTTagCompound sum(NBTTagCompound value1, NBTTagCompound value2)
+        {
             return value1;
         }
 
         @Deprecated
         @Override
-        public NBTTagCompound dif(final NBTTagCompound value1, final NBTTagCompound value2) {
+        public NBTTagCompound dif(NBTTagCompound value1, NBTTagCompound value2)
+        {
             return value1;
         }
 
         @Override
-        public String toString(final NBTTagCompound value) {
+        public String toString(NBTTagCompound value)
+        {
             return value.toString();
         }
 
         @Override
-        public NBTTagCompound getEmpty() {
+        public NBTTagCompound getEmpty()
+        {
             return new NBTTagCompound();
         }
     };
-    public static final ITypeProvider<ItemStack> ITEM_STACK = new ITypeProvider<ItemStack>() {
 
+    public static final ITypeProvider<ItemStack> ITEM_STACK = new ITypeProvider<ItemStack>()
+    {
         @Override
-        public void toNBT(final ItemStack value, final String key, final NBTTagCompound nbt) {
+        public void toNBT(ItemStack value, String key, NBTTagCompound nbt)
+        {
             value.writeToNBT(nbt);
         }
 
         @Override
-        public ItemStack fromNBT(final String key, final NBTTagCompound nbt) {
+        public ItemStack fromNBT(String key, NBTTagCompound nbt)
+        {
             return ItemStack.loadItemStackFromNBT(nbt);
         }
 
         @Override
-        public boolean isValid(final ItemStack value) {
+        public boolean isValid(ItemStack value)
+        {
             return value != null;
         }
 
+        /**
+         * Not implemented (specific method)
+         */
         @Deprecated
         @Override
-        public ItemStack sum(final ItemStack value1, final ItemStack value2) {
+        public ItemStack sum(ItemStack value1, ItemStack value2)
+        {
             return value1;
         }
 
         @Deprecated
         @Override
-        public ItemStack dif(final ItemStack value1, final ItemStack value2) {
+        public ItemStack dif(ItemStack value1, ItemStack value2)
+        {
             return value1;
         }
 
         @Override
-        public String toString(final ItemStack value) {
+        public String toString(ItemStack value)
+        {
             return value.toString();
         }
 
         @Override
-        public ItemStack getEmpty() {
+        public ItemStack getEmpty()
+        {
             return null;
         }
     };
-
-    void toNBT(final Type p0, final String p1, final NBTTagCompound p2);
-
-    Type fromNBT(final String p0, final NBTTagCompound p1);
-
-    Type getEmpty();
-
-    boolean isValid(final Type p0);
-
-    Type sum(final Type p0, final Type p1);
-
-    Type dif(final Type p0, final Type p1);
-
-    String toString(final Type p0);
-}
+};

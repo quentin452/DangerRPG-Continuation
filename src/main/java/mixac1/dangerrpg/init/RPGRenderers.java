@@ -1,121 +1,144 @@
 package mixac1.dangerrpg.init;
 
-import java.util.*;
+import java.util.HashMap;
 
-import net.minecraft.client.renderer.entity.*;
-import net.minecraft.item.*;
-import net.minecraft.util.*;
-import net.minecraftforge.client.*;
-
-import cpw.mods.fml.client.registry.*;
-import cpw.mods.fml.common.event.*;
-import cpw.mods.fml.relauncher.*;
-import mixac1.dangerrpg.api.*;
-import mixac1.dangerrpg.client.render.entity.*;
-import mixac1.dangerrpg.client.render.item.*;
-import mixac1.dangerrpg.entity.projectile.*;
-import mixac1.dangerrpg.entity.projectile.core.*;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import mixac1.dangerrpg.DangerRPG;
+import mixac1.dangerrpg.api.RPGRegister;
+import mixac1.dangerrpg.client.render.entity.RenderArrowRPG;
+import mixac1.dangerrpg.client.render.entity.RenderBit;
+import mixac1.dangerrpg.client.render.entity.RenderMagicOrb;
+import mixac1.dangerrpg.client.render.entity.RenderMaterial;
+import mixac1.dangerrpg.client.render.entity.RenderThrowKnife;
+import mixac1.dangerrpg.client.render.entity.RenderThrowTomahawk;
+import mixac1.dangerrpg.client.render.item.RenderItemModel;
+import mixac1.dangerrpg.client.render.item.RenderKatana;
+import mixac1.dangerrpg.client.render.item.RenderKnife;
+import mixac1.dangerrpg.client.render.item.RenderLongItem;
+import mixac1.dangerrpg.client.render.item.RenderNormalModel.RenderHammer;
+import mixac1.dangerrpg.client.render.item.RenderShadowBow;
+import mixac1.dangerrpg.client.render.item.RenderSniperBow;
+import mixac1.dangerrpg.client.render.item.RenderStaff;
+import mixac1.dangerrpg.client.render.item.RenderStaff.RenderPowerStaff;
+import mixac1.dangerrpg.entity.projectile.EntityMagicOrb;
+import mixac1.dangerrpg.entity.projectile.EntityPowerMagicOrb;
+import mixac1.dangerrpg.entity.projectile.EntityRPGArrow;
+import mixac1.dangerrpg.entity.projectile.EntitySniperArrow;
+import mixac1.dangerrpg.entity.projectile.EntityThrowKnife;
+import mixac1.dangerrpg.entity.projectile.EntityThrowTomahawk;
+import mixac1.dangerrpg.entity.projectile.core.EntityMaterial;
+import mixac1.dangerrpg.entity.projectile.core.EntityProjectile;
+import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.MinecraftForgeClient;
 
 @SideOnly(Side.CLIENT)
-public abstract class RPGRenderers {
+public abstract class RPGRenderers
+{
+    public static HashMap<Item, ResourceLocation> modelTextures = new HashMap<Item, ResourceLocation>();
 
-    public static HashMap<Item, ResourceLocation> modelTextures;
-
-    public static void load(final FMLInitializationEvent e) {
+    public static void load(FMLInitializationEvent e)
+    {
         registerBlockRenderer();
         registerItemRenderer();
         registerEntityRenderingHandler();
     }
 
-    private static void registerItemRenderer() {
-        MinecraftForgeClient.registerItemRenderer(RPGItems.naginataWood, (IItemRenderer) RenderLongItem.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.naginataStone, (IItemRenderer) RenderLongItem.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.naginataIron, (IItemRenderer) RenderLongItem.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.naginataGold, (IItemRenderer) RenderLongItem.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.naginataDiamond, (IItemRenderer) RenderLongItem.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.naginataObsidian, (IItemRenderer) RenderLongItem.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.naginataBedrock, (IItemRenderer) RenderLongItem.INSTANCE);
-        MinecraftForgeClient
-            .registerItemRenderer(RPGItems.naginataBlackMatter, (IItemRenderer) RenderLongItem.INSTANCE);
-        MinecraftForgeClient
-            .registerItemRenderer(RPGItems.naginataWhiteMatter, (IItemRenderer) RenderLongItem.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.katanaWood, (IItemRenderer) RenderKatana.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.katanaStone, (IItemRenderer) RenderKatana.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.katanaIron, (IItemRenderer) RenderKatana.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.katanaGold, (IItemRenderer) RenderKatana.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.katanaDiamond, (IItemRenderer) RenderKatana.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.katanaObsidian, (IItemRenderer) RenderKatana.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.katanaBedrock, (IItemRenderer) RenderKatana.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.katanaBlackMatter, (IItemRenderer) RenderKatana.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.katanaWhiteMatter, (IItemRenderer) RenderKatana.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.scytheWood, (IItemRenderer) RenderLongItem.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.scytheStone, (IItemRenderer) RenderLongItem.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.scytheIron, (IItemRenderer) RenderLongItem.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.scytheGold, (IItemRenderer) RenderLongItem.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.scytheDiamond, (IItemRenderer) RenderLongItem.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.scytheObsidian, (IItemRenderer) RenderLongItem.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.scytheBedrock, (IItemRenderer) RenderLongItem.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.scytheBlackMatter, (IItemRenderer) RenderLongItem.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.scytheWhiteMatter, (IItemRenderer) RenderLongItem.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.knifeWood, (IItemRenderer) RenderKnife.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.knifeStone, (IItemRenderer) RenderKnife.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.knifeIron, (IItemRenderer) RenderKnife.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.knifeGold, (IItemRenderer) RenderKnife.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.knifeDiamond, (IItemRenderer) RenderKnife.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.knifeObsidian, (IItemRenderer) RenderKnife.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.knifeBedrock, (IItemRenderer) RenderKnife.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.knifeBlackMatter, (IItemRenderer) RenderKnife.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.knifeWhiteMatter, (IItemRenderer) RenderKnife.INSTANCE);
-        registerItemRendererE(RPGItems.hammerWood, (RenderItemModel) RenderNormalModel.RenderHammer.INSTANCE);
-        registerItemRendererE(RPGItems.hammerStone, (RenderItemModel) RenderNormalModel.RenderHammer.INSTANCE);
-        registerItemRendererE(RPGItems.hammerIron, (RenderItemModel) RenderNormalModel.RenderHammer.INSTANCE);
-        registerItemRendererE(RPGItems.hammerGold, (RenderItemModel) RenderNormalModel.RenderHammer.INSTANCE);
-        registerItemRendererE(RPGItems.hammerDiamond, (RenderItemModel) RenderNormalModel.RenderHammer.INSTANCE);
-        registerItemRendererE(RPGItems.hammerObsidian, (RenderItemModel) RenderNormalModel.RenderHammer.INSTANCE);
-        registerItemRendererE(RPGItems.hammerBedrock, (RenderItemModel) RenderNormalModel.RenderHammer.INSTANCE);
-        registerItemRendererE(RPGItems.hammerBlackMatter, (RenderItemModel) RenderNormalModel.RenderHammer.INSTANCE);
-        registerItemRendererE(RPGItems.hammerWhiteMatter, (RenderItemModel) RenderNormalModel.RenderHammer.INSTANCE);
-        registerItemRendererE(RPGItems.staffGold, (RenderItemModel) RenderStaff.INSTANCE);
-        registerItemRendererE(RPGItems.staffDiamond, (RenderItemModel) RenderStaff.INSTANCE);
-        registerItemRendererE(RPGItems.staffObsidian, (RenderItemModel) RenderStaff.INSTANCE);
-        registerItemRendererE(RPGItems.staffBedrock, (RenderItemModel) RenderStaff.INSTANCE);
-        registerItemRendererE(RPGItems.staffBlackMatter, (RenderItemModel) RenderStaff.INSTANCE);
-        registerItemRendererE(RPGItems.staffWhiteMatter, (RenderItemModel) RenderStaff.INSTANCE);
-        registerItemRendererE(RPGItems.powerStaffGold, (RenderItemModel) RenderStaff.RenderPowerStaff.INSTANCE);
-        registerItemRendererE(RPGItems.powerStaffDiamond, (RenderItemModel) RenderStaff.RenderPowerStaff.INSTANCE);
-        registerItemRendererE(RPGItems.powerStaffObsidian, (RenderItemModel) RenderStaff.RenderPowerStaff.INSTANCE);
-        registerItemRendererE(RPGItems.powerStaffBedrock, (RenderItemModel) RenderStaff.RenderPowerStaff.INSTANCE);
-        registerItemRendererE(RPGItems.powerStaffBlackMatter, (RenderItemModel) RenderStaff.RenderPowerStaff.INSTANCE);
-        registerItemRendererE(RPGItems.powerStaffWhiteMatter, (RenderItemModel) RenderStaff.RenderPowerStaff.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.shadowBow, (IItemRenderer) RenderShadowBow.INSTANCE);
-        MinecraftForgeClient.registerItemRenderer(RPGItems.sniperBow, (IItemRenderer) RenderSniperBow.INSTANCE);
+    private static void registerItemRenderer()
+    {
+        MinecraftForgeClient.registerItemRenderer(RPGItems.naginataWood,        RenderLongItem.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.naginataStone,       RenderLongItem.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.naginataIron,        RenderLongItem.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.naginataGold,        RenderLongItem.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.naginataDiamond,     RenderLongItem.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.naginataObsidian,    RenderLongItem.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.naginataBedrock,     RenderLongItem.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.naginataBlackMatter, RenderLongItem.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.naginataWhiteMatter, RenderLongItem.INSTANCE);
+
+        MinecraftForgeClient.registerItemRenderer(RPGItems.katanaWood,        RenderKatana.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.katanaStone,       RenderKatana.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.katanaIron,        RenderKatana.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.katanaGold,        RenderKatana.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.katanaDiamond,     RenderKatana.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.katanaObsidian,    RenderKatana.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.katanaBedrock,     RenderKatana.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.katanaBlackMatter, RenderKatana.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.katanaWhiteMatter, RenderKatana.INSTANCE);
+
+        MinecraftForgeClient.registerItemRenderer(RPGItems.scytheWood,        RenderLongItem.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.scytheStone,       RenderLongItem.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.scytheIron,        RenderLongItem.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.scytheGold,        RenderLongItem.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.scytheDiamond,     RenderLongItem.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.scytheObsidian,    RenderLongItem.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.scytheBedrock,     RenderLongItem.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.scytheBlackMatter, RenderLongItem.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.scytheWhiteMatter, RenderLongItem.INSTANCE);
+
+        MinecraftForgeClient.registerItemRenderer(RPGItems.knifeWood,        RenderKnife.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.knifeStone,       RenderKnife.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.knifeIron,        RenderKnife.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.knifeGold,        RenderKnife.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.knifeDiamond,     RenderKnife.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.knifeObsidian,    RenderKnife.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.knifeBedrock,     RenderKnife.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.knifeBlackMatter, RenderKnife.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.knifeWhiteMatter, RenderKnife.INSTANCE);
+
+        registerItemRendererE(RPGItems.hammerWood,        RenderHammer.INSTANCE);
+        registerItemRendererE(RPGItems.hammerStone,       RenderHammer.INSTANCE);
+        registerItemRendererE(RPGItems.hammerIron,        RenderHammer.INSTANCE);
+        registerItemRendererE(RPGItems.hammerGold,        RenderHammer.INSTANCE);
+        registerItemRendererE(RPGItems.hammerDiamond,     RenderHammer.INSTANCE);
+        registerItemRendererE(RPGItems.hammerObsidian,    RenderHammer.INSTANCE);
+        registerItemRendererE(RPGItems.hammerBedrock,     RenderHammer.INSTANCE);
+        registerItemRendererE(RPGItems.hammerBlackMatter, RenderHammer.INSTANCE);
+        registerItemRendererE(RPGItems.hammerWhiteMatter, RenderHammer.INSTANCE);
+
+        registerItemRendererE(RPGItems.staffGold,        RenderStaff.INSTANCE);
+        registerItemRendererE(RPGItems.staffDiamond,     RenderStaff.INSTANCE);
+        registerItemRendererE(RPGItems.staffObsidian,    RenderStaff.INSTANCE);
+        registerItemRendererE(RPGItems.staffBedrock,     RenderStaff.INSTANCE);
+        registerItemRendererE(RPGItems.staffBlackMatter, RenderStaff.INSTANCE);
+        registerItemRendererE(RPGItems.staffWhiteMatter, RenderStaff.INSTANCE);
+
+        registerItemRendererE(RPGItems.powerStaffGold,        RenderPowerStaff.INSTANCE);
+        registerItemRendererE(RPGItems.powerStaffDiamond,     RenderPowerStaff.INSTANCE);
+        registerItemRendererE(RPGItems.powerStaffObsidian,    RenderPowerStaff.INSTANCE);
+        registerItemRendererE(RPGItems.powerStaffBedrock,     RenderPowerStaff.INSTANCE);
+        registerItemRendererE(RPGItems.powerStaffBlackMatter, RenderPowerStaff.INSTANCE);
+        registerItemRendererE(RPGItems.powerStaffWhiteMatter, RenderPowerStaff.INSTANCE);
+
+        MinecraftForgeClient.registerItemRenderer(RPGItems.shadowBow, RenderShadowBow.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(RPGItems.sniperBow, RenderSniperBow.INSTANCE);
     }
 
-    private static void registerEntityRenderingHandler() {
-        RenderingRegistry.registerEntityRenderingHandler((Class) EntityProjectile.class, (Render) RenderBit.INSTANCE);
-        RenderingRegistry
-            .registerEntityRenderingHandler((Class) EntityMaterial.class, (Render) RenderMaterial.INSTANCE);
-        RenderingRegistry
-            .registerEntityRenderingHandler((Class) EntityRPGArrow.class, (Render) RenderArrowRPG.INSTANCE);
-        RenderingRegistry
-            .registerEntityRenderingHandler((Class) EntitySniperArrow.class, (Render) RenderArrowRPG.INSTANCE);
-        RenderingRegistry
-            .registerEntityRenderingHandler((Class) EntityThrowKnife.class, (Render) RenderThrowKnife.INSTANCE);
-        RenderingRegistry
-            .registerEntityRenderingHandler((Class) EntityThrowTomahawk.class, (Render) RenderThrowTomahawk.INSTANCE);
-        RenderingRegistry
-            .registerEntityRenderingHandler((Class) EntityMagicOrb.class, (Render) RenderMagicOrb.INSTANCE);
-        RenderingRegistry
-            .registerEntityRenderingHandler((Class) EntityPowerMagicOrb.class, (Render) RenderMagicOrb.INSTANCE);
+    private static void registerEntityRenderingHandler()
+    {
+        RenderingRegistry.registerEntityRenderingHandler(EntityProjectile.class, RenderBit.INSTANCE);
+        RenderingRegistry.registerEntityRenderingHandler(EntityMaterial.class, RenderMaterial.INSTANCE);
+
+        RenderingRegistry.registerEntityRenderingHandler(EntityRPGArrow.class, RenderArrowRPG.INSTANCE);
+        RenderingRegistry.registerEntityRenderingHandler(EntitySniperArrow.class, RenderArrowRPG.INSTANCE);
+
+        RenderingRegistry.registerEntityRenderingHandler(EntityThrowKnife.class, RenderThrowKnife.INSTANCE);
+        RenderingRegistry.registerEntityRenderingHandler(EntityThrowTomahawk.class, RenderThrowTomahawk.INSTANCE);
+
+        RenderingRegistry.registerEntityRenderingHandler(EntityMagicOrb.class, RenderMagicOrb.INSTANCE);
+        RenderingRegistry.registerEntityRenderingHandler(EntityPowerMagicOrb.class, RenderMagicOrb.INSTANCE);
     }
 
-    private static void registerBlockRenderer() {}
-
-    public static void registerItemRendererE(final Item item, final RenderItemModel model) {
-        RPGRegister.registerItemRendererModel(item, model, "dangerrpg", "textures/models/items/");
+    private static void registerBlockRenderer()
+    {
+        //ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLvlupTable.class, RenderTestBlock.INSTANCE);
     }
 
-    static {
-        RPGRenderers.modelTextures = new HashMap<Item, ResourceLocation>();
+    public static void registerItemRendererE(Item item, RenderItemModel model)
+    {
+        RPGRegister.registerItemRendererModel(item, model, DangerRPG.MODID, "textures/models/items/");
     }
 }

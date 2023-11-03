@@ -1,20 +1,29 @@
 package mixac1.dangerrpg.hook;
 
-import mixac1.hooklib.minecraft.*;
+import mixac1.hooklib.minecraft.HookLoader;
+import mixac1.hooklib.minecraft.PrimaryClassTransformer;
 
-public class RPGHookLoader extends HookLoader {
-
+public class RPGHookLoader extends HookLoader
+{
     @Override
-    public String[] getASMTransformerClass() {
+    public String[] getASMTransformerClass()
+    {
         return new String[] { PrimaryClassTransformer.class.getName() };
     }
 
-    public void registerHooks() {
-        HookLoader.registerHookContainer(HookItems.class.getName());
-        HookLoader.registerHookContainer(HookEntities.class.getName());
-        HookLoader.registerHookContainer(HookArmorSystem.class.getName());
-        HookLoader.registerHookContainer(HookItemBow.class.getName());
-        HookLoader.registerHookContainer(HookFixEntityMotion.class.getName());
-        HookLoader.registerHookContainer(HookFixEntityAttributes.class.getName());
+    @Override
+    public void registerHooks()
+    {
+        registerHookContainer(HookItems.class.getName());
+
+        registerHookContainer(HookEntities.class.getName());
+
+        registerHookContainer(HookArmorSystem.class.getName());
+
+        registerHookContainer(HookItemBow.class.getName());
+
+        registerHookContainer(HookFixEntityMotion.class.getName());
+
+        registerHookContainer(HookFixEntityAttributes.class.getName());
     }
 }

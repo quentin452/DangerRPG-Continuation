@@ -1,49 +1,57 @@
 package mixac1.dangerrpg.block;
 
-import net.minecraft.block.*;
-import net.minecraft.block.material.*;
-import net.minecraft.client.renderer.texture.*;
-import net.minecraft.entity.player.*;
-import net.minecraft.init.*;
-import net.minecraft.util.*;
-import net.minecraft.world.*;
+import mixac1.dangerrpg.DangerRPG;
+import mixac1.dangerrpg.init.RPGGuiHandlers;
+import mixac1.dangerrpg.init.RPGOther.RPGCreativeTabs;
+import mixac1.dangerrpg.util.Utils;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
 
-import mixac1.dangerrpg.*;
-import mixac1.dangerrpg.init.*;
-import mixac1.dangerrpg.util.*;
+public class BlockRPGWorkbench extends Block
+{
+    public static final String NAME  = "rpg_workbench";
 
-public class BlockRPGWorkbench extends Block {
+    public IIcon[]             icons = new IIcon[2];
 
-    public static final String NAME = "rpg_workbench";
-    public IIcon[] icons;
-
-    public BlockRPGWorkbench() {
+    public BlockRPGWorkbench()
+    {
         super(Material.iron);
-        this.icons = new IIcon[2];
-        this.setBlockName("rpg_workbench");
-        this.setBlockTextureName(Utils.toString("dangerrpg", ":", "rpg_workbench"));
-        this.setHardness(2.0f);
-        this.setResistance(6.0f);
-        this.setHarvestLevel("pickaxe", 2);
-        this.setCreativeTab(RPGOther.RPGCreativeTabs.tabRPGBlocks);
+        setBlockName(NAME);
+        setBlockTextureName(Utils.toString(DangerRPG.MODID, ":", NAME));
+        setHardness(2.0f);
+        setResistance(6.0f);
+        setHarvestLevel("pickaxe", 2);
+        setCreativeTab(RPGCreativeTabs.tabRPGBlocks);
     }
 
-    public void registerBlockIcons(final IIconRegister reg) {
-        this.blockIcon = reg.registerIcon(this.getTextureName() + "_side");
-        this.icons[0] = reg.registerIcon(this.getTextureName() + "_top");
-        this.icons[1] = reg.registerIcon(this.getTextureName() + "_front");
+    @Override
+    public void registerBlockIcons(IIconRegister reg)
+    {
+        blockIcon = reg.registerIcon(getTextureName() + "_side");
+        icons[0]  = reg.registerIcon(getTextureName() + "_top");
+        icons[1]  = reg.registerIcon(getTextureName() + "_front");
     }
 
-    public IIcon getIcon(final int side, final int meta) {
-        return (side == 1) ? this.icons[0]
-            : ((side == 0) ? Blocks.iron_block.getBlockTextureFromSide(side)
-                : ((side != 2 && side != 4) ? this.blockIcon : this.icons[1]));
+    @Override
+    public IIcon getIcon(int side, int meta)
+    {
+        return side == 1 ? icons[0]
+                : side == 0 ? Blocks.iron_block.getBlockTextureFromSide(side)
+                        : side != 2 && side != 4 ? blockIcon
+                                : icons[1];
     }
 
-    public boolean onBlockActivated(final World world, final int x, final int y, final int z, final EntityPlayer player,
-        final int par1, final float par2, final float par3, final float par4) {
+    @Override
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par1, float par2,
+                                    float par3, float par4)
+    {
         if (!world.isRemote) {
-            player.openGui((Object) DangerRPG.instance, 3, world, x, y, z);
+            player.openGui(DangerRPG.instance, RPGGuiHandlers.GUI_RPG_WORKBENCH, world, x, y, z);
         }
         return true;
     }

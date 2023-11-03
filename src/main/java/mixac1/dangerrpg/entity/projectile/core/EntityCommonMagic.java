@@ -1,102 +1,90 @@
 package mixac1.dangerrpg.entity.projectile.core;
 
-import net.minecraft.entity.*;
-import net.minecraft.entity.player.*;
-import net.minecraft.item.*;
-import net.minecraft.world.*;
-import net.minecraftforge.common.*;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import mixac1.dangerrpg.api.event.ItemStackEvent.DealtDamageEvent;
+import mixac1.dangerrpg.api.event.ItemStackEvent.HitEntityEvent;
+import mixac1.dangerrpg.capability.ItemAttributes;
+import mixac1.dangerrpg.util.RPGHelper;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 
-import cpw.mods.fml.common.eventhandler.*;
-import cpw.mods.fml.relauncher.*;
-import mixac1.dangerrpg.api.event.*;
-import mixac1.dangerrpg.capability.*;
-import mixac1.dangerrpg.util.*;
+public class EntityCommonMagic extends EntityWithStack
+{
+    public static final int DEFAULT_COLOR = 0x37048E;
 
-public class EntityCommonMagic extends EntityWithStack {
-
-    public static final int DEFAULT_COLOR = 3605646;
-
-    public EntityCommonMagic(final World world) {
+    public EntityCommonMagic(World world)
+    {
         super(world);
     }
 
-    public EntityCommonMagic(final World world, final ItemStack stack) {
+    public EntityCommonMagic(World world, ItemStack stack)
+    {
         super(world);
     }
 
-    public EntityCommonMagic(final World world, final ItemStack stack, final double x, final double y, final double z) {
+    public EntityCommonMagic(World world, ItemStack stack, double x, double y, double z)
+    {
         super(world, stack, x, y, z);
     }
 
-    public EntityCommonMagic(final World world, final EntityLivingBase thrower, final ItemStack stack,
-        final float speed, final float deviation) {
+    public EntityCommonMagic(World world, EntityLivingBase thrower, ItemStack stack, float speed, float deviation)
+    {
         super(world, thrower, stack, speed, deviation);
     }
 
-    public EntityCommonMagic(final World world, final EntityLivingBase thrower, final EntityLivingBase target,
-        final ItemStack stack, final float speed, final float deviation) {
+    public EntityCommonMagic(World world, EntityLivingBase thrower, EntityLivingBase target, ItemStack stack, float speed, float deviation)
+    {
         super(world, thrower, target, stack, speed, deviation);
     }
 
     @Override
-    public void applyEntityHitEffects(EntityLivingBase entity, float dmgMul) {
-
+    public void applyEntityHitEffects(EntityLivingBase entity, float dmgMul)
+    {
         float points = entity.getHealth();
 
         ItemStack stack = this.getStack();
-
-        float damageAmount;
-
-        if(stack != null) {
-
-            if(ItemAttributes.SHOT_DAMAGE.hasIt(stack)) {
-                damageAmount = ItemAttributes.SHOT_DAMAGE.get(stack);
-            } else {
-                damageAmount = 0;
+        if (stack != null) {
+            if (ItemAttributes.SHOT_DAMAGE.hasIt(stack)) {
+                damage = ItemAttributes.SHOT_DAMAGE.get(stack);
             }
-
-            ItemStackEvent.HitEntityEvent event = new ItemStackEvent.HitEntityEvent(
-                stack,
-                entity,
-                this.thrower,
-                damageAmount,
-                0.0f,
-                true
-            );
-
+            HitEntityEvent event = new HitEntityEvent(stack, entity, thrower, (float) damage, 0, true);
             MinecraftForge.EVENT_BUS.post(event);
-
-            damageAmount = event.newDamage;
-
-        } else {
-            damageAmount = 0;
+            damage = event.newDamage;
         }
 
-        setDamage(damageAmount);
-
         super.applyEntityHitEffects(entity, dmgMul);
+
         points -= entity.getHealth();
-        if (this.thrower instanceof EntityPlayer) {
-            MinecraftForge.EVENT_BUS
-                .post((Event) new ItemStackEvent.DealtDamageEvent((EntityPlayer) this.thrower, entity, stack, points));
+        if (thrower instanceof EntityPlayer) {
+            MinecraftForge.EVENT_BUS.post(new DealtDamageEvent((EntityPlayer) thrower, entity, stack, points));
         }
     }
 
     @Override
-    public boolean dieAfterGroundHit() {
+    public boolean dieAfterGroundHit()
+    {
         return true;
     }
 
-    public int getColor() {
-        return RPGHelper.getSpecialColor(this.getStack(), 3605646);
+    public int getColor()
+    {
+        return RPGHelper.getSpecialColor(getStack(), DEFAULT_COLOR);
     }
 
-    public float getBrightness(final float par) {
-        return 0.0f;
+    @Override
+    public float getBrightness(float par)
+    {
+        return 0.0F;
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
-    public int getBrightnessForRender(final float par) {
-        return 15728880;
+    public int getBrightnessForRender(float par)
+    {
+        return 0xF000F0;
     }
 }

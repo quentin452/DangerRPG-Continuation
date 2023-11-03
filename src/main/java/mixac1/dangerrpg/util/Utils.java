@@ -1,72 +1,95 @@
 package mixac1.dangerrpg.util;
 
-import java.io.*;
-import java.util.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.util.Collections;
+import java.util.Random;
 
-public abstract class Utils {
+public abstract class Utils
+{
+    public static Random rand = new Random();
 
-    public static Random rand;
-
-    public static <T> Iterable<T> safe(final Iterable<T> iterable) {
-        return (Iterable<T>) ((iterable == null) ? Collections.emptyList() : iterable);
+    public static <T> Iterable<T> safe(Iterable<T> iterable)
+    {
+        return iterable == null ? Collections.<T>emptyList() : iterable;
     }
 
-    public static float alignment(final float value, final float min, final float max) {
+    public static float alignment(float value, float min, float max)
+    {
         if (value < min) {
             return min;
         }
-        if (value > max) {
+        else if (value > max) {
             return max;
         }
         return value;
     }
 
-    public static double invert(final double value) {
+    public static double invert(double value)
+    {
         return -value;
     }
 
-    public static double invert(final double value, final boolean isInvert) {
+    public static double invert(double value, boolean isInvert)
+    {
         return isInvert ? invert(value) : value;
     }
 
-    public static String toString(final Object... objs) {
-        final StringBuilder buf = new StringBuilder();
-        for (final Object obj : objs) {
-            buf.append((obj != null) ? obj.toString() : "(null)");
+    public static String toString(Object... objs)
+    {
+        StringBuilder buf = new StringBuilder();
+        for (Object obj : objs) {
+            buf.append(obj != null ? obj.toString() : "(null)");
         }
         return buf.toString();
     }
 
-    public static double getDiagonal(final double x, final double y) {
+    public static double getDiagonal(double x, double y)
+    {
         return Math.sqrt(x * x + y * y);
     }
 
-    public static double getDiagonal(final double x, final double y, final double z) {
+    public static double getDiagonal(double x, double y, double z)
+    {
         return Math.sqrt(x * x + y * y + z * z);
     }
 
-    public static int randInt(final Random rand, final int bound, final boolean isAroundZero) {
+    public static int randInt(Random rand, int bound, boolean isAroundZero)
+    {
         if (isAroundZero) {
             return rand.nextInt(bound * 2) - bound;
         }
-        return rand.nextInt(bound);
+        else {
+            return rand.nextInt(bound);
+        }
     }
 
-    public static int randInt(final int bound, final boolean isAroundZero) {
-        return randInt(Utils.rand, bound, isAroundZero);
+    public static int randInt(int bound, boolean isAroundZero)
+    {
+        return randInt(rand, bound, isAroundZero);
     }
 
-    public static double randDouble(final Random rand, final double bound, int accuracy, final boolean isAroundZero) {
-        accuracy = (int) Math.pow(10.0, accuracy);
+    /**
+     * @param accuracy - count of zero after dot
+     */
+    public static double randDouble(Random rand, double bound, int accuracy, boolean isAroundZero)
+    {
+        accuracy = (int) Math.pow(10, accuracy);
         return randInt(rand, (int) (accuracy * bound), isAroundZero) / accuracy;
     }
 
-    public static double randDouble(final double bound, final int accuracy, final boolean isAroundZero) {
-        return randDouble(Utils.rand, bound, accuracy, isAroundZero);
+    public static double randDouble(double bound, int accuracy, boolean isAroundZero)
+    {
+        return randDouble(rand, bound, accuracy, isAroundZero);
     }
 
-    public static <Type> byte[] serialize(final Type obj) {
-        final ByteArrayOutputStream bos = new ByteArrayOutputStream();
+    public static <Type> byte[] serialize(Type obj)
+    {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutput out = null;
         byte[] ret = null;
         try {
@@ -75,27 +98,26 @@ public abstract class Utils {
             out.flush();
             ret = bos.toByteArray();
             bos.close();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
         return ret;
     }
 
-    public static <Type> Type deserialize(final byte[] obj) {
-        final ByteArrayInputStream bis = new ByteArrayInputStream(obj);
+    public static <Type> Type deserialize(byte[] obj)
+    {
+        ByteArrayInputStream bis = new ByteArrayInputStream(obj);
         ObjectInput in = null;
         Type ret = null;
         try {
             in = new ObjectInputStream(bis);
             ret = (Type) in.readObject();
             in.close();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
         return ret;
-    }
-
-    static {
-        Utils.rand = new Random();
     }
 }

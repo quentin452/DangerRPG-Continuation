@@ -1,22 +1,23 @@
 package mixac1.dangerrpg.item.weapon;
 
-import net.minecraft.entity.*;
-import net.minecraft.item.*;
-import net.minecraft.world.*;
+import mixac1.dangerrpg.entity.projectile.EntityThrowKnife;
+import mixac1.dangerrpg.entity.projectile.core.EntityThrowRPGItem;
+import mixac1.dangerrpg.item.RPGItemComponent.RPGToolComponent;
+import mixac1.dangerrpg.item.RPGToolMaterial;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
-import mixac1.dangerrpg.entity.projectile.*;
-import mixac1.dangerrpg.entity.projectile.core.*;
-import mixac1.dangerrpg.item.*;
-
-public class ItemRPGKnife extends ItemRPGThrowable {
-
-    public ItemRPGKnife(final RPGToolMaterial toolMaterial, final RPGItemComponent.RPGToolComponent toolComponent) {
+public class ItemRPGKnife extends ItemRPGThrowable
+{
+    public ItemRPGKnife(RPGToolMaterial toolMaterial, RPGToolComponent toolComponent)
+    {
         super(toolMaterial, toolComponent);
     }
 
     @Override
-    protected EntityThrowRPGItem getThrowEntity(final World world, final EntityLivingBase entityliving,
-        final ItemStack itemstack) {
-        return (EntityThrowRPGItem) new EntityThrowKnife(world, entityliving, itemstack, 1.3f, 3.0f);
+    protected EntityThrowRPGItem getThrowEntity(World world, EntityLivingBase entityliving, ItemStack itemstack)
+    {
+        return new EntityThrowKnife(world, entityliving, itemstack, 1.3F, 3F);
     }
 }

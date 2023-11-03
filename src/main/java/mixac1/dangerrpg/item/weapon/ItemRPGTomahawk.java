@@ -1,21 +1,23 @@
 package mixac1.dangerrpg.item.weapon;
 
-import net.minecraft.entity.*;
-import net.minecraft.item.*;
-import net.minecraft.world.*;
+import mixac1.dangerrpg.entity.projectile.EntityThrowTomahawk;
+import mixac1.dangerrpg.entity.projectile.core.EntityThrowRPGItem;
+import mixac1.dangerrpg.item.RPGItemComponent.RPGToolComponent;
+import mixac1.dangerrpg.item.RPGToolMaterial;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
-import mixac1.dangerrpg.entity.projectile.*;
-import mixac1.dangerrpg.entity.projectile.core.*;
-import mixac1.dangerrpg.item.*;
-
-public class ItemRPGTomahawk extends ItemRPGThrowable {
-
-    public ItemRPGTomahawk(final RPGToolMaterial toolMaterial, final RPGItemComponent.RPGToolComponent toolComponent) {
+public class ItemRPGTomahawk extends ItemRPGThrowable
+{
+    public ItemRPGTomahawk(RPGToolMaterial toolMaterial, RPGToolComponent toolComponent)
+    {
         super(toolMaterial, toolComponent);
     }
 
-    protected EntityThrowRPGItem getThrowEntity(final World world, final EntityLivingBase entityliving,
-        final ItemStack itemstack) {
-        return (EntityThrowRPGItem) new EntityThrowTomahawk(world, entityliving, itemstack, 1.1f, 3.0f);
+    @Override
+    protected EntityThrowRPGItem getThrowEntity(World world, EntityLivingBase entityliving, ItemStack itemstack)
+    {
+        return new EntityThrowTomahawk(world, entityliving, itemstack, 1.1F, 3F);
     }
 }

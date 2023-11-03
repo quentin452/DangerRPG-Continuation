@@ -1,28 +1,29 @@
 package mixac1.dangerrpg.client.render.entity;
 
-import javax.annotation.*;
+import javax.annotation.Nullable;
 
-import net.minecraft.entity.*;
-import net.minecraft.util.*;
+import mixac1.dangerrpg.client.RPGRenderHelper;
+import mixac1.dangerrpg.client.model.ModelProjectile;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 
-import mixac1.dangerrpg.client.*;
-import mixac1.dangerrpg.client.model.*;
-
-public abstract class RenderModel extends RenderProjectile {
+public abstract class RenderModel extends RenderProjectile
+{
+    @Override
+    protected ResourceLocation getEntityTexture(@Nullable Entity entity)
+    {
+        return getModel().getTexture();
+    }
 
     @Override
-    protected ResourceLocation getEntityTexture(@Nullable final Entity entity) {
-        return this.getModel()
-            .getTexture();
+    public void doRender(Entity entity)
+    {
+        RPGRenderHelper.mc.renderEngine.bindTexture(getEntityTexture(entity));
+        getModel().render(entity, 0f, 0f, 0f, 0f, 0f, modelSpecific(entity));
     }
 
-    public void doRender(final Entity entity) {
-        RPGRenderHelper.mc.renderEngine.bindTexture(this.getEntityTexture(entity));
-        this.getModel()
-            .render(entity, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, this.modelSpecific(entity));
-    }
-
-    protected float modelSpecific(final Entity entity) {
+    protected float modelSpecific(Entity entity)
+    {
         return 0.0625f;
     }
 

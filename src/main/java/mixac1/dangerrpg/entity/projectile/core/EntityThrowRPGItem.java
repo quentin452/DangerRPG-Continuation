@@ -1,72 +1,75 @@
 package mixac1.dangerrpg.entity.projectile.core;
 
-import net.minecraft.entity.*;
-import net.minecraft.entity.player.*;
-import net.minecraft.item.*;
-import net.minecraft.world.*;
-import net.minecraftforge.common.*;
+import mixac1.dangerrpg.api.event.ItemStackEvent.DealtDamageEvent;
+import mixac1.dangerrpg.api.event.ItemStackEvent.HitEntityEvent;
+import mixac1.dangerrpg.capability.ItemAttributes;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 
-import cpw.mods.fml.common.eventhandler.*;
-import mixac1.dangerrpg.api.event.*;
-import mixac1.dangerrpg.capability.*;
-
-public class EntityThrowRPGItem extends EntityMaterial {
-
-    public EntityThrowRPGItem(final World world) {
+public class EntityThrowRPGItem extends EntityMaterial
+{
+    public EntityThrowRPGItem(World world)
+    {
         super(world);
     }
 
-    public EntityThrowRPGItem(final World world, final ItemStack stack) {
+    public EntityThrowRPGItem(World world, ItemStack stack)
+    {
         super(world, stack);
     }
 
-    public EntityThrowRPGItem(final World world, final ItemStack stack, final double x, final double y,
-        final double z) {
+    public EntityThrowRPGItem(World world, ItemStack stack, double x, double y, double z)
+    {
         super(world, stack, x, y, z);
     }
 
-    public EntityThrowRPGItem(final World world, final EntityLivingBase thrower, final ItemStack stack,
-        final float speed, final float deviation) {
+    public EntityThrowRPGItem(World world, EntityLivingBase thrower, ItemStack stack, float speed, float deviation)
+    {
         super(world, thrower, stack, speed, deviation);
     }
 
-    public EntityThrowRPGItem(final World world, final EntityLivingBase thrower, final EntityLivingBase target,
-        final ItemStack stack, final float speed, final float deviation) {
+    public EntityThrowRPGItem(World world, EntityLivingBase thrower, EntityLivingBase target, ItemStack stack, float speed, float deviation)
+    {
         super(world, thrower, target, stack, speed, deviation);
     }
 
-    public void entityInit() {
+    @Override
+    public void entityInit()
+    {
         super.entityInit();
-        this.pickupMode = 1;
+        pickupMode = PICKUP_ALL;
     }
 
-    public void applyEntityHitEffects(final EntityLivingBase entity, final float dmgMul) {
-        if (this.beenInGround) {
+    @Override
+    public void applyEntityHitEffects(EntityLivingBase entity, float dmgMul)
+    {
+        if (beenInGround) {
             return;
         }
+
         float points = entity.getHealth();
-        final ItemStack stack = this.getStack();
+
+        ItemStack stack = this.getStack();
         if (stack != null) {
             if (ItemAttributes.SHOT_DAMAGE.hasIt(stack)) {
-                this.phisicDamage = ItemAttributes.SHOT_DAMAGE.get(stack);
-            } else if (ItemAttributes.MELEE_DAMAGE.hasIt(stack)) {
-                this.phisicDamage = ItemAttributes.MELEE_DAMAGE.get(stack);
+                phisicDamage = ItemAttributes.SHOT_DAMAGE.get(stack);
             }
-            final ItemStackEvent.HitEntityEvent event = new ItemStackEvent.HitEntityEvent(
-                stack,
-                entity,
-                this.thrower,
-                this.phisicDamage,
-                0.0f,
-                true);
-            MinecraftForge.EVENT_BUS.post((Event) event);
-            this.phisicDamage = event.newDamage;
+            else if (ItemAttributes.MELEE_DAMAGE.hasIt(stack)) {
+                phisicDamage = ItemAttributes.MELEE_DAMAGE.get(stack);
+            }
+            HitEntityEvent event = new HitEntityEvent(stack, entity, thrower, phisicDamage, 0, true);
+            MinecraftForge.EVENT_BUS.post(event);
+            phisicDamage = event.newDamage;
         }
+
         super.applyEntityHitEffects(entity, dmgMul);
+
         points -= entity.getHealth();
-        if (this.thrower instanceof EntityPlayer) {
-            MinecraftForge.EVENT_BUS
-                .post((Event) new ItemStackEvent.DealtDamageEvent((EntityPlayer) this.thrower, entity, stack, points));
+        if (thrower instanceof EntityPlayer) {
+            MinecraftForge.EVENT_BUS.post(new DealtDamageEvent((EntityPlayer) thrower, entity, stack, points));
         }
     }
 }

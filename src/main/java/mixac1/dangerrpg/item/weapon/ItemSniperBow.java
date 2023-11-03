@@ -1,58 +1,58 @@
 package mixac1.dangerrpg.item.weapon;
 
-import net.minecraft.enchantment.*;
-import net.minecraft.entity.*;
-import net.minecraft.entity.player.*;
-import net.minecraft.init.*;
-import net.minecraft.item.*;
-import net.minecraft.world.*;
+import mixac1.dangerrpg.capability.ItemAttributes;
+import mixac1.dangerrpg.entity.projectile.EntitySniperArrow;
+import mixac1.dangerrpg.entity.projectile.core.EntityMaterial;
+import mixac1.dangerrpg.init.RPGOther;
+import mixac1.dangerrpg.init.RPGOther.RPGItemRarity;
+import mixac1.dangerrpg.item.RPGItemComponent.RPGBowComponent;
+import mixac1.dangerrpg.util.RPGHelper;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
-import mixac1.dangerrpg.capability.*;
-import mixac1.dangerrpg.entity.projectile.*;
-import mixac1.dangerrpg.init.*;
-import mixac1.dangerrpg.item.*;
-import mixac1.dangerrpg.util.*;
-
-public class ItemSniperBow extends ItemRPGBow {
-
-    public ItemSniperBow(final RPGItemComponent.RPGBowComponent bowComponent) {
-        super(bowComponent, RPGOther.RPGItemRarity.legendary);
+public class ItemSniperBow extends ItemRPGBow
+{
+    public ItemSniperBow(RPGBowComponent bowComponent)
+    {
+        super(bowComponent, RPGItemRarity.legendary);
     }
 
-    public void onStoppedUsing(final ItemStack stack, final World world, final EntityPlayer player,
-        final int useDuration) {
-        final boolean flag = player.capabilities.isCreativeMode
-            || EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, stack) > 0;
+    @Override
+    public void onStoppedUsing(ItemStack stack, World world, EntityPlayer player, int useDuration)
+    {
+        boolean flag = player.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, stack) > 0;
         if (flag || player.inventory.hasItem(Items.arrow)) {
-            final float power = RPGHelper.getUsePower(player, stack, useDuration, 20.0f, 0.8f);
-            if (power < 0.0f) {
+
+            float power = RPGHelper.getUsePower(player, stack, useDuration, 20f, 0.8f);
+            if (power < 0) {
                 return;
             }
-            final float powerMul = ItemAttributes.SHOT_POWER.hasIt(stack) ? ItemAttributes.SHOT_POWER.get(stack, player)
-                : 1.0f;
-            final EntitySniperArrow entity = new EntitySniperArrow(
-                world,
-                stack,
-                (EntityLivingBase) player,
-                power * powerMul,
-                0.0f);
+
+            float powerMul = ItemAttributes.SHOT_POWER.hasIt(stack) ?
+                    ItemAttributes.SHOT_POWER.get(stack, player) : 1F;
+            EntitySniperArrow entity = new EntitySniperArrow(world, stack, player, power * powerMul, 0F);
+
             if (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack) > 0) {
                 entity.setFire(100);
             }
-            stack.damageItem(1, (EntityLivingBase) player);
-            world.playSoundAtEntity(
-                (Entity) player,
-                "random.bow",
-                1.0f,
-                1.0f / (RPGOther.rand.nextFloat() * 0.4f + 1.2f) + power * 0.5f);
+
+            stack.damageItem(1, player);
+            world.playSoundAtEntity(player, "random.bow", 1.0F, 1.0F / (RPGOther.rand.nextFloat() * 0.4F + 1.2F) + power * 0.5F);
+
             if (flag) {
-                entity.pickupMode = 2;
-            } else {
+                entity.pickupMode = EntityMaterial.PICKUP_CREATIVE;
+            }
+            else {
                 player.inventory.consumeInventoryItem(Items.arrow);
             }
+
             if (!world.isRemote) {
-                world.spawnEntityInWorld((Entity) entity);
+                world.spawnEntityInWorld(entity);
             }
-        }
+         }
     }
 }

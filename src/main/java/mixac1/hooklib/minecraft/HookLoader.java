@@ -1,71 +1,92 @@
 package mixac1.hooklib.minecraft;
 
-import java.io.*;
-import java.util.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Map;
 
-import org.apache.commons.io.*;
+import org.apache.commons.io.IOUtils;
 
-import cpw.mods.fml.common.asm.transformers.*;
-import cpw.mods.fml.relauncher.*;
-import mixac1.hooklib.asm.*;
+import cpw.mods.fml.common.asm.transformers.DeobfuscationTransformer;
+import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
+import mixac1.hooklib.asm.AsmHook;
+import mixac1.hooklib.asm.HookClassTransformer;
+import mixac1.hooklib.asm.ReadClassHelper;
 
-public abstract class HookLoader implements IFMLLoadingPlugin {
-
+public abstract class HookLoader implements IFMLLoadingPlugin
+{
     private static DeobfuscationTransformer deobfuscationTransformer;
 
-    public static HookClassTransformer getTransformer() {
-        return PrimaryClassTransformer.instance.registeredSecondTransformer ? MinecraftClassTransformer.instance
-            : PrimaryClassTransformer.instance;
+    static {
+        if (HookLibPlugin.getObfuscated()) {
+            deobfuscationTransformer = new DeobfuscationTransformer();
+        }
     }
 
-    public static void registerHook(final AsmHook hook) {
+    public static HookClassTransformer getTransformer()
+    {
+        return PrimaryClassTransformer.instance.registeredSecondTransformer ? MinecraftClassTransformer.instance
+                : PrimaryClassTransformer.instance;
+    }
+
+    public static void registerHook(AsmHook hook)
+    {
         getTransformer().registerHook(hook);
     }
 
-    public static void registerHookContainer(final String className) {
+    public static void registerHookContainer(String className)
+    {
         try {
-            final InputStream classData = ReadClassHelper.getClassData(className);
+            InputStream classData = ReadClassHelper.getClassData(className);
             byte[] bytes = IOUtils.toByteArray(classData);
             classData.close();
-            if (HookLoader.deobfuscationTransformer != null) {
-                bytes = HookLoader.deobfuscationTransformer.transform(className, className, bytes);
+            if (deobfuscationTransformer != null) {
+                bytes = deobfuscationTransformer.transform(className, className, bytes);
             }
-            final ByteArrayInputStream newData = new ByteArrayInputStream(bytes);
-            getTransformer().registerHookContainer((InputStream) newData);
-        } catch (IOException e) {
+            ByteArrayInputStream newData = new ByteArrayInputStream(bytes);
+            getTransformer().registerHookContainer(newData);
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public String[] getLibraryRequestClass() {
+    // 1.6.x only
+    public String[] getLibraryRequestClass()
+    {
         return null;
     }
 
-    public String getAccessTransformerClass() {
+    // 1.7.x only
+    @Override
+    public String getAccessTransformerClass()
+    {
         return null;
     }
 
-    public String[] getASMTransformerClass() {
+    @Override
+    public String[] getASMTransformerClass()
+    {
         return null;
     }
 
-    public String getModContainerClass() {
+    @Override
+    public String getModContainerClass()
+    {
         return null;
     }
 
-    public String getSetupClass() {
+    @Override
+    public String getSetupClass()
+    {
         return null;
     }
 
-    public void injectData(final Map<String, Object> data) {
-        this.registerHooks();
+    @Override
+    public void injectData(Map<String, Object> data)
+    {
+        registerHooks();
     }
 
     protected abstract void registerHooks();
-
-    static {
-        if (HookLibPlugin.getObfuscated()) {
-            HookLoader.deobfuscationTransformer = new DeobfuscationTransformer();
-        }
-    }
 }

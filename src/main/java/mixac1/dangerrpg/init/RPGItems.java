@@ -1,414 +1,318 @@
 package mixac1.dangerrpg.init;
 
-import net.minecraft.item.*;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
+import mixac1.dangerrpg.init.RPGOther.RPGItemRarity;
+import mixac1.dangerrpg.item.ItemE;
+import mixac1.dangerrpg.item.RPGArmorMaterial;
+import mixac1.dangerrpg.item.RPGItemComponent;
+import mixac1.dangerrpg.item.RPGItemComponent.RPGArmorComponent;
+import mixac1.dangerrpg.item.RPGItemComponent.RPGToolComponent;
+import mixac1.dangerrpg.item.RPGToolMaterial;
+import mixac1.dangerrpg.item.armor.ItemMageArmor;
+import mixac1.dangerrpg.item.armor.ItemRPGArmor;
+import mixac1.dangerrpg.item.tool.ItemRPGAxe;
+import mixac1.dangerrpg.item.tool.ItemRPGHoe;
+import mixac1.dangerrpg.item.tool.ItemRPGMultiTool;
+import mixac1.dangerrpg.item.tool.ItemRPGPickaxe;
+import mixac1.dangerrpg.item.tool.ItemRPGSpade;
+import mixac1.dangerrpg.item.weapon.ItemPowerStaff;
+import mixac1.dangerrpg.item.weapon.ItemRPGBow;
+import mixac1.dangerrpg.item.weapon.ItemRPGKnife;
+import mixac1.dangerrpg.item.weapon.ItemRPGStaff;
+import mixac1.dangerrpg.item.weapon.ItemRPGTomahawk;
+import mixac1.dangerrpg.item.weapon.ItemRPGWeapon;
+import mixac1.dangerrpg.item.weapon.ItemSniperBow;
+import mixac1.dangerrpg.util.Utils;
+import net.minecraft.item.Item;
 
-import cpw.mods.fml.common.event.*;
-import cpw.mods.fml.common.registry.*;
-import mixac1.dangerrpg.item.*;
-import mixac1.dangerrpg.item.armor.*;
-import mixac1.dangerrpg.item.tool.*;
-import mixac1.dangerrpg.item.weapon.*;
-import mixac1.dangerrpg.util.*;
 
-public abstract class RPGItems {
+public abstract class RPGItems
+{
+    public static Item magicLeather         = new ItemE("magic_leather");
+    public static Item compressedObsidian   = new ItemE("compressed_obsidian");
+    public static Item compressedBedrock    = new ItemE("compressed_bedrock");
+    public static Item blackMatter          = new ItemE("black_matter");
+    public static Item whiteMatter          = new ItemE("white_matter");
+    public static Item stickDiamond         = new ItemE("stick_diamond");
+    public static Item stickObsidian        = new ItemE("stick_obsidian");
+    public static Item stickBlackMatter     = new ItemE("stick_black_matter");
+    public static Item stickWhiteMatter     = new ItemE("stick_white_matter");
 
-    public static Item magicLeather;
-    public static Item compressedObsidian;
-    public static Item compressedBedrock;
-    public static Item blackMatter;
-    public static Item whiteMatter;
-    public static Item stickDiamond;
-    public static Item stickObsidian;
-    public static Item stickBlackMatter;
-    public static Item stickWhiteMatter;
-    public static Item swordObsidian;
-    public static Item swordBedrock;
-    public static Item swordBlackMatter;
-    public static Item swordWhiteMatter;
-    public static Item naginataWood;
-    public static Item naginataStone;
-    public static Item naginataIron;
-    public static Item naginataGold;
-    public static Item naginataDiamond;
-    public static Item naginataObsidian;
-    public static Item naginataBedrock;
-    public static Item naginataBlackMatter;
-    public static Item naginataWhiteMatter;
-    public static Item katanaWood;
-    public static Item katanaStone;
-    public static Item katanaIron;
-    public static Item katanaGold;
-    public static Item katanaDiamond;
-    public static Item katanaObsidian;
-    public static Item katanaBedrock;
-    public static Item katanaBlackMatter;
-    public static Item katanaWhiteMatter;
-    public static Item scytheWood;
-    public static Item scytheStone;
-    public static Item scytheIron;
-    public static Item scytheGold;
-    public static Item scytheDiamond;
-    public static Item scytheObsidian;
-    public static Item scytheBedrock;
-    public static Item scytheBlackMatter;
-    public static Item scytheWhiteMatter;
-    public static Item hammerWood;
-    public static Item hammerStone;
-    public static Item hammerIron;
-    public static Item hammerGold;
-    public static Item hammerDiamond;
-    public static Item hammerObsidian;
-    public static Item hammerBedrock;
-    public static Item hammerBlackMatter;
-    public static Item hammerWhiteMatter;
-    public static Item tomahawkWood;
-    public static Item tomahawkStone;
-    public static Item tomahawkIron;
-    public static Item tomahawkGold;
-    public static Item tomahawkDiamond;
-    public static Item tomahawkObsidian;
-    public static Item tomahawkBedrock;
-    public static Item tomahawkBlackMatter;
-    public static Item tomahawkWhiteMatter;
-    public static Item knifeWood;
-    public static Item knifeStone;
-    public static Item knifeIron;
-    public static Item knifeGold;
-    public static Item knifeDiamond;
-    public static Item knifeObsidian;
-    public static Item knifeBedrock;
-    public static Item knifeBlackMatter;
-    public static Item knifeWhiteMatter;
-    public static Item staffGold;
-    public static Item staffDiamond;
-    public static Item staffObsidian;
-    public static Item staffBedrock;
-    public static Item staffBlackMatter;
-    public static Item staffWhiteMatter;
-    public static Item powerStaffGold;
-    public static Item powerStaffDiamond;
-    public static Item powerStaffObsidian;
-    public static Item powerStaffBedrock;
-    public static Item powerStaffBlackMatter;
-    public static Item powerStaffWhiteMatter;
-    public static Item axeObsidian;
-    public static Item axeBedrock;
-    public static Item axeBlackMatter;
-    public static Item axeWhiteMatter;
-    public static Item hoeObsidian;
-    public static Item hoeBedrock;
-    public static Item hoeBlackMatter;
-    public static Item hoeWhiteMatter;
-    public static Item pickaxeObsidian;
-    public static Item pickaxeBedrock;
-    public static Item pickaxeBlackMatter;
-    public static Item pickaxeWhiteMatter;
-    public static Item shovelObsidian;
-    public static Item shovelBedrock;
-    public static Item shovelBlackMatter;
-    public static Item shovelWhiteMatter;
-    public static Item multitoolWood;
-    public static Item multitoolStone;
-    public static Item multitoolIron;
-    public static Item multitoolGold;
-    public static Item multitoolDiamond;
-    public static Item multitoolObsidian;
-    public static Item multitoolBedrock;
-    public static Item multitoolBlackMatter;
-    public static Item multitoolWhiteMatter;
-    public static Item[] armorObsidian;
-    public static Item[] armorBedrock;
-    public static Item[] armorBlackMatter;
-    public static Item[] armorWhiteMatter;
-    public static Item[] mageArmorCloth;
-    public static Item[] mageArmorIron;
-    public static Item[] mageArmorGold;
-    public static Item[] mageArmorDiamond;
-    public static Item[] mageArmorObsidian;
-    public static Item[] mageArmorBedrock;
-    public static Item[] mageArmorBlackMatter;
-    public static Item[] mageArmorWhiteMatter;
-    public static Item shadowBow;
-    public static Item sniperBow;
+    public static Item swordObsidian     = new ItemRPGWeapon(RPGToolMaterial.OBSIDIAN,     RPGItemComponent.SWORD);
+    public static Item swordBedrock      = new ItemRPGWeapon(RPGToolMaterial.BEDROCK,      RPGItemComponent.SWORD);
+    public static Item swordBlackMatter  = new ItemRPGWeapon(RPGToolMaterial.BLACK_MATTER, RPGItemComponent.SWORD);
+    public static Item swordWhiteMatter  = new ItemRPGWeapon(RPGToolMaterial.WHITE_MATTER, RPGItemComponent.SWORD);
 
-    public static void load(final FMLPreInitializationEvent e) {
+    public static Item naginataWood        = new ItemRPGWeapon(RPGToolMaterial.WOOD,         RPGItemComponent.NAGINATA);
+    public static Item naginataStone       = new ItemRPGWeapon(RPGToolMaterial.STONE,        RPGItemComponent.NAGINATA);
+    public static Item naginataIron        = new ItemRPGWeapon(RPGToolMaterial.IRON,         RPGItemComponent.NAGINATA);
+    public static Item naginataGold        = new ItemRPGWeapon(RPGToolMaterial.GOLD,         RPGItemComponent.NAGINATA);
+    public static Item naginataDiamond     = new ItemRPGWeapon(RPGToolMaterial.DIAMOND,      RPGItemComponent.NAGINATA);
+    public static Item naginataObsidian    = new ItemRPGWeapon(RPGToolMaterial.OBSIDIAN,     RPGItemComponent.NAGINATA);
+    public static Item naginataBedrock     = new ItemRPGWeapon(RPGToolMaterial.BEDROCK,      RPGItemComponent.NAGINATA);
+    public static Item naginataBlackMatter = new ItemRPGWeapon(RPGToolMaterial.BLACK_MATTER, RPGItemComponent.NAGINATA);
+    public static Item naginataWhiteMatter = new ItemRPGWeapon(RPGToolMaterial.WHITE_MATTER, RPGItemComponent.NAGINATA);
+
+    public static Item katanaWood        = new ItemRPGWeapon(RPGToolMaterial.WOOD,            RPGItemComponent.KATANA);
+    public static Item katanaStone       = new ItemRPGWeapon(RPGToolMaterial.STONE,           RPGItemComponent.KATANA);
+    public static Item katanaIron        = new ItemRPGWeapon(RPGToolMaterial.IRON,            RPGItemComponent.KATANA);
+    public static Item katanaGold        = new ItemRPGWeapon(RPGToolMaterial.GOLD,            RPGItemComponent.KATANA);
+    public static Item katanaDiamond     = new ItemRPGWeapon(RPGToolMaterial.DIAMOND,         RPGItemComponent.KATANA);
+    public static Item katanaObsidian    = new ItemRPGWeapon(RPGToolMaterial.OBSIDIAN,     RPGItemComponent.KATANA);
+    public static Item katanaBedrock     = new ItemRPGWeapon(RPGToolMaterial.BEDROCK,      RPGItemComponent.KATANA);
+    public static Item katanaBlackMatter = new ItemRPGWeapon(RPGToolMaterial.BLACK_MATTER, RPGItemComponent.KATANA);
+    public static Item katanaWhiteMatter = new ItemRPGWeapon(RPGToolMaterial.WHITE_MATTER, RPGItemComponent.KATANA);
+
+    public static Item scytheWood        = new ItemRPGWeapon(RPGToolMaterial.WOOD,         RPGItemComponent.SCYTHE);
+    public static Item scytheStone       = new ItemRPGWeapon(RPGToolMaterial.STONE,        RPGItemComponent.SCYTHE);
+    public static Item scytheIron        = new ItemRPGWeapon(RPGToolMaterial.IRON,         RPGItemComponent.SCYTHE);
+    public static Item scytheGold        = new ItemRPGWeapon(RPGToolMaterial.GOLD,         RPGItemComponent.SCYTHE);
+    public static Item scytheDiamond     = new ItemRPGWeapon(RPGToolMaterial.DIAMOND,      RPGItemComponent.SCYTHE);
+    public static Item scytheObsidian    = new ItemRPGWeapon(RPGToolMaterial.OBSIDIAN,     RPGItemComponent.SCYTHE);
+    public static Item scytheBedrock     = new ItemRPGWeapon(RPGToolMaterial.BEDROCK,      RPGItemComponent.SCYTHE);
+    public static Item scytheBlackMatter = new ItemRPGWeapon(RPGToolMaterial.BLACK_MATTER, RPGItemComponent.SCYTHE);
+    public static Item scytheWhiteMatter = new ItemRPGWeapon(RPGToolMaterial.WHITE_MATTER, RPGItemComponent.SCYTHE);
+
+    public static Item hammerWood        = new ItemRPGWeapon(RPGToolMaterial.WOOD,         RPGItemComponent.HAMMER);
+    public static Item hammerStone       = new ItemRPGWeapon(RPGToolMaterial.STONE,        RPGItemComponent.HAMMER);
+    public static Item hammerIron        = new ItemRPGWeapon(RPGToolMaterial.IRON,         RPGItemComponent.HAMMER);
+    public static Item hammerGold        = new ItemRPGWeapon(RPGToolMaterial.GOLD,         RPGItemComponent.HAMMER);
+    public static Item hammerDiamond     = new ItemRPGWeapon(RPGToolMaterial.DIAMOND,      RPGItemComponent.HAMMER);
+    public static Item hammerObsidian    = new ItemRPGWeapon(RPGToolMaterial.OBSIDIAN,     RPGItemComponent.HAMMER);
+    public static Item hammerBedrock     = new ItemRPGWeapon(RPGToolMaterial.BEDROCK,      RPGItemComponent.HAMMER);
+    public static Item hammerBlackMatter = new ItemRPGWeapon(RPGToolMaterial.BLACK_MATTER, RPGItemComponent.HAMMER);
+    public static Item hammerWhiteMatter = new ItemRPGWeapon(RPGToolMaterial.WHITE_MATTER, RPGItemComponent.HAMMER);
+
+    public static Item tomahawkWood        = new ItemRPGTomahawk(RPGToolMaterial.WOOD,         RPGItemComponent.TOMAHAWK);
+    public static Item tomahawkStone       = new ItemRPGTomahawk(RPGToolMaterial.STONE,        RPGItemComponent.TOMAHAWK);
+    public static Item tomahawkIron        = new ItemRPGTomahawk(RPGToolMaterial.IRON,         RPGItemComponent.TOMAHAWK);
+    public static Item tomahawkGold        = new ItemRPGTomahawk(RPGToolMaterial.GOLD,         RPGItemComponent.TOMAHAWK);
+    public static Item tomahawkDiamond     = new ItemRPGTomahawk(RPGToolMaterial.DIAMOND,      RPGItemComponent.TOMAHAWK);
+    public static Item tomahawkObsidian    = new ItemRPGTomahawk(RPGToolMaterial.OBSIDIAN,     RPGItemComponent.TOMAHAWK);
+    public static Item tomahawkBedrock     = new ItemRPGTomahawk(RPGToolMaterial.BEDROCK,      RPGItemComponent.TOMAHAWK);
+    public static Item tomahawkBlackMatter = new ItemRPGTomahawk(RPGToolMaterial.BLACK_MATTER, RPGItemComponent.TOMAHAWK);
+    public static Item tomahawkWhiteMatter = new ItemRPGTomahawk(RPGToolMaterial.WHITE_MATTER, RPGItemComponent.TOMAHAWK);
+
+    public static Item knifeWood        = new ItemRPGKnife(RPGToolMaterial.WOOD,         RPGItemComponent.KNIFE);
+    public static Item knifeStone       = new ItemRPGKnife(RPGToolMaterial.STONE,        RPGItemComponent.KNIFE);
+    public static Item knifeIron        = new ItemRPGKnife(RPGToolMaterial.IRON,         RPGItemComponent.KNIFE);
+    public static Item knifeGold        = new ItemRPGKnife(RPGToolMaterial.GOLD,         RPGItemComponent.KNIFE);
+    public static Item knifeDiamond     = new ItemRPGKnife(RPGToolMaterial.DIAMOND,      RPGItemComponent.KNIFE);
+    public static Item knifeObsidian    = new ItemRPGKnife(RPGToolMaterial.OBSIDIAN,     RPGItemComponent.KNIFE);
+    public static Item knifeBedrock     = new ItemRPGKnife(RPGToolMaterial.BEDROCK,      RPGItemComponent.KNIFE);
+    public static Item knifeBlackMatter = new ItemRPGKnife(RPGToolMaterial.BLACK_MATTER, RPGItemComponent.KNIFE);
+    public static Item knifeWhiteMatter = new ItemRPGKnife(RPGToolMaterial.WHITE_MATTER, RPGItemComponent.KNIFE);
+
+    public static Item staffGold        = new ItemRPGStaff(RPGToolMaterial.GOLD,         RPGItemComponent.STAFF);
+    public static Item staffDiamond     = new ItemRPGStaff(RPGToolMaterial.DIAMOND,      RPGItemComponent.STAFF);
+    public static Item staffObsidian    = new ItemRPGStaff(RPGToolMaterial.OBSIDIAN,     RPGItemComponent.STAFF);
+    public static Item staffBedrock     = new ItemRPGStaff(RPGToolMaterial.BEDROCK,      RPGItemComponent.STAFF);
+    public static Item staffBlackMatter = new ItemRPGStaff(RPGToolMaterial.BLACK_MATTER, RPGItemComponent.STAFF);
+    public static Item staffWhiteMatter = new ItemRPGStaff(RPGToolMaterial.WHITE_MATTER, RPGItemComponent.STAFF);
+
+    public static Item powerStaffGold        = new ItemPowerStaff(RPGToolMaterial.GOLD,         RPGItemComponent.POWER_STAFF);
+    public static Item powerStaffDiamond     = new ItemPowerStaff(RPGToolMaterial.DIAMOND,      RPGItemComponent.POWER_STAFF);
+    public static Item powerStaffObsidian    = new ItemPowerStaff(RPGToolMaterial.OBSIDIAN,     RPGItemComponent.POWER_STAFF);
+    public static Item powerStaffBedrock     = new ItemPowerStaff(RPGToolMaterial.BEDROCK,      RPGItemComponent.POWER_STAFF);
+    public static Item powerStaffBlackMatter = new ItemPowerStaff(RPGToolMaterial.BLACK_MATTER, RPGItemComponent.POWER_STAFF);
+    public static Item powerStaffWhiteMatter = new ItemPowerStaff(RPGToolMaterial.WHITE_MATTER, RPGItemComponent.POWER_STAFF);
+
+    public static Item axeObsidian     = new ItemRPGAxe(RPGToolMaterial.OBSIDIAN);
+    public static Item axeBedrock      = new ItemRPGAxe(RPGToolMaterial.BEDROCK);
+    public static Item axeBlackMatter  = new ItemRPGAxe(RPGToolMaterial.BLACK_MATTER);
+    public static Item axeWhiteMatter  = new ItemRPGAxe(RPGToolMaterial.WHITE_MATTER);
+
+    public static Item hoeObsidian     = new ItemRPGHoe(RPGToolMaterial.OBSIDIAN);
+    public static Item hoeBedrock      = new ItemRPGHoe(RPGToolMaterial.BEDROCK);
+    public static Item hoeBlackMatter  = new ItemRPGHoe(RPGToolMaterial.BLACK_MATTER);
+    public static Item hoeWhiteMatter  = new ItemRPGHoe(RPGToolMaterial.WHITE_MATTER);
+
+    public static Item pickaxeObsidian     = new ItemRPGPickaxe(RPGToolMaterial.OBSIDIAN);
+    public static Item pickaxeBedrock      = new ItemRPGPickaxe(RPGToolMaterial.BEDROCK);
+    public static Item pickaxeBlackMatter  = new ItemRPGPickaxe(RPGToolMaterial.BLACK_MATTER);
+    public static Item pickaxeWhiteMatter  = new ItemRPGPickaxe(RPGToolMaterial.WHITE_MATTER);
+
+    public static Item shovelObsidian     = new ItemRPGSpade(RPGToolMaterial.OBSIDIAN);
+    public static Item shovelBedrock      = new ItemRPGSpade(RPGToolMaterial.BEDROCK);
+    public static Item shovelBlackMatter  = new ItemRPGSpade(RPGToolMaterial.BLACK_MATTER);
+    public static Item shovelWhiteMatter  = new ItemRPGSpade(RPGToolMaterial.WHITE_MATTER);
+
+    public static Item multitoolWood        = new ItemRPGMultiTool(RPGToolMaterial.WOOD);
+    public static Item multitoolStone       = new ItemRPGMultiTool(RPGToolMaterial.STONE);
+    public static Item multitoolIron        = new ItemRPGMultiTool(RPGToolMaterial.IRON);
+    public static Item multitoolGold        = new ItemRPGMultiTool(RPGToolMaterial.GOLD);
+    public static Item multitoolDiamond     = new ItemRPGMultiTool(RPGToolMaterial.DIAMOND);
+    public static Item multitoolObsidian    = new ItemRPGMultiTool(RPGToolMaterial.OBSIDIAN);
+    public static Item multitoolBedrock     = new ItemRPGMultiTool(RPGToolMaterial.BEDROCK);
+    public static Item multitoolBlackMatter = new ItemRPGMultiTool(RPGToolMaterial.BLACK_MATTER);
+    public static Item multitoolWhiteMatter = new ItemRPGMultiTool(RPGToolMaterial.WHITE_MATTER);
+
+    public static Item[] armorObsidian    = ItemRPGArmor.createFullSet(RPGArmorMaterial.OBSIDIAN,     RPGArmorComponent.ARMOR);
+    public static Item[] armorBedrock     = ItemRPGArmor.createFullSet(RPGArmorMaterial.BEDROCK,      RPGArmorComponent.ARMOR);
+    public static Item[] armorBlackMatter = ItemRPGArmor.createFullSet(RPGArmorMaterial.BLACK_MATTER, RPGArmorComponent.ARMOR);
+    public static Item[] armorWhiteMatter = ItemRPGArmor.createFullSet(RPGArmorMaterial.WHITE_MATTER, RPGArmorComponent.ARMOR);
+
+    public static Item[] mageArmorCloth       = ItemMageArmor.createFullSet(RPGArmorMaterial.CLOTH,        RPGArmorComponent.MAGE_ARMOR);
+    public static Item[] mageArmorIron        = ItemMageArmor.createFullSet(RPGArmorMaterial.IRON,         RPGArmorComponent.MAGE_ARMOR);
+    public static Item[] mageArmorGold        = ItemMageArmor.createFullSet(RPGArmorMaterial.GOLD,         RPGArmorComponent.MAGE_ARMOR);
+    public static Item[] mageArmorDiamond     = ItemMageArmor.createFullSet(RPGArmorMaterial.DIAMOND,      RPGArmorComponent.MAGE_ARMOR);
+    public static Item[] mageArmorObsidian    = ItemMageArmor.createFullSet(RPGArmorMaterial.OBSIDIAN,     RPGArmorComponent.MAGE_ARMOR);
+    public static Item[] mageArmorBedrock     = ItemMageArmor.createFullSet(RPGArmorMaterial.BEDROCK,      RPGArmorComponent.MAGE_ARMOR);
+    public static Item[] mageArmorBlackMatter = ItemMageArmor.createFullSet(RPGArmorMaterial.BLACK_MATTER, RPGArmorComponent.MAGE_ARMOR);
+    public static Item[] mageArmorWhiteMatter = ItemMageArmor.createFullSet(RPGArmorMaterial.WHITE_MATTER, RPGArmorComponent.MAGE_ARMOR);
+
+    public static Item shadowBow = new ItemRPGBow   (RPGItemComponent.SHADOW_BOW, RPGItemRarity.mythic);
+    public static Item sniperBow = new ItemSniperBow(RPGItemComponent.SNIPER_BOW);
+
+    public static void load(FMLPreInitializationEvent e)
+    {
         registerItems();
     }
 
-    private static void registerItems() {
-        registerItem(RPGItems.knifeWood);
-        registerItem(RPGItems.tomahawkWood);
-        registerItem(RPGItems.katanaWood);
-        registerItem(RPGItems.naginataWood);
-        registerItem(RPGItems.scytheWood);
-        registerItem(RPGItems.hammerWood);
-        registerItem(RPGItems.multitoolWood);
-        registerItem(RPGItems.knifeStone);
-        registerItem(RPGItems.tomahawkStone);
-        registerItem(RPGItems.katanaStone);
-        registerItem(RPGItems.naginataStone);
-        registerItem(RPGItems.scytheStone);
-        registerItem(RPGItems.hammerStone);
-        registerItem(RPGItems.multitoolStone);
-        registerItem(RPGItems.knifeIron);
-        registerItem(RPGItems.tomahawkIron);
-        registerItem(RPGItems.katanaIron);
-        registerItem(RPGItems.naginataIron);
-        registerItem(RPGItems.scytheIron);
-        registerItem(RPGItems.hammerIron);
-        registerItem(RPGItems.multitoolIron);
-        registerItem(RPGItems.knifeGold);
-        registerItem(RPGItems.tomahawkGold);
-        registerItem(RPGItems.katanaGold);
-        registerItem(RPGItems.naginataGold);
-        registerItem(RPGItems.scytheGold);
-        registerItem(RPGItems.hammerGold);
-        registerItem(RPGItems.multitoolGold);
-        registerItem(RPGItems.staffGold);
-        registerItem(RPGItems.powerStaffGold);
-        registerItem(RPGItems.knifeDiamond);
-        registerItem(RPGItems.tomahawkDiamond);
-        registerItem(RPGItems.katanaDiamond);
-        registerItem(RPGItems.naginataDiamond);
-        registerItem(RPGItems.scytheDiamond);
-        registerItem(RPGItems.hammerDiamond);
-        registerItem(RPGItems.multitoolDiamond);
-        registerItem(RPGItems.staffDiamond);
-        registerItem(RPGItems.powerStaffDiamond);
-        registerItem(RPGItems.knifeObsidian);
-        registerItem(RPGItems.tomahawkObsidian);
-        registerItem(RPGItems.swordObsidian);
-        registerItem(RPGItems.katanaObsidian);
-        registerItem(RPGItems.naginataObsidian);
-        registerItem(RPGItems.scytheObsidian);
-        registerItem(RPGItems.hammerObsidian);
-        registerItem(RPGItems.axeObsidian);
-        registerItem(RPGItems.shovelObsidian);
-        registerItem(RPGItems.pickaxeObsidian);
-        registerItem(RPGItems.hoeObsidian);
-        registerItem(RPGItems.multitoolObsidian);
-        registerItem(RPGItems.staffObsidian);
-        registerItem(RPGItems.powerStaffObsidian);
-        registerItem(RPGItems.knifeBedrock);
-        registerItem(RPGItems.tomahawkBedrock);
-        registerItem(RPGItems.swordBedrock);
-        registerItem(RPGItems.katanaBedrock);
-        registerItem(RPGItems.naginataBedrock);
-        registerItem(RPGItems.scytheBedrock);
-        registerItem(RPGItems.hammerBedrock);
-        registerItem(RPGItems.axeBedrock);
-        registerItem(RPGItems.shovelBedrock);
-        registerItem(RPGItems.pickaxeBedrock);
-        registerItem(RPGItems.hoeBedrock);
-        registerItem(RPGItems.multitoolBedrock);
-        registerItem(RPGItems.staffBedrock);
-        registerItem(RPGItems.powerStaffBedrock);
-        registerItem(RPGItems.knifeBlackMatter);
-        registerItem(RPGItems.tomahawkBlackMatter);
-        registerItem(RPGItems.swordBlackMatter);
-        registerItem(RPGItems.katanaBlackMatter);
-        registerItem(RPGItems.naginataBlackMatter);
-        registerItem(RPGItems.scytheBlackMatter);
-        registerItem(RPGItems.hammerBlackMatter);
-        registerItem(RPGItems.axeBlackMatter);
-        registerItem(RPGItems.shovelBlackMatter);
-        registerItem(RPGItems.pickaxeBlackMatter);
-        registerItem(RPGItems.hoeBlackMatter);
-        registerItem(RPGItems.multitoolBlackMatter);
-        registerItem(RPGItems.staffBlackMatter);
-        registerItem(RPGItems.powerStaffBlackMatter);
-        registerItem(RPGItems.knifeWhiteMatter);
-        registerItem(RPGItems.tomahawkWhiteMatter);
-        registerItem(RPGItems.swordWhiteMatter);
-        registerItem(RPGItems.katanaWhiteMatter);
-        registerItem(RPGItems.naginataWhiteMatter);
-        registerItem(RPGItems.scytheWhiteMatter);
-        registerItem(RPGItems.hammerWhiteMatter);
-        registerItem(RPGItems.axeWhiteMatter);
-        registerItem(RPGItems.shovelWhiteMatter);
-        registerItem(RPGItems.pickaxeWhiteMatter);
-        registerItem(RPGItems.hoeWhiteMatter);
-        registerItem(RPGItems.multitoolWhiteMatter);
-        registerItem(RPGItems.staffWhiteMatter);
-        registerItem(RPGItems.powerStaffWhiteMatter);
-        registerItem(RPGItems.shadowBow);
-        registerItem(RPGItems.sniperBow);
-        registerItemArray(RPGItems.armorObsidian);
-        registerItemArray(RPGItems.armorBedrock);
-        registerItemArray(RPGItems.armorBlackMatter);
-        registerItemArray(RPGItems.armorWhiteMatter);
-        registerItemArray(RPGItems.mageArmorCloth);
-        registerItemArray(RPGItems.mageArmorIron);
-        registerItemArray(RPGItems.mageArmorGold);
-        registerItemArray(RPGItems.mageArmorDiamond);
-        registerItemArray(RPGItems.mageArmorObsidian);
-        registerItemArray(RPGItems.mageArmorBedrock);
-        registerItemArray(RPGItems.mageArmorBlackMatter);
-        registerItemArray(RPGItems.mageArmorWhiteMatter);
+    private static void registerItems()
+    {
+        registerItem(knifeWood);
+        registerItem(tomahawkWood);
+        registerItem(katanaWood);
+        registerItem(naginataWood);
+        registerItem(scytheWood);
+        registerItem(hammerWood);
+        registerItem(multitoolWood);
+
+        registerItem(knifeStone);
+        registerItem(tomahawkStone);
+        registerItem(katanaStone);
+        registerItem(naginataStone);
+        registerItem(scytheStone);
+        registerItem(hammerStone);
+        registerItem(multitoolStone);
+
+        registerItem(knifeIron);
+        registerItem(tomahawkIron);
+        registerItem(katanaIron);
+        registerItem(naginataIron);
+        registerItem(scytheIron);
+        registerItem(hammerIron);
+        registerItem(multitoolIron);
+
+        registerItem(knifeGold);
+        registerItem(tomahawkGold);
+        registerItem(katanaGold);
+        registerItem(naginataGold);
+        registerItem(scytheGold);
+        registerItem(hammerGold);
+        registerItem(multitoolGold);
+        registerItem(staffGold);
+        registerItem(powerStaffGold);
+
+        registerItem(knifeDiamond);
+        registerItem(tomahawkDiamond);
+        registerItem(katanaDiamond);
+        registerItem(naginataDiamond);
+        registerItem(scytheDiamond);
+        registerItem(hammerDiamond);
+        registerItem(multitoolDiamond);
+        registerItem(staffDiamond);
+        registerItem(powerStaffDiamond);
+
+        registerItem(knifeObsidian);
+        registerItem(tomahawkObsidian);
+        registerItem(swordObsidian);
+        registerItem(katanaObsidian);
+        registerItem(naginataObsidian);
+        registerItem(scytheObsidian);
+        registerItem(hammerObsidian);
+        registerItem(axeObsidian);
+        registerItem(shovelObsidian);
+        registerItem(pickaxeObsidian);
+        registerItem(hoeObsidian);
+        registerItem(multitoolObsidian);
+        registerItem(staffObsidian);
+        registerItem(powerStaffObsidian);
+
+        registerItem(knifeBedrock);
+        registerItem(tomahawkBedrock);
+        registerItem(swordBedrock);
+        registerItem(katanaBedrock);
+        registerItem(naginataBedrock);
+        registerItem(scytheBedrock);
+        registerItem(hammerBedrock);
+        registerItem(axeBedrock);
+        registerItem(shovelBedrock);
+        registerItem(pickaxeBedrock);
+        registerItem(hoeBedrock);
+        registerItem(multitoolBedrock);
+        registerItem(staffBedrock);
+        registerItem(powerStaffBedrock);
+
+        registerItem(knifeBlackMatter);
+        registerItem(tomahawkBlackMatter);
+        registerItem(swordBlackMatter);
+        registerItem(katanaBlackMatter);
+        registerItem(naginataBlackMatter);
+        registerItem(scytheBlackMatter);
+        registerItem(hammerBlackMatter);
+        registerItem(axeBlackMatter);
+        registerItem(shovelBlackMatter);
+        registerItem(pickaxeBlackMatter);
+        registerItem(hoeBlackMatter);
+        registerItem(multitoolBlackMatter);
+        registerItem(staffBlackMatter);
+        registerItem(powerStaffBlackMatter);
+
+        registerItem(knifeWhiteMatter);
+        registerItem(tomahawkWhiteMatter);
+        registerItem(swordWhiteMatter);
+        registerItem(katanaWhiteMatter);
+        registerItem(naginataWhiteMatter);
+        registerItem(scytheWhiteMatter);
+        registerItem(hammerWhiteMatter);
+        registerItem(axeWhiteMatter);
+        registerItem(shovelWhiteMatter);
+        registerItem(pickaxeWhiteMatter);
+        registerItem(hoeWhiteMatter);
+        registerItem(multitoolWhiteMatter);
+        registerItem(staffWhiteMatter);
+        registerItem(powerStaffWhiteMatter);
+
+        registerItem(shadowBow);
+        registerItem(sniperBow);
+
+        registerItemArray(armorObsidian);
+        registerItemArray(armorBedrock);
+        registerItemArray(armorBlackMatter);
+        registerItemArray(armorWhiteMatter);
+
+        registerItemArray(mageArmorCloth);
+        registerItemArray(mageArmorIron);
+        registerItemArray(mageArmorGold);
+        registerItemArray(mageArmorDiamond);
+        registerItemArray(mageArmorObsidian);
+        registerItemArray(mageArmorBedrock);
+        registerItemArray(mageArmorBlackMatter);
+        registerItemArray(mageArmorWhiteMatter);
     }
 
-    public static void registerItem(final Item item) {
-        GameRegistry.registerItem(item, item.getUnlocalizedName(), "dangerrpg");
+    public static void registerItem(Item item)
+    {
+        GameRegistry.registerItem(item, item.unlocalizedName);
     }
 
-    public static void registerItemArray(final Item[] array) {
-        for (final Item item : array) {
+    public static void registerItemArray(Item[] array)
+    {
+        for (Item item : array) {
             registerItem(item);
         }
     }
 
-    public static String getRPGName(final RPGItemComponent.RPGToolComponent toolComponent,
-        final RPGToolMaterial toolMaterial) {
+    public static String getRPGName(RPGToolComponent toolComponent, RPGToolMaterial toolMaterial)
+    {
         return Utils.toString(toolComponent.name, "_", toolMaterial.name);
     }
 
-    public static String getRPGName(final RPGItemComponent.RPGArmorComponent armorComponent,
-        final RPGArmorMaterial armorMaterial) {
+    public static String getRPGName(RPGArmorComponent armorComponent, RPGArmorMaterial armorMaterial)
+    {
         return Utils.toString(armorComponent.name, "_", armorMaterial.name);
-    }
-
-    static {
-        RPGItems.magicLeather = new ItemE("magic_leather");
-        RPGItems.compressedObsidian = new ItemE("compressed_obsidian");
-        RPGItems.compressedBedrock = new ItemE("compressed_bedrock");
-        RPGItems.blackMatter = new ItemE("black_matter");
-        RPGItems.whiteMatter = new ItemE("white_matter");
-        RPGItems.stickDiamond = new ItemE("stick_diamond");
-        RPGItems.stickObsidian = new ItemE("stick_obsidian");
-        RPGItems.stickBlackMatter = new ItemE("stick_black_matter");
-        RPGItems.stickWhiteMatter = new ItemE("stick_white_matter");
-        RPGItems.swordObsidian = (Item) new ItemRPGWeapon(RPGToolMaterial.OBSIDIAN, RPGItemComponent.SWORD);
-        RPGItems.swordBedrock = (Item) new ItemRPGWeapon(RPGToolMaterial.BEDROCK, RPGItemComponent.SWORD);
-        RPGItems.swordBlackMatter = (Item) new ItemRPGWeapon(RPGToolMaterial.BLACK_MATTER, RPGItemComponent.SWORD);
-        RPGItems.swordWhiteMatter = (Item) new ItemRPGWeapon(RPGToolMaterial.WHITE_MATTER, RPGItemComponent.SWORD);
-        RPGItems.naginataWood = (Item) new ItemRPGWeapon(RPGToolMaterial.WOOD, RPGItemComponent.NAGINATA);
-        RPGItems.naginataStone = (Item) new ItemRPGWeapon(RPGToolMaterial.STONE, RPGItemComponent.NAGINATA);
-        RPGItems.naginataIron = (Item) new ItemRPGWeapon(RPGToolMaterial.IRON, RPGItemComponent.NAGINATA);
-        RPGItems.naginataGold = (Item) new ItemRPGWeapon(RPGToolMaterial.GOLD, RPGItemComponent.NAGINATA);
-        RPGItems.naginataDiamond = (Item) new ItemRPGWeapon(RPGToolMaterial.DIAMOND, RPGItemComponent.NAGINATA);
-        RPGItems.naginataObsidian = (Item) new ItemRPGWeapon(RPGToolMaterial.OBSIDIAN, RPGItemComponent.NAGINATA);
-        RPGItems.naginataBedrock = (Item) new ItemRPGWeapon(RPGToolMaterial.BEDROCK, RPGItemComponent.NAGINATA);
-        RPGItems.naginataBlackMatter = (Item) new ItemRPGWeapon(
-            RPGToolMaterial.BLACK_MATTER,
-            RPGItemComponent.NAGINATA);
-        RPGItems.naginataWhiteMatter = (Item) new ItemRPGWeapon(
-            RPGToolMaterial.WHITE_MATTER,
-            RPGItemComponent.NAGINATA);
-        RPGItems.katanaWood = (Item) new ItemRPGWeapon(RPGToolMaterial.WOOD, RPGItemComponent.KATANA);
-        RPGItems.katanaStone = (Item) new ItemRPGWeapon(RPGToolMaterial.STONE, RPGItemComponent.KATANA);
-        RPGItems.katanaIron = (Item) new ItemRPGWeapon(RPGToolMaterial.IRON, RPGItemComponent.KATANA);
-        RPGItems.katanaGold = (Item) new ItemRPGWeapon(RPGToolMaterial.GOLD, RPGItemComponent.KATANA);
-        RPGItems.katanaDiamond = (Item) new ItemRPGWeapon(RPGToolMaterial.DIAMOND, RPGItemComponent.KATANA);
-        RPGItems.katanaObsidian = (Item) new ItemRPGWeapon(RPGToolMaterial.OBSIDIAN, RPGItemComponent.KATANA);
-        RPGItems.katanaBedrock = (Item) new ItemRPGWeapon(RPGToolMaterial.BEDROCK, RPGItemComponent.KATANA);
-        RPGItems.katanaBlackMatter = (Item) new ItemRPGWeapon(RPGToolMaterial.BLACK_MATTER, RPGItemComponent.KATANA);
-        RPGItems.katanaWhiteMatter = (Item) new ItemRPGWeapon(RPGToolMaterial.WHITE_MATTER, RPGItemComponent.KATANA);
-        RPGItems.scytheWood = (Item) new ItemRPGWeapon(RPGToolMaterial.WOOD, RPGItemComponent.SCYTHE);
-        RPGItems.scytheStone = (Item) new ItemRPGWeapon(RPGToolMaterial.STONE, RPGItemComponent.SCYTHE);
-        RPGItems.scytheIron = (Item) new ItemRPGWeapon(RPGToolMaterial.IRON, RPGItemComponent.SCYTHE);
-        RPGItems.scytheGold = (Item) new ItemRPGWeapon(RPGToolMaterial.GOLD, RPGItemComponent.SCYTHE);
-        RPGItems.scytheDiamond = (Item) new ItemRPGWeapon(RPGToolMaterial.DIAMOND, RPGItemComponent.SCYTHE);
-        RPGItems.scytheObsidian = (Item) new ItemRPGWeapon(RPGToolMaterial.OBSIDIAN, RPGItemComponent.SCYTHE);
-        RPGItems.scytheBedrock = (Item) new ItemRPGWeapon(RPGToolMaterial.BEDROCK, RPGItemComponent.SCYTHE);
-        RPGItems.scytheBlackMatter = (Item) new ItemRPGWeapon(RPGToolMaterial.BLACK_MATTER, RPGItemComponent.SCYTHE);
-        RPGItems.scytheWhiteMatter = (Item) new ItemRPGWeapon(RPGToolMaterial.WHITE_MATTER, RPGItemComponent.SCYTHE);
-        RPGItems.hammerWood = (Item) new ItemRPGWeapon(RPGToolMaterial.WOOD, RPGItemComponent.HAMMER);
-        RPGItems.hammerStone = (Item) new ItemRPGWeapon(RPGToolMaterial.STONE, RPGItemComponent.HAMMER);
-        RPGItems.hammerIron = (Item) new ItemRPGWeapon(RPGToolMaterial.IRON, RPGItemComponent.HAMMER);
-        RPGItems.hammerGold = (Item) new ItemRPGWeapon(RPGToolMaterial.GOLD, RPGItemComponent.HAMMER);
-        RPGItems.hammerDiamond = (Item) new ItemRPGWeapon(RPGToolMaterial.DIAMOND, RPGItemComponent.HAMMER);
-        RPGItems.hammerObsidian = (Item) new ItemRPGWeapon(RPGToolMaterial.OBSIDIAN, RPGItemComponent.HAMMER);
-        RPGItems.hammerBedrock = (Item) new ItemRPGWeapon(RPGToolMaterial.BEDROCK, RPGItemComponent.HAMMER);
-        RPGItems.hammerBlackMatter = (Item) new ItemRPGWeapon(RPGToolMaterial.BLACK_MATTER, RPGItemComponent.HAMMER);
-        RPGItems.hammerWhiteMatter = (Item) new ItemRPGWeapon(RPGToolMaterial.WHITE_MATTER, RPGItemComponent.HAMMER);
-        RPGItems.tomahawkWood = (Item) new ItemRPGTomahawk(RPGToolMaterial.WOOD, RPGItemComponent.TOMAHAWK);
-        RPGItems.tomahawkStone = (Item) new ItemRPGTomahawk(RPGToolMaterial.STONE, RPGItemComponent.TOMAHAWK);
-        RPGItems.tomahawkIron = (Item) new ItemRPGTomahawk(RPGToolMaterial.IRON, RPGItemComponent.TOMAHAWK);
-        RPGItems.tomahawkGold = (Item) new ItemRPGTomahawk(RPGToolMaterial.GOLD, RPGItemComponent.TOMAHAWK);
-        RPGItems.tomahawkDiamond = (Item) new ItemRPGTomahawk(RPGToolMaterial.DIAMOND, RPGItemComponent.TOMAHAWK);
-        RPGItems.tomahawkObsidian = (Item) new ItemRPGTomahawk(RPGToolMaterial.OBSIDIAN, RPGItemComponent.TOMAHAWK);
-        RPGItems.tomahawkBedrock = (Item) new ItemRPGTomahawk(RPGToolMaterial.BEDROCK, RPGItemComponent.TOMAHAWK);
-        RPGItems.tomahawkBlackMatter = (Item) new ItemRPGTomahawk(
-            RPGToolMaterial.BLACK_MATTER,
-            RPGItemComponent.TOMAHAWK);
-        RPGItems.tomahawkWhiteMatter = (Item) new ItemRPGTomahawk(
-            RPGToolMaterial.WHITE_MATTER,
-            RPGItemComponent.TOMAHAWK);
-        RPGItems.knifeWood = (Item) new ItemRPGKnife(RPGToolMaterial.WOOD, RPGItemComponent.KNIFE);
-        RPGItems.knifeStone = (Item) new ItemRPGKnife(RPGToolMaterial.STONE, RPGItemComponent.KNIFE);
-        RPGItems.knifeIron = (Item) new ItemRPGKnife(RPGToolMaterial.IRON, RPGItemComponent.KNIFE);
-        RPGItems.knifeGold = (Item) new ItemRPGKnife(RPGToolMaterial.GOLD, RPGItemComponent.KNIFE);
-        RPGItems.knifeDiamond = (Item) new ItemRPGKnife(RPGToolMaterial.DIAMOND, RPGItemComponent.KNIFE);
-        RPGItems.knifeObsidian = (Item) new ItemRPGKnife(RPGToolMaterial.OBSIDIAN, RPGItemComponent.KNIFE);
-        RPGItems.knifeBedrock = (Item) new ItemRPGKnife(RPGToolMaterial.BEDROCK, RPGItemComponent.KNIFE);
-        RPGItems.knifeBlackMatter = (Item) new ItemRPGKnife(RPGToolMaterial.BLACK_MATTER, RPGItemComponent.KNIFE);
-        RPGItems.knifeWhiteMatter = (Item) new ItemRPGKnife(RPGToolMaterial.WHITE_MATTER, RPGItemComponent.KNIFE);
-        RPGItems.staffGold = (Item) new ItemRPGStaff(RPGToolMaterial.GOLD, RPGItemComponent.STAFF);
-        RPGItems.staffDiamond = (Item) new ItemRPGStaff(RPGToolMaterial.DIAMOND, RPGItemComponent.STAFF);
-        RPGItems.staffObsidian = (Item) new ItemRPGStaff(RPGToolMaterial.OBSIDIAN, RPGItemComponent.STAFF);
-        RPGItems.staffBedrock = (Item) new ItemRPGStaff(RPGToolMaterial.BEDROCK, RPGItemComponent.STAFF);
-        RPGItems.staffBlackMatter = (Item) new ItemRPGStaff(RPGToolMaterial.BLACK_MATTER, RPGItemComponent.STAFF);
-        RPGItems.staffWhiteMatter = (Item) new ItemRPGStaff(RPGToolMaterial.WHITE_MATTER, RPGItemComponent.STAFF);
-        RPGItems.powerStaffGold = (Item) new ItemPowerStaff(RPGToolMaterial.GOLD, RPGItemComponent.POWER_STAFF);
-        RPGItems.powerStaffDiamond = (Item) new ItemPowerStaff(RPGToolMaterial.DIAMOND, RPGItemComponent.POWER_STAFF);
-        RPGItems.powerStaffObsidian = (Item) new ItemPowerStaff(RPGToolMaterial.OBSIDIAN, RPGItemComponent.POWER_STAFF);
-        RPGItems.powerStaffBedrock = (Item) new ItemPowerStaff(RPGToolMaterial.BEDROCK, RPGItemComponent.POWER_STAFF);
-        RPGItems.powerStaffBlackMatter = (Item) new ItemPowerStaff(
-            RPGToolMaterial.BLACK_MATTER,
-            RPGItemComponent.POWER_STAFF);
-        RPGItems.powerStaffWhiteMatter = (Item) new ItemPowerStaff(
-            RPGToolMaterial.WHITE_MATTER,
-            RPGItemComponent.POWER_STAFF);
-        RPGItems.axeObsidian = (Item) new ItemRPGAxe(RPGToolMaterial.OBSIDIAN);
-        RPGItems.axeBedrock = (Item) new ItemRPGAxe(RPGToolMaterial.BEDROCK);
-        RPGItems.axeBlackMatter = (Item) new ItemRPGAxe(RPGToolMaterial.BLACK_MATTER);
-        RPGItems.axeWhiteMatter = (Item) new ItemRPGAxe(RPGToolMaterial.WHITE_MATTER);
-        RPGItems.hoeObsidian = (Item) new ItemRPGHoe(RPGToolMaterial.OBSIDIAN);
-        RPGItems.hoeBedrock = (Item) new ItemRPGHoe(RPGToolMaterial.BEDROCK);
-        RPGItems.hoeBlackMatter = (Item) new ItemRPGHoe(RPGToolMaterial.BLACK_MATTER);
-        RPGItems.hoeWhiteMatter = (Item) new ItemRPGHoe(RPGToolMaterial.WHITE_MATTER);
-        RPGItems.pickaxeObsidian = (Item) new ItemRPGPickaxe(RPGToolMaterial.OBSIDIAN);
-        RPGItems.pickaxeBedrock = (Item) new ItemRPGPickaxe(RPGToolMaterial.BEDROCK);
-        RPGItems.pickaxeBlackMatter = (Item) new ItemRPGPickaxe(RPGToolMaterial.BLACK_MATTER);
-        RPGItems.pickaxeWhiteMatter = (Item) new ItemRPGPickaxe(RPGToolMaterial.WHITE_MATTER);
-        RPGItems.shovelObsidian = (Item) new ItemRPGSpade(RPGToolMaterial.OBSIDIAN);
-        RPGItems.shovelBedrock = (Item) new ItemRPGSpade(RPGToolMaterial.BEDROCK);
-        RPGItems.shovelBlackMatter = (Item) new ItemRPGSpade(RPGToolMaterial.BLACK_MATTER);
-        RPGItems.shovelWhiteMatter = (Item) new ItemRPGSpade(RPGToolMaterial.WHITE_MATTER);
-        RPGItems.multitoolWood = (Item) new ItemRPGMultiTool(RPGToolMaterial.WOOD);
-        RPGItems.multitoolStone = (Item) new ItemRPGMultiTool(RPGToolMaterial.STONE);
-        RPGItems.multitoolIron = (Item) new ItemRPGMultiTool(RPGToolMaterial.IRON);
-        RPGItems.multitoolGold = (Item) new ItemRPGMultiTool(RPGToolMaterial.GOLD);
-        RPGItems.multitoolDiamond = (Item) new ItemRPGMultiTool(RPGToolMaterial.DIAMOND);
-        RPGItems.multitoolObsidian = (Item) new ItemRPGMultiTool(RPGToolMaterial.OBSIDIAN);
-        RPGItems.multitoolBedrock = (Item) new ItemRPGMultiTool(RPGToolMaterial.BEDROCK);
-        RPGItems.multitoolBlackMatter = (Item) new ItemRPGMultiTool(RPGToolMaterial.BLACK_MATTER);
-        RPGItems.multitoolWhiteMatter = (Item) new ItemRPGMultiTool(RPGToolMaterial.WHITE_MATTER);
-        RPGItems.armorObsidian = (Item[]) ItemRPGArmor
-            .createFullSet(RPGArmorMaterial.OBSIDIAN, RPGItemComponent.RPGArmorComponent.ARMOR);
-        RPGItems.armorBedrock = (Item[]) ItemRPGArmor
-            .createFullSet(RPGArmorMaterial.BEDROCK, RPGItemComponent.RPGArmorComponent.ARMOR);
-        RPGItems.armorBlackMatter = (Item[]) ItemRPGArmor
-            .createFullSet(RPGArmorMaterial.BLACK_MATTER, RPGItemComponent.RPGArmorComponent.ARMOR);
-        RPGItems.armorWhiteMatter = (Item[]) ItemRPGArmor
-            .createFullSet(RPGArmorMaterial.WHITE_MATTER, RPGItemComponent.RPGArmorComponent.ARMOR);
-        RPGItems.mageArmorCloth = (Item[]) ItemMageArmor
-            .createFullSet(RPGArmorMaterial.CLOTH, RPGItemComponent.RPGArmorComponent.MAGE_ARMOR);
-        RPGItems.mageArmorIron = (Item[]) ItemMageArmor
-            .createFullSet(RPGArmorMaterial.IRON, RPGItemComponent.RPGArmorComponent.MAGE_ARMOR);
-        RPGItems.mageArmorGold = (Item[]) ItemMageArmor
-            .createFullSet(RPGArmorMaterial.GOLD, RPGItemComponent.RPGArmorComponent.MAGE_ARMOR);
-        RPGItems.mageArmorDiamond = (Item[]) ItemMageArmor
-            .createFullSet(RPGArmorMaterial.DIAMOND, RPGItemComponent.RPGArmorComponent.MAGE_ARMOR);
-        RPGItems.mageArmorObsidian = (Item[]) ItemMageArmor
-            .createFullSet(RPGArmorMaterial.OBSIDIAN, RPGItemComponent.RPGArmorComponent.MAGE_ARMOR);
-        RPGItems.mageArmorBedrock = (Item[]) ItemMageArmor
-            .createFullSet(RPGArmorMaterial.BEDROCK, RPGItemComponent.RPGArmorComponent.MAGE_ARMOR);
-        RPGItems.mageArmorBlackMatter = (Item[]) ItemMageArmor
-            .createFullSet(RPGArmorMaterial.BLACK_MATTER, RPGItemComponent.RPGArmorComponent.MAGE_ARMOR);
-        RPGItems.mageArmorWhiteMatter = (Item[]) ItemMageArmor
-            .createFullSet(RPGArmorMaterial.WHITE_MATTER, RPGItemComponent.RPGArmorComponent.MAGE_ARMOR);
-        RPGItems.shadowBow = (Item) new ItemRPGBow(RPGItemComponent.SHADOW_BOW, RPGOther.RPGItemRarity.mythic);
-        RPGItems.sniperBow = (Item) new ItemSniperBow(RPGItemComponent.SNIPER_BOW);
     }
 }

@@ -1,12 +1,12 @@
 package mixac1.dangerrpg.item;
 
-import net.minecraft.item.*;
+import net.minecraft.item.EnumRarity;
 
-public interface IMaterialSpecial {
+public interface IMaterialSpecial
+{
+    public boolean hasSpecialColor();
 
-    boolean hasSpecialColor();
+    public int getSpecialColor();
 
-    int getSpecialColor();
-
-    EnumRarity getItemRarity();
+    public EnumRarity getItemRarity();
 }

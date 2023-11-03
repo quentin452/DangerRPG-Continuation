@@ -1,30 +1,36 @@
 package mixac1.dangerrpg.capability.ea;
 
-import java.util.*;
+import java.util.UUID;
 
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.*;
+import mixac1.dangerrpg.api.entity.EAWithExistIAttr;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.attributes.IAttribute;
 
-import mixac1.dangerrpg.api.entity.*;
-
-public class EAHealth extends EAWithExistIAttr {
-
-    public EAHealth(final String name, final UUID IDBase, final IAttribute attribute) {
+public class EAHealth extends EAWithExistIAttr
+{
+    public EAHealth(String name, UUID IDBase, IAttribute attribute)
+    {
         super(name, IDBase, attribute);
     }
 
-    public void serverInit(final EntityLivingBase entity) {
-        this.setValueRaw(entity.getHealth(), entity);
+    @Override
+    public void serverInit(EntityLivingBase entity)
+    {
+        setValueRaw(entity.getHealth(), entity);
     }
 
+    @Override
     @Deprecated
-    public Float getValueRaw(final EntityLivingBase entity) {
+    public Float getValueRaw(EntityLivingBase entity)
+    {
         return entity.getMaxHealth() + entity.getAbsorptionAmount();
     }
 
+    @Override
     @Deprecated
-    public boolean setValueRaw(final Float value, final EntityLivingBase entity) {
-        final float tmp = entity.getHealth() / entity.getMaxHealth();
+    public boolean setValueRaw(Float value, EntityLivingBase entity)
+    {
+        float tmp = entity.getHealth() / entity.getMaxHealth();
         if (super.setValueRaw(value, entity)) {
             entity.setHealth(entity.getMaxHealth() * tmp);
             return true;
@@ -32,17 +38,21 @@ public class EAHealth extends EAWithExistIAttr {
         return false;
     }
 
-    public void setModificatorValue(final Float value, final EntityLivingBase entity, final UUID ID) {
+    @Override
+    public void setModificatorValue(Float value, EntityLivingBase entity, UUID ID)
+    {
         if (!entity.worldObj.isRemote) {
-            final float tmp = entity.getHealth() / entity.getMaxHealth();
+            float tmp = entity.getHealth() / entity.getMaxHealth();
             super.setModificatorValue(value, entity, ID);
             entity.setHealth(entity.getMaxHealth() * tmp);
         }
     }
 
-    public void removeModificator(final EntityLivingBase entity, final UUID ID) {
+    @Override
+    public void removeModificator(EntityLivingBase entity, UUID ID)
+    {
         if (!entity.worldObj.isRemote) {
-            final float tmp = entity.getHealth() / entity.getMaxHealth();
+            float tmp = entity.getHealth() / entity.getMaxHealth();
             super.removeModificator(entity, ID);
             entity.setHealth(entity.getMaxHealth() * tmp);
         }

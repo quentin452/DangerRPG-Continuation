@@ -1,131 +1,131 @@
 package mixac1.dangerrpg.item.armor;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import mixac1.dangerrpg.DangerRPG;
+import mixac1.dangerrpg.client.RPGRenderHelper;
+import mixac1.dangerrpg.client.model.ModelMageArmor;
+import mixac1.dangerrpg.item.RPGArmorMaterial;
+import mixac1.dangerrpg.item.RPGItemComponent.RPGArmorComponent;
+import mixac1.dangerrpg.util.Utils;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import mixac1.dangerrpg.client.RPGRenderHelper;
-import mixac1.dangerrpg.client.model.ModelMageArmor;
-import mixac1.dangerrpg.item.RPGArmorMaterial;
-import mixac1.dangerrpg.item.RPGItemComponent;
-import mixac1.dangerrpg.util.Utils;
+public class ItemMageArmor extends ItemRPGArmor implements IColorArmor
+{
+    protected int DEFAULT_COLOR = 0x3371e4;
 
-public class ItemMageArmor extends ItemRPGArmor implements IColorArmor {
-
-    @SideOnly(Side.CLIENT)
-    private IIcon customOverlayIcon;
-    protected int DEFAULT_COLOR;
-
-    public ItemMageArmor(final RPGArmorMaterial armorMaterial, final RPGItemComponent.RPGArmorComponent armorComponent,
-        final int armorType) {
+    public ItemMageArmor(RPGArmorMaterial armorMaterial, RPGArmorComponent armorComponent, int armorType)
+    {
         super(armorMaterial, armorComponent, 0, armorType);
-        this.DEFAULT_COLOR = 3371492;
     }
 
-    public static ItemMageArmor[] createFullSet(final RPGArmorMaterial armorMaterial,
-        final RPGItemComponent.RPGArmorComponent armorComponent) {
-        return new ItemMageArmor[] { new ItemMageArmor(armorMaterial, armorComponent, 0),
-            new ItemMageArmor(armorMaterial, armorComponent, 1), new ItemMageArmor(armorMaterial, armorComponent, 2),
-            new ItemMageArmor(armorMaterial, armorComponent, 3) };
+    public static ItemMageArmor[] createFullSet(RPGArmorMaterial armorMaterial, RPGArmorComponent armorComponent)
+    {
+        return new ItemMageArmor[] {
+            new ItemMageArmor(armorMaterial, armorComponent, 0),
+            new ItemMageArmor(armorMaterial, armorComponent, 1),
+            new ItemMageArmor(armorMaterial, armorComponent, 2),
+            new ItemMageArmor(armorMaterial, armorComponent, 3)
+        };
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister iconRegister) {
-        String tmp = "dangerrpg".concat(":armors/");
-        this.itemIcon = iconRegister
-            .registerIcon(Utils.toString(tmp, this.armorComponent.name, ARMOR_TYPES[this.armorType]));
-        this.customOverlayIcon = iconRegister.registerIcon(Utils.toString(tmp, this.getUnlocalizedName(), "_overlay"));
+    public void registerIcons(IIconRegister iconRegister)
+    {
+        String tmp = DangerRPG.MODID.concat(":armors/");
+        itemIcon = iconRegister.registerIcon(Utils.toString(tmp, armorComponent.name, ARMOR_TYPES[armorType]));
+        overlayIcon = iconRegister.registerIcon(Utils.toString(tmp, unlocalizedName, "_overlay"));
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
-    public IIcon getCustomOverlayIcon() {
-        return customOverlayIcon;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public boolean requiresMultipleRenderPasses() {
+    public boolean requiresMultipleRenderPasses()
+    {
         return true;
     }
 
     @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
-        final ModelMageArmor model = (slot == 2) ? ModelMageArmor.INSTANCE_LEGGINGS : ModelMageArmor.INSTANCE_ARMOR;
+    public String getInformationToInfoBook(ItemStack item, EntityPlayer player)
+    {
+        return null;
+    }
+
+    @Override
+    public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type)
+    {
+        ModelMageArmor model = slot == 2 ? ModelMageArmor.INSTANCE_LEGGINGS : ModelMageArmor.INSTANCE_ARMOR;
         if (type != null) {
-            return Utils.toString(this.modelTexture, (slot == 2) ? 2 : 1, "_", type, ".png");
+            return Utils.toString(modelTexture, slot == 2 ? 2 : 1, "_", type, ".png");
         }
-        return Utils.toString(
-            "DangerRPG:textures/models/armors/",
-            this.armorComponent.name,
-            "_layer_",
-            (slot == 2) ? 2 : 1,
-            ".png");
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public IIcon getIcon(ItemStack stack, int pass) {
-        if (pass == 1) {
-            return this.getCustomOverlayIcon();
-        } else {
-            return super.getIcon(stack, pass);
+        else {
+            return Utils.toString("DangerRPG:textures/models/armors/", armorComponent.name, "_layer_", slot == 2 ? 2 : 1, ".png");
         }
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
-    public ModelBiped getArmorModel(final EntityLivingBase entity, final ItemStack stack, final int slot) {
-        final ModelBiped tmp = RPGRenderHelper.modelBipedInit(
-            entity,
-            (slot == 2) ? ModelMageArmor.INSTANCE_LEGGINGS : ModelMageArmor.INSTANCE_ARMOR,
-            slot);
-        return tmp;
+    @SideOnly(Side.CLIENT)
+    public ModelBiped getArmorModel(EntityLivingBase entity, ItemStack stack, int slot)
+    {
+        return RPGRenderHelper.modelBipedInit(entity, slot == 2 ? ModelMageArmor.INSTANCE_LEGGINGS : ModelMageArmor.INSTANCE_ARMOR, slot);
     }
 
-    public boolean hasColor(final ItemStack stack) {
-        return stack.hasTagCompound() && stack.getTagCompound()
-            .hasKey("display", 10)
-            && stack.getTagCompound()
-                .getCompoundTag("display")
-                .hasKey("color", 3);
+    @Override
+    public boolean hasColor(ItemStack stack)
+    {
+        return !stack.hasTagCompound() ? false : (!stack.getTagCompound().hasKey("display", 10) ? false : stack.getTagCompound().getCompoundTag("display").hasKey("color", 3));
     }
 
-    public int getColor(final ItemStack stack) {
-        final NBTTagCompound nbt = stack.getTagCompound();
+    @Override
+    public int getColor(ItemStack stack)
+    {
+        NBTTagCompound nbt = stack.getTagCompound();
+
         if (nbt == null) {
-            return this.DEFAULT_COLOR;
+            return DEFAULT_COLOR;
         }
-        final NBTTagCompound nbtColor = nbt.getCompoundTag("display");
-        return (nbtColor == null) ? this.DEFAULT_COLOR
-            : (nbtColor.hasKey("color", 3) ? nbtColor.getInteger("color") : this.DEFAULT_COLOR);
+        else {
+            NBTTagCompound nbtColor = nbt.getCompoundTag("display");
+            return nbtColor == null ? DEFAULT_COLOR : (nbtColor.hasKey("color", 3) ? nbtColor.getInteger("color") : DEFAULT_COLOR);
+        }
     }
 
-    public void removeColor(final ItemStack stack) {
-        final NBTTagCompound nbt = stack.getTagCompound();
+    @Override
+    public void removeColor(ItemStack stack)
+    {
+        NBTTagCompound nbt = stack.getTagCompound();
+
         if (nbt != null) {
-            final NBTTagCompound nbtColor = nbt.getCompoundTag("display");
+            NBTTagCompound nbtColor = nbt.getCompoundTag("display");
+
             if (nbtColor.hasKey("color")) {
                 nbtColor.removeTag("color");
             }
         }
     }
 
-    public void func_82813_b(final ItemStack stack, final int color) {
+    @Override
+    public void func_82813_b(ItemStack stack, int color)
+    {
         NBTTagCompound nbt = stack.getTagCompound();
+
         if (nbt == null) {
             nbt = new NBTTagCompound();
             stack.setTagCompound(nbt);
         }
-        final NBTTagCompound nbtColor = nbt.getCompoundTag("display");
+
+        NBTTagCompound nbtColor = nbt.getCompoundTag("display");
+
         if (!nbt.hasKey("display", 10)) {
-            nbt.setTag("display", (NBTBase) nbtColor);
+            nbt.setTag("display", nbtColor);
         }
+
         nbtColor.setInteger("color", color);
     }
 }

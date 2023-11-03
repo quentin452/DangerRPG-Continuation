@@ -1,116 +1,130 @@
 package mixac1.dangerrpg.item.weapon;
 
-import net.minecraft.block.*;
-import net.minecraft.block.material.*;
-import net.minecraft.entity.*;
-import net.minecraft.entity.player.*;
-import net.minecraft.item.*;
-import net.minecraft.util.*;
-import net.minecraft.world.*;
+import mixac1.dangerrpg.DangerRPG;
+import mixac1.dangerrpg.api.item.IRPGItem.IRPGItemStaff;
+import mixac1.dangerrpg.capability.RPGItemHelper;
+import mixac1.dangerrpg.capability.ItemAttributes;
+import mixac1.dangerrpg.capability.data.RPGItemRegister.RPGItemData;
+import mixac1.dangerrpg.entity.projectile.EntityMagicOrb;
+import mixac1.dangerrpg.init.RPGItems;
+import mixac1.dangerrpg.init.RPGOther.RPGCreativeTabs;
+import mixac1.dangerrpg.item.IHasBooksInfo;
+import mixac1.dangerrpg.item.RPGItemComponent.RPGStaffComponent;
+import mixac1.dangerrpg.item.RPGToolMaterial;
+import mixac1.dangerrpg.util.RPGHelper;
+import mixac1.dangerrpg.util.Utils;
+import mixac1.dangerrpg.world.RPGEntityFXManager;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumAction;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
+import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
 
-import mixac1.dangerrpg.*;
-import mixac1.dangerrpg.api.item.*;
-import mixac1.dangerrpg.capability.*;
-import mixac1.dangerrpg.capability.data.*;
-import mixac1.dangerrpg.entity.projectile.*;
-import mixac1.dangerrpg.init.*;
-import mixac1.dangerrpg.item.*;
-import mixac1.dangerrpg.util.*;
-import mixac1.dangerrpg.world.*;
-
-public class ItemRPGStaff extends ItemSword implements IRPGItem.IRPGItemStaff, IHasBooksInfo {
-
+public class ItemRPGStaff extends ItemSword implements IRPGItemStaff, IHasBooksInfo
+{
     public RPGToolMaterial toolMaterial;
-    public RPGItemComponent.RPGStaffComponent staffComponent;
+    public RPGStaffComponent staffComponent;
 
-    public ItemRPGStaff(final RPGToolMaterial toolMaterial, final RPGItemComponent.RPGStaffComponent staffComponent) {
+    public ItemRPGStaff(RPGToolMaterial toolMaterial, RPGStaffComponent staffComponent)
+    {
         super(toolMaterial.material);
         this.toolMaterial = toolMaterial;
         this.staffComponent = staffComponent;
-        this.setUnlocalizedName(
-            RPGItems.getRPGName(
-                (RPGItemComponent.RPGToolComponent) this.getItemComponent((Item) this),
-                this.getToolMaterial((Item) this)));
-        this.setTextureName(Utils.toString("dangerrpg", ":weapons/range/", getUnlocalizedName()));
-        this.setCreativeTab(RPGOther.RPGCreativeTabs.tabRPGAmmunitions);
-        this.setMaxStackSize(1);
+        setUnlocalizedName(RPGItems.getRPGName(getItemComponent(this), getToolMaterial(this)));
+        setTextureName(Utils.toString(DangerRPG.MODID, ":weapons/range/", unlocalizedName));
+        setCreativeTab(RPGCreativeTabs.tabRPGAmmunitions);
+        setMaxStackSize(1);
     }
 
-    public void registerAttributes(final Item item, final RPGItemRegister.RPGItemData map) {
+    @Override
+    public void registerAttributes(Item item, RPGItemData map)
+    {
         RPGItemHelper.registerParamsItemStaff(item, map);
     }
 
-    public RPGToolMaterial getToolMaterial(final Item item) {
-        return this.toolMaterial;
+    @Override
+    public RPGToolMaterial getToolMaterial(Item item)
+    {
+        return toolMaterial;
     }
 
-    public RPGItemComponent.RPGStaffComponent getItemComponent(final Item item) {
-        return this.staffComponent;
+    @Override
+    public RPGStaffComponent getItemComponent(Item item)
+    {
+        return staffComponent;
     }
 
-    public String getInformationToInfoBook(final ItemStack item, final EntityPlayer player) {
+    @Override
+    public String getInformationToInfoBook(ItemStack item, EntityPlayer player)
+    {
         return null;
     }
 
-    public float func_150893_a(final ItemStack stack, final Block block) {
-        final Material material = block.getMaterial();
-        return (material != Material.plants && material != Material.vine
-            && material != Material.coral
-            && material != Material.leaves
-            && material != Material.gourd) ? 1.0f : 1.5f;
+    @Override
+    public float func_150893_a(ItemStack stack, Block block)
+    {
+        Material material = block.getMaterial();
+        return material != Material.plants && material != Material.vine && material != Material.coral && material != Material.leaves && material != Material.gourd ? 1.0F : 1.5F;
     }
 
-    public boolean func_150897_b(final Block block) {
+    @Override
+    public boolean func_150897_b(Block block)
+    {
         return false;
     }
 
-    public EnumAction getItemUseAction(final ItemStack p_77661_1_) {
+    @Override
+    public EnumAction getItemUseAction(ItemStack p_77661_1_)
+    {
         return EnumAction.bow;
     }
 
-    public ItemStack onItemRightClick(final ItemStack stack, final World world, final EntityPlayer player) {
-        if (RPGHelper.spendMana(player, ItemAttributes.MANA_COST.getSafe(stack, player, 0.0f))) {
-            player.setItemInUse(stack, this.getMaxItemUseDuration(stack));
+    @Override
+    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
+    {
+        if (RPGHelper.spendMana(player, ItemAttributes.MANA_COST.getSafe(stack, player, 0))) {
+            player.setItemInUse(stack, getMaxItemUseDuration(stack));
         }
         return stack;
     }
 
-    public void onPlayerStoppedUsing(final ItemStack stack, final World world, final EntityPlayer player,
-        final int useRemain) {
+    @Override
+    public void onPlayerStoppedUsing(ItemStack stack, World world, EntityPlayer player, int useRemain)
+    {
         if (!world.isRemote
-            && RPGHelper.getUsePower(player, stack, stack.getMaxItemUseDuration() - useRemain, 20.0f, 20.0f) > 0.0f) {
-            final EntityMagicOrb entity = this.getEntityMagicOrb(stack, world, player);
-            world.spawnEntityInWorld((Entity) entity);
-            this.playShotSound(world, player);
+            && RPGHelper.getUsePower(player, stack, stack.getMaxItemUseDuration() - useRemain, 20F, 20F) > 0) {
+            EntityMagicOrb entity = getEntityMagicOrb(stack, world, player);
+            world.spawnEntityInWorld(entity);
+            playShotSound(world, player);
         }
     }
 
-    public EntityMagicOrb getEntityMagicOrb(final ItemStack stack, final World world, final EntityPlayer player) {
-        return new EntityMagicOrb(world, (EntityLivingBase) player, stack, 1.0f, 0.0f);
+    public EntityMagicOrb getEntityMagicOrb(ItemStack stack, World world, EntityPlayer player)
+    {
+        return new EntityMagicOrb(world, player, stack, 1f, 0F);
     }
 
-    public void playShotSound(final World world, final EntityPlayer player) {
-        world.playAuxSFXAtEntity((EntityPlayer) null, 1016, (int) player.posX, (int) player.posY, (int) player.posZ, 0);
+    public void playShotSound(World world, EntityPlayer player)
+    {
+        world.playAuxSFXAtEntity(null, 1016, (int)player.posX, (int)player.posY, (int)player.posZ, 0);
     }
 
-    public void onUpdate(final ItemStack stack, final World world, final Entity entity, final int par,
-        final boolean isActive) {
+    @Override
+    public void onUpdate(ItemStack stack, World world, Entity entity, int par, boolean isActive)
+    {
         if (world.isRemote && isActive && entity instanceof EntityPlayer) {
-            final EntityPlayer player = (EntityPlayer) entity;
+            EntityPlayer player = (EntityPlayer) entity;
             if (player.isUsingItem()) {
-                final double power = RPGHelper
-                    .getUsePower(player, stack, stack.getMaxItemUseDuration() - player.getItemInUseCount(), 20.0f);
-                final int color = RPGHelper.getSpecialColor(stack, 3605646);
-                final Vec3 vec = RPGHelper.getFirePoint((EntityLivingBase) player);
-                DangerRPG.proxy.spawnEntityFX(
-                    RPGEntityFXManager.EntityReddustFXE,
-                    vec.xCoord,
-                    vec.yCoord + 1.0 - 1.0 * power,
-                    vec.zCoord,
-                    0.0,
-                    0.0,
-                    0.0,
-                    color);
+                double power = RPGHelper.getUsePower(player, stack, stack.getMaxItemUseDuration() - player.getItemInUseCount(), 20F);
+                int color = RPGHelper.getSpecialColor(stack, EntityMagicOrb.DEFAULT_COLOR);
+                Vec3 vec = RPGHelper.getFirePoint(player);
+                DangerRPG.proxy.spawnEntityFX(RPGEntityFXManager.EntityReddustFXE,
+                                              vec.xCoord, vec.yCoord + 1 - 1 * power,vec.zCoord, 0f, 0f, 0f, color);
             }
         }
     }

@@ -1,15 +1,15 @@
 package mixac1.dangerrpg.network;
 
-import java.io.*;
+import org.apache.commons.lang3.SerializationUtils;
 
-import org.apache.commons.lang3.*;
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import io.netty.buffer.ByteBuf;
+import mixac1.dangerrpg.world.explosion.ExplosionEffect;
 
-import cpw.mods.fml.common.network.simpleimpl.*;
-import io.netty.buffer.*;
-import mixac1.dangerrpg.world.explosion.*;
-
-public class MsgExplosion implements IMessage {
-
+public class MsgExplosion implements IMessage
+{
     int effectId;
     double x;
     double y;
@@ -19,8 +19,8 @@ public class MsgExplosion implements IMessage {
 
     public MsgExplosion() {}
 
-    public MsgExplosion(final int effectId, final double x, final double y, final double z, final double size,
-        final Object[] meta) {
+    public MsgExplosion(int effectId, double x, double y, double z, double size, Object[] meta)
+    {
         this.effectId = effectId;
         this.x = x;
         this.y = y;
@@ -29,33 +29,39 @@ public class MsgExplosion implements IMessage {
         this.meta = meta;
     }
 
-    public void fromBytes(final ByteBuf buf) {
-        this.effectId = buf.readInt();
-        this.x = buf.readDouble();
-        this.y = buf.readDouble();
-        this.z = buf.readDouble();
-        this.size = buf.readDouble();
-        final byte[] bytes = new byte[buf.readInt()];
+    @Override
+    public void fromBytes(ByteBuf buf)
+    {
+        effectId = buf.readInt();
+        x = buf.readDouble();
+        y = buf.readDouble();
+        z = buf.readDouble();
+        size = buf.readDouble();
+        byte[] bytes = new byte[buf.readInt()];
         buf.readBytes(bytes);
-        this.meta = (Object[]) SerializationUtils.deserialize(bytes);
+        meta = SerializationUtils.deserialize(bytes);
     }
 
-    public void toBytes(final ByteBuf buf) {
-        buf.writeInt(this.effectId);
-        buf.writeDouble(this.x);
-        buf.writeDouble(this.y);
-        buf.writeDouble(this.z);
-        buf.writeDouble(this.size);
-        final byte[] bytes = SerializationUtils.serialize((Serializable) this.meta);
+    @Override
+    public void toBytes(ByteBuf buf)
+    {
+        buf.writeInt(effectId);
+        buf.writeDouble(x);
+        buf.writeDouble(y);
+        buf.writeDouble(z);
+        buf.writeDouble(size);
+
+        byte[] bytes = SerializationUtils.serialize(meta);
         buf.writeInt(bytes.length);
         buf.writeBytes(bytes);
     }
 
-    public static class Handler implements IMessageHandler<MsgExplosion, IMessage> {
-
-        public IMessage onMessage(final MsgExplosion msg, final MessageContext ctx) {
-            ExplosionEffect.list.get(msg.effectId)
-                .doEffect(msg.x, msg.y, msg.z, msg.size, msg.meta);
+    public static class Handler implements IMessageHandler<MsgExplosion, IMessage>
+    {
+        @Override
+        public IMessage onMessage(MsgExplosion msg, MessageContext ctx)
+        {
+            ExplosionEffect.list.get(msg.effectId).doEffect(msg.x, msg.y, msg.z, msg.size, msg.meta);
             return null;
         }
     }

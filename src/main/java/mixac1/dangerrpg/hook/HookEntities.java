@@ -1,146 +1,169 @@
 package mixac1.dangerrpg.hook;
 
-import net.minecraft.enchantment.*;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.*;
-import net.minecraft.entity.boss.*;
-import net.minecraft.entity.player.*;
-import net.minecraft.item.*;
-import net.minecraft.potion.*;
-import net.minecraft.stats.*;
-import net.minecraft.util.*;
-import net.minecraftforge.common.*;
-import net.minecraftforge.event.entity.player.*;
+import mixac1.dangerrpg.api.event.ItemStackEvent.DealtDamageEvent;
+import mixac1.dangerrpg.api.event.ItemStackEvent.HitEntityEvent;
+import mixac1.dangerrpg.capability.PlayerAttributes;
+import mixac1.dangerrpg.capability.RPGItemHelper;
+import mixac1.hooklib.asm.Hook;
+import mixac1.hooklib.asm.Hook.ReturnValue;
+import mixac1.hooklib.asm.ReturnCondition;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityMultiPart;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.BaseAttribute;
+import net.minecraft.entity.boss.EntityDragonPart;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.stats.AchievementList;
+import net.minecraft.stats.StatList;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
 
-import cpw.mods.fml.common.eventhandler.*;
-import mixac1.dangerrpg.api.event.*;
-import mixac1.dangerrpg.capability.*;
-import mixac1.hooklib.asm.*;
-
-public class HookEntities {
-
+public class HookEntities
+{
     @Hook(injectOnExit = true, targetMethod = "<clinit>")
-    public static void SharedMonsterAttributes(final SharedMonsterAttributes attributes) {
+    public static void SharedMonsterAttributes(SharedMonsterAttributes attributes)
+    {
         ((BaseAttribute) SharedMonsterAttributes.attackDamage).setShouldWatch(true);
     }
 
     @Hook(returnCondition = ReturnCondition.ALWAYS)
-    public static void attackTargetEntityWithCurrentItem(final EntityPlayer player, final Entity entity) {
-        if (MinecraftForge.EVENT_BUS.post((Event) new AttackEntityEvent(player, entity))) {
+    public static void attackTargetEntityWithCurrentItem(EntityPlayer player, Entity entity)
+    {
+        if (MinecraftForge.EVENT_BUS.post(new AttackEntityEvent(player, entity))) {
             return;
         }
-        final ItemStack stack = player.getCurrentEquippedItem();
-        if (stack != null && stack.getItem()
-            .onLeftClickEntity(stack, player, entity)) {
-            return;
-        }
-        if (entity.canAttackWithItem() && !entity.hitByEntity((Entity) player)) {
-            if (entity instanceof EntityLivingBase && stack != null
-                && RPGItemHelper.isRPGable(stack)
-                && (float) PlayerAttributes.SPEED_COUNTER.getValue((EntityLivingBase) player) > 0.0f) {
+
+        ItemStack stack = player.getCurrentEquippedItem();
+        if (stack != null) {
+            if (stack.getItem().onLeftClickEntity(stack, player, entity)) {
                 return;
             }
-            float dmg = (float) player.getEntityAttribute(SharedMonsterAttributes.attackDamage)
-                .getAttributeValue();
-            float knockback = 0.0f;
-            float moreDmg = 0.0f;
-            if (entity instanceof EntityLivingBase) {
-                moreDmg = EnchantmentHelper
-                    .getEnchantmentModifierLiving((EntityLivingBase) player, (EntityLivingBase) entity);
-                knockback += EnchantmentHelper
-                    .getKnockbackModifier((EntityLivingBase) player, (EntityLivingBase) entity);
+        }
+
+        if (entity.canAttackWithItem() && !entity.hitByEntity(player)) {
+            if (entity instanceof EntityLivingBase && stack != null && RPGItemHelper.isRPGable(stack)) {
+                if (PlayerAttributes.SPEED_COUNTER.getValue(player) > 0) {
+                    return;
+                }
             }
+
+            float dmg = (float) player.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue();
+            float knockback = 0;
+            float moreDmg = 0.0F;
+
+            if (entity instanceof EntityLivingBase) {
+                moreDmg = EnchantmentHelper.getEnchantmentModifierLiving(player, (EntityLivingBase)entity);
+                knockback += EnchantmentHelper.getKnockbackModifier(player, (EntityLivingBase)entity);
+            }
+
             if (player.isSprinting()) {
                 ++knockback;
             }
-            if (dmg > 0.0f || moreDmg > 0.0f) {
-                final boolean crit = player.fallDistance > 0.0f && !player.onGround
-                    && !player.isOnLadder()
-                    && !player.isInWater()
-                    && !player.isPotionActive(Potion.blindness)
-                    && player.ridingEntity == null
-                    && entity instanceof EntityLivingBase;
-                if (crit && dmg > 0.0f) {
-                    dmg *= 1.5f;
+
+            if (dmg > 0.0F || moreDmg > 0.0F) {
+                boolean crit = player.fallDistance > 0.0F
+                            && !player.onGround
+                            && !player.isOnLadder()
+                            && !player.isInWater()
+                            && !player.isPotionActive(Potion.blindness)
+                            && player.ridingEntity == null
+                            && entity instanceof EntityLivingBase;
+
+                if (crit && dmg > 0.0F) {
+                    dmg *= 1.5F;
                 }
+
                 dmg += moreDmg;
+
                 boolean isFire = false;
-                final int fire = EnchantmentHelper.getFireAspectModifier((EntityLivingBase) player);
+                int fire = EnchantmentHelper.getFireAspectModifier(player);
                 if (entity instanceof EntityLivingBase && fire > 0 && !entity.isBurning()) {
                     isFire = true;
                     entity.setFire(1);
                 }
-                float points = 0.0f;
+
+                float points = 0;
                 if (entity instanceof EntityLivingBase) {
                     points = ((EntityLivingBase) entity).getHealth();
                 }
+
                 if (stack != null && entity instanceof EntityLivingBase) {
-                    final ItemStackEvent.HitEntityEvent event = new ItemStackEvent.HitEntityEvent(
-                        stack,
-                        (EntityLivingBase) entity,
-                        (EntityLivingBase) player,
-                        dmg,
-                        knockback,
-                        false);
-                    MinecraftForge.EVENT_BUS.post((Event) event);
+                    HitEntityEvent event = new HitEntityEvent(stack, (EntityLivingBase) entity, player, dmg, knockback, false);
+                    MinecraftForge.EVENT_BUS.post(event);
                     dmg = event.newDamage;
                     knockback = event.knockback;
                 }
+
                 if (entity.attackEntityFrom(DamageSource.causePlayerDamage(player), dmg)) {
                     if (entity instanceof EntityLivingBase) {
                         points -= ((EntityLivingBase) entity).getHealth();
-                        MinecraftForge.EVENT_BUS.post(
-                            (Event) new ItemStackEvent.DealtDamageEvent(
-                                player,
-                                (EntityLivingBase) entity,
-                                stack,
-                                points));
+                        MinecraftForge.EVENT_BUS.post(new DealtDamageEvent(player, (EntityLivingBase) entity, stack, points));
                     }
-                    if (knockback > 0.0f) {
-                        entity.addVelocity(
-                            (double) (-MathHelper.sin(player.rotationYaw * 3.1415927f / 180.0f) * knockback * 0.5f),
-                            0.1,
-                            (double) (MathHelper.cos(player.rotationYaw * 3.1415927f / 180.0f) * knockback * 0.5f));
-                        player.motionX *= 0.6;
-                        player.motionZ *= 0.6;
+
+                    if (knockback > 0) {
+                        entity.addVelocity(-MathHelper.sin(player.rotationYaw * (float)Math.PI / 180.0F) * knockback * 0.5F,
+                                            0.1D,
+                                            MathHelper.cos(player.rotationYaw * (float)Math.PI / 180.0F) * knockback * 0.5F);
+                        player.motionX *= 0.6D;
+                        player.motionZ *= 0.6D;
                         player.setSprinting(false);
                     }
+
                     if (crit) {
                         player.onCriticalHit(entity);
                     }
-                    if (moreDmg > 0.0f) {
+
+                    if (moreDmg > 0.0F) {
                         player.onEnchantmentCritical(entity);
                     }
-                    if (dmg >= 18.0f) {
-                        player.triggerAchievement((StatBase) AchievementList.overkill);
+
+                    if (dmg >= 18.0F) {
+                        player.triggerAchievement(AchievementList.overkill);
                     }
+
                     player.setLastAttacker(entity);
+
                     if (entity instanceof EntityLivingBase) {
-                        EnchantmentHelper.func_151384_a((EntityLivingBase) entity, (Entity) player);
+                        EnchantmentHelper.func_151384_a((EntityLivingBase)entity, player);
                     }
-                    EnchantmentHelper.func_151385_b((EntityLivingBase) player, entity);
-                    final ItemStack itemstack = player.getCurrentEquippedItem();
+
+                    EnchantmentHelper.func_151385_b(player, entity);
+                    ItemStack itemstack = player.getCurrentEquippedItem();
                     Object object = entity;
+
                     if (entity instanceof EntityDragonPart) {
-                        final IEntityMultiPart ientitymultipart = ((EntityDragonPart) entity).entityDragonObj;
+                        IEntityMultiPart ientitymultipart = ((EntityDragonPart)entity).entityDragonObj;
+
                         if (ientitymultipart != null && ientitymultipart instanceof EntityLivingBase) {
                             object = ientitymultipart;
                         }
                     }
+
                     if (itemstack != null && object instanceof EntityLivingBase) {
-                        itemstack.hitEntity((EntityLivingBase) object, player);
+                        itemstack.hitEntity((EntityLivingBase)object, player);
+
                         if (itemstack.stackSize <= 0) {
                             player.destroyCurrentEquippedItem();
                         }
                     }
+
                     if (entity instanceof EntityLivingBase) {
-                        player.addStat(StatList.damageDealtStat, Math.round(dmg * 10.0f));
+                        player.addStat(StatList.damageDealtStat, Math.round(dmg * 10.0F));
+
                         if (fire > 0) {
                             entity.setFire(fire * 4);
                         }
                     }
-                    player.addExhaustion(0.3f);
-                } else if (isFire) {
+
+                    player.addExhaustion(0.3F);
+                }
+                else if (isFire) {
                     entity.extinguish();
                 }
             }
@@ -148,46 +171,57 @@ public class HookEntities {
     }
 
     @Hook(injectOnExit = true, returnCondition = ReturnCondition.ALWAYS)
-    public static float getAIMoveSpeed(final EntityPlayer player, @Hook.ReturnValue final float returnValue) {
+    public static float getAIMoveSpeed(EntityPlayer player, @ReturnValue float returnValue)
+    {
         if (player.isSneaking()) {
-            return returnValue + (float) PlayerAttributes.SNEAK_SPEED.getSafe((EntityLivingBase) player, 0.0f) * 3.0f;
+            return returnValue + PlayerAttributes.SNEAK_SPEED.getSafe(player, 0f) * 3;
         }
-        return returnValue + (float) PlayerAttributes.MOVE_SPEED.getSafe((EntityLivingBase) player, 0.0f);
+        return returnValue + PlayerAttributes.MOVE_SPEED.getSafe(player, 0f);
     }
 
     @Hook(injectOnExit = true, returnCondition = ReturnCondition.ALWAYS)
-    public static void onLivingUpdate(final EntityPlayer player) {
-        player.jumpMovementFactor += (float) PlayerAttributes.JUMP_RANGE.getSafe((EntityLivingBase) player, 0.0f);
+    public static void onLivingUpdate(EntityPlayer player)
+    {
+        player.jumpMovementFactor += PlayerAttributes.JUMP_RANGE.getSafe(player, 0f);
     }
 
     @Hook
-    public static void moveEntityWithHeading(final EntityLivingBase entity, final float par1, final float par2) {
-        if (entity instanceof EntityPlayer && ((EntityPlayer) entity).capabilities.isFlying
-            && entity.ridingEntity == null) {
-            entity.jumpMovementFactor += (float) PlayerAttributes.FLY_SPEED.getSafe(entity, 0.0f);
+    public static void moveEntityWithHeading(EntityLivingBase entity, float par1, float par2)
+    {
+        if (entity instanceof EntityPlayer && ((EntityPlayer) entity).capabilities.isFlying && entity.ridingEntity == null) {
+            entity.jumpMovementFactor += PlayerAttributes.FLY_SPEED.getSafe(entity, 0f);
         }
     }
 
     @Hook(returnCondition = ReturnCondition.ALWAYS)
-    public static void moveFlying(final Entity entity, float par1, float par2, float speed) {
+    public static void moveFlying(Entity entity, float par1, float par2, float speed)
+    {
         float f3 = par1 * par1 + par2 * par2;
-        if (f3 >= 1.0E-4f) {
-            if (entity instanceof EntityPlayer && !((EntityPlayer) entity).capabilities.isFlying) {
-                if (entity.isInWater()) {
-                    speed += (float) PlayerAttributes.SWIM_SPEED.getSafe((EntityLivingBase) entity, 0.0f);
-                } else if (entity.handleLavaMovement()) {
-                    speed += (float) PlayerAttributes.SWIM_SPEED.getSafe((EntityLivingBase) entity, 0.0f) / 2.0f;
+
+        if (f3 >= 1.0E-4F) {
+            if (entity instanceof EntityPlayer) {
+                if (!((EntityPlayer) entity).capabilities.isFlying) {
+                    if (entity.isInWater()) {
+                        speed += PlayerAttributes.SWIM_SPEED.getSafe((EntityLivingBase) entity, 0f);
+                    }
+                    else if (entity.handleLavaMovement()) {
+                        speed += PlayerAttributes.SWIM_SPEED.getSafe((EntityLivingBase) entity, 0f) / 2;
+                    }
                 }
             }
+
             f3 = MathHelper.sqrt_float(f3);
-            if (f3 < 1.0f) {
-                f3 = 1.0f;
+
+            if (f3 < 1.0F)
+            {
+                f3 = 1.0F;
             }
+
             f3 = speed / f3;
             par1 *= f3;
             par2 *= f3;
-            final float f4 = MathHelper.sin(entity.rotationYaw * 3.1415927f / 180.0f);
-            final float f5 = MathHelper.cos(entity.rotationYaw * 3.1415927f / 180.0f);
+            float f4 = MathHelper.sin(entity.rotationYaw * (float)Math.PI / 180.0F);
+            float f5 = MathHelper.cos(entity.rotationYaw * (float)Math.PI / 180.0F);
             entity.motionX += par1 * f5 - par2 * f4;
             entity.motionZ += par2 * f5 + par1 * f4;
         }

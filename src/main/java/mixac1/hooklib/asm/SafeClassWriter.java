@@ -1,100 +1,116 @@
 package mixac1.hooklib.asm;
 
-import java.io.*;
-import java.lang.reflect.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
 
-import org.objectweb.asm.*;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Opcodes;
 
-public class SafeClassWriter extends ClassWriter {
+public class SafeClassWriter extends ClassWriter
+{
 
-    private static Method m;
-
-    public SafeClassWriter(final int flags) {
+    public SafeClassWriter(int flags)
+    {
         super(flags);
     }
 
-    protected String getCommonSuperClass(final String type1, final String type2) {
-        final ClassLoader classLoader = this.getClass()
-            .getClassLoader();
-        ArrayList<String> superClasses1;
-        ArrayList<String> superClasses2;
-        int size;
+    @Override
+    protected String getCommonSuperClass(String type1, String type2)
+    {
+        ClassLoader classLoader = getClass().getClassLoader();
+        ArrayList<String> superClasses1 = getSuperClasses(type1, classLoader);
+        ArrayList<String> superClasses2 = getSuperClasses(type2, classLoader);
+        int size = Math.min(superClasses1.size(), superClasses2.size());
         int i;
-        for (superClasses1 = this.getSuperClasses(type1, classLoader), superClasses2 = this.getSuperClasses(
-            type2,
-            classLoader), size = Math.min(superClasses1.size(), superClasses2.size()), i = 0; i < size
-                && superClasses1.get(i)
-                    .equals(superClasses2.get(i)); ++i) {}
+        for (i = 0; i < size && superClasses1.get(i).equals(superClasses2.get(i)); i++) {
+            ;
+        }
         if (i == 0) {
             return "java/lang/Object";
         }
-        return superClasses1.get(i - 1);
+        else {
+            return superClasses1.get(i - 1);
+        }
     }
 
-    private ArrayList<String> getSuperClasses(String type, final ClassLoader classLoader) {
-        final ArrayList<String> superclasses = new ArrayList<String>(1);
+    private ArrayList<String> getSuperClasses(String type, ClassLoader classLoader)
+    {
+        ArrayList<String> superclasses = new ArrayList<String>(1);
         superclasses.add(type);
-        while ((type = this.getSuperClass(type, classLoader)) != null) {
+        while ((type = getSuperClass(type, classLoader)) != null) {
             superclasses.add(type);
         }
         Collections.reverse(superclasses);
         return superclasses;
     }
 
-    private String getSuperClass(final String type, final ClassLoader classLoader) {
+    private static Method m;
+
+    static {
         try {
-            final Class clazz = (Class) SafeClassWriter.m.invoke(classLoader, type.replace('/', '.'));
+            m = ClassLoader.class.getDeclaredMethod("findLoadedClass", String.class);
+            m.setAccessible(true);
+        }
+        catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String getSuperClass(String type, ClassLoader classLoader)
+    {
+        try {
+            Class clazz = (Class) m.invoke(classLoader, type.replace('/', '.'));
             if (clazz != null) {
                 if (clazz.getSuperclass() == null) {
                     return null;
                 }
-                return clazz.getSuperclass()
-                    .getName()
-                    .replace('.', '/');
+                return clazz.getSuperclass().getName().replace('.', '/');
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
         InputStream input = null;
         try {
-            final String resourceName = "/" + type + ".class";
-            input = this.getClass()
-                .getResourceAsStream(resourceName);
-            final ClassReader reader = new ClassReader(input);
-            final CheckSuperClassVisitor cv = new CheckSuperClassVisitor();
-            reader.accept((ClassVisitor) cv, 0);
+            String resourceName = "/" + type + ".class";
+            input = getClass().getResourceAsStream(resourceName);
+            ClassReader reader = new ClassReader(input);
+            CheckSuperClassVisitor cv = new CheckSuperClassVisitor();
+            reader.accept(cv, 0);
             return cv.superClassName;
-        } catch (IOException e2) {
-            throw new RuntimeException("Can not load class " + type, e2);
-        } finally {
+        }
+        catch (IOException e) {
+            throw new RuntimeException("Can not load class " + type, e);
+        }
+        finally {
             if (input != null) {
                 try {
                     input.close();
-                } catch (IOException ex) {}
+                }
+                catch (IOException e) {
+                }
             }
         }
     }
 
-    static {
-        try {
-            (SafeClassWriter.m = ClassLoader.class.getDeclaredMethod("findLoadedClass", String.class))
-                .setAccessible(true);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static class CheckSuperClassVisitor extends ClassVisitor {
+    private static class CheckSuperClassVisitor extends ClassVisitor
+    {
 
         String superClassName;
 
-        public CheckSuperClassVisitor() {
-            super(327680);
+        public CheckSuperClassVisitor()
+        {
+            super(Opcodes.ASM5);
         }
 
-        public void visit(final int version, final int access, final String name, final String signature,
-            final String superName, final String[] interfaces) {
+        @Override
+        public void visit(int version, int access, String name, String signature, String superName, String[] interfaces)
+        {
             this.superClassName = superName;
         }
     }

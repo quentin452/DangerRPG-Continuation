@@ -1,39 +1,48 @@
 package mixac1.dangerrpg.inventory;
 
-import net.minecraft.entity.player.*;
-import net.minecraft.inventory.*;
-import net.minecraft.item.*;
+import mixac1.dangerrpg.capability.RPGItemHelper;
+import mixac1.dangerrpg.item.gem.Gem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 
-import mixac1.dangerrpg.capability.*;
-import mixac1.dangerrpg.item.gem.*;
-
-public class InventoryLvlupTable implements IInventory {
-
+public class InventoryLvlupTable implements IInventory
+{
     public static final String NAME = "lvlup_table";
-    public ItemStack[] inv;
+
+    public ItemStack[] inv = new ItemStack[4];
+
     private ContainerLvlupTable eventHandler;
 
-    public InventoryLvlupTable(final ContainerLvlupTable eventHandler) {
-        this.inv = new ItemStack[4];
+    public InventoryLvlupTable(ContainerLvlupTable eventHandler)
+    {
         this.eventHandler = eventHandler;
     }
 
-    public int getSizeInventory() {
-        return this.inv.length;
+    @Override
+    public int getSizeInventory()
+    {
+        return inv.length;
     }
 
-    public ItemStack getStackInSlot(final int index) {
-        return (index < 0 || index >= this.getSizeInventory()) ? null : this.inv[index];
+    @Override
+    public ItemStack getStackInSlot(int index)
+    {
+        return index < 0 || index >= getSizeInventory() ? null : inv[index];
     }
 
-    public ItemStack decrStackSize(final int index, final int count) {
-        ItemStack stack = this.getStackInSlot(index);
+    @Override
+    public ItemStack decrStackSize(int index, int count)
+    {
+        ItemStack stack = getStackInSlot(index);
         if (stack != null) {
             ItemStack itemstack;
+
             if (stack.stackSize <= count) {
                 itemstack = stack;
-                this.setInventorySlotContents(index, null);
-            } else {
+                setInventorySlotContents(index, null);
+            }
+            else {
                 itemstack = stack.splitStack(count);
                 if (stack.stackSize == 0) {
                     stack = null;
@@ -44,60 +53,87 @@ public class InventoryLvlupTable implements IInventory {
         return null;
     }
 
-    public ItemStack getStackInSlotOnClosing(final int index) {
-        final ItemStack stack = this.getStackInSlot(index);
+    @Override
+    public ItemStack getStackInSlotOnClosing(int index)
+    {
+        ItemStack stack = getStackInSlot(index);
         if (stack != null) {
-            final ItemStack itemstack = stack;
-            this.setInventorySlotContents(index, null);
+            ItemStack itemstack = stack;
+            setInventorySlotContents(index, null);
             return itemstack;
         }
         return null;
     }
 
-    public void setInventorySlotContents(final int index, final ItemStack stack) {
-        if (index < 0 || index >= this.getSizeInventory()) {
+    @Override
+    public void setInventorySlotContents(int index, ItemStack stack)
+    {
+        if (index < 0 || index >= getSizeInventory()) {
             return;
         }
-        this.inv[index] = stack;
-        this.eventHandler.onCraftMatrixChanged((IInventory) this);
+
+        inv[index] = stack;
+        eventHandler.onCraftMatrixChanged(this);
     }
 
-    public String getInventoryName() {
-        return "lvlup_table";
+    @Override
+    public String getInventoryName()
+    {
+        return NAME;
     }
 
-    public boolean hasCustomInventoryName() {
+    @Override
+    public boolean hasCustomInventoryName()
+    {
         return true;
     }
 
-    public int getInventoryStackLimit() {
+    @Override
+    public int getInventoryStackLimit()
+    {
         return 64;
     }
 
+    @Override
     public void markDirty() {}
 
-    public boolean isUseableByPlayer(final EntityPlayer player) {
+    @Override
+    public boolean isUseableByPlayer(EntityPlayer player)
+    {
         return true;
     }
 
+    @Override
     public void openInventory() {}
 
+    @Override
     public void closeInventory() {}
 
-    public boolean isItemValidForSlot(final int index, final ItemStack stack) {
-        if (stack != null) {
-            return (index == 0 && RPGItemHelper.isRPGable(stack))
-                || (this.inv[0] != null && this.inv[0].getItem() instanceof Gem
-                    && Gem.areGemsEqual(this.inv[0], stack));
-        }
-        if (index != 0) {
-            return true;
-        }
-        for (int i = 1; i < this.inv.length; ++i) {
-            if (this.inv[i] != null) {
-                return false;
+    @Override
+    public boolean isItemValidForSlot(int index, ItemStack stack)
+    {
+        if (stack == null) {
+            if (index != 0) {
+                return true;
+            }
+            else {
+                for (int i = 1; i < inv.length; ++i) {
+                    if (inv[i] != null) {
+                        return false;
+                    }
+                }
+                return true;
             }
         }
-        return true;
+
+        if (index == 0 && RPGItemHelper.isRPGable(stack)) {
+            return true;
+        }
+
+        if (inv[0] != null && inv[0].getItem() instanceof Gem && Gem.areGemsEqual(inv[0], stack)) {
+            return true;
+        }
+
+        return false;
     }
 }

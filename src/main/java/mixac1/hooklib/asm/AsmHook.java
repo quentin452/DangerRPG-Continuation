@@ -1,298 +1,366 @@
 package mixac1.hooklib.asm;
 
-import java.util.*;
+import static org.objectweb.asm.Opcodes.ALOAD;
+import static org.objectweb.asm.Opcodes.ARETURN;
+import static org.objectweb.asm.Opcodes.DLOAD;
+import static org.objectweb.asm.Opcodes.DRETURN;
+import static org.objectweb.asm.Opcodes.FLOAD;
+import static org.objectweb.asm.Opcodes.FRETURN;
+import static org.objectweb.asm.Opcodes.IFEQ;
+import static org.objectweb.asm.Opcodes.IFNONNULL;
+import static org.objectweb.asm.Opcodes.IFNULL;
+import static org.objectweb.asm.Opcodes.ILOAD;
+import static org.objectweb.asm.Opcodes.INVOKESTATIC;
+import static org.objectweb.asm.Opcodes.IRETURN;
+import static org.objectweb.asm.Opcodes.LLOAD;
+import static org.objectweb.asm.Opcodes.LRETURN;
+import static org.objectweb.asm.Opcodes.RETURN;
+import static org.objectweb.asm.Type.BOOLEAN_TYPE;
+import static org.objectweb.asm.Type.BYTE_TYPE;
+import static org.objectweb.asm.Type.CHAR_TYPE;
+import static org.objectweb.asm.Type.DOUBLE_TYPE;
+import static org.objectweb.asm.Type.FLOAT_TYPE;
+import static org.objectweb.asm.Type.INT_TYPE;
+import static org.objectweb.asm.Type.LONG_TYPE;
+import static org.objectweb.asm.Type.SHORT_TYPE;
+import static org.objectweb.asm.Type.VOID_TYPE;
+import static org.objectweb.asm.Type.getType;
 
-import org.objectweb.asm.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class AsmHook implements Cloneable, Comparable<AsmHook> {
+import org.objectweb.asm.Label;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
 
+import mixac1.hooklib.asm.HookInjectorFactory.MethodEnter;
+import mixac1.hooklib.asm.HookInjectorFactory.MethodExit;
+
+public class AsmHook implements Cloneable, Comparable<AsmHook>
+{
     private String targetClassName;
     private String targetMethodName;
-    private List<Type> targetMethodParameters;
+    private List<Type> targetMethodParameters = new ArrayList<Type>(2);
     private Type targetMethodReturnType;
+
     private String hooksClassName;
     private String hookMethodName;
-    private List<Integer> transmittableVariableIds;
-    private List<Type> hookMethodParameters;
-    private Type hookMethodReturnType;
+
+    private List<Integer> transmittableVariableIds = new ArrayList<Integer>(2);
+    private List<Type> hookMethodParameters = new ArrayList<Type>(2);
+    private Type hookMethodReturnType = Type.VOID_TYPE;
     private boolean hasReturnValueParameter;
-    private ReturnCondition returnCondition;
-    private ReturnValue returnValue;
+
+    private ReturnCondition returnCondition = ReturnCondition.NEVER;
+    private ReturnValue returnValue = ReturnValue.VOID;
     private Object primitiveConstant;
-    private HookInjectorFactory injectorFactory;
-    private HookPriority priority;
-    public static final HookInjectorFactory ON_ENTER_FACTORY;
-    public static final HookInjectorFactory ON_EXIT_FACTORY;
+
+    private HookInjectorFactory injectorFactory = ON_ENTER_FACTORY;
+    private HookPriority priority = HookPriority.NORMAL;
+
+    public static final HookInjectorFactory ON_ENTER_FACTORY = MethodEnter.INSTANCE;
+    public static final HookInjectorFactory ON_EXIT_FACTORY = MethodExit.INSTANCE;
+
     private String targetMethodDescription;
     private String hookMethodDescription;
     private String returnMethodName;
     private String returnMethodDescription;
 
-    public AsmHook() {
-        this.targetMethodParameters = new ArrayList<Type>(2);
-        this.transmittableVariableIds = new ArrayList<Integer>(2);
-        this.hookMethodParameters = new ArrayList<Type>(2);
-        this.hookMethodReturnType = Type.VOID_TYPE;
-        this.returnCondition = ReturnCondition.NEVER;
-        this.returnValue = ReturnValue.VOID;
-        this.injectorFactory = AsmHook.ON_ENTER_FACTORY;
-        this.priority = HookPriority.NORMAL;
+    protected String getTargetClassName()
+    {
+        return targetClassName;
     }
 
-    protected String getTargetClassName() {
-        return this.targetClassName;
+    protected String getTargetMethodName()
+    {
+        return targetMethodName;
     }
 
-    protected String getTargetMethodName() {
-        return this.targetMethodName;
+    protected boolean isTargetMethod(String name, String desc)
+    {
+        return (targetMethodReturnType == null && desc.startsWith(targetMethodDescription)
+                || desc.equals(targetMethodDescription)) && name.equals(targetMethodName);
     }
 
-    protected boolean isTargetMethod(final String name, final String desc) {
-        return ((this.targetMethodReturnType == null && desc.startsWith(this.targetMethodDescription))
-            || desc.equals(this.targetMethodDescription)) && name.equals(this.targetMethodName);
+    protected HookInjectorFactory getInjectorFactory()
+    {
+        return injectorFactory;
     }
 
-    protected HookInjectorFactory getInjectorFactory() {
-        return this.injectorFactory;
+    private boolean hasHookMethod()
+    {
+        return hookMethodName != null && hooksClassName != null;
     }
 
-    private boolean hasHookMethod() {
-        return this.hookMethodName != null && this.hooksClassName != null;
-    }
+    protected void inject(HookInjectorMethodVisitor inj)
+    {
+        Type targetMethodReturnType = inj.methodType.getReturnType();
 
-    protected void inject(final HookInjectorMethodVisitor inj) {
-        final Type targetMethodReturnType = inj.methodType.getReturnType();
         int returnLocalId = -1;
-        if (this.hasReturnValueParameter) {
+        if (hasReturnValueParameter) {
             returnLocalId = inj.newLocal(targetMethodReturnType);
             inj.storeLocal(returnLocalId, targetMethodReturnType);
         }
+
         int hookResultLocalId = -1;
-        if (this.hasHookMethod()) {
-            this.injectInvokeStatic(inj, returnLocalId, this.hookMethodName, this.hookMethodDescription);
-            if (this.returnValue == ReturnValue.HOOK_RETURN_VALUE || this.returnCondition.requiresCondition) {
-                hookResultLocalId = inj.newLocal(this.hookMethodReturnType);
-                inj.storeLocal(hookResultLocalId, this.hookMethodReturnType);
+        if (hasHookMethod()) {
+            injectInvokeStatic(inj, returnLocalId, hookMethodName, hookMethodDescription);
+
+            if (returnValue == ReturnValue.HOOK_RETURN_VALUE || returnCondition.requiresCondition) {
+                hookResultLocalId = inj.newLocal(hookMethodReturnType);
+                inj.storeLocal(hookResultLocalId, hookMethodReturnType);
             }
         }
-        if (this.returnCondition != ReturnCondition.NEVER) {
-            final Label label = inj.newLabel();
-            if (this.returnCondition != ReturnCondition.ALWAYS) {
-                inj.loadLocal(hookResultLocalId, this.hookMethodReturnType);
-                if (this.returnCondition == ReturnCondition.ON_TRUE) {
-                    inj.visitJumpInsn(153, label);
-                } else if (this.returnCondition == ReturnCondition.ON_NULL) {
-                    inj.visitJumpInsn(199, label);
-                } else if (this.returnCondition == ReturnCondition.ON_NOT_NULL) {
-                    inj.visitJumpInsn(198, label);
+
+        if (returnCondition != ReturnCondition.NEVER) {
+            Label label = inj.newLabel();
+
+            if (returnCondition != ReturnCondition.ALWAYS) {
+                inj.loadLocal(hookResultLocalId, hookMethodReturnType);
+                if (returnCondition == ReturnCondition.ON_TRUE) {
+                    inj.visitJumpInsn(IFEQ, label);
+                }
+                else if (returnCondition == ReturnCondition.ON_NULL) {
+                    inj.visitJumpInsn(IFNONNULL, label);
+                }
+                else if (returnCondition == ReturnCondition.ON_NOT_NULL) {
+                    inj.visitJumpInsn(IFNULL, label);
                 }
             }
-            if (this.returnValue == ReturnValue.NULL) {
-                inj.visitInsn(1);
-            } else if (this.returnValue == ReturnValue.PRIMITIVE_CONSTANT) {
-                inj.visitLdcInsn(this.primitiveConstant);
-            } else if (this.returnValue == ReturnValue.HOOK_RETURN_VALUE) {
-                inj.loadLocal(hookResultLocalId, this.hookMethodReturnType);
-            } else if (this.returnValue == ReturnValue.ANOTHER_METHOD_RETURN_VALUE) {
+
+            if (returnValue == ReturnValue.NULL) {
+                inj.visitInsn(Opcodes.ACONST_NULL);
+            }
+            else if (returnValue == ReturnValue.PRIMITIVE_CONSTANT) {
+                inj.visitLdcInsn(primitiveConstant);
+            }
+            else if (returnValue == ReturnValue.HOOK_RETURN_VALUE) {
+                inj.loadLocal(hookResultLocalId, hookMethodReturnType);
+            }
+            else if (returnValue == ReturnValue.ANOTHER_METHOD_RETURN_VALUE) {
                 String returnMethodDescription = this.returnMethodDescription;
                 if (returnMethodDescription.endsWith(")")) {
                     returnMethodDescription += targetMethodReturnType.getDescriptor();
                 }
-                this.injectInvokeStatic(inj, returnLocalId, this.returnMethodName, returnMethodDescription);
+                injectInvokeStatic(inj, returnLocalId, returnMethodName, returnMethodDescription);
             }
-            this.injectReturn(inj, targetMethodReturnType);
+
+            injectReturn(inj, targetMethodReturnType);
+
             inj.visitLabel(label);
         }
-        if (this.hasReturnValueParameter) {
-            this.injectVarInsn(inj, targetMethodReturnType, returnLocalId);
+
+        if (hasReturnValueParameter) {
+            injectVarInsn(inj, targetMethodReturnType, returnLocalId);
         }
     }
 
-    private void injectVarInsn(final HookInjectorMethodVisitor inj, final Type parameterType, final int variableId) {
+    private void injectVarInsn(HookInjectorMethodVisitor inj, Type parameterType, int variableId)
+    {
         int opcode;
-        if (parameterType == Type.INT_TYPE || parameterType == Type.BYTE_TYPE
-            || parameterType == Type.CHAR_TYPE
-            || parameterType == Type.BOOLEAN_TYPE
-            || parameterType == Type.SHORT_TYPE) {
-            opcode = 21;
-        } else if (parameterType == Type.LONG_TYPE) {
-            opcode = 22;
-        } else if (parameterType == Type.FLOAT_TYPE) {
-            opcode = 23;
-        } else if (parameterType == Type.DOUBLE_TYPE) {
-            opcode = 24;
-        } else {
-            opcode = 25;
+        if (parameterType == INT_TYPE || parameterType == BYTE_TYPE || parameterType == CHAR_TYPE
+                || parameterType == BOOLEAN_TYPE || parameterType == SHORT_TYPE) {
+            opcode = ILOAD;
         }
-        inj.getBasicVisitor()
-            .visitVarInsn(opcode, variableId);
+        else if (parameterType == LONG_TYPE) {
+            opcode = LLOAD;
+        }
+        else if (parameterType == FLOAT_TYPE) {
+            opcode = FLOAD;
+        }
+        else if (parameterType == DOUBLE_TYPE) {
+            opcode = DLOAD;
+        }
+        else {
+            opcode = ALOAD;
+        }
+        inj.getBasicVisitor().visitVarInsn(opcode, variableId);
     }
 
-    private void injectReturn(final HookInjectorMethodVisitor inj, final Type targetMethodReturnType) {
-        if (targetMethodReturnType == Type.INT_TYPE || targetMethodReturnType == Type.SHORT_TYPE
-            || targetMethodReturnType == Type.BOOLEAN_TYPE
-            || targetMethodReturnType == Type.BYTE_TYPE
-            || targetMethodReturnType == Type.CHAR_TYPE) {
-            inj.visitInsn(172);
-        } else if (targetMethodReturnType == Type.LONG_TYPE) {
-            inj.visitInsn(173);
-        } else if (targetMethodReturnType == Type.FLOAT_TYPE) {
-            inj.visitInsn(174);
-        } else if (targetMethodReturnType == Type.DOUBLE_TYPE) {
-            inj.visitInsn(175);
-        } else if (targetMethodReturnType == Type.VOID_TYPE) {
-            inj.visitInsn(177);
-        } else {
-            inj.visitInsn(176);
+    private void injectReturn(HookInjectorMethodVisitor inj, Type targetMethodReturnType)
+    {
+        if (targetMethodReturnType == INT_TYPE || targetMethodReturnType == SHORT_TYPE
+                || targetMethodReturnType == BOOLEAN_TYPE || targetMethodReturnType == BYTE_TYPE
+                || targetMethodReturnType == CHAR_TYPE) {
+            inj.visitInsn(IRETURN);
+        }
+        else if (targetMethodReturnType == LONG_TYPE) {
+            inj.visitInsn(LRETURN);
+        }
+        else if (targetMethodReturnType == FLOAT_TYPE) {
+            inj.visitInsn(FRETURN);
+        }
+        else if (targetMethodReturnType == DOUBLE_TYPE) {
+            inj.visitInsn(DRETURN);
+        }
+        else if (targetMethodReturnType == VOID_TYPE) {
+            inj.visitInsn(RETURN);
+        }
+        else {
+            inj.visitInsn(ARETURN);
         }
     }
 
-    private void injectInvokeStatic(final HookInjectorMethodVisitor inj, final int returnLocalId, final String name,
-        final String desc) {
-        for (int i = 0; i < this.hookMethodParameters.size(); ++i) {
-            final Type parameterType = this.hookMethodParameters.get(i);
-            int variableId = this.transmittableVariableIds.get(i);
+    private void injectInvokeStatic(HookInjectorMethodVisitor inj, int returnLocalId, String name, String desc)
+    {
+        for (int i = 0; i < hookMethodParameters.size(); i++) {
+            Type parameterType = hookMethodParameters.get(i);
+            int variableId = transmittableVariableIds.get(i);
             if (inj.isStatic) {
                 if (variableId == 0) {
-                    inj.visitInsn(1);
+                    inj.visitInsn(Opcodes.ACONST_NULL);
                     continue;
                 }
                 if (variableId > 0) {
-                    --variableId;
+                    variableId--;
                 }
             }
             if (variableId == -1) {
                 variableId = returnLocalId;
             }
-            this.injectVarInsn(inj, parameterType, variableId);
+            injectVarInsn(inj, parameterType, variableId);
         }
-        inj.visitMethodInsn(184, this.hooksClassName.replace(".", "/"), name, desc);
+
+        inj.visitMethodInsn(INVOKESTATIC, hooksClassName.replace(".", "/"), name, desc);
     }
 
     @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder();
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
         sb.append("AsmHook: ");
-        sb.append(this.targetClassName)
-            .append('#')
-            .append(this.targetMethodName);
-        sb.append(this.targetMethodDescription);
+
+        sb.append(targetClassName).append('#').append(targetMethodName);
+        sb.append(targetMethodDescription);
         sb.append(" -> ");
-        sb.append(this.hooksClassName)
-            .append('#')
-            .append(this.hookMethodName);
-        sb.append(this.hookMethodDescription);
-        sb.append(", ReturnCondition=" + this.returnCondition);
-        sb.append(", ReturnValue=" + this.returnValue);
-        if (this.returnValue == ReturnValue.PRIMITIVE_CONSTANT) {
-            sb.append(", Constant=" + this.primitiveConstant);
+        sb.append(hooksClassName).append('#').append(hookMethodName);
+        sb.append(hookMethodDescription);
+
+        sb.append(", ReturnCondition=" + returnCondition);
+        sb.append(", ReturnValue=" + returnValue);
+        if (returnValue == ReturnValue.PRIMITIVE_CONSTANT) {
+            sb.append(", Constant=" + primitiveConstant);
         }
-        sb.append(
-            ", InjectorFactory: " + this.injectorFactory.getClass()
-                .getName());
+        sb.append(", InjectorFactory: " + injectorFactory.getClass().getName());
+
         return sb.toString();
     }
 
     @Override
-    public int compareTo(final AsmHook o) {
-        if (this.injectorFactory.isPriorityInverted && o.injectorFactory.isPriorityInverted) {
-            return (this.priority.ordinal() > o.priority.ordinal()) ? -1 : 1;
+    public int compareTo(AsmHook o)
+    {
+        if (injectorFactory.isPriorityInverted && o.injectorFactory.isPriorityInverted) {
+            return priority.ordinal() > o.priority.ordinal() ? -1 : 1;
         }
-        if (!this.injectorFactory.isPriorityInverted && !o.injectorFactory.isPriorityInverted) {
-            return (this.priority.ordinal() > o.priority.ordinal()) ? 1 : -1;
+        else if (!injectorFactory.isPriorityInverted && !o.injectorFactory.isPriorityInverted) {
+            return priority.ordinal() > o.priority.ordinal() ? 1 : -1;
         }
-        return this.injectorFactory.isPriorityInverted ? 1 : -1;
+        else {
+            return injectorFactory.isPriorityInverted ? 1 : -1;
+        }
     }
 
-    public Builder newBuilder() {
-        return new Builder();
+    public static Builder newBuilder()
+    {
+        return new AsmHook().new Builder();
     }
 
-    static {
-        ON_ENTER_FACTORY = HookInjectorFactory.MethodEnter.INSTANCE;
-        ON_EXIT_FACTORY = HookInjectorFactory.MethodExit.INSTANCE;
-    }
+    public class Builder extends AsmHook
+    {
 
-    public class Builder extends AsmHook {
+        private Builder()
+        {
 
-        private Builder() {}
+        }
 
-        public Builder setTargetClass(final String className) {
+        public Builder setTargetClass(String className)
+        {
             AsmHook.this.targetClassName = className;
             return this;
         }
 
-        public Builder setTargetMethod(final String methodName) {
+        public Builder setTargetMethod(String methodName)
+        {
             AsmHook.this.targetMethodName = methodName;
             return this;
         }
 
-        public Builder addTargetMethodParameters(final Type... parameterTypes) {
-            for (final Type type : parameterTypes) {
+        public Builder addTargetMethodParameters(Type... parameterTypes)
+        {
+            for (Type type : parameterTypes) {
                 AsmHook.this.targetMethodParameters.add(type);
             }
             return this;
         }
 
-        public Builder addTargetMethodParameters(final String... parameterTypeNames) {
-            final Type[] types = new Type[parameterTypeNames.length];
-            for (int i = 0; i < parameterTypeNames.length; ++i) {
+        public Builder addTargetMethodParameters(String... parameterTypeNames)
+        {
+            Type[] types = new Type[parameterTypeNames.length];
+            for (int i = 0; i < parameterTypeNames.length; i++) {
                 types[i] = TypeHelper.getType(parameterTypeNames[i]);
             }
-            return this.addTargetMethodParameters(types);
+            return addTargetMethodParameters(types);
         }
 
-        public Builder setTargetMethodReturnType(final Type returnType) {
+        public Builder setTargetMethodReturnType(Type returnType)
+        {
             AsmHook.this.targetMethodReturnType = returnType;
             return this;
         }
 
-        public Builder setTargetMethodReturnType(final String returnType) {
-            return this.setTargetMethodReturnType(TypeHelper.getType(returnType));
+        public Builder setTargetMethodReturnType(String returnType)
+        {
+            return setTargetMethodReturnType(TypeHelper.getType(returnType));
         }
 
-        public Builder setHookClass(final String className) {
+        public Builder setHookClass(String className)
+        {
             AsmHook.this.hooksClassName = className;
             return this;
         }
 
-        public Builder setHookMethod(final String methodName) {
+        public Builder setHookMethod(String methodName)
+        {
             AsmHook.this.hookMethodName = methodName;
             return this;
         }
 
-        public Builder addHookMethodParameter(final Type parameterType, final int variableId) {
+        public Builder addHookMethodParameter(Type parameterType, int variableId)
+        {
             if (!AsmHook.this.hasHookMethod()) {
                 throw new IllegalStateException(
-                    "Hook method is not specified, so can not append parameter to its parameters list.");
+                        "Hook method is not specified, so can not append " + "parameter to its parameters list.");
             }
             AsmHook.this.hookMethodParameters.add(parameterType);
             AsmHook.this.transmittableVariableIds.add(variableId);
             return this;
         }
 
-        public Builder addHookMethodParameter(final String parameterTypeName, final int variableId) {
-            return this.addHookMethodParameter(TypeHelper.getType(parameterTypeName), variableId);
+        public Builder addHookMethodParameter(String parameterTypeName, int variableId)
+        {
+            return addHookMethodParameter(TypeHelper.getType(parameterTypeName), variableId);
         }
 
-        public Builder addThisToHookMethodParameters() {
+        public Builder addThisToHookMethodParameters()
+        {
             if (!AsmHook.this.hasHookMethod()) {
                 throw new IllegalStateException(
-                    "Hook method is not specified, so can not append parameter to its parameters list.");
+                        "Hook method is not specified, so can not append " + "parameter to its parameters list.");
             }
-            AsmHook.this.hookMethodParameters.add(TypeHelper.getType(AsmHook.this.targetClassName));
+            AsmHook.this.hookMethodParameters.add(TypeHelper.getType(targetClassName));
             AsmHook.this.transmittableVariableIds.add(0);
             return this;
         }
 
-        public Builder addReturnValueToHookMethodParameters() {
+        public Builder addReturnValueToHookMethodParameters()
+        {
             if (!AsmHook.this.hasHookMethod()) {
                 throw new IllegalStateException(
-                    "Hook method is not specified, so can not append parameter to its parameters list.");
+                        "Hook method is not specified, so can not append " + "parameter to its parameters list.");
             }
             if (AsmHook.this.targetMethodReturnType == Type.VOID_TYPE) {
-                throw new IllegalStateException(
-                    "Target method's return type is void, it does not make sense to transmit its return value to hook method.");
+                throw new IllegalStateException("Target method's return type is void, it does not make sense to "
+                        + "transmit its return value to hook method.");
             }
             AsmHook.this.hookMethodParameters.add(AsmHook.this.targetMethodReturnType);
             AsmHook.this.transmittableVariableIds.add(-1);
@@ -300,58 +368,59 @@ public class AsmHook implements Cloneable, Comparable<AsmHook> {
             return this;
         }
 
-        public Builder setReturnCondition(final ReturnCondition condition) {
+        public Builder setReturnCondition(ReturnCondition condition)
+        {
             if (condition.requiresCondition && AsmHook.this.hookMethodName == null) {
-                throw new IllegalArgumentException(
-                    "Hook method is not specified, so can not use return condition that depends on hook method.");
+                throw new IllegalArgumentException("Hook method is not specified, so can not use return "
+                        + "condition that depends on hook method.");
             }
+
             AsmHook.this.returnCondition = condition;
-            Type returnType = null;
+            Type returnType;
             switch (condition) {
-                case NEVER:
-                case ALWAYS: {
-                    returnType = Type.VOID_TYPE;
-                    break;
-                }
-                case ON_TRUE: {
-                    returnType = Type.BOOLEAN_TYPE;
-                    break;
-                }
-                default: {
-                    returnType = Type.getType((Class) Object.class);
-                    break;
-                }
+            case NEVER:
+            case ALWAYS:
+                returnType = VOID_TYPE;
+                break;
+            case ON_TRUE:
+                returnType = BOOLEAN_TYPE;
+                break;
+            default:
+                returnType = getType(Object.class);
+                break;
             }
             AsmHook.this.hookMethodReturnType = returnType;
             return this;
         }
 
-        public Builder setReturnValue(final ReturnValue value) {
+        public Builder setReturnValue(ReturnValue value)
+        {
             if (AsmHook.this.returnCondition == ReturnCondition.NEVER) {
-                throw new IllegalStateException(
-                    "Current return condition is ReturnCondition.NEVER, so it does not make sense to specify the return value.");
+                throw new IllegalStateException("Current return condition is ReturnCondition.NEVER, so it does not "
+                        + "make sense to specify the return value.");
             }
-            final Type returnType = AsmHook.this.targetMethodReturnType;
-            if (value != ReturnValue.VOID && returnType == Type.VOID_TYPE) {
+            Type returnType = AsmHook.this.targetMethodReturnType;
+            if (value != ReturnValue.VOID && returnType == VOID_TYPE) {
                 throw new IllegalArgumentException(
-                    "Target method return value is void, so it does not make sense to return anything else.");
+                        "Target method return value is void, so it does not make sense to " + "return anything else.");
             }
-            if (value == ReturnValue.VOID && returnType != Type.VOID_TYPE) {
+            if (value == ReturnValue.VOID && returnType != VOID_TYPE) {
                 throw new IllegalArgumentException(
-                    "Target method return value is not void, so it is impossible to return VOID.");
+                        "Target method return value is not void, so it is impossible " + "to return VOID.");
             }
-            if (value == ReturnValue.PRIMITIVE_CONSTANT && returnType != null && !this.isPrimitive(returnType)) {
+            if (value == ReturnValue.PRIMITIVE_CONSTANT && returnType != null && !isPrimitive(returnType)) {
+                throw new IllegalArgumentException("Target method return value is not a primitive, so it is "
+                        + "impossible to return PRIVITIVE_CONSTANT.");
+            }
+            if (value == ReturnValue.NULL && returnType != null && isPrimitive(returnType)) {
                 throw new IllegalArgumentException(
-                    "Target method return value is not a primitive, so it is impossible to return PRIVITIVE_CONSTANT.");
+                        "Target method return value is a primitive, so it is impossible " + "to return NULL.");
             }
-            if (value == ReturnValue.NULL && returnType != null && this.isPrimitive(returnType)) {
+            if (value == ReturnValue.HOOK_RETURN_VALUE && !hasHookMethod()) {
                 throw new IllegalArgumentException(
-                    "Target method return value is a primitive, so it is impossible to return NULL.");
+                        "Hook method is not specified, so can not use return " + "value that depends on hook method.");
             }
-            if (value == ReturnValue.HOOK_RETURN_VALUE && !AsmHook.this.hasHookMethod()) {
-                throw new IllegalArgumentException(
-                    "Hook method is not specified, so can not use return value that depends on hook method.");
-            }
+
             AsmHook.this.returnValue = value;
             if (value == ReturnValue.HOOK_RETURN_VALUE) {
                 AsmHook.this.hookMethodReturnType = AsmHook.this.targetMethodReturnType;
@@ -359,102 +428,126 @@ public class AsmHook implements Cloneable, Comparable<AsmHook> {
             return this;
         }
 
-        public Type getHookMethodReturnType() {
-            return AsmHook.this.hookMethodReturnType;
+        public Type getHookMethodReturnType()
+        {
+            return hookMethodReturnType;
         }
 
-        protected void setHookMethodReturnType(final Type type) {
+        protected void setHookMethodReturnType(Type type)
+        {
             AsmHook.this.hookMethodReturnType = type;
         }
 
-        private boolean isPrimitive(final Type type) {
+        private boolean isPrimitive(Type type)
+        {
             return type.getSort() > 0 && type.getSort() < 9;
         }
 
-        public Builder setPrimitiveConstant(final Object constant) {
+        public Builder setPrimitiveConstant(Object constant)
+        {
             if (AsmHook.this.returnValue != ReturnValue.PRIMITIVE_CONSTANT) {
-                throw new IllegalStateException(
-                    "Return value is not PRIMITIVE_CONSTANT, so it does not make senceto specify that constant.");
+                throw new IllegalStateException("Return value is not PRIMITIVE_CONSTANT, so it does not make sence"
+                        + "to specify that constant.");
             }
-            final Type returnType = AsmHook.this.targetMethodReturnType;
-            if ((returnType == Type.BOOLEAN_TYPE && !(constant instanceof Boolean))
-                || (returnType == Type.CHAR_TYPE && !(constant instanceof Character))
-                || (returnType == Type.BYTE_TYPE && !(constant instanceof Byte))
-                || (returnType == Type.SHORT_TYPE && !(constant instanceof Short))
-                || (returnType == Type.INT_TYPE && !(constant instanceof Integer))
-                || (returnType == Type.LONG_TYPE && !(constant instanceof Long))
-                || (returnType == Type.FLOAT_TYPE && !(constant instanceof Float))
-                || (returnType == Type.DOUBLE_TYPE && !(constant instanceof Double))) {
+            Type returnType = AsmHook.this.targetMethodReturnType;
+            if (returnType == BOOLEAN_TYPE && !(constant instanceof Boolean)
+                    || returnType == CHAR_TYPE && !(constant instanceof Character)
+                    || returnType == BYTE_TYPE && !(constant instanceof Byte)
+                    || returnType == SHORT_TYPE && !(constant instanceof Short)
+                    || returnType == INT_TYPE && !(constant instanceof Integer)
+                    || returnType == LONG_TYPE && !(constant instanceof Long)
+                    || returnType == FLOAT_TYPE && !(constant instanceof Float)
+                    || returnType == DOUBLE_TYPE && !(constant instanceof Double)) {
                 throw new IllegalArgumentException("Given object class does not math target method return type.");
             }
+
             AsmHook.this.primitiveConstant = constant;
             return this;
         }
 
-        public Builder setReturnMethod(final String methodName) {
+        public Builder setReturnMethod(String methodName)
+        {
             if (AsmHook.this.returnValue != ReturnValue.ANOTHER_METHOD_RETURN_VALUE) {
-                throw new IllegalStateException(
-                    "Return value is not ANOTHER_METHOD_RETURN_VALUE, so it does not make sence to specify that method.");
+                throw new IllegalStateException("Return value is not ANOTHER_METHOD_RETURN_VALUE, "
+                        + "so it does not make sence to specify that method.");
             }
+
             AsmHook.this.returnMethodName = methodName;
             return this;
         }
 
-        public Builder setInjectorFactory(final HookInjectorFactory factory) {
+        public Builder setInjectorFactory(HookInjectorFactory factory)
+        {
             AsmHook.this.injectorFactory = factory;
             return this;
         }
 
-        public Builder setPriority(final HookPriority priority) {
+        /**
+         * Задает приоритет хука. Хуки с большим приоритетом вызаваются раньше.
+         */
+        public Builder setPriority(HookPriority priority)
+        {
             AsmHook.this.priority = priority;
             return this;
         }
 
-        private String getMethodDesc(final Type returnType, final List<Type> paramTypes) {
-            final Type[] paramTypesArray = paramTypes.toArray(new Type[0]);
+        private String getMethodDesc(Type returnType, List<Type> paramTypes)
+        {
+            Type[] paramTypesArray = paramTypes.toArray(new Type[0]);
             if (returnType == null) {
-                final String voidDesc = Type.getMethodDescriptor(Type.VOID_TYPE, paramTypesArray);
+                String voidDesc = Type.getMethodDescriptor(Type.VOID_TYPE, paramTypesArray);
                 return voidDesc.substring(0, voidDesc.length() - 1);
             }
-            return Type.getMethodDescriptor(returnType, paramTypesArray);
+            else {
+                return Type.getMethodDescriptor(returnType, paramTypesArray);
+            }
         }
 
-        public AsmHook build() {
+        public AsmHook build()
+        {
             AsmHook hook = AsmHook.this;
-            hook.targetMethodDescription = this
-                .getMethodDesc(AsmHook.this.targetMethodReturnType, hook.targetMethodParameters);
+
+            hook.targetMethodDescription = getMethodDesc(targetMethodReturnType, hook.targetMethodParameters);
+
             if (hook.hasHookMethod()) {
-                hook.hookMethodDescription = Type.getMethodDescriptor(
-                    hook.hookMethodReturnType,
-                    (Type[]) hook.hookMethodParameters.toArray(new Type[0]));
+                hook.hookMethodDescription = Type.getMethodDescriptor(hook.hookMethodReturnType,
+                        hook.hookMethodParameters.toArray(new Type[0]));
             }
             if (hook.returnValue == ReturnValue.ANOTHER_METHOD_RETURN_VALUE) {
-                hook.returnMethodDescription = this
-                    .getMethodDesc(hook.targetMethodReturnType, hook.hookMethodParameters);
+                hook.returnMethodDescription = getMethodDesc(hook.targetMethodReturnType, hook.hookMethodParameters);
             }
+
             try {
-                hook = (AsmHook) this.clone();
-            } catch (CloneNotSupportedException ex) {}
+                hook = (AsmHook) AsmHook.this.clone();
+            }
+            catch (CloneNotSupportedException impossible) {
+            }
+
             if (hook.targetClassName == null) {
                 throw new IllegalStateException(
-                    "Target class name is not specified. Call setTargetClassName() before build().");
+                        "Target class name is not specified. " + "Call setTargetClassName() before build().");
             }
+
             if (hook.targetMethodName == null) {
                 throw new IllegalStateException(
-                    "Target method name is not specified. Call setTargetMethodName() before build().");
+                        "Target method name is not specified. " + "Call setTargetMethodName() before build().");
             }
+
             if (hook.returnValue == ReturnValue.PRIMITIVE_CONSTANT && hook.primitiveConstant == null) {
-                throw new IllegalStateException(
-                    "Return value is PRIMITIVE_CONSTANT, but the constant is not specified. Call setReturnValue() before build().");
+                throw new IllegalStateException("Return value is PRIMITIVE_CONSTANT, but the constant is not "
+                        + "specified. Call setReturnValue() before build().");
             }
+
             if (hook.returnValue == ReturnValue.ANOTHER_METHOD_RETURN_VALUE && hook.returnMethodName == null) {
-                throw new IllegalStateException(
-                    "Return value is ANOTHER_METHOD_RETURN_VALUE, but the method is not specified. Call setReturnMethod() before build().");
+                throw new IllegalStateException("Return value is ANOTHER_METHOD_RETURN_VALUE, but the method is not "
+                        + "specified. Call setReturnMethod() before build().");
             }
-            if (!(hook.injectorFactory instanceof HookInjectorFactory.MethodExit) && hook.hasReturnValueParameter) {
+
+            if (!(hook.injectorFactory instanceof MethodExit) && hook.hasReturnValueParameter) {
                 throw new IllegalStateException(
-                    "Can not pass return value to hook method because hook location is not return insn.");
+                        "Can not pass return value to hook method " + "because hook location is not return insn.");
             }
+
             return hook;
         }
     }

@@ -1,51 +1,69 @@
 package mixac1.dangerrpg.item.weapon;
 
-import net.minecraft.entity.player.*;
-import net.minecraft.item.*;
-import net.minecraft.world.*;
+import mixac1.dangerrpg.DangerRPG;
+import mixac1.dangerrpg.api.item.IRPGItem;
+import mixac1.dangerrpg.api.item.IRPGItem.IRPGItemBow;
+import mixac1.dangerrpg.capability.RPGItemHelper;
+import mixac1.dangerrpg.capability.data.RPGItemRegister.RPGItemData;
+import mixac1.dangerrpg.init.RPGOther.RPGCreativeTabs;
+import mixac1.dangerrpg.item.IHasBooksInfo;
+import mixac1.dangerrpg.item.RPGItemComponent.RPGBowComponent;
+import mixac1.dangerrpg.item.RPGToolMaterial;
+import mixac1.dangerrpg.util.Utils;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumRarity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBow;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
-import mixac1.dangerrpg.api.item.*;
-import mixac1.dangerrpg.capability.*;
-import mixac1.dangerrpg.capability.data.*;
-import mixac1.dangerrpg.init.*;
-import mixac1.dangerrpg.item.*;
-import mixac1.dangerrpg.util.*;
-
-public class ItemRPGBow extends ItemBow implements IRPGItem.IRPGItemBow, IHasBooksInfo {
-
-    public RPGItemComponent.RPGBowComponent bowComponent;
+public class ItemRPGBow extends ItemBow implements IRPGItemBow, IHasBooksInfo
+{
+    public RPGBowComponent bowComponent;
     protected EnumRarity rarity;
 
-    public ItemRPGBow(final RPGItemComponent.RPGBowComponent bowComponent, final EnumRarity rarity) {
-        this.setUnlocalizedName(bowComponent.name);
-        this.setTextureName(Utils.toString("dangerrpg", ":weapons/range/", getUnlocalizedName()));
-        this.setCreativeTab(RPGOther.RPGCreativeTabs.tabRPGAmmunitions);
+    public ItemRPGBow(RPGBowComponent bowComponent, EnumRarity rarity)
+    {
+        setUnlocalizedName(bowComponent.name);
+        setTextureName(Utils.toString(DangerRPG.MODID, ":weapons/range/", unlocalizedName));
+        setCreativeTab(RPGCreativeTabs.tabRPGAmmunitions);
         this.bowComponent = bowComponent;
         this.rarity = rarity;
     }
 
-    public void registerAttributes(final Item item, final RPGItemRegister.RPGItemData map) {
+    @Override
+    public void registerAttributes(Item item, RPGItemData map)
+    {
         RPGItemHelper.registerParamsItemBow(item, map);
     }
 
-    public String getInformationToInfoBook(final ItemStack item, final EntityPlayer player) {
+    @Override
+    public String getInformationToInfoBook(ItemStack item, EntityPlayer player)
+    {
         return null;
     }
 
-    public RPGItemComponent.RPGBowComponent getItemComponent(final Item item) {
-        return this.bowComponent;
+    @Override
+    public RPGBowComponent getItemComponent(Item item)
+    {
+        return bowComponent;
     }
 
-    public RPGToolMaterial getToolMaterial(final Item item) {
+    @Override
+    public RPGToolMaterial getToolMaterial(Item item)
+    {
         return null;
     }
 
-    public void onStoppedUsing(final ItemStack stack, final World world, final EntityPlayer player,
-        final int useDuration) {
+    @Override
+    public void onStoppedUsing(ItemStack stack, World world, EntityPlayer player, int useDuration)
+    {
         IRPGItem.DEFAULT_BOW.onStoppedUsing(stack, world, player, useDuration);
     }
 
-    public EnumRarity getRarity(final ItemStack stack) {
-        return this.rarity;
+    @Override
+    public EnumRarity getRarity(ItemStack stack)
+    {
+        return rarity;
     }
 }

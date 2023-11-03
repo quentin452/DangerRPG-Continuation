@@ -1,19 +1,20 @@
 package mixac1.dangerrpg.capability.ia;
 
-import net.minecraft.entity.*;
-import net.minecraft.entity.player.*;
-import net.minecraft.item.*;
+import mixac1.dangerrpg.api.item.IADynamic;
+import mixac1.dangerrpg.capability.PlayerAttributes;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
-import mixac1.dangerrpg.api.item.*;
-import mixac1.dangerrpg.capability.*;
-
-public class IAEfficiency extends IADynamic {
-
-    public IAEfficiency(final String name) {
+public class IAEfficiency extends IADynamic
+{
+    public IAEfficiency(String name)
+    {
         super(name);
     }
 
-    public float get(final ItemStack stack, final EntityPlayer player) {
-        return this.getChecked(stack) + (float) PlayerAttributes.EFFICIENCY.getValue((EntityLivingBase) player);
+    @Override
+    public float get(ItemStack stack, EntityPlayer player)
+    {
+        return getChecked(stack) + PlayerAttributes.EFFICIENCY.getValue(player);
     }
 }

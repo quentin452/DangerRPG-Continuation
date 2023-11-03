@@ -1,32 +1,25 @@
 package mixac1.dangerrpg.capability;
 
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.*;
+import mixac1.dangerrpg.api.entity.EAWithExistIAttr;
+import mixac1.dangerrpg.api.entity.EAWithIAttr;
+import mixac1.dangerrpg.api.entity.EAWithIAttr.RPGAttribute;
+import mixac1.dangerrpg.capability.ea.EAHealth;
+import mixac1.dangerrpg.capability.ea.EALvl;
+import mixac1.dangerrpg.capability.ea.EASlimeDamage;
+import mixac1.dangerrpg.init.RPGOther.RPGUUIDs;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.IAttribute;
 
-import mixac1.dangerrpg.api.entity.*;
-import mixac1.dangerrpg.capability.ea.*;
-import mixac1.dangerrpg.init.*;
+public abstract class EntityAttributes
+{
+    public static final IAttribute rangeAttackDamage = new RPGAttribute("range_damage");
 
-public abstract class EntityAttributes {
 
-    public static final IAttribute rangeAttackDamage;
-    public static final EALvl LVL;
-    public static final EAWithIAttr HEALTH;
-    public static final EAWithIAttr MELEE_DAMAGE;
-    public static final EAWithIAttr RANGE_DAMAGE;
-    public static final EAWithIAttr MELEE_DAMAGE_STAB;
-    public static final EAWithIAttr MELEE_DAMAGE_SLIME;
+    public static final EALvl           LVL                = new EALvl           ("lvl");
+    public static final EAWithIAttr     HEALTH             = new EAHealth        ("health",       RPGUUIDs.EA_HEALTH, SharedMonsterAttributes.maxHealth);
+    public static final EAWithIAttr     MELEE_DAMAGE       = new EAWithExistIAttr("melee_damage", RPGUUIDs.EA_DAMAGE,  SharedMonsterAttributes.attackDamage);
+    public static final EAWithIAttr     RANGE_DAMAGE       = new EAWithIAttr     ("range_damage", rangeAttackDamage);
 
-    static {
-        rangeAttackDamage = (IAttribute) new EAWithIAttr.RPGAttribute("range_damage");
-        LVL = new EALvl("lvl");
-        HEALTH = (EAWithIAttr) new EAHealth("health", RPGOther.RPGUUIDs.EA_HEALTH, SharedMonsterAttributes.maxHealth);
-        MELEE_DAMAGE = (EAWithIAttr) new EAWithExistIAttr(
-            "melee_damage",
-            RPGOther.RPGUUIDs.EA_DAMAGE,
-            SharedMonsterAttributes.attackDamage);
-        RANGE_DAMAGE = new EAWithIAttr("range_damage", EntityAttributes.rangeAttackDamage);
-        MELEE_DAMAGE_STAB = new EAWithIAttr("melee_damage", SharedMonsterAttributes.attackDamage);
-        MELEE_DAMAGE_SLIME = (EAWithIAttr) new EASlimeDamage("melee_damage", SharedMonsterAttributes.attackDamage);
-    }
+    public static final EAWithIAttr     MELEE_DAMAGE_STAB  = new EAWithIAttr     ("melee_damage", SharedMonsterAttributes.attackDamage);
+    public static final EAWithIAttr     MELEE_DAMAGE_SLIME = new EASlimeDamage   ("melee_damage", SharedMonsterAttributes.attackDamage);
 }

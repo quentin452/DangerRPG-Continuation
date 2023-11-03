@@ -1,23 +1,27 @@
 package mixac1.dangerrpg.capability.ea;
 
-import net.minecraft.entity.*;
+import mixac1.dangerrpg.api.entity.EntityAttribute.EAFloat;
+import mixac1.dangerrpg.capability.PlayerAttributes;
+import mixac1.dangerrpg.util.Utils;
+import net.minecraft.entity.EntityLivingBase;
 
-import mixac1.dangerrpg.api.entity.*;
-import mixac1.dangerrpg.capability.*;
-import mixac1.dangerrpg.util.*;
-
-public class EACurrMana extends EntityAttribute.EAFloat {
-
-    public EACurrMana(final String name) {
+public class EACurrMana extends EAFloat
+{
+    public EACurrMana(String name)
+    {
         super(name);
     }
 
-    public void serverInit(final EntityLivingBase entity) {
-        this.setValueRaw((Float) PlayerAttributes.MANA.getValue(entity), entity);
+    @Override
+    public void serverInit(EntityLivingBase entity)
+    {
+        setValueRaw(PlayerAttributes.MANA.getValue(entity), entity);
     }
 
+    @Override
     @Deprecated
-    public boolean setValueRaw(final Float value, final EntityLivingBase entity) {
-        return super.setValueRaw(Utils.alignment(value, 0.0f, PlayerAttributes.MANA.getValueRaw(entity)), entity);
+    public boolean setValueRaw(Float value, EntityLivingBase entity)
+    {
+        return super.setValueRaw(Utils.alignment(value, 0f, PlayerAttributes.MANA.getValueRaw(entity)), entity);
     }
 }

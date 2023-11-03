@@ -1,52 +1,52 @@
 package mixac1.hooklib.disk;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.apache.commons.io.*;
+import org.apache.commons.io.IOUtils;
 
-import mixac1.hooklib.asm.*;
+import mixac1.hooklib.asm.HookClassTransformer;
 
-public class DiskHookLib {
-
-    File untransformedDir;
-    File transformedDir;
-    File hooksDir;
-
-    public DiskHookLib() {
-        this.untransformedDir = new File("untransformed");
-        this.transformedDir = new File("transformed");
-        this.hooksDir = new File("hooks");
-    }
-
-    public static void main(final String[] args) throws IOException {
+public class DiskHookLib
+{
+    public static void main(String[] args) throws IOException
+    {
         new DiskHookLib().process();
     }
 
-    void process() throws IOException {
-        final HookClassTransformer transformer = new HookClassTransformer();
-        for (final File file : getFiles(".class", this.hooksDir)) {
-            transformer.registerHookContainer((InputStream) new FileInputStream(file));
+    File untransformedDir = new File("untransformed");
+    File transformedDir = new File("transformed");
+    File hooksDir = new File("hooks");
+
+    void process() throws IOException
+    {
+        HookClassTransformer transformer = new HookClassTransformer();
+        for (File file : getFiles(".class", hooksDir)) {
+            transformer.registerHookContainer(new FileInputStream(file));
         }
-        for (final File file : getFiles(".class", this.untransformedDir)) {
-            final byte[] bytes = IOUtils.toByteArray((InputStream) new FileInputStream(file));
-            final String className = "";
-            transformer.transform(className, bytes);
+        for (File file : getFiles(".class", untransformedDir)) {
+            byte[] bytes = IOUtils.toByteArray(new FileInputStream(file));
+            String className = "";
+
+            byte[] newBytes = transformer.transform(className, bytes);
         }
     }
 
-    private static List<File> getFiles(final String postfix, final File dir) throws IOException {
-        final ArrayList<File> files = new ArrayList<File>();
-        final File[] filesArray = dir.listFiles();
+    private static List<File> getFiles(String postfix, File dir) throws IOException
+    {
+        ArrayList<File> files = new ArrayList<File>();
+        File[] filesArray = dir.listFiles();
         if (filesArray != null) {
-            for (final File file : dir.listFiles()) {
+            for (File file : dir.listFiles()) {
                 if (file.isDirectory()) {
                     files.addAll(getFiles(postfix, file));
-                } else if (file.getName()
-                    .toLowerCase()
-                    .endsWith(postfix)) {
-                        files.add(file);
-                    }
+                }
+                else if (file.getName().toLowerCase().endsWith(postfix)) {
+                    files.add(file);
+                }
             }
         }
         return files;

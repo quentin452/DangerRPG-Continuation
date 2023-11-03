@@ -1,35 +1,33 @@
 package mixac1.dangerrpg.client.render.item;
 
-import net.minecraft.client.model.*;
-import net.minecraft.entity.*;
-import net.minecraft.item.*;
-import net.minecraftforge.client.*;
+import org.lwjgl.opengl.GL11;
 
-import org.lwjgl.opengl.*;
+import mixac1.dangerrpg.client.model.ModelHammer;
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 
-import mixac1.dangerrpg.client.model.*;
+public abstract class RenderNormalModel extends RenderItemModel
+{
+    @Override
+    public float specific(ItemRenderType type, ItemStack stack, EntityLivingBase entity)
+    {
+        GL11.glRotatef(180F, 1F, 0F, 0f);
+        GL11.glRotatef(-90F, 0F, 0F, 1F);
 
-public abstract class RenderNormalModel extends RenderItemModel {
-
-    public float specific(final IItemRenderer.ItemRenderType type, final ItemStack stack,
-        final EntityLivingBase entity) {
-        GL11.glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
-        GL11.glRotatef(-90.0f, 0.0f, 0.0f, 1.0f);
-        GL11.glTranslatef(-0.62f, 0.0f, 0.0f);
-        GL11.glTranslatef(0.75f, 0.75f, 0.0f);
+        GL11.glTranslatef(-0.62f, 0, 0);
+        GL11.glTranslatef(0.75f, 0.75f, 0f);
         return super.specific(type, stack, entity);
     }
 
-    public static class RenderHammer extends RenderNormalModel {
+    public static class RenderHammer extends RenderNormalModel
+    {
+        public static final RenderHammer INSTANCE = new RenderHammer();
 
-        public static final RenderHammer INSTANCE;
-
-        public ModelBase getModel() {
-            return (ModelBase) ModelHammer.INSTANCE;
-        }
-
-        static {
-            INSTANCE = new RenderHammer();
+        @Override
+        public ModelBase getModel()
+        {
+            return ModelHammer.INSTANCE;
         }
     }
 }

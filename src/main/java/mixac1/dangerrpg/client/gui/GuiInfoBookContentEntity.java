@@ -1,282 +1,217 @@
 package mixac1.dangerrpg.client.gui;
 
-import java.util.*;
+import java.util.List;
 
-import net.minecraft.client.*;
-import net.minecraft.client.gui.*;
-import net.minecraft.client.renderer.*;
-import net.minecraft.util.*;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 
-import org.lwjgl.input.*;
-import org.lwjgl.opengl.*;
-
-import cpw.mods.fml.relauncher.*;
-import mixac1.dangerrpg.*;
-import mixac1.dangerrpg.api.entity.*;
-import mixac1.dangerrpg.util.*;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import mixac1.dangerrpg.DangerRPG;
+import mixac1.dangerrpg.api.entity.LvlEAProvider;
+import mixac1.dangerrpg.util.Utils;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.ResourceLocation;
 
 @SideOnly(Side.CLIENT)
-public class GuiInfoBookContentEntity extends GuiInfoBookContent {
+public class GuiInfoBookContentEntity extends GuiInfoBookContent
+{
+    public static final ResourceLocation TEXTURE = new ResourceLocation("DangerRPG:textures/gui/info_book_player_content.png");
 
-    public static final ResourceLocation TEXTURE;
-    public static int imageW;
-    public static int imageH;
-    public static int offset;
-    public static int sizeContent;
-    public static int butX;
-    public static int butY;
-    public static int butU;
-    public static int butV;
-    public static int butW;
-    public static int butH;
-    public static int titleW;
-    public static int titleH;
-    public static int titleX;
-    public static int titleY;
-    public static int infoX;
-    public static int infoY;
-    public static int infoI;
-    public static int infoW;
-    private int currIndex;
+    public static int imageW  = 176;
+    public static int imageH  = 84;
 
-    public GuiInfoBookContentEntity(final Minecraft mc, final int width, final int height, final int top,
-        final int size, final int left, final GuiInfoBook parent) {
-        super(
-            mc,
-            width,
-            height,
-            top,
-            size - GuiInfoBookContentEntity.imageH - GuiInfoBookContentEntity.offset,
-            left,
-            GuiInfoBookContentEntity.sizeContent,
-            parent);
-        this.currIndex = -1;
+    public static int offset = 5;
+    public static int sizeContent = 20;
+
+    public static int butX = 111;
+    public static int butY = 1;
+    public static int butU = 176;
+    public static int butV = 0;
+    public static int butW = 32;
+    public static int butH = 15;
+
+    public static int titleW = 109;
+    public static int titleH = 15;
+    public static int titleX = 1;
+    public static int titleY = 1;
+
+    public static int infoX = 5;
+    public static int infoY = 20;
+    public static int infoI = 2;
+    public static int infoW = imageW - infoX * 2;
+
+    private int currIndex = -1;
+
+    public GuiInfoBookContentEntity(Minecraft mc, int width, int height, int top, int size, int left, GuiInfoBook parent)
+    {
+        super(mc, width, height, top, size - imageH - offset, left, sizeContent, parent);
     }
 
-    public void init() {
+    @Override
+    public void init()
+    {
         super.init();
-        for (final LvlEAProvider attr : this.parent.attributes) {
-            this.list.add(new ContentItem(attr));
+        for (LvlEAProvider attr : parent.attributes) {
+            list.add(new ContentItem(attr));
         }
     }
 
-    public void drawScreen(final int mouseX, final int mouseY, final float par3) {
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float par3)
+    {
         super.drawScreen(mouseX, mouseY, par3);
-        if (this.currIndex >= 0) {
-            final int offsetX = this.left;
-            final int offsetY = this.bottom + GuiInfoBookContentEntity.offset;
-            final int indent = GuiInfoBookContentEntity.infoI + this.mc.fontRenderer.FONT_HEIGHT;
-            final LvlEAProvider lvlProv = this.parent.attributes.get(this.currIndex);
-            this.mc.getTextureManager()
-                .bindTexture(GuiInfoBookContentEntity.TEXTURE);
-            this.parent.drawTexturedModalRect(
-                offsetX,
-                offsetY,
-                0,
-                0,
-                GuiInfoBookContentEntity.imageW,
-                GuiInfoBookContentEntity.imageH);
-            String s = this.mc.fontRenderer.trimStringToWidth(
-                lvlProv.attr.getDisplayName()
-                    .toUpperCase(),
-                GuiInfoBookContentEntity.titleW);
-            this.mc.fontRenderer.drawStringWithShadow(
-                s,
-                offsetX + (GuiInfoBookContentEntity.titleW - this.mc.fontRenderer.getStringWidth(s) + 4) / 2,
-                offsetY + (GuiInfoBookContentEntity.titleH - this.mc.fontRenderer.FONT_HEIGHT + 4) / 2,
-                16777215);
+        String s, s1;
+        if (currIndex >= 0) {
+            int offsetX = left;
+            int offsetY = bottom + offset;
+            int indent = infoI + mc.fontRenderer.FONT_HEIGHT;
+            LvlEAProvider lvlProv = parent.attributes.get(currIndex);
+
+            mc.getTextureManager().bindTexture(TEXTURE);
+            parent.drawTexturedModalRect(offsetX, offsetY, 0, 0, imageW, imageH);
+
+            s = mc.fontRenderer.trimStringToWidth(lvlProv.attr.getDisplayName().toUpperCase(), titleW);
+            mc.fontRenderer.drawStringWithShadow(s, offsetX + (titleW - mc.fontRenderer.getStringWidth(s) + 4) / 2, offsetY + (titleH - mc.fontRenderer.FONT_HEIGHT + 4) / 2, 0xffffff);
+
             int k = 0;
-            s = Utils.toString(DangerRPG.trans("ia.lvl"), ": ", lvlProv.getLvl(this.parent.target));
-            if (!lvlProv.isMaxLvl(this.parent.target)) {
+            s = Utils.toString(DangerRPG.trans("ia.lvl"), ": ", lvlProv.getLvl(parent.target));
+            if (!lvlProv.isMaxLvl(parent.target)) {
                 s = Utils.toString(s, "   (", lvlProv.maxLvl, ")");
             }
-            this.mc.fontRenderer.drawStringWithShadow(
-                s,
-                offsetX + GuiInfoBookContentEntity.infoX,
-                offsetY + GuiInfoBookContentEntity.infoY,
-                16777215);
+            mc.fontRenderer.drawStringWithShadow(s, offsetX + infoX, offsetY + infoY, 0xffffff);
             k += indent;
-            final String s2 = lvlProv.attr.getDisplayValue(this.parent.target);
-            if (s2 != null) {
-                s = Utils.toString(DangerRPG.trans("rpgstr.value"), ": ", s2);
-                this.mc.fontRenderer.drawStringWithShadow(
-                    s,
-                    offsetX + GuiInfoBookContentEntity.infoX,
-                    offsetY + GuiInfoBookContentEntity.infoY + k,
-                    16777215);
+
+            s1 = lvlProv.attr.getDisplayValue(parent.target);
+            if (s1 != null) {
+                s = Utils.toString(DangerRPG.trans("rpgstr.value"), ": ", s1);
+                mc.fontRenderer.drawStringWithShadow(s, offsetX + infoX, offsetY + infoY + k, 0xffffff);
                 k += indent;
             }
+
             s = lvlProv.attr.getInfo();
-            final List list = this.mc.fontRenderer.listFormattedStringToWidth(s, GuiInfoBookContentEntity.infoW);
+            List list = mc.fontRenderer.listFormattedStringToWidth(s, infoW);
             for (int i = 0; i < list.size(); ++i) {
-                this.mc.fontRenderer.drawStringWithShadow(
-                    list.get(i)
-                        .toString(),
-                    offsetX + GuiInfoBookContentEntity.infoX,
-                    offsetY + GuiInfoBookContentEntity.infoY + k,
-                    16777215);
+                mc.fontRenderer.drawStringWithShadow(list.get(i).toString(), offsetX + infoX, offsetY + infoY + k, 0xffffff);
                 k += indent;
             }
-            if (!lvlProv.isMaxLvl(this.parent.target)) {
-                final int value = lvlProv.getExpUp(this.parent.target);
-                s = String.format("%d/%d", this.parent.player.experienceLevel, value);
-                final int tmp = offsetX + (GuiInfoBookContentEntity.infoW - this.mc.fontRenderer.getStringWidth(s)) / 2;
-                this.mc.fontRenderer.drawStringWithShadow(
-                    s,
-                    offsetX + (GuiInfoBookContentEntity.infoW - this.mc.fontRenderer.getStringWidth(s)) / 2,
-                    offsetY + 73,
-                    lvlProv.canUp(this.parent.target, this.parent.player) ? 48896 : 12517376);
-            } else {
-                s = this.mc.fontRenderer
-                    .trimStringToWidth(DangerRPG.trans("rpgstr.max"), GuiInfoBookContentEntity.infoW);
-                this.mc.fontRenderer.drawStringWithShadow(
-                    s,
-                    offsetX + (GuiInfoBookContentEntity.infoW - this.mc.fontRenderer.getStringWidth(s)) / 2,
-                    offsetY + 73,
-                    15724288);
+
+
+            if (!lvlProv.isMaxLvl(parent.target)) {
+                int value = lvlProv.getExpUp(parent.target);
+                s = String.format("%d/%d", parent.player.experienceLevel, value);
+                int tmp = offsetX + (infoW - mc.fontRenderer.getStringWidth(s)) / 2;
+                mc.fontRenderer.drawStringWithShadow(s, offsetX + (infoW - mc.fontRenderer.getStringWidth(s)) / 2, offsetY + 73, lvlProv.canUp(parent.target, parent.player) ? 0x00bf00 : 0xbf0000);
+            }
+            else {
+                s = mc.fontRenderer.trimStringToWidth(DangerRPG.trans("rpgstr.max"), infoW);
+                mc.fontRenderer.drawStringWithShadow(s, offsetX + (infoW - mc.fontRenderer.getStringWidth(s)) / 2, offsetY + 73, 0xefef00);
             }
         }
-        String s = DangerRPG.trans("rpgstr.stats");
-        this.mc.fontRenderer.drawStringWithShadow(
-            s,
-            this.left + (this.listWidth - this.mc.fontRenderer.getStringWidth(s)) / 2,
-            this.top - this.mc.fontRenderer.FONT_HEIGHT - 4,
-            16777215);
+
+        s = DangerRPG.trans("rpgstr.stats");
+        mc.fontRenderer.drawStringWithShadow(s, left + (listWidth - mc.fontRenderer.getStringWidth(s)) / 2, top - mc.fontRenderer.FONT_HEIGHT - 4, 0xffffff);
     }
 
-    protected void elementClicked(final int index, final boolean doubleClick) {
-        if (this.currIndex == index) {
-            this.currIndex = -1;
-        } else {
-            this.currIndex = index;
+    @Override
+    protected void elementClicked(int index, boolean doubleClick)
+    {
+        if (currIndex == index) {
+            currIndex = -1;
+        }
+        else {
+            currIndex = index;
         }
     }
 
-    protected boolean isSelected(final int index) {
-        return index == this.currIndex;
+    @Override
+    protected boolean isSelected(int index)
+    {
+        return index == currIndex;
     }
 
+    @Override
     protected void drawBackground() {}
 
-    protected void drawSlot(int var1, int var2, int var3, int var4, Tessellator var5) {
-        ((ContentItem) this.list.get(var1)).draw(this.left, var3, 16777215, 48896);
+    @Override
+    protected void drawSlot(int var1, int var2, int var3, int var4, Tessellator var5)
+    {
+        ((ContentItem) list.get(var1)).draw(left, var3, 0xffffff, 0x00bf00);
     }
 
-    static {
-        TEXTURE = new ResourceLocation("DangerRPG:textures/gui/info_book_player_content.png");
-        GuiInfoBookContentEntity.imageW = 176;
-        GuiInfoBookContentEntity.imageH = 84;
-        GuiInfoBookContentEntity.offset = 5;
-        GuiInfoBookContentEntity.sizeContent = 20;
-        GuiInfoBookContentEntity.butX = 111;
-        GuiInfoBookContentEntity.butY = 1;
-        GuiInfoBookContentEntity.butU = 176;
-        GuiInfoBookContentEntity.butV = 0;
-        GuiInfoBookContentEntity.butW = 32;
-        GuiInfoBookContentEntity.butH = 15;
-        GuiInfoBookContentEntity.titleW = 109;
-        GuiInfoBookContentEntity.titleH = 15;
-        GuiInfoBookContentEntity.titleX = 1;
-        GuiInfoBookContentEntity.titleY = 1;
-        GuiInfoBookContentEntity.infoX = 5;
-        GuiInfoBookContentEntity.infoY = 20;
-        GuiInfoBookContentEntity.infoI = 2;
-        GuiInfoBookContentEntity.infoW = GuiInfoBookContentEntity.imageW - GuiInfoBookContentEntity.infoX * 2;
-    }
-
-    public class ContentItem {
-
+    public class ContentItem
+    {
         private LvlEAProvider attr;
 
-        public ContentItem(final LvlEAProvider attr) {
+        public ContentItem(LvlEAProvider attr)
+        {
             this.attr = attr;
         }
 
-        public void draw(final int x, final int y, final int color1, final int color2) {
-            String s = GuiInfoBookContentEntity.this.mc.fontRenderer
-                .trimStringToWidth(this.attr.attr.getDisplayName(), GuiInfoBookContentEntity.this.listWidth - 20);
-            GuiInfoBookContentEntity.this.mc.fontRenderer.drawStringWithShadow(
-                s,
-                x + (GuiInfoBookContentEntity.this.listWidth
-                    - GuiInfoBookContentEntity.this.mc.fontRenderer.getStringWidth(s)) / 2,
-                y + (GuiInfoBookContentEntity.sizeContent - GuiInfoBookContentEntity.this.mc.fontRenderer.FONT_HEIGHT)
-                    / 2,
-                16777215);
-            s = String.valueOf(this.attr.getLvl(GuiInfoBookContentEntity.this.parent.target));
-            final int color3 = this.attr.isMaxLvl(GuiInfoBookContentEntity.this.parent.target) ? 15724288
-                : (this.attr
-                    .canUp(GuiInfoBookContentEntity.this.parent.target, GuiInfoBookContentEntity.this.parent.player)
-                        ? 48896
-                        : 16777215);
-            GuiInfoBookContentEntity.this.mc.fontRenderer.drawStringWithShadow(
-                s,
-                x + 5,
-                y + (GuiInfoBookContentEntity.sizeContent - GuiInfoBookContentEntity.this.mc.fontRenderer.FONT_HEIGHT)
-                    / 2,
-                color3);
+        public void draw(int x, int y, int color1, int color2)
+        {
+            String s = mc.fontRenderer.trimStringToWidth(attr.attr.getDisplayName(), listWidth - 20);
+            mc.fontRenderer.drawStringWithShadow(s, x + (listWidth - mc.fontRenderer.getStringWidth(s)) / 2, y + (sizeContent - mc.fontRenderer.FONT_HEIGHT) / 2, 0xffffff);
+
+            s = String.valueOf(attr.getLvl(parent.target));
+            int color = attr.isMaxLvl(parent.target) ? 0xefef00 : attr.canUp(parent.target, parent.player) ? 0x00bf00 : 0xffffff;
+            mc.fontRenderer.drawStringWithShadow(s, x + 5, y + (sizeContent - mc.fontRenderer.FONT_HEIGHT) / 2, color);
         }
     }
 
-    public static class LevelUpButton extends GuiButton {
-
+    public static class LevelUpButton extends GuiButton
+    {
         private GuiInfoBookContentEntity parent;
         private boolean isUp;
 
-        public LevelUpButton(final int id, final boolean isUp, final int x, final int y,
-            final GuiInfoBookContentEntity parent) {
-            super(id, x, y, GuiInfoBookContentEntity.butW, GuiInfoBookContentEntity.butH, isUp ? "+" : "-");
+
+        public LevelUpButton(int id, boolean isUp, int x, int y, GuiInfoBookContentEntity parent)
+        {
+            super(id, x, y, butW, butH, isUp ? "+" : "-");
             this.parent = parent;
             this.isUp = isUp;
         }
 
-        public void drawButton(final Minecraft mc, final int par1, final int par2) {
-            GL11.glDisable(2896);
-            if (this.visible && this.parent.currIndex >= 0) {
-                final boolean flag = par1 >= this.xPosition && par2 >= this.yPosition
-                    && par1 < this.xPosition + this.width
-                    && par2 < this.yPosition + this.height;
-                GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-                mc.getTextureManager()
-                    .bindTexture(GuiInfoBookContentEntity.TEXTURE);
-                this.enabled = (this.isUp ? this.parent.parent.attributes.get(this.parent.currIndex)
-                    .canUp(this.parent.parent.target, this.parent.parent.player)
-                    : this.parent.parent.attributes.get(this.parent.currIndex)
-                        .canDown(this.parent.parent.target, this.parent.parent.player));
-                int color = 9539985;
-                if (this.enabled) {
+        @Override
+        public void drawButton(Minecraft mc, int par1, int par2)
+        {
+            GL11.glDisable(GL11.GL_LIGHTING);
+            if (visible && parent.currIndex >= 0) {
+                boolean flag = par1 >= xPosition && par2 >= yPosition && par1 < xPosition + width && par2 < yPosition + height;
+                GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+                mc.getTextureManager().bindTexture(TEXTURE);
+
+                enabled = isUp ?
+                        parent.parent.attributes.get(parent.currIndex).canUp(parent.parent.target, parent.parent.player) :
+                        parent.parent.attributes.get(parent.currIndex).canDown(parent.parent.target, parent.parent.player);
+                int color = 0x919191;
+
+                if (enabled) {
                     if (flag) {
                         if (!Mouse.isButtonDown(0)) {
-                            this.drawTexturedModalRect(
-                                this.xPosition,
-                                this.yPosition,
-                                GuiInfoBookContentEntity.butU,
-                                GuiInfoBookContentEntity.butV + GuiInfoBookContentEntity.butH,
-                                this.width,
-                                this.height);
-                            color = 15724288;
+                            this.drawTexturedModalRect(xPosition, yPosition, butU, butV + butH, width, height);
+                            color = 0xefef00;
                         }
-                    } else {
-                        this.drawTexturedModalRect(
-                            this.xPosition,
-                            this.yPosition,
-                            GuiInfoBookContentEntity.butU,
-                            GuiInfoBookContentEntity.butV,
-                            this.width,
-                            this.height);
-                        color = 15724288;
+                    }
+                    else {
+                        this.drawTexturedModalRect(xPosition, yPosition, butU, butV, width, height);
+                        color = 0xefef00;
                     }
                 }
-                mc.fontRenderer.drawStringWithShadow(
-                    this.displayString,
-                    this.xPosition + (this.width - mc.fontRenderer.getStringWidth(this.displayString)) / 2,
-                    this.yPosition + (this.height - mc.fontRenderer.FONT_HEIGHT) / 2,
-                    color);
+
+                mc.fontRenderer.drawStringWithShadow(displayString, xPosition + (width - mc.fontRenderer.getStringWidth(displayString)) / 2, yPosition + (height - mc.fontRenderer.FONT_HEIGHT) / 2, color);
             }
         }
 
-        public boolean mousePressed(final Minecraft mc, final int x, final int y) {
-            return super.mousePressed(mc, x, y) && this.parent.parent.attributes.get(this.parent.currIndex)
-                .tryUp(this.parent.parent.target, this.parent.parent.player, this.isUp);
+        @Override
+        public boolean mousePressed(Minecraft mc, int x, int y)
+        {
+            if (super.mousePressed(mc, x, y) && parent.parent.attributes.get(parent.currIndex).tryUp(parent.parent.target, parent.parent.player, isUp)) {
+                return true;
+            }
+            return false;
         }
     }
 }

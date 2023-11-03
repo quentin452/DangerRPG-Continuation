@@ -1,20 +1,21 @@
 package mixac1.dangerrpg.capability.ia;
 
-import net.minecraft.entity.*;
-import net.minecraft.entity.player.*;
-import net.minecraft.item.*;
+import mixac1.dangerrpg.api.item.IAStatic;
+import mixac1.dangerrpg.capability.ItemAttributes;
+import mixac1.dangerrpg.capability.PlayerAttributes;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
-import mixac1.dangerrpg.api.item.*;
-import mixac1.dangerrpg.capability.*;
-
-public class IAKnockback extends IAStatic {
-
-    public IAKnockback(final String name) {
+public class IAKnockback extends IAStatic
+{
+    public IAKnockback(String name)
+    {
         super(name);
     }
 
-    public float get(final ItemStack stack, final EntityPlayer player) {
-        return this.getChecked(stack) + (float) PlayerAttributes.STRENGTH.getValue((EntityLivingBase) player)
-            * ItemAttributes.KNBACK_MUL.get(stack, player);
+    @Override
+    public float get(ItemStack stack, EntityPlayer player)
+    {
+        return getChecked(stack) + PlayerAttributes.STRENGTH.getValue(player) * ItemAttributes.KNBACK_MUL.get(stack, player);
     }
 }

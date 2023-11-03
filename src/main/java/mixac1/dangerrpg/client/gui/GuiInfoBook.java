@@ -1,260 +1,219 @@
 package mixac1.dangerrpg.client.gui;
 
-import java.util.*;
+import java.util.List;
 
-import net.minecraft.client.*;
-import net.minecraft.client.gui.*;
-import net.minecraft.client.renderer.*;
-import net.minecraft.entity.*;
-import net.minecraft.entity.player.*;
-import net.minecraft.item.*;
-import net.minecraft.util.*;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 
-import org.lwjgl.opengl.*;
-
-import cpw.mods.fml.relauncher.*;
-import mixac1.dangerrpg.*;
-import mixac1.dangerrpg.api.entity.*;
-import mixac1.dangerrpg.capability.*;
-import mixac1.dangerrpg.capability.data.*;
-import mixac1.dangerrpg.init.*;
-import mixac1.dangerrpg.util.*;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import mixac1.dangerrpg.DangerRPG;
+import mixac1.dangerrpg.api.entity.LvlEAProvider;
+import mixac1.dangerrpg.capability.RPGEntityHelper;
+import mixac1.dangerrpg.capability.data.RPGEntityProperties;
+import mixac1.dangerrpg.client.gui.GuiInfoBookContentEntity.LevelUpButton;
+import mixac1.dangerrpg.init.RPGKeyBinds;
+import mixac1.dangerrpg.util.RPGHelper;
+import mixac1.dangerrpg.util.Utils;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.ResourceLocation;
 
 @SideOnly(Side.CLIENT)
-public class GuiInfoBook extends GuiScreen {
+public class GuiInfoBook extends GuiScreen
+{
+    public static final ResourceLocation TEXTURE = new ResourceLocation(DangerRPG.MODID, "textures/gui/info_book.png");
 
-    public static final ResourceLocation TEXTURE;
     public EntityPlayer player;
     public EntityLivingBase target;
     public boolean isTargetPlayer;
     public List<LvlEAProvider> attributes;
     private ItemStack[] stacks;
-    public static int currContent;
-    private SelectContentButton[] butContent;
-    public GuiInfoBookContent[] content;
+    public static int currContent = 0;
+
+    private GuiInfoBook.SelectContentButton[] butContent;
+    public GuiInfoBookContent[] content = new GuiInfoBookContent[6];
+
     private int offsetX;
     private int offsetY;
-    public static int bookImageW;
-    public static int bookImageH;
-    public static int titleHeight;
-    public static int butContentX;
-    public static int butContentY;
-    public static int butContentU;
-    public static int butContentV;
-    public static int butContentI;
-    public static int butContentS;
-    public static int emptyIconU;
-    public static int emptyIconV;
-    public static int contentX;
-    public static int contentY;
-    public static int contentS;
-    private GuiInfoBookContentEntity.LevelUpButton buttonUp;
-    private GuiInfoBookContentEntity.LevelUpButton buttonDown;
 
-    public GuiInfoBook(final EntityPlayer player) {
-        this.content = new GuiInfoBookContent[6];
+    public static int bookImageW  = 186;
+    public static int bookImageH  = 254;
+    public static int titleHeight = 16;
+
+    public static int butContentX = 31;
+    public static int butContentY = 16;
+    public static int butContentU = 186;
+    public static int butContentV = 0;
+    public static int butContentI = 1;
+    public static int butContentS = 20;
+
+    public static int emptyIconU = 206;
+    public static int emptyIconV = 0;
+
+    public static int contentX = 5;
+    public static int contentY = 55;
+    public static int contentS = 190;
+
+    private LevelUpButton buttonUp;
+    private LevelUpButton buttonDown;
+
+    public GuiInfoBook(EntityPlayer player)
+    {
         this.player = player;
-        final MovingObjectPosition mop = RPGHelper.getMouseOver(0.0f, 10.0f);
-        if (mop != null && mop.entityHit != null
-            && mop.entityHit instanceof EntityPlayer
-            && RPGEntityHelper.isRPGable((EntityLivingBase) mop.entityHit)) {
-            this.target = (EntityLivingBase) mop.entityHit;
-            this.isTargetPlayer = true;
-        } else {
-            this.target = (EntityLivingBase) player;
-            this.isTargetPlayer = true;
+
+        MovingObjectPosition mop = RPGHelper.getMouseOver(0, 10);
+        if (mop != null && mop.entityHit != null && mop.entityHit instanceof EntityPlayer && RPGEntityHelper.isRPGable((EntityLivingBase) mop.entityHit)) {
+            target = (EntityLivingBase) mop.entityHit;
+            isTargetPlayer = true;
         }
-        this.attributes = (List<LvlEAProvider>) RPGEntityProperties.get(this.target)
-            .getLvlProviders();
+        else {
+            target = player;
+            isTargetPlayer = true;
+        }
+
+        attributes = RPGEntityProperties.get(target).getLvlProviders();
     }
 
-    public void setWorldAndResolution(final Minecraft mc, final int width, final int height) {
+    @Override
+    public void setWorldAndResolution(Minecraft mc, int width, int height)
+    {
         super.setWorldAndResolution(mc, width, height);
-        if (this.target != mc.thePlayer) {
-            GuiInfoBook.currContent = 0;
+
+        if (target != mc.thePlayer) {
+            currContent = 0;
         }
-        if (this.isTargetPlayer) {
-            final EntityPlayer tmp = (EntityPlayer) this.target;
-            this.stacks = new ItemStack[] { tmp.getCurrentEquippedItem(), tmp.getCurrentArmor(3),
-                tmp.getCurrentArmor(2), tmp.getCurrentArmor(1), tmp.getCurrentArmor(0) };
-        } else {
-            this.stacks = new ItemStack[5];
+
+        if (isTargetPlayer) {
+            EntityPlayer tmp = (EntityPlayer) target;
+            stacks = new ItemStack[] {
+                tmp.getCurrentEquippedItem(),
+                tmp.getCurrentArmor(3),
+                tmp.getCurrentArmor(2),
+                tmp.getCurrentArmor(1),
+                tmp.getCurrentArmor(0)
+            };
         }
-        this.offsetX = (width - GuiInfoBook.bookImageW) / 2;
-        this.offsetY = (height - GuiInfoBook.bookImageH) / 2;
-        this.content[0] = new GuiInfoBookContentEntity(
-            mc,
-            GuiInfoBook.bookImageW - GuiInfoBook.contentX * 2,
-            0,
-            this.offsetY + GuiInfoBook.contentY,
-            GuiInfoBook.contentS,
-            this.offsetX + GuiInfoBook.contentX,
-            this);
-        for (int i = 1; i < this.content.length; ++i) {
-            this.content[i] = new GuiInfoBookContentStack(
-                mc,
-                GuiInfoBook.bookImageW - GuiInfoBook.contentX * 2,
-                0,
-                this.offsetY + GuiInfoBook.contentY,
-                GuiInfoBook.contentS,
-                this.offsetX + GuiInfoBook.contentX,
-                this,
-                this.stacks[i - 1]);
+        else {
+            stacks = new ItemStack[5];
         }
-        this.buttonList.add(
-            this.buttonDown = new GuiInfoBookContentEntity.LevelUpButton(
-                100,
-                false,
-                this.offsetX + GuiInfoBook.contentX + GuiInfoBookContentEntity.butX,
-                this.offsetY + GuiInfoBook.contentY
-                    + GuiInfoBook.contentS
-                    + GuiInfoBookContentEntity.butY
-                    - GuiInfoBookContentEntity.imageH,
-                (GuiInfoBookContentEntity) this.content[0]));
-        this.buttonList.add(
-            this.buttonUp = new GuiInfoBookContentEntity.LevelUpButton(
-                101,
-                true,
-                this.offsetX + GuiInfoBook.contentX + GuiInfoBookContentEntity.butX + GuiInfoBookContentEntity.butW,
-                this.offsetY + GuiInfoBook.contentY
-                    + GuiInfoBook.contentS
-                    + GuiInfoBookContentEntity.butY
-                    - GuiInfoBookContentEntity.imageH,
-                (GuiInfoBookContentEntity) this.content[0]));
-        this.content[GuiInfoBook.currContent].init();
+
+        offsetX = (width  - bookImageW)  / 2;
+        offsetY = (height - bookImageH) / 2;
+
+        content[0] = new GuiInfoBookContentEntity(mc, bookImageW - contentX * 2, 0, offsetY + contentY, contentS, offsetX + contentX, this);
+        for (int i = 1; i < content.length; ++i) {
+            content[i] = new GuiInfoBookContentStack(mc, bookImageW - contentX * 2, 0, offsetY + contentY, contentS, offsetX + contentX, this, stacks[i - 1]);
+        }
+        buttonList.add(buttonDown = new LevelUpButton(100, false, offsetX + contentX + GuiInfoBookContentEntity.butX, offsetY + contentY + contentS + GuiInfoBookContentEntity.butY - GuiInfoBookContentEntity.imageH, (GuiInfoBookContentEntity) content[0]));
+        buttonList.add(buttonUp   = new LevelUpButton(101, true,  offsetX + contentX + GuiInfoBookContentEntity.butX + GuiInfoBookContentEntity.butW, offsetY + contentY + contentS + GuiInfoBookContentEntity.butY - GuiInfoBookContentEntity.imageH, (GuiInfoBookContentEntity) content[0]));
+
+        content[currContent].init();
     }
 
-    public void initGui() {
-        this.buttonList.clear();
-        this.offsetX = (this.width - GuiInfoBook.bookImageW) / 2;
-        this.offsetY = (this.height - GuiInfoBook.bookImageH) / 2;
+    @Override
+    public void initGui()
+    {
+        buttonList.clear();
+
+        offsetX = (width  - bookImageW)  / 2;
+        offsetY = (height - bookImageH) / 2;
+
         int i = 0;
-        this.butContent = new SelectContentButton[6];
+        butContent = new GuiInfoBook.SelectContentButton[6];
         for (int k = 0; k < 6; ++k) {
-            this.buttonList.add(
-                this.butContent[k] = new SelectContentButton(
-                    i++,
-                    this.offsetX + GuiInfoBook.butContentX + (GuiInfoBook.butContentS + GuiInfoBook.butContentI) * k,
-                    this.offsetY + GuiInfoBook.butContentY));
+            buttonList.add(butContent[k] = new GuiInfoBook.SelectContentButton(i++, offsetX + butContentX + (butContentS + butContentI) * k, offsetY + butContentY));
         }
     }
 
-    protected void keyTyped(final char c, final int keyCode) {
+    @Override
+    protected void keyTyped(char c, int keyCode)
+    {
         super.keyTyped(c, keyCode);
-        if (keyCode == 1 || keyCode == 18 || keyCode == RPGKeyBinds.infoBookKey.getKeyCode()) {
-            this.mc.thePlayer.closeScreen();
+        if (keyCode == Keyboard.KEY_ESCAPE || keyCode == Keyboard.KEY_E || keyCode == RPGKeyBinds.infoBookKey.getKeyCode()) {
+            mc.thePlayer.closeScreen();
         }
     }
 
-    public boolean doesGuiPauseGame() {
+    @Override
+    public boolean doesGuiPauseGame()
+    {
         return false;
     }
 
-    public void drawScreen(final int mouseX, final int mouseY, final float par3) {
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float par3)
+    {
         GL11.glPushMatrix();
-        this.offsetX = (this.width - GuiInfoBook.bookImageW) / 2;
-        this.offsetY = (this.height - GuiInfoBook.bookImageH) / 2;
-        for (int k = 0; k < this.stacks.length; ++k) {
-            if (this.stacks[k] != null) {
+
+        offsetX = (width  - bookImageW)  / 2;
+        offsetY = (height - bookImageH) / 2;
+
+        for (int k = 0; k < stacks.length; ++k) {
+            if (stacks[k] != null) {
                 RenderHelper.enableGUIStandardItemLighting();
-                GuiScreen.itemRender.renderItemAndEffectIntoGUI(
-                    this.mc.fontRenderer,
-                    this.mc.getTextureManager(),
-                    this.stacks[k],
-                    this.butContent[k + 1].xPosition + 2,
-                    this.butContent[k + 1].yPosition + 2);
-                GuiScreen.itemRender.renderItemOverlayIntoGUI(
-                    this.mc.fontRenderer,
-                    this.mc.getTextureManager(),
-                    this.stacks[k],
-                    this.butContent[k + 1].xPosition + 2,
-                    this.butContent[k + 1].yPosition + 2);
+                GuiScreen.itemRender.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.getTextureManager(), stacks[k], butContent[k + 1].xPosition + 2, butContent[k + 1].yPosition + 2);
+                GuiScreen.itemRender.renderItemOverlayIntoGUI(mc.fontRenderer, mc.getTextureManager(), stacks[k], butContent[k + 1].xPosition + 2, butContent[k + 1].yPosition + 2);
             }
         }
-        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-        this.mc.getTextureManager()
-            .bindTexture(GuiInfoBook.TEXTURE);
-        this.drawTexturedModalRect(this.offsetX, this.offsetY, 0, 0, GuiInfoBook.bookImageW, GuiInfoBook.bookImageH);
-        final String title = Utils
-            .toString(DangerRPG.trans("rpgstr.info_about"), " ", this.target.getCommandSenderName());
-        this.fontRendererObj.drawStringWithShadow(
-            title,
-            this.offsetX + (GuiInfoBook.bookImageW - this.fontRendererObj.getStringWidth(title)) / 2,
-            this.offsetY + (GuiInfoBook.titleHeight - this.fontRendererObj.FONT_HEIGHT) / 2 + 2,
-            16777215);
-        this.content[GuiInfoBook.currContent].drawScreen(mouseX, mouseY, par3);
+
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        mc.getTextureManager().bindTexture(TEXTURE);
+        drawTexturedModalRect(offsetX, offsetY, 0, 0, bookImageW, bookImageH);
+
+        String title = Utils.toString(DangerRPG.trans("rpgstr.info_about"), " ", target.getCommandSenderName());
+        fontRendererObj.drawStringWithShadow(title, offsetX + (bookImageW - fontRendererObj.getStringWidth(title)) / 2, offsetY + (titleHeight - fontRendererObj.FONT_HEIGHT) / 2 + 2, 0xffffff);
+
+        content[currContent].drawScreen(mouseX, mouseY, par3);
+
         super.drawScreen(mouseX, mouseY, par3);
+
         GL11.glPopMatrix();
     }
 
-    static {
-        TEXTURE = new ResourceLocation("dangerrpg", "textures/gui/info_book.png");
-        GuiInfoBook.currContent = 0;
-        GuiInfoBook.bookImageW = 186;
-        GuiInfoBook.bookImageH = 254;
-        GuiInfoBook.titleHeight = 16;
-        GuiInfoBook.butContentX = 31;
-        GuiInfoBook.butContentY = 16;
-        GuiInfoBook.butContentU = 186;
-        GuiInfoBook.butContentV = 0;
-        GuiInfoBook.butContentI = 1;
-        GuiInfoBook.butContentS = 20;
-        GuiInfoBook.emptyIconU = 206;
-        GuiInfoBook.emptyIconV = 0;
-        GuiInfoBook.contentX = 5;
-        GuiInfoBook.contentY = 55;
-        GuiInfoBook.contentS = 190;
-    }
-
-    class SelectContentButton extends GuiButton {
-
-        public SelectContentButton(final int id, final int x, final int y) {
-            super(id, x, y, GuiInfoBook.butContentS, GuiInfoBook.butContentS, "");
+    class SelectContentButton extends GuiButton
+    {
+        public SelectContentButton(int id, int x, int y)
+        {
+            super(id, x, y, butContentS, butContentS, "");
         }
 
-        public void drawButton(final Minecraft mc, final int par1, final int par2) {
+        @Override
+        public void drawButton(Minecraft mc, int par1, int par2)
+        {
             if (this.visible) {
-                final boolean flag = par1 >= this.xPosition && par2 >= this.yPosition
-                    && par1 < this.xPosition + this.width
-                    && par2 < this.yPosition + this.height;
-                GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-                mc.getTextureManager()
-                    .bindTexture(GuiInfoBook.TEXTURE);
-                if (this.id == GuiInfoBook.currContent) {
-                    this.drawTexturedModalRect(
-                        this.xPosition,
-                        this.yPosition,
-                        GuiInfoBook.butContentU,
-                        GuiInfoBook.butContentV + GuiInfoBook.butContentS,
-                        GuiInfoBook.butContentS,
-                        GuiInfoBook.butContentS);
-                } else if (flag && this.enabled) {
-                    this.drawTexturedModalRect(
-                        this.xPosition,
-                        this.yPosition,
-                        GuiInfoBook.butContentU,
-                        GuiInfoBook.butContentV,
-                        GuiInfoBook.butContentS,
-                        GuiInfoBook.butContentS);
+                boolean flag = par1 >= xPosition && par2 >= yPosition && par1 < xPosition + width && par2 < yPosition + height;
+
+                GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+                mc.getTextureManager().bindTexture(TEXTURE);
+
+                if (id == currContent) {
+                    this.drawTexturedModalRect(xPosition, yPosition, butContentU, butContentV + butContentS, butContentS, butContentS);
                 }
-                if (this.id == 0 || GuiInfoBook.this.stacks[this.id - 1] == null) {
-                    this.drawTexturedModalRect(
-                        this.xPosition + 2,
-                        this.yPosition + 2,
-                        GuiInfoBook.emptyIconU + (GuiInfoBook.this.isTargetPlayer ? 0 : 16),
-                        GuiInfoBook.emptyIconV + this.id * 16,
-                        16,
-                        16);
+                else if (flag && this.enabled) {
+                    this.drawTexturedModalRect(xPosition, yPosition, butContentU, butContentV, butContentS, butContentS);
+                }
+
+                if (!(id != 0 && stacks[id - 1] != null)) {
+                    drawTexturedModalRect(xPosition + 2, yPosition + 2, emptyIconU + (isTargetPlayer ? 0 : 16), emptyIconV + id * 16, 16, 16);
                 }
             }
         }
 
-        public boolean mousePressed(final Minecraft mc, final int x, final int y) {
+        @Override
+        public boolean mousePressed(Minecraft mc, int x, int y)
+        {
             if (super.mousePressed(mc, x, y)) {
-                GuiInfoBook.currContent = this.id;
-                GuiInfoBook.this.content[this.id].init();
-                GuiInfoBook.this.buttonUp.visible = (this.id == 0);
-                GuiInfoBook.this.buttonDown.visible = (this.id == 0);
+                currContent = id;
+                content[id].init();
+                buttonUp.visible = id == 0;
+                buttonDown.visible = id == 0;
                 return true;
             }
             return false;

@@ -5,96 +5,130 @@ import mixac1.dangerrpg.init.RPGCapability;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-public abstract class ItemAttribute {
+public abstract class ItemAttribute
+{
     public final String name;
     public final int hash;
 
-    public ItemAttribute(String name) {
+    public ItemAttribute(String name)
+    {
         this.name = "ia.".concat(name);
-        this.hash = name.hashCode();
-        RPGCapability.mapIntToItemAttribute.put(this.hash, this);
+        hash = name.hashCode();
+        RPGCapability.mapIntToItemAttribute.put(hash, this);
     }
 
-    public boolean isValid(float value) {
-        return value >= 0.0F;
+    public boolean isValid(float value)
+    {
+        return value >= 0;
     }
 
-    public boolean isValid(ItemStack stack) {
-        return this.isValid(this.get(stack));
+    public boolean isValid(ItemStack stack)
+    {
+        return isValid(get(stack));
     }
 
-    public abstract boolean hasIt(ItemStack var1);
+    public abstract boolean hasIt(ItemStack stack);
 
-    public abstract void checkIt(ItemStack var1);
+    public abstract void checkIt(ItemStack stack);
 
-    /** @deprecated */
+    /**
+     * Warning: Check {@link #hasIt(ItemStack)} before use this method
+     */
     @Deprecated
-    public abstract float getRaw(ItemStack var1);
+    public abstract float getRaw(ItemStack stack);
 
-    public float get(ItemStack stack) {
-        float value = this.getRaw(stack);
-        if (!this.isValid(value)) {
-            this.init(stack);
-            value = this.getRaw(stack);
+    /**
+     * Warning: Check {@link #hasIt(ItemStack)} before use this method
+     */
+    public float get(ItemStack stack)
+    {
+        float value = getRaw(stack);
+        if (!isValid(value)) {
+            init(stack);
+            value = getRaw(stack);
         }
-
         return value;
     }
 
-    public float get(ItemStack stack, EntityPlayer player) {
-        return this.getChecked(stack);
+    /**
+     * Warning: Check {@link #hasIt(ItemStack)} before use this method
+     */
+    public float get(ItemStack stack, EntityPlayer player)
+    {
+        return getChecked(stack);
     }
 
-    public float getSafe(ItemStack stack, EntityPlayer player, float defaultValue) {
-        return this.hasIt(stack) ? this.get(stack, player) : defaultValue;
+    public float getSafe(ItemStack stack, EntityPlayer player, float defaultValue)
+    {
+        return hasIt(stack) ? get(stack, player) : defaultValue;
     }
 
-    public float getChecked(ItemStack stack) {
-        this.checkIt(stack);
-        return this.get(stack);
+    /**
+     * Warning: Check {@link #hasIt(ItemStack)} before use this method
+     */
+    public float getChecked(ItemStack stack)
+    {
+        checkIt(stack);
+        return get(stack);
     }
 
-    /** @deprecated */
     @Deprecated
-    public abstract void setRaw(ItemStack var1, float var2);
+    public abstract void setRaw(ItemStack stack, float value);
 
-    public void set(ItemStack stack, float value) {
-        if (this.isValid(value)) {
-            this.setRaw(stack, value);
+    /**
+     * Warning: Check {@link #hasIt(ItemStack)} before use this method
+     */
+    public void set(ItemStack stack, float value)
+    {
+        if (isValid(value)) {
+            setRaw(stack, value);
         }
-
     }
 
-    public void setChecked(ItemStack stack, float value) {
-        this.checkIt(stack);
-        this.setChecked(stack, value);
+    /**
+     * Warning: Check {@link #hasIt(ItemStack)} before use this method
+     */
+    public void setChecked(ItemStack stack, float value)
+    {
+        checkIt(stack);
+        setChecked(stack, value);
     }
 
-    public void add(ItemStack stack, float value) {
-        this.set(stack, value + this.get(stack));
+    /**
+     * Warning: Check {@link #hasIt(ItemStack)} before use this method
+     */
+    public void add(ItemStack stack, float value)
+    {
+        set(stack, value + get(stack));
     }
 
-    public abstract void init(ItemStack var1);
+    public abstract void init(ItemStack stack);
 
-    public abstract void lvlUp(ItemStack var1);
+    public abstract void lvlUp(ItemStack stack);
 
-    public String getDispayName() {
-        return DangerRPG.trans(this.name);
+    public String getDispayName()
+    {
+        return DangerRPG.trans(name);
     }
 
-    public String getDispayValue(ItemStack stack, EntityPlayer player) {
-        return String.format("%.2f", this.get(stack, player));
+    public String getDispayValue(ItemStack stack, EntityPlayer player)
+    {
+        return String.format("%.2f", get(stack, player));
     }
 
-    public boolean isVisibleInInfoBook(ItemStack stack) {
+    public boolean isVisibleInInfoBook(ItemStack stack)
+    {
         return true;
     }
 
-    public boolean isConfigurable() {
+    public boolean isConfigurable()
+    {
         return true;
     }
 
-    public final int hashCode() {
-        return this.hash;
+    @Override
+    public final int hashCode()
+    {
+        return hash;
     }
 }

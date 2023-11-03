@@ -1,54 +1,50 @@
 package mixac1.dangerrpg.client.gui;
 
-import net.minecraft.client.gui.inventory.*;
-import net.minecraft.entity.player.*;
-import net.minecraft.inventory.*;
-import net.minecraft.util.*;
-import net.minecraft.world.*;
-
-import cpw.mods.fml.relauncher.*;
-import mixac1.dangerrpg.init.*;
-import mixac1.dangerrpg.inventory.*;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import mixac1.dangerrpg.DangerRPG;
+import mixac1.dangerrpg.init.RPGBlocks;
+import mixac1.dangerrpg.inventory.ContainerRPGWorkbench;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
+import net.minecraft.world.World;
 
 @SideOnly(Side.CLIENT)
-public class GuiRPGWorkbench extends GuiContainer {
+public class GuiRPGWorkbench extends GuiContainer
+{
+    public static final ResourceLocation TEXTURE = new ResourceLocation(DangerRPG.MODID, "textures/gui/container/gui_rpg_workbench.png");
 
-    public static final ResourceLocation TEXTURE;
-    public static int textureW;
-    public static int textureH;
-    public static int nameStrY;
-    public static int invStrX;
-    public static int invStrY;
+    public static int textureW = 176;
+    public static int textureH = 227;
 
-    public GuiRPGWorkbench(final InventoryPlayer inventory, final World world, final int x, final int y, final int z) {
-        super((Container) new ContainerRPGWorkbench(inventory, world, x, y, z));
-        this.xSize = GuiRPGWorkbench.textureW;
-        this.ySize = GuiRPGWorkbench.textureH;
+    public static int nameStrY = 5;
+
+    public static int invStrX = 8;
+    public static int invStrY = 133;
+
+    public GuiRPGWorkbench(InventoryPlayer inventory, World world, int x, int y, int z)
+    {
+        super(new ContainerRPGWorkbench(inventory, world, x, y, z));
+
+        xSize = textureW;
+        ySize = textureH;
     }
 
-    protected void drawGuiContainerBackgroundLayer(final float partialTicks, final int mouseX, final int mouseY) {
-        this.mc.getTextureManager()
-            .bindTexture(GuiRPGWorkbench.TEXTURE);
-        this.drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
+    @Override
+    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
+    {
+        mc.getTextureManager().bindTexture(TEXTURE);
+        drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
     }
 
-    protected void drawGuiContainerForegroundLayer(final int mouseX, final int mouseY) {
-        final String s1 = StatCollector.translateToLocal(RPGBlocks.rpgWorkbench.getLocalizedName());
-        final String s2 = StatCollector.translateToLocal("key.inventory");
-        this.fontRendererObj.drawString(
-            s1,
-            (this.xSize - this.fontRendererObj.getStringWidth(s1)) / 2,
-            GuiRPGWorkbench.nameStrY,
-            4210752);
-        this.fontRendererObj.drawString(s2, GuiRPGWorkbench.invStrX, GuiRPGWorkbench.invStrY, 4210752);
-    }
-
-    static {
-        TEXTURE = new ResourceLocation("dangerrpg", "textures/gui/container/gui_rpg_workbench.png");
-        GuiRPGWorkbench.textureW = 176;
-        GuiRPGWorkbench.textureH = 227;
-        GuiRPGWorkbench.nameStrY = 5;
-        GuiRPGWorkbench.invStrX = 8;
-        GuiRPGWorkbench.invStrY = 133;
+    @Override
+    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
+    {
+        String s1 = StatCollector.translateToLocal(RPGBlocks.rpgWorkbench.getLocalizedName());
+        String s2 = StatCollector.translateToLocal("key.inventory");
+        fontRendererObj.drawString(s1, (xSize - fontRendererObj.getStringWidth(s1)) / 2, nameStrY, 0x404040);
+        fontRendererObj.drawString(s2, invStrX, invStrY, 0x404040);
     }
 }

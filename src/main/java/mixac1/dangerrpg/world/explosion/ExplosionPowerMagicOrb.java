@@ -1,19 +1,23 @@
 package mixac1.dangerrpg.world.explosion;
 
-import mixac1.dangerrpg.entity.projectile.core.*;
+import mixac1.dangerrpg.entity.projectile.core.EntityCommonMagic;
 
-public class ExplosionPowerMagicOrb extends ExplosionSpell {
-
-    public ExplosionPowerMagicOrb(final EntityCommonMagic entity, final double x, final double y, final double z,
-        final float explosionSize) {
+public class ExplosionPowerMagicOrb extends ExplosionSpell
+{
+    public ExplosionPowerMagicOrb(EntityCommonMagic entity, double x, double y, double z, float explosionSize)
+    {
         super(entity, x, y, z, explosionSize);
     }
 
-    public ExplosionEffect getExplosionEffect() {
+    @Override
+    public ExplosionEffect getExplosionEffect()
+    {
         return ExplosionEffect.MAGIC_POWER_ORB;
     }
 
-    public Object[] getEffectMeta() {
-        return new Object[] { ((EntityCommonMagic) this.exploder).getColor() };
+    @Override
+    public Object[] getEffectMeta()
+    {
+        return new Object[] { ((EntityCommonMagic) exploder).getColor() };
     }
 }

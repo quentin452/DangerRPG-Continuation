@@ -1,25 +1,30 @@
 package mixac1.dangerrpg.capability.data;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
 
-import mixac1.dangerrpg.util.*;
+import mixac1.dangerrpg.capability.data.RPGDataRegister.ElementData;
+import mixac1.dangerrpg.util.Tuple.Pair;
+import mixac1.dangerrpg.util.Utils;
 
-public abstract class RPGDataRegister<Key, Data extends RPGDataRegister.ElementData<Key, TransferData>, TransferKey, TransferData>
-    extends HashMap<Key, Data> {
-
+public abstract class RPGDataRegister<Key, Data extends ElementData<Key, TransferData>, TransferKey, TransferData> extends HashMap<Key, Data>
+{
     private byte[] transferData;
 
-    public boolean isActivated(final Key key) {
-        return this.containsKey(key) && this.get(key).isActivated;
+    public boolean isActivated(Key key)
+    {
+        return containsKey(key) && get(key).isActivated;
     }
 
-    public boolean isSupported(final Key key) {
-        return this.containsKey(key) && this.get(key).isSupported;
+    public boolean isSupported(Key key)
+    {
+        return containsKey(key) && get(key).isSupported;
     }
 
-    public HashMap<Key, Data> getActiveElements() {
-        final HashMap<Key, Data> map = new HashMap<Key, Data>();
-        for (final Map.Entry<Key, Data> entry : this.entrySet()) {
+    public HashMap<Key, Data> getActiveElements()
+    {
+        HashMap<Key, Data> map = new HashMap<Key, Data>();
+        for (Entry<Key, Data> entry : entrySet()) {
             if (entry.getValue().isActivated) {
                 map.put(entry.getKey(), entry.getValue());
             }
@@ -27,54 +32,53 @@ public abstract class RPGDataRegister<Key, Data extends RPGDataRegister.ElementD
         return map;
     }
 
-    protected abstract TransferKey codingKey(final Key p0);
+    protected abstract TransferKey codingKey(Key key);
 
-    protected abstract Key decodingKey(final TransferKey p0);
+    protected abstract Key decodingKey(TransferKey key);
 
-    public void createTransferData() {
-        final LinkedList<Tuple.Pair<TransferKey, TransferData>> list = new LinkedList<Tuple.Pair<TransferKey, TransferData>>();
-        for (final Map.Entry<Key, Data> entry : this.getActiveElements()
-            .entrySet()) {
-            final TransferKey key = this.codingKey(entry.getKey());
+    public void createTransferData()
+    {
+        LinkedList<Pair<TransferKey, TransferData>> list = new LinkedList<Pair<TransferKey, TransferData>>();
+        for (Entry<Key, Data> entry : getActiveElements().entrySet()) {
+            TransferKey key = codingKey(entry.getKey());
             if (key != null) {
-                list.add(
-                    new Tuple.Pair<TransferKey, TransferData>(
-                        key,
-                        (entry.getValue() != null) ? entry.getValue()
-                            .getTransferData(entry.getKey()) : null));
+                list.add(new Pair<TransferKey, TransferData>(key, entry.getValue() != null ? entry.getValue().getTransferData(entry.getKey()) : null));
             }
         }
-        this.transferData = Utils.serialize(list);
+
+        transferData = Utils.serialize(list);
     }
 
-    public byte[] getTransferData() {
-        return this.transferData;
+    public byte[] getTransferData()
+    {
+        return transferData;
     }
 
-    public void extractTransferData(final byte[] tranferData) {
-        for (final Map.Entry<Key, Data> entry : this.entrySet()) {
+    public void extractTransferData(byte[] tranferData)
+    {
+        for (Entry<Key, Data> entry : entrySet()) {
             entry.getValue().isActivated = false;
         }
-        final LinkedList<Tuple.Pair<TransferKey, TransferData>> list = Utils.deserialize(tranferData);
-        for (final Tuple.Pair<TransferKey, TransferData> data : list) {
-            final Key key = this.decodingKey(data.value1);
-            if (key != null && this.containsKey(key)) {
+
+        LinkedList<Pair<TransferKey, TransferData>> list = Utils.deserialize(tranferData);
+        for (Pair<TransferKey, TransferData> data : list) {
+            Key key = decodingKey(data.value1);
+            if (key != null && containsKey(key)) {
                 if (data.value2 != null) {
-                    this.get(key)
-                        .unpackTransferData(data.value2);
+                    get(key).unpackTransferData(data.value2);
                 }
-                this.get(key).isActivated = true;
+                get(key).isActivated = true;
             }
         }
     }
 
-    public abstract static class ElementData<Key, TransferData> {
-
+    public static abstract class ElementData<Key, TransferData>
+    {
         public boolean isActivated;
         public boolean isSupported;
 
-        public abstract TransferData getTransferData(final Key p0);
+        public abstract TransferData getTransferData(Key key);
 
-        public abstract void unpackTransferData(final TransferData p0);
+        public abstract void unpackTransferData(TransferData data);
     }
 }

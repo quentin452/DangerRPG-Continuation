@@ -1,56 +1,58 @@
 package mixac1.dangerrpg.entity.projectile;
 
-import net.minecraft.entity.*;
-import net.minecraft.item.*;
-import net.minecraft.util.*;
-import net.minecraft.world.*;
+import mixac1.dangerrpg.world.explosion.ExplosionCommonRPG;
+import mixac1.dangerrpg.world.explosion.ExplosionPowerMagicOrb;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.World;
 
-import mixac1.dangerrpg.entity.projectile.core.*;
-import mixac1.dangerrpg.world.explosion.*;
-
-public class EntityPowerMagicOrb extends EntityMagicOrb {
-
-    public EntityPowerMagicOrb(final World world) {
+public class EntityPowerMagicOrb extends EntityMagicOrb
+{
+    public EntityPowerMagicOrb(World world)
+    {
         super(world);
     }
 
-    public EntityPowerMagicOrb(final World world, final ItemStack stack) {
+    public EntityPowerMagicOrb(World world, ItemStack stack)
+    {
         super(world);
     }
 
-    public EntityPowerMagicOrb(final World world, final ItemStack stack, final double x, final double y,
-        final double z) {
+    public EntityPowerMagicOrb(World world, ItemStack stack, double x, double y, double z)
+    {
         super(world, stack, x, y, z);
     }
 
-    public EntityPowerMagicOrb(final World world, final EntityLivingBase thrower, final ItemStack stack,
-        final float speed, final float deviation) {
+    public EntityPowerMagicOrb(World world, EntityLivingBase thrower, ItemStack stack, float speed, float deviation)
+    {
         super(world, thrower, stack, speed, deviation);
     }
 
-    public EntityPowerMagicOrb(final World world, final EntityLivingBase thrower, final EntityLivingBase target,
-        final ItemStack stack, final float speed, final float deviation) {
+    public EntityPowerMagicOrb(World world, EntityLivingBase thrower, EntityLivingBase target, ItemStack stack, float speed, float deviation)
+    {
         super(world, thrower, target, stack, speed, deviation);
     }
 
-    public void preInpact(final MovingObjectPosition mop) {
-        if (!this.worldObj.isRemote) {
-            final ExplosionCommonRPG explosion = new ExplosionPowerMagicOrb(
-                (EntityCommonMagic) this,
-                mop.hitVec.xCoord,
-                mop.hitVec.yCoord,
-                mop.hitVec.zCoord,
-                2.0f);
-            explosion.init(false, 1.0f, 0.0f, false);
+    @Override
+    public void preInpact(MovingObjectPosition mop)
+    {
+        if (!worldObj.isRemote) {
+            ExplosionCommonRPG explosion = new ExplosionPowerMagicOrb(this, mop.hitVec.xCoord, mop.hitVec.yCoord, mop.hitVec.zCoord, 2);
+            explosion.init(false, 1, 0, false);
             explosion.doExplosion();
         }
     }
 
-    public float getAirResistance() {
-        return 0.95f;
+    @Override
+    public float getAirResistance()
+    {
+        return 0.95F;
     }
 
-    public float getGravity() {
-        return 0.05f;
+    @Override
+    public float getGravity()
+    {
+        return 0.05F;
     }
 }

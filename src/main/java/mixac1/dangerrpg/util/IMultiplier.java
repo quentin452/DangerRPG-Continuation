@@ -1,58 +1,72 @@
 package mixac1.dangerrpg.util;
 
-import java.io.*;
+import java.io.Serializable;
 
-public interface IMultiplier<Type> extends Serializable {
+public interface IMultiplier<Type> extends Serializable
+{
+    public Type up(Type value, Object... objs);
 
-    public static final MultiplierAdd ADD_1 = new MultiplierAdd(1.0f);
-    public static final MultiplierMul MUL_1 = new MultiplierMul(1.0f);
+    public interface IMultiplierE<Type> extends IMultiplier<Type>
+    {
+        public Type down(Type value, Object... objs);
+    }
 
-    Type up(final Type p0, final Object... p1);
-
-    public enum MulType {
-
-        ADD {
-
+    enum MulType
+    {
+        ADD
+        {
             @Override
-            public Multiplier getMul(final Float d) {
+            public Multiplier getMul(Float d)
+            {
                 return new MultiplierAdd(d);
             }
         },
-        MUL {
 
+        MUL
+        {
             @Override
-            public Multiplier getMul(final Float d) {
+            public Multiplier getMul(Float d)
+            {
                 return new MultiplierMul(d);
             }
         },
-        SQRT {
 
+        SQRT
+        {
             @Override
-            public Multiplier getMul(final Float d) {
+            public Multiplier getMul(Float d)
+            {
                 return new MultiplierSQRT(d);
             }
         },
-        HARD {
 
+        HARD
+        {
             @Override
-            public String toString(final Float value) {
-                return this.name();
+            public String toString(Float value)
+            {
+                return name();
             }
-        };
+        },
 
-        public Multiplier getMul(final Float value) {
+        ;
+
+        public Multiplier getMul(Float value)
+        {
             return null;
         }
 
-        public String toString(final Float value) {
-            return Utils.toString(this.name(), " ", value);
+        public String toString(Float value)
+        {
+            return Utils.toString(name(), " ", value);
         }
 
-        public static Multiplier getMul(final String str) {
-            final String[] strs = str.split(" ");
+        public static Multiplier getMul(String str)
+        {
+            String[] strs = str.split(" ");
             if (strs.length == 2) {
-                final MulType type = valueOf(strs[0].toUpperCase());
-                final Float value = Float.valueOf(strs[1]);
+                MulType type = MulType.valueOf(strs[0].toUpperCase());
+                Float value = Float.valueOf(strs[1]);
                 if (type != null && value != null) {
                     return type.getMul(value);
                 }
@@ -61,81 +75,91 @@ public interface IMultiplier<Type> extends Serializable {
         }
     }
 
-    public abstract static class Multiplier implements IMultiplierE<Float> {
-
+    public static abstract class Multiplier implements IMultiplierE<Float>
+    {
         public final Float mul;
         public final MulType mulType;
 
-        public Multiplier(final Float mul, final MulType mulType) {
+        public Multiplier(Float mul, MulType mulType)
+        {
             this.mul = mul;
             this.mulType = mulType;
         }
 
         @Override
-        public String toString() {
-            return this.mulType.toString(this.mul);
+        public String toString()
+        {
+            return mulType.toString(mul);
         }
     }
 
-    public static class MultiplierAdd extends Multiplier {
-
-        public MultiplierAdd(final Float mul) {
+    public static class MultiplierAdd extends Multiplier
+    {
+        public MultiplierAdd(Float mul)
+        {
             super(mul, MulType.ADD);
         }
 
         @Override
-        public Float up(final Float value, final Object... objs) {
-            return value + this.mul;
+        public Float up(Float value, Object... objs)
+        {
+            return value + mul;
         }
 
         @Override
-        public Float down(final Float value, final Object... objs) {
-            return value - this.mul;
+        public Float down(Float value, Object... objs)
+        {
+            return value - mul;
         }
     }
 
-    public static class MultiplierMul extends Multiplier {
-
-        public MultiplierMul(final Float mul) {
+    public static class MultiplierMul extends Multiplier
+    {
+        public MultiplierMul(Float mul)
+        {
             super(mul, MulType.MUL);
         }
 
         @Override
-        public Float up(final Float value, final Object... objs) {
-            return value * this.mul;
+        public Float up(Float value, Object... objs)
+        {
+            return value * mul;
         }
 
         @Override
-        public Float down(final Float value, final Object... objs) {
-            return value / this.mul;
+        public Float down(Float value, Object... objs)
+        {
+            return value / mul;
         }
     }
 
-    public static class MultiplierSQRT extends Multiplier {
-
-        public MultiplierSQRT(final Float mul) {
+    public static class MultiplierSQRT extends Multiplier
+    {
+        public MultiplierSQRT(Float mul)
+        {
             super(mul, MulType.SQRT);
         }
 
         @Override
-        public Float up(final Float value, final Object... objs) {
-            return (float) (value + Math.sqrt(value * this.mul));
+        public Float up(Float value, Object... objs)
+        {
+            return (float) (value + Math.sqrt(value * mul));
         }
 
         @Override
-        public Float down(final Float value, final Object... objs) {
-            final float a = -1.0f;
-            final float b = 2.0f * value + this.mul;
-            final float c = -value * value;
-            final float d = (float) Math.sqrt(Math.pow(b, 2.0) - 4.0f * a * c);
-            final float tmp1 = (-b - d) / 2.0f * a;
-            final float tmp2 = (-b + d) / 2.0f * a;
-            return (this.up(tmp1, new Object[0]) == value) ? tmp1 : tmp2;
+        public Float down(Float value, Object... objs)
+        {
+            float a = -1;
+            float b = 2 * value + mul;
+            float c = -value * value;
+            float d = (float) Math.sqrt((Math.pow(b, 2) - 4 * a * c));
+            float tmp1 = (-b - d) / 2 * a;
+            float tmp2 = (-b + d) / 2 * a;
+            return up(tmp1) == value ? tmp1 : tmp2;
         }
     }
 
-    public interface IMultiplierE<Type> extends IMultiplier<Type> {
+    public static final MultiplierAdd ADD_1 = new MultiplierAdd(1F);
 
-        Type down(final Type p0, final Object... p1);
-    }
+    public static final MultiplierMul MUL_1 = new MultiplierMul(1F);
 }

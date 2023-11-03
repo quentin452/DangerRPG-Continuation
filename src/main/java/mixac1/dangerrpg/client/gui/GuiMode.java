@@ -1,51 +1,53 @@
 package mixac1.dangerrpg.client.gui;
 
-import net.minecraftforge.common.*;
-
-import cpw.mods.fml.common.eventhandler.*;
-import cpw.mods.fml.relauncher.*;
-import mixac1.dangerrpg.api.event.*;
-import mixac1.dangerrpg.util.*;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import mixac1.dangerrpg.api.event.GuiModeChangeEvent;
+import mixac1.dangerrpg.util.Utils;
+import net.minecraftforge.common.MinecraftForge;
 
 @SideOnly(Side.CLIENT)
-public class GuiMode {
+public class GuiMode
+{
+    private static int curr = 0;
 
-    private static int curr;
-
-    public static void change() {
-        if (++GuiMode.curr >= GuiModeType.values().length) {
-            GuiMode.curr = 0;
+    public static void change()
+    {
+        if (++curr >= GuiModeType.values().length) {
+            curr = 0;
         }
-        MinecraftForge.EVENT_BUS.post((Event) new GuiModeChangeEvent(curr()));
+        MinecraftForge.EVENT_BUS.post(new GuiModeChangeEvent(curr()));
     }
 
-    public static GuiModeType curr() {
-        return GuiModeType.values()[GuiMode.curr];
+    public static GuiModeType curr()
+    {
+        return GuiModeType.values()[curr];
     }
 
-    public static void set(final int number) {
-        GuiMode.curr = (int) Utils.alignment((float) number, 0.0f, (float) (GuiModeType.values().length - 1));
+    public static void set(int number)
+    {
+        curr = (int) Utils.alignment(number, 0, GuiModeType.values().length - 1);
     }
 
-    public static boolean isIt(final GuiModeType type) {
+    public static boolean isIt(GuiModeType type)
+    {
         return type.equals(curr());
     }
 
-    static {
-        GuiMode.curr = 0;
-    }
+    public static enum GuiModeType
+    {
+        NORMAL          (false, false),
+        NORMAL_DIGITAL  (true,  false),
+        SIMPLE          (false, true),
+        SIMPLE_DIGITAL  (true,  true),
 
-    public enum GuiModeType {
-
-        NORMAL(false, false),
-        NORMAL_DIGITAL(true, false),
-        SIMPLE(false, true),
-        SIMPLE_DIGITAL(true, true);
+        ;
 
         public boolean isDigital;
         public boolean isSimple;
 
-        private GuiModeType(final boolean isDigital, final boolean isSimple) {
+        GuiModeType(boolean isDigital, boolean isSimple)
+        {
             this.isDigital = isDigital;
             this.isSimple = isSimple;
         }

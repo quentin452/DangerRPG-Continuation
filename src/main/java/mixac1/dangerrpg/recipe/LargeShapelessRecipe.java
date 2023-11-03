@@ -1,82 +1,105 @@
 package mixac1.dangerrpg.recipe;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-import net.minecraft.block.*;
-import net.minecraft.inventory.*;
-import net.minecraft.item.*;
-import net.minecraft.item.crafting.*;
-import net.minecraft.world.*;
+import mixac1.dangerrpg.inventory.ContainerRPGWorkbench;
+import net.minecraft.block.Block;
+import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.world.World;
 
-import mixac1.dangerrpg.inventory.*;
+public class LargeShapelessRecipe implements IRecipe
+{
+    public static String NAME = "large_shapeless";
 
-public class LargeShapelessRecipe implements IRecipe {
-
-    public static String NAME;
     private final ItemStack recipeOutput;
     public final List recipeItems;
 
-    public LargeShapelessRecipe(final ItemStack recipeOutput, final List recipeItems) {
+    public LargeShapelessRecipe(ItemStack recipeOutput, List recipeItems)
+    {
         this.recipeOutput = recipeOutput;
         this.recipeItems = recipeItems;
     }
 
-    public ItemStack getRecipeOutput() {
+    @Override
+    public ItemStack getRecipeOutput()
+    {
         return this.recipeOutput;
     }
 
-    public boolean matches(InventoryCrafting inv, World world) {
-        final ArrayList<ItemStack> list = new ArrayList<>(this.recipeItems);
+    @Override
+    public boolean matches(InventoryCrafting inv, World world)
+    {
+        ArrayList list = new ArrayList(this.recipeItems);
+
         for (int i = 0; i < ContainerRPGWorkbench.craftSize; ++i) {
             for (int j = 0; j < ContainerRPGWorkbench.craftSize; ++j) {
-                final ItemStack stack = inv.getStackInRowAndColumn(j, i);
+                ItemStack stack = inv.getStackInRowAndColumn(j, i);
+
                 if (stack != null) {
                     boolean flag = false;
-                    for (final ItemStack iterStack : list) {
-                        if (stack.getItem() == iterStack.getItem() && (iterStack.getItemDamage() == 32767
-                            || stack.getItemDamage() == iterStack.getItemDamage())) {
+                    Iterator iterator = list.iterator();
+
+                    while (iterator.hasNext()) {
+                        ItemStack iterStack = (ItemStack)iterator.next();
+
+                        if (stack.getItem() == iterStack.getItem() && (iterStack.getItemDamage() == 32767 || stack.getItemDamage() == iterStack.getItemDamage())) {
                             flag = true;
                             list.remove(iterStack);
                             break;
                         }
                     }
+
                     if (!flag) {
                         return false;
                     }
                 }
             }
         }
+
         return list.isEmpty();
     }
 
-    public ItemStack getCraftingResult(final InventoryCrafting inv) {
+    @Override
+    public ItemStack getCraftingResult(InventoryCrafting inv)
+    {
         return this.recipeOutput.copy();
     }
 
-    public int getRecipeSize() {
+    @Override
+    public int getRecipeSize()
+    {
         return this.recipeItems.size();
     }
 
-    public static LargeShapelessRecipe create(final ItemStack stack, final Object... objs) {
-        final ArrayList arraylist = new ArrayList();
-        final Object[] aobject = objs;
-        for (int i = objs.length, j = 0; j < i; ++j) {
-            final Object object1 = aobject[j];
+    public static LargeShapelessRecipe create(ItemStack stack, Object ... objs)
+    {
+        ArrayList arraylist = new ArrayList();
+        Object[] aobject = objs;
+        int i = objs.length;
+
+        for (int j = 0; j < i; ++j) {
+            Object object1 = aobject[j];
+
             if (object1 instanceof ItemStack) {
-                arraylist.add(((ItemStack) object1).copy());
-            } else if (object1 instanceof Item) {
-                arraylist.add(new ItemStack((Item) object1));
-            } else {
+                arraylist.add(((ItemStack)object1).copy());
+            }
+            else if (object1 instanceof Item) {
+                arraylist.add(new ItemStack((Item)object1));
+            }
+            else {
                 if (!(object1 instanceof Block)) {
                     throw new RuntimeException("Invalid shapeless recipy!");
                 }
-                arraylist.add(new ItemStack((Block) object1));
+
+                arraylist.add(new ItemStack((Block)object1));
             }
         }
-        return new LargeShapelessRecipe(stack, arraylist);
-    }
 
-    static {
-        LargeShapelessRecipe.NAME = "large_shapeless";
+        return new LargeShapelessRecipe(stack, arraylist);
     }
 }

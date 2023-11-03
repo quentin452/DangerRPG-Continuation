@@ -1,134 +1,145 @@
 package mixac1.dangerrpg.event;
 
-import net.minecraft.entity.*;
-import net.minecraft.entity.player.*;
-import net.minecraft.item.*;
-import net.minecraft.nbt.*;
-import net.minecraft.util.*;
-import net.minecraftforge.common.*;
-import net.minecraftforge.event.entity.*;
-import net.minecraftforge.event.entity.living.*;
-import net.minecraftforge.event.entity.player.*;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import mixac1.dangerrpg.DangerRPG;
+import mixac1.dangerrpg.api.entity.EntityAttribute.EAFloat;
+import mixac1.dangerrpg.api.event.InitRPGEntityEvent;
+import mixac1.dangerrpg.api.event.ItemStackEvent.StackChangedEvent;
+import mixac1.dangerrpg.capability.EntityAttributes;
+import mixac1.dangerrpg.capability.PlayerAttributes;
+import mixac1.dangerrpg.capability.RPGEntityHelper;
+import mixac1.dangerrpg.capability.data.RPGEntityProperties;
+import mixac1.dangerrpg.init.RPGCapability;
+import mixac1.dangerrpg.init.RPGConfig.EntityConfig;
+import mixac1.dangerrpg.init.RPGNetwork;
+import mixac1.dangerrpg.network.MsgSyncEntityData;
+import mixac1.dangerrpg.util.IMultiplier.Multiplier;
+import mixac1.dangerrpg.util.RPGHelper;
+import mixac1.dangerrpg.util.Utils;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
+import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 
-import cpw.mods.fml.common.eventhandler.*;
-import cpw.mods.fml.common.gameevent.*;
-import cpw.mods.fml.common.network.simpleimpl.*;
-import mixac1.dangerrpg.*;
-import mixac1.dangerrpg.api.entity.*;
-import mixac1.dangerrpg.api.event.*;
-import mixac1.dangerrpg.capability.*;
-import mixac1.dangerrpg.capability.data.*;
-import mixac1.dangerrpg.init.*;
-import mixac1.dangerrpg.network.*;
-import mixac1.dangerrpg.util.*;
-
-public class EventHandlerEntity {
-
+public class EventHandlerEntity
+{
     @SubscribeEvent
-    public void onEntityConstructing(final EntityEvent.EntityConstructing e) {
+    public void onEntityConstructing(EntityConstructing e)
+    {
         if (e.entity instanceof EntityLivingBase && RPGEntityHelper.isRPGable((EntityLivingBase) e.entity)) {
             RPGEntityProperties.register((EntityLivingBase) e.entity);
         }
     }
 
     @SubscribeEvent
-    public void onEntityJoinWorld(final EntityJoinWorldEvent e) {
+    public void onEntityJoinWorld(EntityJoinWorldEvent e)
+    {
         if (e.entity instanceof EntityLivingBase && RPGEntityHelper.isRPGable((EntityLivingBase) e.entity)) {
             if (e.entity.worldObj.isRemote) {
-                RPGNetwork.net.sendToServer((IMessage) new MsgSyncEntityData((EntityLivingBase) e.entity));
-            } else {
-                RPGEntityProperties.get((EntityLivingBase) e.entity)
-                    .serverInit();
+                RPGNetwork.net.sendToServer(new MsgSyncEntityData((EntityLivingBase) e.entity));
+            }
+            else {
+                RPGEntityProperties.get((EntityLivingBase) e.entity).serverInit();
             }
         }
     }
 
     @SubscribeEvent
-    public void onPlayerCloned(final PlayerEvent.Clone e) {
+    public void onPlayerCloned(PlayerEvent.Clone e)
+    {
         if (e.wasDeath) {
-            RPGEntityProperties.get((EntityLivingBase) e.original)
-                .rebuildOnDeath();
+            RPGEntityProperties.get(e.original).rebuildOnDeath();
         }
-        final NBTTagCompound nbt = new NBTTagCompound();
-        RPGEntityProperties.get((EntityLivingBase) e.original)
-            .saveNBTData(nbt);
-        RPGEntityProperties.get((EntityLivingBase) e.entityPlayer)
-            .loadNBTData(nbt);
+        NBTTagCompound nbt = new NBTTagCompound();
+        RPGEntityProperties.get(e.original).saveNBTData(nbt);
+        RPGEntityProperties.get(e.entityPlayer).loadNBTData(nbt);
     }
 
     @SubscribeEvent
-    public void onInitRPGEntity(final InitRPGEntityEvent e) {
-        final ChunkCoordinates spawn = e.entity.worldObj.getSpawnPoint();
-        final double distance = Utils.getDiagonal(e.entity.posX - spawn.posX, e.entity.posZ - spawn.posZ);
-        final int lvl = (int) (distance / RPGConfig.EntityConfig.d.entityLvlUpFrequency);
+    public void onInitRPGEntity(InitRPGEntityEvent e)
+    {
+        ChunkCoordinates spawn = e.entity.worldObj.getSpawnPoint();
+        double distance = Utils.getDiagonal(e.entity.posX - spawn.posX, e.entity.posZ - spawn.posZ);
+
+        int lvl = (int) (distance / EntityConfig.d.entityLvlUpFrequency);
         if (EntityAttributes.LVL.hasIt(e.entity)) {
-            EntityAttributes.LVL.setValue((lvl + 1), e.entity);
+            EntityAttributes.LVL.setValue(lvl + 1, e.entity);
         }
+
+        Multiplier mul;
         if (EntityAttributes.HEALTH.hasIt(e.entity)) {
-            final float health = e.entity.getHealth();
-            final IMultiplier.Multiplier mul = RPGCapability.rpgEntityRegistr.get(e.entity).attributes
-                .get(EntityAttributes.HEALTH).mulValue;
+            float health = e.entity.getHealth();
+            mul = RPGCapability.rpgEntityRegistr.get(e.entity).attributes.get(EntityAttributes.HEALTH).mulValue;
             EntityAttributes.HEALTH.setValue(RPGHelper.multyMul(health, lvl, mul), e.entity);
         }
-        EntityAttribute.EAFloat attr = RPGCapability.rpgEntityRegistr.get(e.entity).rpgComponent
-            .getEAMeleeDamage(e.entity);
+
+        EAFloat attr = RPGCapability.rpgEntityRegistr.get(e.entity).rpgComponent.getEAMeleeDamage(e.entity);
         if (attr != null) {
-            final IMultiplier.Multiplier mul = RPGCapability.rpgEntityRegistr.get(e.entity).attributes
-                .get(attr).mulValue;
+            mul = RPGCapability.rpgEntityRegistr.get(e.entity).attributes.get(attr).mulValue;
             attr.addValue(RPGHelper.multyMul(attr.getValue(e.entity), lvl, mul), e.entity);
         }
+
         attr = RPGCapability.rpgEntityRegistr.get(e.entity).rpgComponent.getEARangeDamage(e.entity);
         if (attr != null) {
-            final IMultiplier.Multiplier mul = RPGCapability.rpgEntityRegistr.get(e.entity).attributes
-                .get(attr).mulValue;
-            attr.addValue(RPGHelper.multyMul((float) attr.getValue(e.entity), lvl, mul), e.entity);
+            mul = RPGCapability.rpgEntityRegistr.get(e.entity).attributes.get(attr).mulValue;
+            attr.addValue(RPGHelper.multyMul(attr.getValue(e.entity), lvl, mul), e.entity);
         }
     }
 
     @SubscribeEvent
-    public void onLivingJump(final LivingEvent.LivingJumpEvent e) {
+    public void onLivingJump(LivingJumpEvent e)
+    {
         if (e.entityLiving instanceof EntityPlayer) {
-            final EntityLivingBase entityLiving = e.entityLiving;
-            entityLiving.motionY += (float) PlayerAttributes.JUMP_HEIGHT.getValue(e.entityLiving) * 14.0f;
+            e.entityLiving.motionY += PlayerAttributes.JUMP_HEIGHT.getValue(e.entityLiving) * 14;
         }
     }
 
     @SubscribeEvent
-    public void onLivingFall(final LivingFallEvent e) {
+    public void onLivingFall(LivingFallEvent e)
+    {
         if (e.entityLiving instanceof EntityPlayer) {
-            e.distance -= (float) PlayerAttributes.FALL_RESIST.getValue(e.entityLiving) * 10.0f;
+            e.distance -= PlayerAttributes.FALL_RESIST.getValue(e.entityLiving) * 10;
         }
     }
 
     @SubscribeEvent
-    public void onPlayerTick(final TickEvent.PlayerTickEvent e) {
+    public void onPlayerTick(TickEvent.PlayerTickEvent e)
+    {
         if (e.phase == TickEvent.Phase.START) {
             DangerRPG.proxy.fireTick(e.side);
-            float tmp1;
+
+            float tmp1, tmp2;
             if (!e.player.worldObj.isRemote) {
-                float tmp2;
-                if (DangerRPG.proxy.getTick(e.side) % 20 == 0 && (tmp1 = PlayerAttributes.CURR_MANA.getValue(e.player)) < PlayerAttributes.MANA.getValue(e.player) && (tmp2 = (Float)PlayerAttributes.MANA_REGEN.getValue(e.player)) != 0.0F) {
-                    PlayerAttributes.CURR_MANA.setValue(tmp1 + tmp2, e.player);
+                if (DangerRPG.proxy.getTick(e.side) % 20 == 0) {
+                    if ((tmp1 = PlayerAttributes.CURR_MANA.getValue(e.player)) < PlayerAttributes.MANA.getValue(e.player) &&
+                        (tmp2 = PlayerAttributes.MANA_REGEN.getValue(e.player)) != 0) {
+                        PlayerAttributes.CURR_MANA.setValue(tmp1 + tmp2, e.player);
+                    }
                 }
 
                 if (DangerRPG.proxy.getTick(e.side) % 100 == 0) {
-
-                    float baseRegen = 1f;
-                    e.player.heal(baseRegen);
-
-                    float regen = PlayerAttributes.HEALTH_REGEN.getValue(e.player);
-                    e.player.heal(regen);
-
+                    e.player.heal(PlayerAttributes.HEALTH_REGEN.getValue(e.player));
                 }
 
                 for (int i = 0; i < 5; ++i) {
+                    ItemStack oldStack = e.player.previousEquipment[i];
                     ItemStack newStack = e.player.getEquipmentInSlot(i);
-                    ItemStack oldStack = e.player.getHeldItem();
+
                     if (!ItemStack.areItemStacksEqual(newStack, oldStack)) {
-                        MinecraftForge.EVENT_BUS.post(new ItemStackEvent.StackChangedEvent(newStack, oldStack, i, e.player));
+                        MinecraftForge.EVENT_BUS.post(new StackChangedEvent(newStack, oldStack, i, e.player));
                     }
                 }
+            }
+            else {
+
             }
 
             if (e.player.getHealth() > (tmp1 = e.player.getMaxHealth())) {
@@ -139,8 +150,8 @@ public class EventHandlerEntity {
                 PlayerAttributes.CURR_MANA.setValue(tmp1, e.player);
             }
 
-            if ((tmp1 = PlayerAttributes.SPEED_COUNTER.getValue(e.player)) > 0.0F) {
-                PlayerAttributes.SPEED_COUNTER.setValue(tmp1 - 1.0F, e.player);
+            if (e.player != null && (tmp1 = PlayerAttributes.SPEED_COUNTER.getValue(e.player)) > 0) {
+                PlayerAttributes.SPEED_COUNTER.setValue(tmp1 - 1, e.player);
             }
         }
     }

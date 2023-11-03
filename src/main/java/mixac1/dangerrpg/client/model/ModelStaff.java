@@ -1,11 +1,13 @@
 package mixac1.dangerrpg.client.model;
 
-import net.minecraft.client.model.*;
-import net.minecraft.entity.*;
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.entity.Entity;
 
-public class ModelStaff extends ModelBase {
+public class ModelStaff extends ModelBase
+{
+    public static final ModelStaff INSTANCE = new ModelStaff();
 
-    public static final ModelStaff INSTANCE;
     public ModelRenderer shape28;
     public ModelRenderer shape29;
     public ModelRenderer shape30;
@@ -32,63 +34,90 @@ public class ModelStaff extends ModelBase {
     public ModelRenderer shape24;
     public ModelRenderer shape3;
 
-    public ModelStaff() {
+    public ModelStaff()
+    {
         this.textureWidth = 32;
         this.textureHeight = 11;
-        (this.shape16 = new ModelRenderer((ModelBase) this, 0, 0)).setRotationPoint(7.0f, -7.0f, 0.0f);
-        this.shape16.addBox(0.0f, 0.0f, 0.0f, 1, 3, 1, 0.0f);
-        (this.shape6 = new ModelRenderer((ModelBase) this, 0, 0)).setRotationPoint(-4.0f, 4.0f, 0.0f);
-        this.shape6.addBox(0.0f, 0.0f, 0.0f, 1, 3, 1, 0.0f);
-        (this.shape13 = new ModelRenderer((ModelBase) this, 0, 0)).setRotationPoint(4.0f, -4.0f, 0.0f);
-        this.shape13.addBox(0.0f, 0.0f, 0.0f, 1, 3, 1, 0.0f);
-        (this.shape29 = new ModelRenderer((ModelBase) this, 8, 0)).setRotationPoint(14.0f, -16.0f, -1.0f);
-        this.shape29.addBox(0.0f, 0.0f, 0.0f, 4, 4, 3, 0.1f);
-        (this.shape10 = new ModelRenderer((ModelBase) this, 0, 0)).setRotationPoint(0.0f, 0.0f, 0.0f);
-        this.shape10.addBox(0.0f, 0.0f, 0.0f, 1, 3, 1, 0.0f);
-        (this.shape4 = new ModelRenderer((ModelBase) this, 0, 0)).setRotationPoint(-6.0f, 6.0f, 0.0f);
-        this.shape4.addBox(0.0f, 0.0f, 0.0f, 1, 3, 1, 0.0f);
-        (this.shape19 = new ModelRenderer((ModelBase) this, 0, 0)).setRotationPoint(10.0f, -10.0f, 0.0f);
-        this.shape19.addBox(0.0f, 0.0f, 0.0f, 1, 3, 1, 0.0f);
-        (this.shape24 = new ModelRenderer((ModelBase) this, 0, 4)).setRotationPoint(13.0f, -11.0f, 0.0f);
-        this.shape24.addBox(0.0f, 0.0f, 0.0f, 1, 1, 1, 0.0f);
-        (this.shape7 = new ModelRenderer((ModelBase) this, 0, 0)).setRotationPoint(-3.0f, 3.0f, 0.0f);
-        this.shape7.addBox(0.0f, 0.0f, 0.0f, 1, 3, 1, 0.0f);
-        (this.shape9 = new ModelRenderer((ModelBase) this, 0, 0)).setRotationPoint(-1.0f, 1.0f, 0.0f);
-        this.shape9.addBox(0.0f, 0.0f, 0.0f, 1, 3, 1, 0.0f);
-        (this.shape17 = new ModelRenderer((ModelBase) this, 0, 0)).setRotationPoint(8.0f, -8.0f, 0.0f);
-        this.shape17.addBox(0.0f, 0.0f, 0.0f, 1, 3, 1, 0.0f);
-        (this.shape21 = new ModelRenderer((ModelBase) this, 0, 0)).setRotationPoint(12.0f, -12.0f, 0.0f);
-        this.shape21.addBox(0.0f, 0.0f, 0.0f, 1, 3, 1, 0.0f);
-        (this.shape15 = new ModelRenderer((ModelBase) this, 0, 0)).setRotationPoint(6.0f, -6.0f, 0.0f);
-        this.shape15.addBox(0.0f, 0.0f, 0.0f, 1, 3, 1, 0.0f);
-        (this.shape12 = new ModelRenderer((ModelBase) this, 0, 0)).setRotationPoint(3.0f, -3.0f, 0.0f);
-        this.shape12.addBox(0.0f, 0.0f, 0.0f, 1, 3, 1, 0.0f);
-        (this.shape28 = new ModelRenderer((ModelBase) this, 20, 5)).setRotationPoint(13.0f, -14.1f, -1.0f);
-        this.shape28.addBox(0.0f, 0.0f, 0.0f, 3, 3, 3, 0.0f);
-        (this.shape5 = new ModelRenderer((ModelBase) this, 0, 0)).setRotationPoint(-5.0f, 5.0f, 0.0f);
-        this.shape5.addBox(0.0f, 0.0f, 0.0f, 1, 3, 1, 0.0f);
-        (this.shape14 = new ModelRenderer((ModelBase) this, 0, 0)).setRotationPoint(5.0f, -5.0f, 0.0f);
-        this.shape14.addBox(0.0f, 0.0f, 0.0f, 1, 3, 1, 0.0f);
-        (this.shape3 = new ModelRenderer((ModelBase) this, 0, 0)).setRotationPoint(1.0f, -1.0f, 0.0f);
-        this.shape3.addBox(0.0f, 0.0f, 0.0f, 1, 3, 1, 0.0f);
-        (this.shape20 = new ModelRenderer((ModelBase) this, 0, 0)).setRotationPoint(11.0f, -11.0f, 0.0f);
-        this.shape20.addBox(0.0f, 0.0f, 0.0f, 1, 3, 1, 0.0f);
-        (this.shape34 = new ModelRenderer((ModelBase) this, 0, 4)).setRotationPoint(-7.0f, 7.0f, 0.0f);
-        this.shape34.addBox(0.0f, 0.0f, 0.0f, 1, 1, 1, 0.0f);
-        (this.shape30 = new ModelRenderer((ModelBase) this, 22, 0)).setRotationPoint(15.0f, -17.0f, 0.0f);
-        this.shape30.addBox(0.0f, 0.0f, 0.0f, 4, 4, 1, 0.0f);
-        (this.shape11 = new ModelRenderer((ModelBase) this, 0, 0)).setRotationPoint(2.0f, -2.0f, 0.0f);
-        this.shape11.addBox(0.0f, 0.0f, 0.0f, 1, 3, 1, 0.0f);
-        (this.shape35 = new ModelRenderer((ModelBase) this, 0, 6)).setRotationPoint(-9.0f, 8.0f, 0.0f);
-        this.shape35.addBox(0.0f, 0.0f, 0.0f, 3, 3, 1, 0.0f);
-        (this.shape8 = new ModelRenderer((ModelBase) this, 0, 0)).setRotationPoint(-2.0f, 2.0f, 0.0f);
-        this.shape8.addBox(0.0f, 0.0f, 0.0f, 1, 3, 1, 0.0f);
-        (this.shape18 = new ModelRenderer((ModelBase) this, 0, 0)).setRotationPoint(9.0f, -9.0f, 0.0f);
-        this.shape18.addBox(0.0f, 0.0f, 0.0f, 1, 3, 1, 0.0f);
+        this.shape16 = new ModelRenderer(this, 0, 0);
+        this.shape16.setRotationPoint(7.0F, -7.0F, 0.0F);
+        this.shape16.addBox(0.0F, 0.0F, 0.0F, 1, 3, 1, 0.0F);
+        this.shape6 = new ModelRenderer(this, 0, 0);
+        this.shape6.setRotationPoint(-4.0F, 4.0F, 0.0F);
+        this.shape6.addBox(0.0F, 0.0F, 0.0F, 1, 3, 1, 0.0F);
+        this.shape13 = new ModelRenderer(this, 0, 0);
+        this.shape13.setRotationPoint(4.0F, -4.0F, 0.0F);
+        this.shape13.addBox(0.0F, 0.0F, 0.0F, 1, 3, 1, 0.0F);
+        this.shape29 = new ModelRenderer(this, 8, 0);
+        this.shape29.setRotationPoint(14.0F, -16.0F, -1.0F);
+        this.shape29.addBox(0.0F, 0.0F, 0.0F, 4, 4, 3, 0.1F);
+        this.shape10 = new ModelRenderer(this, 0, 0);
+        this.shape10.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.shape10.addBox(0.0F, 0.0F, 0.0F, 1, 3, 1, 0.0F);
+        this.shape4 = new ModelRenderer(this, 0, 0);
+        this.shape4.setRotationPoint(-6.0F, 6.0F, 0.0F);
+        this.shape4.addBox(0.0F, 0.0F, 0.0F, 1, 3, 1, 0.0F);
+        this.shape19 = new ModelRenderer(this, 0, 0);
+        this.shape19.setRotationPoint(10.0F, -10.0F, 0.0F);
+        this.shape19.addBox(0.0F, 0.0F, 0.0F, 1, 3, 1, 0.0F);
+        this.shape24 = new ModelRenderer(this, 0, 4);
+        this.shape24.setRotationPoint(13.0F, -11.0F, 0.0F);
+        this.shape24.addBox(0.0F, 0.0F, 0.0F, 1, 1, 1, 0.0F);
+        this.shape7 = new ModelRenderer(this, 0, 0);
+        this.shape7.setRotationPoint(-3.0F, 3.0F, 0.0F);
+        this.shape7.addBox(0.0F, 0.0F, 0.0F, 1, 3, 1, 0.0F);
+        this.shape9 = new ModelRenderer(this, 0, 0);
+        this.shape9.setRotationPoint(-1.0F, 1.0F, 0.0F);
+        this.shape9.addBox(0.0F, 0.0F, 0.0F, 1, 3, 1, 0.0F);
+        this.shape17 = new ModelRenderer(this, 0, 0);
+        this.shape17.setRotationPoint(8.0F, -8.0F, 0.0F);
+        this.shape17.addBox(0.0F, 0.0F, 0.0F, 1, 3, 1, 0.0F);
+        this.shape21 = new ModelRenderer(this, 0, 0);
+        this.shape21.setRotationPoint(12.0F, -12.0F, 0.0F);
+        this.shape21.addBox(0.0F, 0.0F, 0.0F, 1, 3, 1, 0.0F);
+        this.shape15 = new ModelRenderer(this, 0, 0);
+        this.shape15.setRotationPoint(6.0F, -6.0F, 0.0F);
+        this.shape15.addBox(0.0F, 0.0F, 0.0F, 1, 3, 1, 0.0F);
+        this.shape12 = new ModelRenderer(this, 0, 0);
+        this.shape12.setRotationPoint(3.0F, -3.0F, 0.0F);
+        this.shape12.addBox(0.0F, 0.0F, 0.0F, 1, 3, 1, 0.0F);
+        this.shape28 = new ModelRenderer(this, 20, 5);
+        this.shape28.setRotationPoint(13.0F, -14.1F, -1.0F);
+        this.shape28.addBox(0.0F, 0.0F, 0.0F, 3, 3, 3, 0.0F);
+        this.shape5 = new ModelRenderer(this, 0, 0);
+        this.shape5.setRotationPoint(-5.0F, 5.0F, 0.0F);
+        this.shape5.addBox(0.0F, 0.0F, 0.0F, 1, 3, 1, 0.0F);
+        this.shape14 = new ModelRenderer(this, 0, 0);
+        this.shape14.setRotationPoint(5.0F, -5.0F, 0.0F);
+        this.shape14.addBox(0.0F, 0.0F, 0.0F, 1, 3, 1, 0.0F);
+        this.shape3 = new ModelRenderer(this, 0, 0);
+        this.shape3.setRotationPoint(1.0F, -1.0F, 0.0F);
+        this.shape3.addBox(0.0F, 0.0F, 0.0F, 1, 3, 1, 0.0F);
+        this.shape20 = new ModelRenderer(this, 0, 0);
+        this.shape20.setRotationPoint(11.0F, -11.0F, 0.0F);
+        this.shape20.addBox(0.0F, 0.0F, 0.0F, 1, 3, 1, 0.0F);
+        this.shape34 = new ModelRenderer(this, 0, 4);
+        this.shape34.setRotationPoint(-7.0F, 7.0F, 0.0F);
+        this.shape34.addBox(0.0F, 0.0F, 0.0F, 1, 1, 1, 0.0F);
+        this.shape30 = new ModelRenderer(this, 22, 0);
+        this.shape30.setRotationPoint(15.0F, -17.0F, 0.0F);
+        this.shape30.addBox(0.0F, 0.0F, 0.0F, 4, 4, 1, 0.0F);
+        this.shape11 = new ModelRenderer(this, 0, 0);
+        this.shape11.setRotationPoint(2.0F, -2.0F, 0.0F);
+        this.shape11.addBox(0.0F, 0.0F, 0.0F, 1, 3, 1, 0.0F);
+        this.shape35 = new ModelRenderer(this, 0, 6);
+        this.shape35.setRotationPoint(-9.0F, 8.0F, 0.0F);
+        this.shape35.addBox(0.0F, 0.0F, 0.0F, 3, 3, 1, 0.0F);
+        this.shape8 = new ModelRenderer(this, 0, 0);
+        this.shape8.setRotationPoint(-2.0F, 2.0F, 0.0F);
+        this.shape8.addBox(0.0F, 0.0F, 0.0F, 1, 3, 1, 0.0F);
+        this.shape18 = new ModelRenderer(this, 0, 0);
+        this.shape18.setRotationPoint(9.0F, -9.0F, 0.0F);
+        this.shape18.addBox(0.0F, 0.0F, 0.0F, 1, 3, 1, 0.0F);
     }
 
-    public void render(final Entity entity, final float f, final float f1, final float f2, final float f3,
-        final float f4, final float f5) {
+    @Override
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
+    {
         this.shape16.render(f5);
         this.shape6.render(f5);
         this.shape13.render(f5);
@@ -116,13 +145,10 @@ public class ModelStaff extends ModelBase {
         this.shape18.render(f5);
     }
 
-    public void setRotateAngle(final ModelRenderer modelRenderer, final float x, final float y, final float z) {
+    public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z)
+    {
         modelRenderer.rotateAngleX = x;
         modelRenderer.rotateAngleY = y;
         modelRenderer.rotateAngleZ = z;
-    }
-
-    static {
-        INSTANCE = new ModelStaff();
     }
 }

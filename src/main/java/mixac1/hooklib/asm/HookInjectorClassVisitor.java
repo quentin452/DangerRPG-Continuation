@@ -1,35 +1,41 @@
 package mixac1.hooklib.asm;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
 
-import org.objectweb.asm.*;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 
-public class HookInjectorClassVisitor extends ClassVisitor {
-
+public class HookInjectorClassVisitor extends ClassVisitor
+{
     List<AsmHook> hooks;
     boolean visitingHook;
 
-    public HookInjectorClassVisitor(final ClassWriter cv, final List<AsmHook> hooks) {
-        super(327680, (ClassVisitor) cv);
+    public HookInjectorClassVisitor(ClassWriter cv, List<AsmHook> hooks)
+    {
+        super(Opcodes.ASM5, cv);
         this.hooks = hooks;
     }
 
-    public MethodVisitor visitMethod(final int access, final String name, final String desc, final String signature,
-        final String[] exceptions) {
+    @Override
+    public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions)
+    {
         MethodVisitor mv = super.visitMethod(access, name, desc, signature, exceptions);
-        final Iterator<AsmHook> it = this.hooks.iterator();
+        Iterator<AsmHook> it = hooks.iterator();
         while (it.hasNext()) {
-            final AsmHook hook = it.next();
-            if (this.isTargetMethod(hook, name, desc)) {
-                mv = (MethodVisitor) hook.getInjectorFactory()
-                    .createHookInjector(mv, access, name, desc, hook, this);
+            AsmHook hook = it.next();
+            if (isTargetMethod(hook, name, desc)) {
+                mv = hook.getInjectorFactory().createHookInjector(mv, access, name, desc, hook, this);
                 it.remove();
             }
         }
         return mv;
     }
 
-    protected boolean isTargetMethod(final AsmHook hook, final String name, final String desc) {
+    protected boolean isTargetMethod(AsmHook hook, String name, String desc)
+    {
         return hook.isTargetMethod(name, desc);
     }
 }

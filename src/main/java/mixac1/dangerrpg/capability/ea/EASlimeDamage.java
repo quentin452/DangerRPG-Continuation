@@ -1,36 +1,43 @@
 package mixac1.dangerrpg.capability.ea;
 
-import java.util.*;
+import java.util.UUID;
 
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.*;
-import net.minecraft.entity.monster.*;
+import mixac1.dangerrpg.api.entity.EAWithIAttr;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.monster.EntitySlime;
 
-import mixac1.dangerrpg.api.entity.*;
-
-public class EASlimeDamage extends EAWithIAttr {
-
-    public EASlimeDamage(final String name, final IAttribute attr) {
+public class EASlimeDamage extends EAWithIAttr
+{
+    public EASlimeDamage(String name, IAttribute attr)
+    {
         super(name);
     }
 
-    public Float getValueRaw(final EntityLivingBase entity) {
-        return super.getValueRaw(entity) * this.getSlimeMul(entity);
+    @Override
+    public Float getValueRaw(EntityLivingBase entity)
+    {
+        return super.getValueRaw(entity) * getSlimeMul(entity);
     }
 
-    public Float getBaseValue(final EntityLivingBase entity) {
-        return super.getBaseValue(entity) * this.getSlimeMul(entity);
+    @Override
+    public Float getBaseValue(EntityLivingBase entity)
+    {
+        return super.getBaseValue(entity) * getSlimeMul(entity);
     }
 
-    public Float getModificatorValue(final EntityLivingBase entity, final UUID ID) {
-        return super.getModificatorValue(entity, ID) * this.getSlimeMul(entity);
+    @Override
+    public Float getModificatorValue(EntityLivingBase entity, UUID ID)
+    {
+        return super.getModificatorValue(entity, ID) * getSlimeMul(entity);
     }
 
-    private float getSlimeMul(final EntityLivingBase entity) {
+    private float getSlimeMul(EntityLivingBase entity)
+    {
         if (entity instanceof EntitySlime) {
-            final int size = ((EntitySlime) entity).getSlimeSize();
-            return size / 4.0f;
+            int size = ((EntitySlime) entity).getSlimeSize();
+            return size / 4f;
         }
-        return 1.0f;
+        return 1;
     }
 }

@@ -1,23 +1,31 @@
 package mixac1.dangerrpg.capability.ia;
 
-import net.minecraft.item.*;
+import mixac1.dangerrpg.api.item.IAStatic;
+import mixac1.dangerrpg.capability.ItemAttributes;
+import net.minecraft.item.ItemStack;
 
-import mixac1.dangerrpg.api.item.*;
-import mixac1.dangerrpg.capability.*;
-
-public class IADurability extends IAStatic {
-
-    public IADurability(final String name) {
+public class IADurability extends IAStatic
+{
+    public IADurability(String name)
+    {
         super(name);
     }
 
-    public boolean hasIt(final ItemStack stack) {
+    @Override
+    public boolean hasIt(ItemStack stack)
+    {
         return ItemAttributes.MAX_DURABILITY.hasIt(stack);
     }
 
-    public void checkIt(final ItemStack stack) {}
+    @Override
+    public void checkIt(ItemStack stack)
+    {
 
-    public float get(final ItemStack stack) {
+    }
+
+    @Override
+    public float get(ItemStack stack)
+    {
         return stack.getMaxDamage() - stack.getItemDamage();
     }
 }

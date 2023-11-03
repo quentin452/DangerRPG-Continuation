@@ -1,129 +1,150 @@
 package mixac1.dangerrpg.capability.data;
 
-import java.io.*;
-import java.util.*;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
-import net.minecraft.item.*;
+import mixac1.dangerrpg.DangerRPG;
+import mixac1.dangerrpg.api.item.GemType;
+import mixac1.dangerrpg.api.item.IADynamic;
+import mixac1.dangerrpg.api.item.IAStatic;
+import mixac1.dangerrpg.api.item.IRPGItem;
+import mixac1.dangerrpg.api.item.ItemAttribute;
+import mixac1.dangerrpg.capability.data.RPGItemRegister.ItemAttrParams;
+import mixac1.dangerrpg.capability.data.RPGItemRegister.RPGItemData;
+import mixac1.dangerrpg.init.RPGCapability;
+import mixac1.dangerrpg.util.IMultiplier.Multiplier;
+import mixac1.dangerrpg.util.Tuple.Pair;
+import mixac1.dangerrpg.util.Tuple.Stub;
+import net.minecraft.item.Item;
 
-import mixac1.dangerrpg.*;
-import mixac1.dangerrpg.api.item.*;
-import mixac1.dangerrpg.init.*;
-import mixac1.dangerrpg.util.*;
-
-public class RPGItemRegister extends
-    RPGDataRegister<Item, RPGItemRegister.RPGItemData, Integer, Tuple.Pair<HashMap<Integer, RPGItemRegister.ItemAttrParams>, HashMap<Integer, Integer>>> {
-
-    protected Integer codingKey(final Item key) {
+public class RPGItemRegister extends RPGDataRegister<Item, RPGItemData, Integer, Pair<HashMap<Integer, ItemAttrParams>, HashMap<Integer, Integer>>>
+{
+    @Override
+    protected Integer codingKey(Item key)
+    {
         return Item.getIdFromItem(key);
     }
 
-    protected Item decodingKey(final Integer key) {
-        return Item.getItemById((int) key);
+    @Override
+    protected Item decodingKey(Integer key)
+    {
+        return Item.getItemById(key);
     }
 
-    public static class RPGItemData extends
-        RPGDataRegister.ElementData<Item, Tuple.Pair<HashMap<Integer, ItemAttrParams>, HashMap<Integer, Integer>>> {
+    /******************************************************************************************************/
 
-        public HashMap<ItemAttribute, ItemAttrParams> attributes;
-        public HashMap<GemType, Tuple.Stub<Integer>> gems;
+    public static class RPGItemData extends RPGDataRegister.ElementData<Item, Pair<HashMap<Integer, ItemAttrParams>, HashMap<Integer, Integer>>>
+    {
+        public HashMap<ItemAttribute, ItemAttrParams> attributes = new LinkedHashMap<ItemAttribute, ItemAttrParams>();
+        public HashMap<GemType, Stub<Integer>> gems = new LinkedHashMap<GemType, Stub<Integer>>();
         public IRPGItem rpgComponent;
-        public ItemType itemType;
+        public ItemType itemType = ItemType.MELEE_WPN;
 
-        public RPGItemData(final IRPGItem lvlComponent, final boolean isSupported) {
-            this.attributes = new LinkedHashMap<ItemAttribute, ItemAttrParams>();
-            this.gems = new LinkedHashMap<GemType, Tuple.Stub<Integer>>();
-            this.itemType = ItemType.MELEE_WPN;
+        public RPGItemData(IRPGItem lvlComponent, boolean isSupported)
+        {
             this.rpgComponent = lvlComponent;
             this.isSupported = isSupported;
         }
 
-        public void registerIAStatic(final IAStatic attr, final float value) {
-            this.attributes.put((ItemAttribute) attr, new ItemAttrParams(value, null));
+        public void registerIAStatic(IAStatic attr, float value)
+        {
+            attributes.put(attr, new ItemAttrParams(value, null));
         }
 
-        public void registerIADynamic(final IADynamic attr, final float value, final IMultiplier.Multiplier mul) {
-            this.attributes.put((ItemAttribute) attr, new ItemAttrParams(value, mul));
+        public void registerIADynamic(IADynamic attr, float value, Multiplier mul)
+        {
+            attributes.put(attr, new ItemAttrParams(value, mul));
         }
 
-        public void registerGT(final GemType gemType, final int count) {
-            for (final GemType it : this.gems.keySet()) {
+        public void registerGT(GemType gemType, int count)
+        {
+            for (GemType it : gems.keySet()) {
                 if (it.name.equals(gemType.name)) {
-                    this.gems.remove(it);
+                    gems.remove(it);
                     break;
                 }
             }
-            this.gems.put(gemType, Tuple.Stub.create((count < 1) ? 1 : count));
+
+            gems.put(gemType, Stub.create(count < 1 ? 1 : count));
         }
 
-        public Tuple.Pair<HashMap<Integer, ItemAttrParams>, HashMap<Integer, Integer>> getTransferData(final Item key) {
-            final HashMap<Integer, ItemAttrParams> tmp1 = new HashMap<Integer, ItemAttrParams>();
-            for (final Map.Entry<ItemAttribute, ItemAttrParams> entry : this.attributes.entrySet()) {
+        @Override
+        public Pair<HashMap<Integer, ItemAttrParams>, HashMap<Integer, Integer>> getTransferData(Item key)
+        {
+            HashMap<Integer, ItemAttrParams> tmp1 = new HashMap<Integer, ItemAttrParams>();
+            for (Entry<ItemAttribute, ItemAttrParams> entry : attributes.entrySet()) {
                 tmp1.put(entry.getKey().hash, entry.getValue());
             }
-            final HashMap<Integer, Integer> tmp2 = new HashMap<Integer, Integer>();
-            for (final Map.Entry<GemType, Tuple.Stub<Integer>> entry2 : this.gems.entrySet()) {
-                tmp2.put(entry2.getKey().hash, entry2.getValue().value1);
+
+            HashMap<Integer, Integer> tmp2 = new HashMap<Integer, Integer>();
+            for (Entry<GemType, Stub<Integer>> entry : gems.entrySet()) {
+                tmp2.put(entry.getKey().hash, entry.getValue().value1);
             }
-            return new Tuple.Pair<HashMap<Integer, ItemAttrParams>, HashMap<Integer, Integer>>(tmp1, tmp2);
+
+            return new Pair<HashMap<Integer, ItemAttrParams>, HashMap<Integer, Integer>>(tmp1, tmp2);
         }
 
-        public void unpackTransferData(
-            final Tuple.Pair<HashMap<Integer, ItemAttrParams>, HashMap<Integer, Integer>> data) {
-            for (final Map.Entry<Integer, ItemAttrParams> entry : data.value1.entrySet()) {
+        @Override
+        public void unpackTransferData(Pair<HashMap<Integer, ItemAttrParams>, HashMap<Integer, Integer>> data)
+        {
+            for (Entry<Integer, ItemAttrParams> entry : data.value1.entrySet()) {
                 if (RPGCapability.mapIntToItemAttribute.containsKey(entry.getKey())) {
-                    final ItemAttribute attr = RPGCapability.mapIntToItemAttribute.get(entry.getKey());
-                    if (!this.attributes.containsKey(attr)) {
-                        continue;
+                    ItemAttribute attr = RPGCapability.mapIntToItemAttribute.get(entry.getKey());
+                    if (attributes.containsKey(attr)) {
+                        ItemAttrParams tmp = attributes.get(attr);
+                        tmp.value = entry.getValue().value;
+                        tmp.mul = entry.getValue().mul;
                     }
-                    final ItemAttrParams tmp = this.attributes.get(attr);
-                    tmp.value = entry.getValue().value;
-                    tmp.mul = entry.getValue().mul;
                 }
             }
-            for (final Map.Entry<Integer, Integer> entry2 : data.value2.entrySet()) {
-                if (RPGCapability.mapIntToGemType.containsKey(entry2.getKey())) {
-                    final GemType gemType = RPGCapability.mapIntToGemType.get(entry2.getKey());
-                    if (!this.gems.containsKey(gemType)) {
-                        continue;
+
+            for (Entry<Integer, Integer> entry : data.value2.entrySet()) {
+                if (RPGCapability.mapIntToGemType.containsKey(entry.getKey())) {
+                    GemType gemType = RPGCapability.mapIntToGemType.get(entry.getKey());
+                    if (gems.containsKey(gemType)) {
+                        gems.get(gemType).value1 = entry.getValue();
                     }
-                    this.gems.get(gemType).value1 = entry2.getValue();
                 }
             }
         }
     }
 
-    public static class ItemAttrParams implements Serializable {
-
+    public static class ItemAttrParams implements Serializable
+    {
         public float value;
-        public IMultiplier.Multiplier mul;
+        public Multiplier mul;
 
-        public ItemAttrParams(final float value, final IMultiplier.Multiplier mul) {
+        public ItemAttrParams(float value, Multiplier mul)
+        {
             this.value = value;
             this.mul = mul;
         }
 
-        public float up(final float value) {
-            return this.mul.up(value, new Object[0]);
+        public float up(float value)
+        {
+            return mul.up(value);
         }
     }
 
-    public enum ItemType {
-
+    public enum ItemType
+    {
         MELEE_WPN,
         TOOL,
         ARMOR,
         BOW,
         RANGE_WPN,
-        STAFF;
+        STAFF
 
-        public String getDisplayName() {
-            return DangerRPG.trans(
-                "it.".concat(
-                    this.name()
-                        .toLowerCase()));
+        ;
+
+        public String getDisplayName()
+        {
+            return DangerRPG.trans("it.".concat(name().toLowerCase()));
         }
 
-        public static String getDisplayNameAll() {
+        public static String getDisplayNameAll()
+        {
             return DangerRPG.trans("it.all");
         }
     }
