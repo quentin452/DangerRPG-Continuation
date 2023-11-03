@@ -1,10 +1,13 @@
 package mixac1.dangerrpg.client.gui;
 
+import com.google.common.collect.Multimap;
+import io.netty.util.AttributeMap;
 import net.minecraft.client.*;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.gui.inventory.*;
 import net.minecraft.client.renderer.*;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.boss.*;
 import net.minecraft.entity.player.*;
 import net.minecraft.item.*;
@@ -19,6 +22,8 @@ import mixac1.dangerrpg.capability.data.*;
 import mixac1.dangerrpg.hook.*;
 import mixac1.dangerrpg.init.*;
 import mixac1.dangerrpg.util.*;
+
+import java.util.Map;
 
 public class RPGGuiIngame extends Gui {
 
@@ -496,14 +501,35 @@ public class RPGGuiIngame extends Gui {
                 }
             }
             if (hasMeleeDamage && this.mode.isDigital) {
-                final String s = this.genValueStr(
-                    (float) iRPG.getEAMeleeDamage(entity)
-                        .getValue(entity));
+                ItemStack item = entity.getHeldItem();
+
+                float itemDamage = 0;
+
+                if (item != null) {
+                    Multimap itemAttributes = item.getAttributeModifiers();
+
+                    for (Object attribute : itemAttributes.entries()) {
+                        if (attribute instanceof Map.Entry) {
+                            Map.Entry entry = (Map.Entry) attribute;
+
+                            if (entry.getKey().equals(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName())) {
+                                itemDamage += ((AttributeModifier) entry.getValue()).getAmount();
+                            }
+                        }
+                    }
+                }
+
+                float meleeDamage = iRPG.getEAMeleeDamage(entity).getValue(entity);
+
+                meleeDamage += itemDamage;
+
+                final String s = genValueStr(meleeDamage);
                 this.fr.drawStringWithShadow(
                     s,
                     offsetX + this.getOffsetX(s, this.barX, isInverted),
                     offsetMeleeDmg + (this.barIconH - this.fr.FONT_HEIGHT) / 2 + 1,
-                    16777215);
+                    16777215
+                );
             }
             if (hasRangeDamage && this.mode.isDigital) {
                 final String s = this.genValueStr(

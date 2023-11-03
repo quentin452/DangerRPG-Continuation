@@ -162,28 +162,32 @@ public class EventHandlerItem {
     }
 
     @SubscribeEvent
-    public void onStackChangedEvent(ItemStackEvent.StackChangedEvent e) {
-        if (e.slot == 0) {
-            final IAttributeInstance attr = e.player.getEntityAttribute(SharedMonsterAttributes.attackDamage);
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        EntityPlayer player = event.entityPlayer;
+        ItemStack heldItem = player.getHeldItem();
+
+        // Check if the player is holding a valid item
+        if (heldItem != null && RPGItemHelper.isRPGable(heldItem) && ItemAttributes.STR_MUL.hasIt(heldItem)) {
+            final IAttributeInstance attr = player.getEntityAttribute(SharedMonsterAttributes.attackDamage);
             final AttributeModifier mod = attr.getModifier(RPGOther.RPGUUIDs.ADD_STR_DAMAGE);
+
             if (mod != null) {
                 attr.removeModifier(mod);
             }
-            if (e.stack != null && RPGItemHelper.isRPGable(e.stack) && ItemAttributes.STR_MUL.hasIt(e.stack)) {
-                final AttributeModifier newMod = new AttributeModifier(
-                    RPGOther.RPGUUIDs.ADD_STR_DAMAGE,
-                    "Strenght damage",
-                    PlayerAttributes.STRENGTH.getValue(e.player)
-                        * ItemAttributes.STR_MUL.get(e.stack),
-                    0).setSaved(true);
-                attr.applyModifier(newMod);
-            }
+
+            final AttributeModifier newMod = new AttributeModifier(
+                RPGOther.RPGUUIDs.ADD_STR_DAMAGE,
+                "Strength damage",
+                PlayerAttributes.STRENGTH.getValue(player) * ItemAttributes.STR_MUL.get(heldItem),
+                0
+            ).setSaved(true);
+            attr.applyModifier(newMod);
         }
-        if (e.oldStack != null) {
-            GemTypes.PA.activate2All(e.oldStack, e.player);
+        if (heldItem != null) {
+            GemTypes.PA.activate2All(heldItem, player);
         }
-        if (e.stack != null) {
-            GemTypes.PA.activate1All(e.stack, e.player);
+        if (heldItem != null) {
+            GemTypes.PA.activate1All(heldItem, player);
         }
     }
 
