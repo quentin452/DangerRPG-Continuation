@@ -575,7 +575,7 @@ public class RPGConfig {
         }
 
         public void postLoadPre() {
-            final ArrayList<String> names = RPGHelper.getEntityNames(RPGCapability.rpgEntityRegistr.keySet(), true);
+            final ArrayList<String> names = (ArrayList<String>) RPGHelper.getEntityNames(RPGCapability.rpgEntityRegistr.keySet(), true);
             final Property prop = this.getPropertyStrings(
                 "activeRPGEntities",
                 names.toArray(new String[names.size()]),
@@ -592,13 +592,13 @@ public class RPGConfig {
             final HashMap<Class<? extends EntityLivingBase>, RPGEntityRegister.RPGEntityData> map = (HashMap<Class<? extends EntityLivingBase>, RPGEntityRegister.RPGEntityData>) RPGCapability.rpgEntityRegistr
                 .getActiveElements();
             this.customConfig(map);
-            ArrayList<String> names = RPGHelper.getEntityNames(map.keySet(), true);
+            ArrayList<String> names = (ArrayList<String>) RPGHelper.getEntityNames(map.keySet(), true);
             this.getPropertyStrings(
                 "activeRPGEntities",
                 names.toArray(new String[names.size()]),
                 "Set active RPG entities (activated if 'isAllEntitiesRPGable' is false) (true/false)",
                 true);
-            names = RPGHelper.getEntityNames(RPGCapability.rpgEntityRegistr.keySet(), true);
+            names = (ArrayList<String>) RPGHelper.getEntityNames(RPGCapability.rpgEntityRegistr.keySet(), true);
             this.getPropertyStrings(
                 "entityList",
                 names.toArray(new String[names.size()]),
