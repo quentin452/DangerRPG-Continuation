@@ -179,7 +179,7 @@ public class EventHandlerItem {
             final AttributeModifier newMod = new AttributeModifier(
                 RPGOther.RPGUUIDs.ADD_STR_DAMAGE,
                 "Strength damage",
-                PlayerAttributes.STRENGTH.getValue(player) * ItemAttributes.STR_MUL.get(heldItem),
+                PlayerAttributes.STRENGTH.getValue(player) * ItemAttributes.STR_MUL.get(heldItem) * 2,
                 0
             ).setSaved(true);
             attr.applyModifier(newMod);

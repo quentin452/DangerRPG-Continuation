@@ -771,7 +771,7 @@ public class RPGGuiIngame extends Gui {
 
         return String.format("%.1f%s", scaledValue, unit);
     }
-    
+
     private double invert(final double value) {
         return Utils.invert(value, this.isInvert);
     }
