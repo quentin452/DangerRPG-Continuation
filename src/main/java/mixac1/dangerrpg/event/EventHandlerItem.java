@@ -39,7 +39,7 @@ public class EventHandlerItem {
                     float speed = ItemAttributes.MELEE_SPEED.getSafe(e.stack, player, 10.0F);
                     PlayerAttributes.SPEED_COUNTER.setValue(speed < 0.0F ? 0.0F : speed, player);
                 } else {
-                    e.newDamage += (Float)PlayerAttributes.STRENGTH.getValue(player) * ItemAttributes.STR_MUL.getSafe(e.stack, player, 0.0F);
+                    e.newDamage += PlayerAttributes.STRENGTH.getValue(player) * ItemAttributes.STR_MUL.getSafe(e.stack, player, 0.0F);
                 }
                 e.entity.hurtResistantTime = 0;
                 e.knockback += ItemAttributes.KNOCKBACK.getSafe(e.stack, player, 0.0F);
@@ -87,10 +87,10 @@ public class EventHandlerItem {
                         (int) ItemAttributes.MAX_EXP.get(e.itemStack)));
             }
             final HashMap<GemType, List<ItemStack>> map = new HashMap<GemType, List<ItemStack>>();
-            final Set<GemType> set = ((RPGItemRegister.RPGItemData) RPGCapability.rpgItemRegistr
-                .get((Object) item)).gems.keySet();
+            final Set<GemType> set = RPGCapability.rpgItemRegistr
+                .get(item).gems.keySet();
             for (final GemType gemType : set) {
-                final List<ItemStack> list = (List<ItemStack>) gemType.get(e.itemStack);
+                final List<ItemStack> list = gemType.get(e.itemStack);
                 if (!list.isEmpty()) {
                     map.put(gemType, list);
                 }
@@ -133,7 +133,7 @@ public class EventHandlerItem {
     @SubscribeEvent
     public void onBreakSpeed(PlayerEvent.BreakSpeed e) {
         if (ForgeHooks.canToolHarvestBlock(e.block, e.metadata, e.entityPlayer.inventory.getCurrentItem())) {
-            e.newSpeed += (float) PlayerAttributes.EFFICIENCY.getValue((EntityLivingBase) e.entityPlayer);
+            e.newSpeed += PlayerAttributes.EFFICIENCY.getValue(e.entityPlayer);
         }
     }
 
@@ -162,33 +162,25 @@ public class EventHandlerItem {
             true);
     }
 
+
     @SubscribeEvent
-    public void onPlayerInteract(PlayerInteractEvent event) {
-        EntityPlayer player = event.entityPlayer;
-        ItemStack heldItem = player.getHeldItem();
-
-        // Check if the player is holding a valid item
-        if (heldItem != null && RPGItemHelper.isRPGable(heldItem) && ItemAttributes.STR_MUL.hasIt(heldItem)) {
-            final IAttributeInstance attr = player.getEntityAttribute(SharedMonsterAttributes.attackDamage);
-            final AttributeModifier mod = attr.getModifier(RPGOther.RPGUUIDs.ADD_STR_DAMAGE);
-
+    public void onStackChangedEvent(ItemStackEvent.StackChangedEvent e) {
+        if (e.slot == 0) {
+            IAttributeInstance attr = e.player.getEntityAttribute(SharedMonsterAttributes.attackDamage);
+            AttributeModifier mod = attr.getModifier(RPGOther.RPGUUIDs.ADD_STR_DAMAGE);
             if (mod != null) {
                 attr.removeModifier(mod);
             }
-
-            final AttributeModifier newMod = new AttributeModifier(
-                RPGOther.RPGUUIDs.ADD_STR_DAMAGE,
-                "Strength damage",
-                PlayerAttributes.STRENGTH.getValue(player) * ItemAttributes.STR_MUL.get(heldItem) * 2,
-                0
-            ).setSaved(true);
-            attr.applyModifier(newMod);
+            if (RPGItemHelper.isRPGable(e.stack) && ItemAttributes.STR_MUL.hasIt(e.stack)) {
+                AttributeModifier newMod = (new AttributeModifier(RPGOther.RPGUUIDs.ADD_STR_DAMAGE, "Strenght damage", PlayerAttributes.STRENGTH.getValue(e.player) * ItemAttributes.STR_MUL.get(e.stack), 0)).setSaved(true);
+                attr.applyModifier(newMod);
+            }
         }
-        if (heldItem != null) {
-            GemTypes.PA.activate2All(heldItem, player);
+        if (e.oldStack != null) {
+            GemTypes.PA.activate2All(e.oldStack, e.player);
         }
-        if (heldItem != null) {
-            GemTypes.PA.activate1All(heldItem, player);
+        if (e.stack != null) {
+            GemTypes.PA.activate1All(e.stack, e.player);
         }
     }
 
