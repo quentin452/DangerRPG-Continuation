@@ -8,8 +8,11 @@
     with these lines or some features from the mod will not work
 
 Manifest-Version: 1.0
+
 FMLAT: dangerrpg_at.cfg
+
 FMLCorePlugin: mixac1.dangerrpg.hook.RPGHookLoader
+
 FMLCorePluginContainsFMLMod: true
 
 # Description
