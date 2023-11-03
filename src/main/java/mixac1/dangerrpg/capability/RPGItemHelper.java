@@ -185,6 +185,9 @@ public abstract class RPGItemHelper {
     }
 
     public static boolean isRPGable(ItemStack stack) {
+        if(stack == null) {
+            return false;
+        }
         return RPGCapability.rpgItemRegistr.isActivated(stack.getItem());
     }
 

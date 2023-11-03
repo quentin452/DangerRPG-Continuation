@@ -164,7 +164,7 @@ public class EventHandlerItem {
 
     @SubscribeEvent
     public void onPlayerInteract(PlayerInteractEvent event) {
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayer player = event.entityPlayer;
         ItemStack heldItem = player.getHeldItem();
 
         // Check if the player is holding a valid item
