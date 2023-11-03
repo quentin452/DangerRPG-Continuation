@@ -2,6 +2,7 @@ package mixac1.dangerrpg.event;
 
 import java.util.*;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.*;
 import net.minecraft.entity.player.*;
@@ -163,7 +164,7 @@ public class EventHandlerItem {
 
     @SubscribeEvent
     public void onPlayerInteract(PlayerInteractEvent event) {
-        EntityPlayer player = event.entityPlayer;
+        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         ItemStack heldItem = player.getHeldItem();
 
         // Check if the player is holding a valid item
