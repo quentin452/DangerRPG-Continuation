@@ -26,8 +26,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
 
 @SideOnly(Side.CLIENT)
-public class GuiInfoBook extends GuiScreen
-{
+public class GuiInfoBook extends GuiScreen {
     public static final ResourceLocation TEXTURE = new ResourceLocation(DangerRPG.MODID, "textures/gui/info_book.png");
 
     public EntityPlayer player;
@@ -43,37 +42,35 @@ public class GuiInfoBook extends GuiScreen
     private int offsetX;
     private int offsetY;
 
-    public static int bookImageW  = 186;
-    public static int bookImageH  = 254;
-    public static int titleHeight = 16;
+    public static final int bookImageW = 186;
+    public static final int bookImageH = 254;
+    public static final int titleHeight = 16;
 
-    public static int butContentX = 31;
-    public static int butContentY = 16;
-    public static int butContentU = 186;
-    public static int butContentV = 0;
-    public static int butContentI = 1;
-    public static int butContentS = 20;
+    public static final int butContentX = 31;
+    public static final int butContentY = 16;
+    public static final int butContentU = 186;
+    public static final int butContentV = 0;
+    public static final int butContentI = 1;
+    public static final int butContentS = 20;
 
-    public static int emptyIconU = 206;
-    public static int emptyIconV = 0;
+    public static final int emptyIconU = 206;
+    public static final int emptyIconV = 0;
 
-    public static int contentX = 5;
-    public static int contentY = 55;
-    public static int contentS = 190;
+    public static final int contentX = 5;
+    public static final int contentY = 55;
+    public static final int contentS = 190;
 
     private LevelUpButton buttonUp;
     private LevelUpButton buttonDown;
 
-    public GuiInfoBook(EntityPlayer player)
-    {
+    public GuiInfoBook(EntityPlayer player) {
         this.player = player;
 
         MovingObjectPosition mop = RPGHelper.getMouseOver(0, 10);
         if (mop != null && mop.entityHit != null && mop.entityHit instanceof EntityPlayer && RPGEntityHelper.isRPGable((EntityLivingBase) mop.entityHit)) {
             target = (EntityLivingBase) mop.entityHit;
             isTargetPlayer = true;
-        }
-        else {
+        } else {
             target = player;
             isTargetPlayer = true;
         }
@@ -82,8 +79,7 @@ public class GuiInfoBook extends GuiScreen
     }
 
     @Override
-    public void setWorldAndResolution(Minecraft mc, int width, int height)
-    {
+    public void setWorldAndResolution(Minecraft mc, int width, int height) {
         super.setWorldAndResolution(mc, width, height);
 
         if (target != mc.thePlayer) {
@@ -99,12 +95,11 @@ public class GuiInfoBook extends GuiScreen
                 tmp.getCurrentArmor(1),
                 tmp.getCurrentArmor(0)
             };
-        }
-        else {
+        } else {
             stacks = new ItemStack[5];
         }
 
-        offsetX = (width  - bookImageW)  / 2;
+        offsetX = (width - bookImageW) / 2;
         offsetY = (height - bookImageH) / 2;
 
         content[0] = new GuiInfoBookContentEntity(mc, bookImageW - contentX * 2, 0, offsetY + contentY, contentS, offsetX + contentX, this);
@@ -112,17 +107,16 @@ public class GuiInfoBook extends GuiScreen
             content[i] = new GuiInfoBookContentStack(mc, bookImageW - contentX * 2, 0, offsetY + contentY, contentS, offsetX + contentX, this, stacks[i - 1]);
         }
         buttonList.add(buttonDown = new LevelUpButton(100, false, offsetX + contentX + GuiInfoBookContentEntity.butX, offsetY + contentY + contentS + GuiInfoBookContentEntity.butY - GuiInfoBookContentEntity.imageH, (GuiInfoBookContentEntity) content[0]));
-        buttonList.add(buttonUp   = new LevelUpButton(101, true,  offsetX + contentX + GuiInfoBookContentEntity.butX + GuiInfoBookContentEntity.butW, offsetY + contentY + contentS + GuiInfoBookContentEntity.butY - GuiInfoBookContentEntity.imageH, (GuiInfoBookContentEntity) content[0]));
+        buttonList.add(buttonUp = new LevelUpButton(101, true, offsetX + contentX + GuiInfoBookContentEntity.butX + GuiInfoBookContentEntity.butW, offsetY + contentY + contentS + GuiInfoBookContentEntity.butY - GuiInfoBookContentEntity.imageH, (GuiInfoBookContentEntity) content[0]));
 
         content[currContent].init();
     }
 
     @Override
-    public void initGui()
-    {
+    public void initGui() {
         buttonList.clear();
 
-        offsetX = (width  - bookImageW)  / 2;
+        offsetX = (width - bookImageW) / 2;
         offsetY = (height - bookImageH) / 2;
 
         int i = 0;
@@ -133,8 +127,7 @@ public class GuiInfoBook extends GuiScreen
     }
 
     @Override
-    protected void keyTyped(char c, int keyCode)
-    {
+    protected void keyTyped(char c, int keyCode) {
         super.keyTyped(c, keyCode);
         if (keyCode == Keyboard.KEY_ESCAPE || keyCode == Keyboard.KEY_E || keyCode == RPGKeyBinds.infoBookKey.getKeyCode()) {
             mc.thePlayer.closeScreen();
@@ -142,17 +135,15 @@ public class GuiInfoBook extends GuiScreen
     }
 
     @Override
-    public boolean doesGuiPauseGame()
-    {
+    public boolean doesGuiPauseGame() {
         return false;
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float par3)
-    {
+    public void drawScreen(int mouseX, int mouseY, float par3) {
         GL11.glPushMatrix();
 
-        offsetX = (width  - bookImageW)  / 2;
+        offsetX = (width - bookImageW) / 2;
         offsetY = (height - bookImageH) / 2;
 
         for (int k = 0; k < stacks.length; ++k) {
@@ -178,16 +169,13 @@ public class GuiInfoBook extends GuiScreen
         GL11.glPopMatrix();
     }
 
-    class SelectContentButton extends GuiButton
-    {
-        public SelectContentButton(int id, int x, int y)
-        {
+    class SelectContentButton extends GuiButton {
+        public SelectContentButton(int id, int x, int y) {
             super(id, x, y, butContentS, butContentS, "");
         }
 
         @Override
-        public void drawButton(Minecraft mc, int par1, int par2)
-        {
+        public void drawButton(Minecraft mc, int par1, int par2) {
             if (this.visible) {
                 boolean flag = par1 >= xPosition && par2 >= yPosition && par1 < xPosition + width && par2 < yPosition + height;
 
@@ -196,8 +184,7 @@ public class GuiInfoBook extends GuiScreen
 
                 if (id == currContent) {
                     this.drawTexturedModalRect(xPosition, yPosition, butContentU, butContentV + butContentS, butContentS, butContentS);
-                }
-                else if (flag && this.enabled) {
+                } else if (flag && this.enabled) {
                     this.drawTexturedModalRect(xPosition, yPosition, butContentU, butContentV, butContentS, butContentS);
                 }
 
@@ -208,8 +195,7 @@ public class GuiInfoBook extends GuiScreen
         }
 
         @Override
-        public boolean mousePressed(Minecraft mc, int x, int y)
-        {
+        public boolean mousePressed(Minecraft mc, int x, int y) {
             if (super.mousePressed(mc, x, y)) {
                 currContent = id;
                 content[id].init();
