@@ -77,6 +77,7 @@ public abstract class RPGEntityHelper
         map.registerEALvlable(PlayerAttributes.HEALTH,        0f,  new DafailtLvlEAProvider(2, 1000, ADD_2));
         map.registerEALvlable(PlayerAttributes.MANA,          q0,  new DafailtLvlEAProvider(2, 1000, ADD_2));
         map.registerEALvlable(PlayerAttributes.STRENGTH,      0f,  new DafailtLvlEAProvider(2, 1000, ADD_1));
+        map.registerEALvlable(PlayerAttributes.KNOCKBACK,     0f,  new DafailtLvlEAProvider(2, 1000, ADD_0d2));
         map.registerEALvlable(PlayerAttributes.AGILITY,       0f,  new DafailtLvlEAProvider(2, 1000, ADD_1));
         map.registerEALvlable(PlayerAttributes.INTELLIGENCE,  0f,  new DafailtLvlEAProvider(2, 1000, ADD_1));
         map.registerEALvlable(PlayerAttributes.EFFICIENCY,    0f,  new DafailtLvlEAProvider(2, 1000, ADD_2));

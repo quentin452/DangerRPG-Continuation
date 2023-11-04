@@ -12,6 +12,7 @@ public abstract class PlayerAttributes extends EntityAttributes
 {
     public static final EAWithIAttr MANA          = new EAMana      ("mana");
     public static final EAWithIAttr STRENGTH      = new EAWithIAttr ("str");
+    public static final EAWithIAttr KNOCKBACK      = new EAWithIAttr ("knock2");
     public static final EAWithIAttr AGILITY       = new EAWithIAttr ("agi");
     public static final EAWithIAttr INTELLIGENCE  = new EAWithIAttr ("int");
     public static final EAWithIAttr MANA_REGEN    = new EAWithIAttr ("mana_regen");
