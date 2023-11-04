@@ -240,9 +240,8 @@ public abstract class RPGItemHelper
         MinecraftForge.EVENT_BUS.post(new RegIAEvent.ItemStaffIAEvent(item, map));
     }
 
-    public static boolean isRPGable(ItemStack stack)
-    {
-        return RPGCapability.rpgItemRegistr.isActivated(stack.getItem());
+    public static boolean isRPGable(ItemStack stack) {
+        return stack != null && RPGCapability.rpgItemRegistr.isActivated(stack.getItem());
     }
 
     public static void checkNBT(ItemStack stack)
