@@ -3,6 +3,8 @@ package mixac1.dangerrpg.capability.data;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map;
 
 import mixac1.dangerrpg.DangerRPG;
 import mixac1.dangerrpg.api.item.GemType;
@@ -36,8 +38,8 @@ public class RPGItemRegister extends RPGDataRegister<Item, RPGItemData, Integer,
 
     public static class RPGItemData extends RPGDataRegister.ElementData<Item, Pair<HashMap<Integer, ItemAttrParams>, HashMap<Integer, Integer>>>
     {
-        public HashMap<ItemAttribute, ItemAttrParams> attributes = new LinkedHashMap<ItemAttribute, ItemAttrParams>();
-        public HashMap<GemType, Stub<Integer>> gems = new LinkedHashMap<GemType, Stub<Integer>>();
+        public Map<ItemAttribute, ItemAttrParams> attributes = new LinkedHashMap<ItemAttribute, ItemAttrParams>();
+        public Map<GemType, Stub<Integer>> gems = new LinkedHashMap<GemType, Stub<Integer>>();
         public IRPGItem rpgComponent;
         public ItemType itemType = ItemType.MELEE_WPN;
 
@@ -66,7 +68,7 @@ public class RPGItemRegister extends RPGDataRegister<Item, RPGItemData, Integer,
                 }
             }
 
-            gems.put(gemType, Stub.create(count < 1 ? 1 : count));
+            gems.put(gemType, Stub.create(Math.max(count, 1)));
         }
 
         @Override
@@ -82,7 +84,7 @@ public class RPGItemRegister extends RPGDataRegister<Item, RPGItemData, Integer,
                 tmp2.put(entry.getKey().hash, entry.getValue().value1);
             }
 
-            return new Pair<HashMap<Integer, ItemAttrParams>, HashMap<Integer, Integer>>(tmp1, tmp2);
+            return new Pair<>(tmp1, tmp2);
         }
 
         @Override

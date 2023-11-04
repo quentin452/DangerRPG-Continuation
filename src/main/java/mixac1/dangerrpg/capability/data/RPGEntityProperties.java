@@ -95,7 +95,7 @@ public class RPGEntityProperties implements IExtendedEntityProperties
         int count = 0;
         int lvl;
 
-        ArrayList<LvlEAProvider> pas = new ArrayList<LvlEAProvider>();
+        ArrayList<LvlEAProvider> pas = new ArrayList<>();
         for (LvlEAProvider it : getLvlProviders()) {
             if ((lvl = it.getLvl(entity)) > 1) {
                 pas.add(it);

@@ -2,6 +2,7 @@ package mixac1.dangerrpg.capability.data;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 import mixac1.dangerrpg.capability.data.RPGDataRegister.ElementData;
 import mixac1.dangerrpg.util.Tuple.Pair;
@@ -21,7 +22,7 @@ public abstract class RPGDataRegister<Key, Data extends ElementData<Key, Transfe
         return containsKey(key) && get(key).isSupported;
     }
 
-    public HashMap<Key, Data> getActiveElements()
+    public Map<Key, Data> getActiveElements()
     {
         HashMap<Key, Data> map = new HashMap<Key, Data>();
         for (Entry<Key, Data> entry : entrySet()) {

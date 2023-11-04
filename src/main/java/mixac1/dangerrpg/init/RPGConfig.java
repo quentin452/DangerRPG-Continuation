@@ -327,7 +327,7 @@ public class RPGConfig
         @Override
         public void postLoadPost()
         {
-            HashMap<Item, RPGItemData> map = RPGCapability.rpgItemRegistr.getActiveElements();
+            HashMap<Item, RPGItemData> map = (HashMap<Item, RPGItemData>) RPGCapability.rpgItemRegistr.getActiveElements();
 
             customConfig(map);
 
@@ -512,17 +512,17 @@ public class RPGConfig
         {
             playerConfig();
 
-            HashMap<Class<? extends EntityLivingBase>, RPGEntityData> map = RPGCapability.rpgEntityRegistr
+            HashMap<Class<? extends EntityLivingBase>, RPGEntityData> map = (HashMap<Class<? extends EntityLivingBase>, RPGEntityData>) RPGCapability.rpgEntityRegistr
                     .getActiveElements();
 
             customConfig(map);
 
             ArrayList<String> names = RPGHelper.getEntityNames(map.keySet(), true);
-            getPropertyStrings("activeRPGEntities", names.toArray(new String[names.size()]),
+            getPropertyStrings("activeRPGEntities", names.toArray(new String[0]),
                     "Set active RPG entities (activated if 'isAllEntitiesRPGable' is false) (true/false)", true);
 
             names = RPGHelper.getEntityNames(RPGCapability.rpgEntityRegistr.keySet(), true);
-            getPropertyStrings("entityList", names.toArray(new String[names.size()]),
+            getPropertyStrings("entityList", names.toArray(new String[0]),
                     "List of all entities, which can be RPGable", true);
 
             save();
@@ -607,7 +607,7 @@ public class RPGConfig
         }
     }
 
-    public static abstract class RPGConfigCommon
+    public abstract static class RPGConfigCommon
     {
         protected Configuration config;
         protected ConfigCategory category;

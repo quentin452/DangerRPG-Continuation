@@ -136,7 +136,7 @@ public class InventoryModificationTable implements IInventory
 
     private void detachGems(ItemStack stack)
     {
-        HashMap<GemType, Stub<Integer>> map = RPGCapability.rpgItemRegistr.get(stack.getItem()).gems;
+        HashMap<GemType, Stub<Integer>> map = (HashMap<GemType, Stub<Integer>>) RPGCapability.rpgItemRegistr.get(stack.getItem()).gems;
         inv = new ItemStack[map.size()][];
 
         int i = 0;
@@ -199,7 +199,7 @@ public class InventoryModificationTable implements IInventory
                 ++row;
             }
             else {
-                return new Pair<Integer, Integer>(row, index);
+                return new Pair<>(row, index);
             }
         }
         return null;
@@ -239,7 +239,7 @@ public class InventoryModificationTable implements IInventory
 
     public GemType getGemTypeSlot(int index)
     {
-        if (index > 0 && main != null && RPGItemHelper.isRPGable(main)) {
+        if (index > 0 && RPGItemHelper.isRPGable(main)) {
             Pair<Integer, Integer> coords = getRowColumn(index - 1);
             if (coords != null) {
                 return getGemType(coords.value1);
