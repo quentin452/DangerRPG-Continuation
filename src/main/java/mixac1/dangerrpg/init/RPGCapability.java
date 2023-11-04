@@ -1,10 +1,5 @@
 package mixac1.dangerrpg.init;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map.Entry;
-
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.registry.GameData;
 import mixac1.dangerrpg.DangerRPG;
@@ -31,46 +26,27 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
-import net.minecraft.entity.monster.EntityBlaze;
-import net.minecraft.entity.monster.EntityCaveSpider;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.monster.EntityGhast;
-import net.minecraft.entity.monster.EntityGiantZombie;
-import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.entity.monster.EntityMagmaCube;
-import net.minecraft.entity.monster.EntityPigZombie;
-import net.minecraft.entity.monster.EntitySilverfish;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.monster.EntitySlime;
-import net.minecraft.entity.monster.EntitySnowman;
-import net.minecraft.entity.monster.EntitySpider;
-import net.minecraft.entity.monster.EntityWitch;
-import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.entity.passive.EntityBat;
-import net.minecraft.entity.passive.EntityChicken;
-import net.minecraft.entity.passive.EntityCow;
-import net.minecraft.entity.passive.EntityHorse;
-import net.minecraft.entity.passive.EntityMooshroom;
-import net.minecraft.entity.passive.EntityOcelot;
-import net.minecraft.entity.passive.EntityPig;
-import net.minecraft.entity.passive.EntitySheep;
-import net.minecraft.entity.passive.EntitySquid;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.passive.EntityWolf;
+import net.minecraft.entity.monster.*;
+import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
 public abstract class RPGCapability
 {
-    public static RPGItemRegister   rpgItemRegistr   = new RPGItemRegister();
-    public static RPGEntityRegister rpgEntityRegistr = new RPGEntityRegister();
+    public static final RPGItemRegister   rpgItemRegistr   = new RPGItemRegister();
+    public static final RPGEntityRegister rpgEntityRegistr = new RPGEntityRegister();
 
-    public static HashMap<Integer, ItemAttribute>   mapIntToItemAttribute   = new HashMap<Integer, ItemAttribute>();
-    public static HashMap<Integer, GemType>         mapIntToGemType         = new HashMap<Integer, GemType>();
-    public static HashMap<Integer, EntityAttribute> mapIntToEntityAttribute = new HashMap<Integer, EntityAttribute>();
-    public static HashSet<Class<? extends EntityLivingBase>> blackListEntities = new HashSet<Class<? extends EntityLivingBase>>()
+    public static final Map<Integer, ItemAttribute>   mapIntToItemAttribute   = new HashMap<>();
+    public static final Map<Integer, GemType>         mapIntToGemType         = new HashMap<>();
+    public static final Map<Integer, EntityAttribute> mapIntToEntityAttribute = new HashMap<>();
+    public static final Set<Class<? extends EntityLivingBase>> blackListEntities = new HashSet<Class<? extends EntityLivingBase>>()
     {{
         add(EntityBat.class);
         add(EntitySquid.class);
@@ -98,11 +74,9 @@ public abstract class RPGCapability
 
     private static void registerDefaultRPGItems()
     {
-        Iterator iterator = GameData.getItemRegistry().iterator();
-        while(iterator.hasNext()) {
-            Item item = (Item) iterator.next();
-            if (item instanceof IRPGItem) {
-                RPGRegister.registerRPGItem(item, (IRPGItem) item);
+        for (Item value : (Iterable<Item>) GameData.getItemRegistry()) {
+            if (value instanceof IRPGItem) {
+                RPGRegister.registerRPGItem(value, (IRPGItem) value);
             }
         }
 
@@ -215,9 +189,7 @@ public abstract class RPGCapability
         }
 
         for (Class<? extends EntityLivingBase> it : blackListEntities) {
-            if (rpgEntityRegistr.containsKey(it)) {
-                rpgEntityRegistr.remove(it);
-            }
+            rpgEntityRegistr.remove(it);
         }
 
         RPGEntityHelper.registerEntity(EntityPlayer.class);
@@ -225,7 +197,8 @@ public abstract class RPGCapability
         for (Entry<Class<? extends EntityLivingBase>, RPGEntityData> it : rpgEntityRegistr.entrySet()) {
             RPGEntityHelper.registerEntityDefault(it.getKey(), it.getValue());
             it.getValue().rpgComponent.registerAttributes(it.getKey(), it.getValue());
-            if (EntityConfig.d.isAllEntitiesRPGable || EntityConfig.activeRPGEntities.contains(EntityList.classToStringMapping.get(it.getKey()))) {
+            String entityName = (String) EntityList.classToStringMapping.get(it.getKey());
+            if (entityName != null && (EntityConfig.d.isAllEntitiesRPGable || EntityConfig.activeRPGEntities.contains(entityName))) {
                 rpgEntityRegistr.get(it.getKey()).isActivated = true;
                 DangerRPG.infoLog(String.format("Register RPG entity (sup from mod: %s): %s",
                                   it.getValue().isSupported ? " true" : "false", EntityList.classToStringMapping.get(it.getKey())));
@@ -237,9 +210,8 @@ public abstract class RPGCapability
 
     private static void loadItems()
     {
-        Iterator iterator = GameData.getItemRegistry().iterator();
-        while(iterator.hasNext()) {
-            RPGItemHelper.registerRPGItem((Item) iterator.next());
+        for (Item item : (Iterable<Item>) GameData.getItemRegistry()) {
+            RPGItemHelper.registerRPGItem(item);
         }
 
         for (Entry<Item, RPGItemData> it : rpgItemRegistr.entrySet()) {
