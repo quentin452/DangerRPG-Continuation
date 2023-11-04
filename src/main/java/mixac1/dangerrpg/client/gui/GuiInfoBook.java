@@ -159,7 +159,8 @@ public class GuiInfoBook extends GuiScreen
             if (stacks[k] != null) {
                 RenderHelper.enableGUIStandardItemLighting();
                 GuiScreen.itemRender.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.getTextureManager(), stacks[k], butContent[k + 1].xPosition + 2, butContent[k + 1].yPosition + 2);
-                GuiScreen.itemRender.renderItemOverlayIntoGUI(mc.fontRenderer, mc.getTextureManager(), stacks[k], butContent[k + 1].xPosition + 2, butContent[k + 1].yPosition + 2);
+                // Disabling this line fix https://github.com/quentin452/DangerRPG-Continuation/issues/34
+                // GuiScreen.itemRender.renderItemOverlayIntoGUI(mc.fontRenderer, mc.getTextureManager(), stacks[k], butContent[k + 1].xPosition + 2, butContent[k + 1].yPosition + 2);
             }
         }
 
