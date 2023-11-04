@@ -93,8 +93,8 @@ public class GuiInfoBookContentEntity extends GuiInfoBookContent
 
             s = lvlProv.attr.getInfo();
             List list = mc.fontRenderer.listFormattedStringToWidth(s, infoW);
-            for (int i = 0; i < list.size(); ++i) {
-                mc.fontRenderer.drawStringWithShadow(list.get(i).toString(), offsetX + infoX, offsetY + infoY + k, 0xffffff);
+            for (Object o : list) {
+                mc.fontRenderer.drawStringWithShadow(o.toString(), offsetX + infoX, offsetY + infoY + k, 0xffffff);
                 k += indent;
             }
 
@@ -163,8 +163,8 @@ public class GuiInfoBookContentEntity extends GuiInfoBookContent
 
     public static class LevelUpButton extends GuiButton
     {
-        private GuiInfoBookContentEntity parent;
-        private boolean isUp;
+        private final GuiInfoBookContentEntity parent;
+        private final boolean isUp;
 
 
         public LevelUpButton(int id, boolean isUp, int x, int y, GuiInfoBookContentEntity parent)
@@ -208,10 +208,7 @@ public class GuiInfoBookContentEntity extends GuiInfoBookContent
         @Override
         public boolean mousePressed(Minecraft mc, int x, int y)
         {
-            if (super.mousePressed(mc, x, y) && parent.parent.attributes.get(parent.currIndex).tryUp(parent.parent.target, parent.parent.player, isUp)) {
-                return true;
-            }
-            return false;
+            return super.mousePressed(mc, x, y) && parent.parent.attributes.get(parent.currIndex).tryUp(parent.parent.target, parent.parent.player, isUp);
         }
     }
 }

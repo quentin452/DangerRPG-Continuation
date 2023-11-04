@@ -26,7 +26,7 @@ import net.minecraft.item.ItemStack;
 @SideOnly(Side.CLIENT)
 public class GuiInfoBookContentStack extends GuiInfoBookContent
 {
-    private ItemStack stack;
+    private final ItemStack stack;
     private EntityPlayer player;
 
     public GuiInfoBookContentStack(Minecraft mc, int width, int height, int top, int size, int left, GuiInfoBook parent, ItemStack stack)
