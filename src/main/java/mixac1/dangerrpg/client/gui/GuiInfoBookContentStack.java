@@ -175,8 +175,7 @@ public class GuiInfoBookContentStack extends GuiInfoBookContent
         else if (!(item instanceof ItemBlock)) {
             if (stack.isItemStackDamageable()) {
                  addString(String.format("%s: %d/%d", ItemAttributes.DURABILITY.getDispayName(),
-                         stack.getItemDamage(),
-                         stack.getMaxDamage()));
+                     stack.getMaxDamage() - stack.getItemDamage(), stack.getMaxDamage()));
             }
             else {
                  addString(String.format("%s: %s", ItemAttributes.DURABILITY.getDispayName(),
