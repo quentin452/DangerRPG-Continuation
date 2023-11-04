@@ -14,79 +14,70 @@ import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * Default entity attribute. It supports any Type, but you must create {@link ITypeProvider} for this Type. <br>
- * {@link LvlEAProvider} allows make this attribute lvlable.
+ * {@link LvlEAProvider} allows making this attribute levelable.
  */
-public class EntityAttribute<Type>
-{
+public class EntityAttribute<Type> {
     public final String name;
-    public final int    hash;
+    public final int hash;
     public final ITypeProvider<Type> typeProvider;
 
-    public EntityAttribute(ITypeProvider<Type> typeProvider, String name)
-    {
+    public EntityAttribute(ITypeProvider<Type> typeProvider, String name) {
         this.name = "ea.".concat(name);
         this.hash = name.hashCode();
         this.typeProvider = typeProvider;
         RPGCapability.mapIntToEntityAttribute.put(hash, this);
     }
 
-    public void init(EntityLivingBase entity)
-    {
-        getEntityData(entity).attributeMap.put(hash, new Stub<Type>(typeProvider.getEmpty()));
+    public void init(EntityLivingBase entity) {
+        RPGEntityProperties properties = getEntityData(entity);
+        properties.attributeMap.put(hash, new Stub<Type>(typeProvider.getEmpty()));
         LvlEAProvider lvlProvider = getLvlProvider(entity);
         if (lvlProvider != null) {
             lvlProvider.init(entity);
         }
     }
 
-    public void serverInit(EntityLivingBase entity)
-    {
-        setValueRaw((Type) RPGCapability.rpgEntityRegistr.get(entity).attributes.get(this).startValue, entity);
+    public void serverInit(EntityLivingBase entity) {
+        Type startValue = (Type) RPGCapability.rpgEntityRegistr.get(entity).attributes.get(this).startValue;
+        setValueRaw(startValue, entity);
     }
 
-    public LvlEAProvider getLvlProvider(EntityLivingBase entity)
-    {
+    public LvlEAProvider getLvlProvider(EntityLivingBase entity) {
         return RPGCapability.rpgEntityRegistr.get(entity).attributes.get(this).lvlProvider;
     }
 
-    public boolean hasIt(EntityLivingBase entity)
-    {
+    public boolean hasIt(EntityLivingBase entity) {
         return RPGCapability.rpgEntityRegistr.isActivated(entity)
-               && RPGCapability.rpgEntityRegistr.get(entity).attributes.containsKey(this);
+            && RPGCapability.rpgEntityRegistr.get(entity).attributes.containsKey(this);
     }
 
-    public boolean isValid(Type value)
-    {
+    public boolean isValid(Type value) {
         return typeProvider.isValid(value);
     }
 
-    public boolean isValid(Type value, EntityLivingBase entity)
-    {
+    public boolean isValid(Type value, EntityLivingBase entity) {
         return isValid(value);
     }
 
-    protected RPGEntityProperties getEntityData(EntityLivingBase entity)
-    {
+    protected RPGEntityProperties getEntityData(EntityLivingBase entity) {
         return RPGEntityProperties.get(entity);
     }
 
     /**
-     * Get value without check on valid<br>
-     * Warning: Check {@link EntityAttribute#hasIt(EntityLivingBase)} before use this method
+     * Get value without checking validity.
+     * Warning: Check {@link EntityAttribute#hasIt(EntityLivingBase)} before using this method.
      */
     @Deprecated
-    public Type getValueRaw(EntityLivingBase entity)
-    {
+    public Type getValueRaw(EntityLivingBase entity) {
         return (Type) getEntityData(entity).attributeMap.get(hash).value1;
     }
 
     /**
-     * Set value without check on valid<br>
-     * Warning: Check {@link EntityAttribute#hasIt(EntityLivingBase)} before use this method
+     * Set value without checking validity.
+     * Warning: Check {@link EntityAttribute#hasIt(EntityLivingBase)} before using this method.
      */
     @Deprecated
-    public boolean setValueRaw(Type value, EntityLivingBase entity)
-    {
+    public boolean setValueRaw(Type value, EntityLivingBase entity) {
         if (!value.equals(getValueRaw(entity))) {
             getEntityData(entity).attributeMap.get(hash).value1 = value;
             return true;
@@ -95,10 +86,9 @@ public class EntityAttribute<Type>
     }
 
     /**
-     * Warning: Check {@link EntityAttribute#hasIt(EntityLivingBase)} before use this method
+     * Warning: Check {@link EntityAttribute#hasIt(EntityLivingBase)} before using this method.
      */
-    public Type getValue(EntityLivingBase entity)
-    {
+    public Type getValue(EntityLivingBase entity) {
         Type value = getValueRaw(entity);
         if (!isValid(value, entity)) {
             serverInit(entity);
@@ -107,16 +97,14 @@ public class EntityAttribute<Type>
         return value;
     }
 
-    public Type getSafe(EntityLivingBase entity, Type defaultValue)
-    {
+    public Type getSafe(EntityLivingBase entity, Type defaultValue) {
         return hasIt(entity) ? getValue(entity) : defaultValue;
     }
 
     /**
-     * Warning: Check {@link EntityAttribute#hasIt(EntityLivingBase)} before use this method
+     * Warning: Check {@link EntityAttribute#hasIt(EntityLivingBase)} before using this method.
      */
-    public void setValue(Type value, EntityLivingBase entity)
-    {
+    public void setValue(Type value, EntityLivingBase entity) {
         if (isValid(value, entity)) {
             if (setValueRaw(value, entity) || getLvlProvider(entity) != null) {
                 sync(entity);
@@ -125,38 +113,33 @@ public class EntityAttribute<Type>
     }
 
     /**
-     * Warning: Check {@link EntityAttribute#hasIt(EntityLivingBase)} before use this method
+     * Warning: Check {@link EntityAttribute#hasIt(EntityLivingBase)} before using this method.
      */
-    public void addValue(Type value, EntityLivingBase entity)
-    {
+    public void addValue(Type value, EntityLivingBase entity) {
         setValue(typeProvider.sum(getBaseValue(entity), value), entity);
     }
 
     /**
-     * Warning: Check {@link EntityAttribute#hasIt(EntityLivingBase)} before use this method
+     * Warning: Check {@link EntityAttribute#hasIt(EntityLivingBase)} before using this method.
      */
-    public Type getBaseValue(EntityLivingBase entity)
-    {
+    public Type getBaseValue(EntityLivingBase entity) {
         return getValue(entity);
     }
 
     /**
-     * Warning: Check {@link EntityAttribute#hasIt(EntityLivingBase)} before use this method
+     * Warning: Check {@link EntityAttribute#hasIt(EntityLivingBase)} before using this method.
      */
-    public Type getModifierValue(EntityLivingBase entity)
-    {
+    public Type getModifierValue(EntityLivingBase entity) {
         return typeProvider.dif(getValue(entity), getBaseValue(entity));
     }
 
-    public void sync(EntityLivingBase entity)
-    {
+    public void sync(EntityLivingBase entity) {
         if (RPGEntityProperties.isServerSide(entity)) {
             RPGNetwork.net.sendToAll(new MsgSyncEA(this, entity));
         }
     }
 
-    public void toNBT(NBTTagCompound nbt, EntityLivingBase entity)
-    {
+    public void toNBT(NBTTagCompound nbt, EntityLivingBase entity) {
         NBTTagCompound tmp = new NBTTagCompound();
         typeProvider.toNBT(getBaseValue(entity), "value", tmp);
         LvlEAProvider lvlProvider = getLvlProvider(entity);
@@ -166,8 +149,7 @@ public class EntityAttribute<Type>
         nbt.setTag(name, tmp);
     }
 
-    public void fromNBT(NBTTagCompound nbt, EntityLivingBase entity)
-    {
+    public void fromNBT(NBTTagCompound nbt, EntityLivingBase entity) {
         NBTTagCompound tmp = (NBTTagCompound) nbt.getTag(name);
         if (tmp != null) {
             setValueRaw(typeProvider.fromNBT("value", tmp), entity);
@@ -175,100 +157,79 @@ public class EntityAttribute<Type>
             if (lvlProvider != null) {
                 lvlProvider.setLvl(tmp.getInteger("lvl"), entity);
             }
-        }
-        else {
+        } else {
             serverInit(entity);
         }
     }
 
-    public void toNBTforMsg(NBTTagCompound nbt, EntityLivingBase entity)
-    {
+    public void toNBTforMsg(NBTTagCompound nbt, EntityLivingBase entity) {
         toNBT(nbt, entity);
     }
 
-    public void fromNBTforMsg(NBTTagCompound nbt, EntityLivingBase entity)
-    {
+    public void fromNBTforMsg(NBTTagCompound nbt, EntityLivingBase entity) {
         fromNBT(nbt, entity);
     }
 
-    public String getValueToString(Type value, EntityLivingBase entity)
-    {
+    public String getValueToString(Type value, EntityLivingBase entity) {
         return typeProvider.toString(value);
     }
 
-    public String getDisplayValue(EntityLivingBase entity)
-    {
+    public String getDisplayValue(EntityLivingBase entity) {
         return getValueToString(getValue(entity), entity);
     }
 
-    public String getDisplayName()
-    {
+    public String getDisplayName() {
         return DangerRPG.trans(name);
     }
 
-    public String getInfo()
-    {
+    public String getInfo() {
         return DangerRPG.trans(Utils.toString(name, ".info"));
     }
 
-    public boolean isConfigurable()
-    {
+    public boolean isConfigurable() {
         return true;
     }
 
     @Override
-    public final int hashCode()
-    {
+    public final int hashCode() {
         return hash;
     }
 
     /********************************************************************/
-    //T0D0: implements of EntityAttribute for default types
+    // TODO: Implementations of EntityAttribute for default types
 
-    public static class EABoolean extends EntityAttribute<Boolean>
-    {
-        public EABoolean(String name)
-        {
+    public static class EABoolean extends EntityAttribute<Boolean> {
+        public EABoolean(String name) {
             super(ITypeProvider.BOOLEAN, name);
         }
     }
 
-    public static class EAInteger extends EntityAttribute<Integer>
-    {
-        public EAInteger(String name)
-        {
+    public static class EAInteger extends EntityAttribute<Integer> {
+        public EAInteger(String name) {
             super(ITypeProvider.INTEGER, name);
         }
     }
 
-    public static class EAFloat extends EntityAttribute<Float>
-    {
-        public EAFloat(String name)
-        {
+    public static class EAFloat extends EntityAttribute<Float> {
+        public EAFloat(String name) {
             super(ITypeProvider.FLOAT, name);
         }
     }
 
-    public static class EAString extends EntityAttribute<String>
-    {
-        public EAString(String name)
-        {
+    public static class EAString extends EntityAttribute<String> {
+        public EAString(String name) {
             super(ITypeProvider.STRING, name);
         }
     }
 
-    public static class EANBT extends EntityAttribute<NBTTagCompound>
-    {
-        public EANBT(String name)
-        {
+    public static class EANBT extends EntityAttribute<NBTTagCompound> {
+        public EANBT(String name) {
             super(ITypeProvider.NBT_TAG, name);
         }
     }
 
-    public static class EAItemStack extends EntityAttribute<ItemStack>
-    {
-        public EAItemStack(String name)
-        {
+    public static class EAItemStack extends EntityAttribute<ItemStack> {
+        public EAItemStack(String name) {
             super(ITypeProvider.ITEM_STACK, name);
         }
     }
