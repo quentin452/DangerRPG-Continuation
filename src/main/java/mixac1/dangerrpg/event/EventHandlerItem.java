@@ -38,6 +38,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
@@ -186,19 +187,6 @@ public class EventHandlerItem
     @SubscribeEvent
     public void onStackChangedEvent(StackChangedEvent e)
     {
-        if (e.slot == 0) {
-            IAttributeInstance attr = e.player.getEntityAttribute(SharedMonsterAttributes.attackDamage);
-            AttributeModifier mod = attr.getModifier(RPGUUIDs.ADD_STR_DAMAGE);
-            if (mod != null) {
-                attr.removeModifier(mod);
-            }
-            if (e.stack != null && RPGItemHelper.isRPGable(e.stack) && ItemAttributes.STR_MUL.hasIt(e.stack)) {
-                AttributeModifier newMod = new AttributeModifier(RPGUUIDs.ADD_STR_DAMAGE, "Strenght damage",
-                        PlayerAttributes.STRENGTH.getValue(e.player) * ItemAttributes.STR_MUL.get(e.stack) *2, 0).setSaved(true);
-                attr.applyModifier(newMod);
-            }
-        }
-
         if (e.oldStack != null) {
             GemTypes.PA.activate2All(e.oldStack, e.player);
         }
@@ -206,6 +194,26 @@ public class EventHandlerItem
             GemTypes.PA.activate1All(e.stack, e.player);
         }
     }
+    @SubscribeEvent
+    public void onlivingUpdate(LivingEvent.LivingUpdateEvent e) {
+        if (e.entityLiving instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) e.entityLiving;
+            IAttributeInstance attr = player.getEntityAttribute(SharedMonsterAttributes.attackDamage);
+            AttributeModifier mod = attr.getModifier(RPGUUIDs.ADD_STR_DAMAGE);
+
+            if (mod != null) {
+                attr.removeModifier(mod);
+            }
+
+            ItemStack heldItem = player.getHeldItem();
+            if (heldItem != null && RPGItemHelper.isRPGable(heldItem) && ItemAttributes.STR_MUL.hasIt(heldItem)) {
+                double newModifierValue = PlayerAttributes.STRENGTH.getValue(player) * ItemAttributes.STR_MUL.get(heldItem) * 2;
+                AttributeModifier newMod = new AttributeModifier(RPGUUIDs.ADD_STR_DAMAGE, "Strength damage", newModifierValue, 0).setSaved(true);
+                attr.applyModifier(newMod);
+            }
+        }
+    }
+
 
     @SubscribeEvent
     public void onUpMaxLevel(UpMaxLevelEvent e)
