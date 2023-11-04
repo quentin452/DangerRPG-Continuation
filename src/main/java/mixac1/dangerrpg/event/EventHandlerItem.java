@@ -205,7 +205,7 @@ public class EventHandlerItem
                 attr.removeModifier(mod);
             }
 
-            ItemStack heldItem = player.getHeldItem();
+            ItemStack heldItem = player.getItemInUse();
             if (heldItem != null && RPGItemHelper.isRPGable(heldItem) && ItemAttributes.STR_MUL.hasIt(heldItem)) {
                 double newModifierValue = PlayerAttributes.STRENGTH.getValue(player) * ItemAttributes.STR_MUL.get(heldItem) * 2;
                 AttributeModifier newMod = new AttributeModifier(RPGUUIDs.ADD_STR_DAMAGE, "Strength damage", newModifierValue, 0).setSaved(true);
