@@ -122,20 +122,20 @@ public class HookFixEntityAttributes {
     @Hook(returnCondition = ReturnCondition.ALWAYS)
     public static void onImpact(EntityLargeFireball that, MovingObjectPosition mop) {
         if (!that.worldObj.isRemote) {
-            if (mop.entityHit != null) {
-                float damage = RPGHelper.getRangeDamageHook(that.shootingEntity, 6f);
-                mop.entityHit.attackEntityFrom(DamageSource.causeFireballDamage(that, that.shootingEntity), damage);
+            if (mop.entityHit != null && (that.shootingEntity != null)) {
+                    float damage = RPGHelper.getRangeDamageHook(that.shootingEntity, 6f);
+                    mop.entityHit.attackEntityFrom(DamageSource.causeFireballDamage(that, that.shootingEntity), damage);
+
             }
 
             that.worldObj.newExplosion(
-                (Entity) null,
+                null,
                 that.posX,
                 that.posY,
                 that.posZ,
                 that.field_92057_e,
                 true,
-                that.worldObj.getGameRules()
-                    .getGameRuleBooleanValue("mobGriefing"));
+                that.worldObj.getGameRules().getGameRuleBooleanValue("mobGriefing"));
             that.setDead();
         }
     }
@@ -153,8 +153,11 @@ public class HookFixEntityAttributes {
      */
     @Hook(returnCondition = ReturnCondition.ALWAYS)
     public static boolean attackEntityAsMob(EntityWolf that, Entity entity) {
-        int damage = (int) RPGHelper.getMeleeDamageHook(that, that.isTamed() ? 4 : 2);
-        return that.attackEntityFrom(DamageSource.causeMobDamage(that), damage);
+        if (entity != null) {
+            int damage = (int) RPGHelper.getMeleeDamageHook(that, that.isTamed() ? 4 : 2);
+            return that.attackEntityFrom(DamageSource.causeMobDamage(that), damage);
+        }
+        return false;
     }
 
     /**
@@ -162,17 +165,20 @@ public class HookFixEntityAttributes {
      */
     @Hook(returnCondition = ReturnCondition.ALWAYS)
     public static boolean attackEntityAsMob(EntityIronGolem that, Entity entity) {
-        that.attackTimer = 10;
-        that.worldObj.setEntityState(that, (byte) 4);
-        int damage = (int) RPGHelper.getMeleeDamageHook(that, 7 + that.rand.nextInt(15));
-        boolean flag = entity.attackEntityFrom(DamageSource.causeMobDamage(that), damage);
+        if (entity != null) {
+            that.attackTimer = 10;
+            that.worldObj.setEntityState(that, (byte) 4);
+            int damage = (int) RPGHelper.getMeleeDamageHook(that, 7 + that.rand.nextInt(15));
+            boolean flag = entity.attackEntityFrom(DamageSource.causeMobDamage(that), damage);
 
-        if (flag) {
-            entity.motionY += 0.4000000059604645D;
+            if (flag) {
+                entity.motionY += 0.4000000059604645D;
+            }
+
+            that.playSound("mob.irongolem.throw", 1.0F, 1.0F);
+            return flag;
         }
-
-        that.playSound("mob.irongolem.throw", 1.0F, 1.0F);
-        return flag;
+        return false;
     }
 
     /**
