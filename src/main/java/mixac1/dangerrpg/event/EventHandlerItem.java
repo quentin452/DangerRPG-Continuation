@@ -67,7 +67,7 @@ public class EventHandlerItem {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onHitEntityPost(HitEntityEvent e) {
-        if (!e.attacker.worldObj.isRemote && e.attacker instanceof EntityPlayer) {
+        if (e.attacker != null && !e.attacker.worldObj.isRemote && e.attacker instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) e.attacker;
 
             if (RPGItemHelper.isRPGable(e.stack)) {

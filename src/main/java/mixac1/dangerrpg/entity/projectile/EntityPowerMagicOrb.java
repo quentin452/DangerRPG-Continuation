@@ -8,6 +8,9 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class EntityPowerMagicOrb extends EntityMagicOrb {
+    private EntityLivingBase thrower;
+    private EntityLivingBase target;
+
 
     public EntityPowerMagicOrb(World world) {
         super(world);
@@ -33,6 +36,15 @@ public class EntityPowerMagicOrb extends EntityMagicOrb {
     @Override
     public void preInpact(MovingObjectPosition mop) {
         if (!worldObj.isRemote) {
+
+            if (mop.entityHit instanceof EntityLivingBase) {
+                target = (EntityLivingBase) mop.entityHit;
+            }
+
+            if (getThrower() instanceof EntityLivingBase) {
+                thrower = (EntityLivingBase) getThrower();
+            }
+
             ExplosionCommonRPG explosion = new ExplosionPowerMagicOrb(
                 this,
                 mop.hitVec.xCoord,
@@ -41,6 +53,9 @@ public class EntityPowerMagicOrb extends EntityMagicOrb {
                 2);
             explosion.init(false, 1, 0, false);
             explosion.doExplosion();
+        }
+        if (target != null && thrower != null) {
+            target.setRevengeTarget(thrower);
         }
     }
 

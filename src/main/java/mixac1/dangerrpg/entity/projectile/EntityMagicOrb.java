@@ -9,6 +9,9 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class EntityMagicOrb extends EntityCommonMagic {
+    private EntityLivingBase thrower;
+    private EntityLivingBase target;
+
 
     public EntityMagicOrb(World world) {
         super(world);
@@ -54,6 +57,13 @@ public class EntityMagicOrb extends EntityCommonMagic {
         super.preInpact(mop);
 
         if (worldObj.isRemote) {
+            if (mop.entityHit instanceof EntityLivingBase) {
+                target = (EntityLivingBase) mop.entityHit;
+            }
+
+            if (getThrower() instanceof EntityLivingBase) {
+                thrower = (EntityLivingBase) getThrower();
+            }
             int color = getColor();
             double r = 0.2D;
             double frec = Math.PI / 4;
@@ -69,5 +79,9 @@ public class EntityMagicOrb extends EntityCommonMagic {
                 }
             }
         }
+        if (target != null && thrower != null) {
+            target.setRevengeTarget(thrower);
+        }
     }
+
 }
