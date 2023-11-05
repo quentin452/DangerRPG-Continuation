@@ -22,7 +22,7 @@ public abstract class RPGGems
     public static GemPassiveAttribute gemPAHealthRegen     = new GemPassiveAttribute("gem_pa_health_regen",    0.5f,   new MultiplierAdd(0.5f),     PlayerAttributes.HEALTH_REGEN);
     public static GemPassiveAttribute gemPAMotionSpeed     = new GemPassiveAttribute("gem_pa_motion_speed",    0.002f, new MultiplierAdd(0.002f),   PlayerAttributes.SNEAK_SPEED, PlayerAttributes.MOVE_SPEED, PlayerAttributes.SWIM_SPEED, PlayerAttributes.FLY_SPEED);
     public static GemPassiveAttribute gemPAJumpStrenght    = new GemPassiveAttribute("gem_pa_jump_str",        0.002f, new MultiplierAdd(0.002f),   PlayerAttributes.JUMP_HEIGHT, PlayerAttributes.JUMP_RANGE);
-    public static GemPassiveAttribute gemPAPhysicResist    = new GemPassiveAttribute("gem_pa_physic_resist",   0.01f,  new MultiplierAdd(0.01f),    PlayerAttributes.PHYSIC_RESIST);
+    public static GemPassiveAttribute gemPAPhysicResist    = new GemPassiveAttribute("gem_pa_physic_resist",   0.01f,  new MultiplierAdd(0.01f),    PlayerAttributes.PHISIC_RESIST);
     public static GemPassiveAttribute gemPAMagicResist     = new GemPassiveAttribute("gem_pa_magic_resist",    0.01f,  new MultiplierAdd(0.01f),    PlayerAttributes.MAGIC_RESIST);
     public static GemPassiveAttribute gemPAFallResist      = new GemPassiveAttribute("gem_pa_fall_resist",     0.02f,  new MultiplierAdd(0.02f),    PlayerAttributes.FALL_RESIST);
     public static GemPassiveAttribute gemPAFireResist      = new GemPassiveAttribute("gem_pa_fire_resist",     0.02f,  new MultiplierAdd(0.02f),    PlayerAttributes.FIRE_RESIST);

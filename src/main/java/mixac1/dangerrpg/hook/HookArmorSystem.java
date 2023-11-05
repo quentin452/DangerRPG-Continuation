@@ -96,7 +96,7 @@ public class HookArmorSystem
                 return PlayerAttributes.MAGIC_RESIST.getSafe(entity, 0f);
             }
             else if (!source.isUnblockable()) {
-                return PlayerAttributes.PHYSIC_RESIST.getSafe(entity, 0f);
+                return PlayerAttributes.PHISIC_RESIST.getSafe(entity, 0f);
             }
         }
         return 0;

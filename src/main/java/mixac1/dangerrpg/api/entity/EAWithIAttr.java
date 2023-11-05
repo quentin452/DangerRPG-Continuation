@@ -151,7 +151,7 @@ public class EAWithIAttr extends EAFloat
         }
     }
 
-    public static class EAMotion extends EAWithIAttr
+    public static class EAMotion extends EAFloat
     {
         public EAMotion(String name)
         {
@@ -165,7 +165,7 @@ public class EAWithIAttr extends EAFloat
         }
     }
 
-    public static class EAPercent extends EAWithIAttr
+    public static class EAPercent extends EAFloat
     {
         public EAPercent(String name)
         {

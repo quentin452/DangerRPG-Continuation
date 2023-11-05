@@ -3,13 +3,14 @@ package mixac1.dangerrpg.capability.ea;
 import java.util.UUID;
 
 import mixac1.dangerrpg.api.entity.EAWithIAttr;
+import mixac1.dangerrpg.api.entity.EntityAttribute;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.monster.EntitySlime;
 
-public class EASlimeDamage extends EAWithIAttr
+public class EASlimeDamage extends EntityAttribute.EAFloat
 {
-    public EASlimeDamage(String name, IAttribute attr)
+    public EASlimeDamage(String name)
     {
         super(name);
     }

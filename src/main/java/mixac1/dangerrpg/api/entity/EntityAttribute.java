@@ -9,8 +9,13 @@ import mixac1.dangerrpg.util.ITypeProvider;
 import mixac1.dangerrpg.util.Tuple.Stub;
 import mixac1.dangerrpg.util.Utils;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
+import java.util.UUID;
 
 /**
  * Default entity attribute. It supports any Type, but you must create {@link ITypeProvider} for this Type. <br>
@@ -213,6 +218,20 @@ public class EntityAttribute<Type> {
     public static class EAFloat extends EntityAttribute<Float> {
         public EAFloat(String name) {
             super(ITypeProvider.FLOAT, name);
+        }
+
+        public void setModificatorValue(Float value, EntityLivingBase entity, UUID ID)
+        {
+
+        }
+
+        public void removeModificator(EntityLivingBase entity, UUID ID)
+        {
+
+        }
+
+        protected Float getModificatorValue(EntityLivingBase entity, UUID id) {
+            return null;
         }
     }
 

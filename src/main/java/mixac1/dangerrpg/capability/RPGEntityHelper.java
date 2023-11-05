@@ -91,7 +91,7 @@ public abstract class RPGEntityHelper
         map.registerEALvlable(PlayerAttributes.JUMP_HEIGHT,   0f,  new DafailtLvlEAProvider(2, 20,   ADD_0d001));
         map.registerEALvlable(PlayerAttributes.JUMP_RANGE,    0f,  new DafailtLvlEAProvider(2, 20,   ADD_0d001));
 
-        map.registerEALvlable(PlayerAttributes.PHYSIC_RESIST, 0f,  new DafailtLvlEAProvider(2, 20,   ADD_0d01));
+        map.registerEALvlable(PlayerAttributes.PHISIC_RESIST, 0f,  new DafailtLvlEAProvider(2, 20,   ADD_0d01));
         map.registerEALvlable(PlayerAttributes.MAGIC_RESIST,  0f,  new DafailtLvlEAProvider(2, 20,   ADD_0d01));
         map.registerEALvlable(PlayerAttributes.FALL_RESIST,   0f,  new DafailtLvlEAProvider(2, 20,   ADD_0d025));
         map.registerEALvlable(PlayerAttributes.FIRE_RESIST,   0f,  new DafailtLvlEAProvider(2, 20,   ADD_0d025));

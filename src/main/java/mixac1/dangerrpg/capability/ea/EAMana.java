@@ -1,24 +1,26 @@
 package mixac1.dangerrpg.capability.ea;
 
-import java.util.UUID;
-
+import mixac1.dangerrpg.api.entity.EntityAttribute;
 import mixac1.dangerrpg.capability.PlayerAttributes;
 import net.minecraft.entity.EntityLivingBase;
-import mixac1.dangerrpg.api.entity.EAWithIAttr;
 
-public class EAMana extends EAWithIAttr {
+import java.util.UUID;
+
+public class EAMana extends EntityAttribute.EAFloat {
 
     public EAMana(String name) {
         super(name);
     }
 
     @Override
-    public boolean setValueRaw(Float value, EntityLivingBase entity) {
-        if (super.setValueRaw(value, entity)) {
-            updateCurrentMana(entity);
-            return true;
+    public void setValue(Float value, EntityLivingBase entity)
+    {
+        if (isValid(value, entity)) {
+            float max = getValue(entity);
+            setValueRaw(value, entity);
+            sync(entity);
+            PlayerAttributes.CURR_MANA.setValue(value * PlayerAttributes.CURR_MANA.getValue(entity) / max, entity);
         }
-        return false;
     }
 
     @Override
