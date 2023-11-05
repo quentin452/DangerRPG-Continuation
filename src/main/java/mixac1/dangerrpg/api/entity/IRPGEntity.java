@@ -11,13 +11,13 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public interface IRPGEntity {
 
-    public EAFloat getEAMeleeDamage(EntityLivingBase entity);
+    EAFloat getEAMeleeDamage(EntityLivingBase entity);
 
-    public EAFloat getEARangeDamage(EntityLivingBase entity);
+    EAFloat getEARangeDamage(EntityLivingBase entity);
 
-    public void registerAttributes(Class<? extends EntityLivingBase> entityClass, RPGEntityData set);
+    void registerAttributes(Class<? extends EntityLivingBase> entityClass, RPGEntityData set);
 
-    public static IRPGEntity DEFAULT_PLAYER = new IRPGEntity() {
+    IRPGEntity DEFAULT_PLAYER = new IRPGEntity() {
 
         @Override
         public EAFloat getEAMeleeDamage(EntityLivingBase entity) {
@@ -35,11 +35,11 @@ public interface IRPGEntity {
         }
     };
 
-    public static IRPGEntity DEFAULT_LIVING = new RPGLivingEntity();
+    IRPGEntity DEFAULT_LIVING = new RPGLivingEntity();
 
-    public static IRPGEntity DEFAULT_MOB = new RPGEntityMob();
+    IRPGEntity DEFAULT_MOB = new RPGEntityMob();
 
-    public static class RPGLivingEntity implements IRPGEntity {
+    class RPGLivingEntity implements IRPGEntity {
 
         @Override
         public EAFloat getEAMeleeDamage(EntityLivingBase entity) {
@@ -55,9 +55,9 @@ public interface IRPGEntity {
         public void registerAttributes(Class<? extends EntityLivingBase> entityClass, RPGEntityData set) {
             RPGEntityHelper.registerEntityLiving((Class<? extends EntityLiving>) entityClass, set);
         }
-    };
+    }
 
-    public static class RPGEntityMob extends RPGLivingEntity {
+    class RPGEntityMob extends RPGLivingEntity {
 
         @Override
         public EAFloat getEAMeleeDamage(EntityLivingBase entity) {
@@ -69,9 +69,9 @@ public interface IRPGEntity {
             super.registerAttributes(entityClass, set);
             RPGEntityHelper.registerEntityMob((Class<? extends EntityMob>) entityClass, set);
         }
-    };
+    }
 
-    public static class RPGRangeEntityMob extends RPGEntityMob {
+    class RPGRangeEntityMob extends RPGEntityMob {
 
         protected EAFloat rangeAttr;
         protected float rangeValue;
@@ -97,9 +97,9 @@ public interface IRPGEntity {
                 set.registerEA(rangeAttr, rangeValue, RPGEntityHelper.DAMAGE_MUL);
             }
         }
-    };
+    }
 
-    public static class RPGCommonEntity extends RPGLivingEntity {
+    class RPGCommonEntity extends RPGLivingEntity {
 
         protected EAFloat meleeAttr;
         protected float meleeValue;
@@ -143,12 +143,12 @@ public interface IRPGEntity {
                 set.registerEA(rangeAttr, rangeValue, RPGEntityHelper.DAMAGE_MUL);
             }
         }
-    };
+    }
 
-    public static class RPGCommonRangeEntity extends RPGCommonEntity {
+    class RPGCommonRangeEntity extends RPGCommonEntity {
 
         public RPGCommonRangeEntity(float value) {
             super(null, 0, EntityAttributes.RANGE_DAMAGE, value);
         }
-    };
+    }
 }
