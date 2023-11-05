@@ -9,9 +9,6 @@ import mixac1.dangerrpg.util.ITypeProvider;
 import mixac1.dangerrpg.util.Tuple.Stub;
 import mixac1.dangerrpg.util.Utils;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -22,6 +19,7 @@ import java.util.UUID;
  * {@link LvlEAProvider} allows making this attribute levelable.
  */
 public class EntityAttribute<Type> {
+
     public final String name;
     public final int hash;
     public final ITypeProvider<Type> typeProvider;
@@ -204,29 +202,30 @@ public class EntityAttribute<Type> {
     // TODO: Implementations of EntityAttribute for default types
 
     public static class EABoolean extends EntityAttribute<Boolean> {
+
         public EABoolean(String name) {
             super(ITypeProvider.BOOLEAN, name);
         }
     }
 
     public static class EAInteger extends EntityAttribute<Integer> {
+
         public EAInteger(String name) {
             super(ITypeProvider.INTEGER, name);
         }
     }
 
     public static class EAFloat extends EntityAttribute<Float> {
+
         public EAFloat(String name) {
             super(ITypeProvider.FLOAT, name);
         }
 
-        public void setModificatorValue(Float value, EntityLivingBase entity, UUID ID)
-        {
+        public void setModificatorValue(Float value, EntityLivingBase entity, UUID ID) {
 
         }
 
-        public void removeModificator(EntityLivingBase entity, UUID ID)
-        {
+        public void removeModificator(EntityLivingBase entity, UUID ID) {
 
         }
 
@@ -236,18 +235,21 @@ public class EntityAttribute<Type> {
     }
 
     public static class EAString extends EntityAttribute<String> {
+
         public EAString(String name) {
             super(ITypeProvider.STRING, name);
         }
     }
 
     public static class EANBT extends EntityAttribute<NBTTagCompound> {
+
         public EANBT(String name) {
             super(ITypeProvider.NBT_TAG, name);
         }
     }
 
     public static class EAItemStack extends EntityAttribute<ItemStack> {
+
         public EAItemStack(String name) {
             super(ITypeProvider.ITEM_STACK, name);
         }

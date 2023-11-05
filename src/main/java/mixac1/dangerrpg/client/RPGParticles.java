@@ -8,12 +8,12 @@ import net.minecraft.client.particle.EntitySmokeFX;
 import net.minecraft.world.World;
 
 @SideOnly(Side.CLIENT)
-public abstract class RPGParticles
-{
-    public static class EntityAuraFXE extends EntityAuraFX
-    {
-        public EntityAuraFXE(World world, double x, double y, double z, double motionX, double motionY, double motionZ)
-        {
+public abstract class RPGParticles {
+
+    public static class EntityAuraFXE extends EntityAuraFX {
+
+        public EntityAuraFXE(World world, double x, double y, double z, double motionX, double motionY,
+            double motionZ) {
             super(world, x, y, z, motionX, motionY, motionZ);
             this.motionX *= 0.10000000149011612D;
             this.motionY *= 0.10000000149011612D;
@@ -24,14 +24,12 @@ public abstract class RPGParticles
         }
 
         @Override
-        public int getBrightnessForRender(float par)
-        {
+        public int getBrightnessForRender(float par) {
             return 0xF000F0;
         }
 
         @Override
-        public void onUpdate()
-        {
+        public void onUpdate() {
             prevPosX = posX;
             prevPosY = posY;
             prevPosZ = posZ;
@@ -46,10 +44,10 @@ public abstract class RPGParticles
         }
     }
 
-    public static class EntityReddustFXE extends EntityReddustFX
-    {
-        public EntityReddustFXE(World world, double x, double y, double z, float motionX, float motionY, float motionZ)
-        {
+    public static class EntityReddustFXE extends EntityReddustFX {
+
+        public EntityReddustFXE(World world, double x, double y, double z, float motionX, float motionY,
+            float motionZ) {
             super(world, x, y, z, motionX, motionY, motionZ);
             this.motionX *= 0.10000000149011612D;
             this.motionY *= 0.10000000149011612D;
@@ -60,14 +58,12 @@ public abstract class RPGParticles
         }
 
         @Override
-        public int getBrightnessForRender(float par)
-        {
+        public int getBrightnessForRender(float par) {
             return 0xF000F0;
         }
 
         @Override
-        public void onUpdate()
-        {
+        public void onUpdate() {
             prevPosX = posX;
             prevPosY = posY;
             prevPosZ = posZ;
@@ -85,16 +81,14 @@ public abstract class RPGParticles
         }
     }
 
-    public static class EntitySmokeFXE extends EntitySmokeFX
-    {
-        public EntitySmokeFXE(World world, double x, double y, double z, float motionX, float motionY, float motionZ)
-        {
+    public static class EntitySmokeFXE extends EntitySmokeFX {
+
+        public EntitySmokeFXE(World world, double x, double y, double z, float motionX, float motionY, float motionZ) {
             super(world, x, y, z, motionX, motionY, motionZ);
         }
 
         @Override
-        public int getBrightnessForRender(float par)
-        {
+        public int getBrightnessForRender(float par) {
             return 0xF000F0;
         }
     }

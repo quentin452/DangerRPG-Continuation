@@ -3,15 +3,14 @@ package mixac1.dangerrpg.client.model;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 
-public class ModelMageArmor extends ModelBiped
-{
+public class ModelMageArmor extends ModelBiped {
+
     public static final ModelMageArmor INSTANCE_ARMOR = new ModelMageArmor(0.6F);
     public static final ModelMageArmor INSTANCE_LEGGINGS = new ModelMageArmor(0.3F);
 
     public ModelRenderer cape;
 
-    public ModelMageArmor(float scale)
-    {
+    public ModelMageArmor(float scale) {
         super(scale, 0.0F, 64, 44);
 
         this.cape = new ModelRenderer(this, 0, 32);

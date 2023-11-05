@@ -12,38 +12,33 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
-public class EntityCommonMagic extends EntityWithStack
-{
+public class EntityCommonMagic extends EntityWithStack {
+
     public static final int DEFAULT_COLOR = 0x37048E;
 
-    public EntityCommonMagic(World world)
-    {
+    public EntityCommonMagic(World world) {
         super(world);
     }
 
-    public EntityCommonMagic(World world, ItemStack stack)
-    {
+    public EntityCommonMagic(World world, ItemStack stack) {
         super(world);
     }
 
-    public EntityCommonMagic(World world, ItemStack stack, double x, double y, double z)
-    {
+    public EntityCommonMagic(World world, ItemStack stack, double x, double y, double z) {
         super(world, stack, x, y, z);
     }
 
-    public EntityCommonMagic(World world, EntityLivingBase thrower, ItemStack stack, float speed, float deviation)
-    {
+    public EntityCommonMagic(World world, EntityLivingBase thrower, ItemStack stack, float speed, float deviation) {
         super(world, thrower, stack, speed, deviation);
     }
 
-    public EntityCommonMagic(World world, EntityLivingBase thrower, EntityLivingBase target, ItemStack stack, float speed, float deviation)
-    {
+    public EntityCommonMagic(World world, EntityLivingBase thrower, EntityLivingBase target, ItemStack stack,
+        float speed, float deviation) {
         super(world, thrower, target, stack, speed, deviation);
     }
 
     @Override
-    public void applyEntityHitEffects(EntityLivingBase entity, float dmgMul)
-    {
+    public void applyEntityHitEffects(EntityLivingBase entity, float dmgMul) {
         float points = entity.getHealth();
 
         ItemStack stack = this.getStack();
@@ -65,26 +60,22 @@ public class EntityCommonMagic extends EntityWithStack
     }
 
     @Override
-    public boolean dieAfterGroundHit()
-    {
+    public boolean dieAfterGroundHit() {
         return true;
     }
 
-    public int getColor()
-    {
+    public int getColor() {
         return RPGHelper.getSpecialColor(getStack(), DEFAULT_COLOR);
     }
 
     @Override
-    public float getBrightness(float par)
-    {
+    public float getBrightness(float par) {
         return 0.0F;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public int getBrightnessForRender(float par)
-    {
+    public int getBrightnessForRender(float par) {
         return 0xF000F0;
     }
 }

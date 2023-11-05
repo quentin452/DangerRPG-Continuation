@@ -11,19 +11,17 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public abstract class ItemRPGThrowable extends ItemRPGWeapon implements IUseItemExtra
-{
+public abstract class ItemRPGThrowable extends ItemRPGWeapon implements IUseItemExtra {
+
     Class throwEntityClass;
 
-    public ItemRPGThrowable(RPGToolMaterial toolMaterial, RPGToolComponent toolComponent)
-    {
+    public ItemRPGThrowable(RPGToolMaterial toolMaterial, RPGToolComponent toolComponent) {
         super(toolMaterial, toolComponent);
         setTextureName(Utils.toString(DangerRPG.MODID, ":weapons/throwable/", unlocalizedName));
     }
 
     @Override
-    public ItemStack onItemUseExtra(ItemStack stack, World world, EntityPlayer player)
-    {
+    public ItemStack onItemUseExtra(ItemStack stack, World world, EntityPlayer player) {
         world.playSoundAtEntity(player, "random.bow", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F));
         if (!world.isRemote) {
             world.spawnEntityInWorld(getThrowEntity(world, player, stack));
@@ -35,5 +33,6 @@ public abstract class ItemRPGThrowable extends ItemRPGWeapon implements IUseItem
         return stack;
     }
 
-    protected abstract EntityThrowRPGItem getThrowEntity(World world, EntityLivingBase entityliving, ItemStack itemstack);
+    protected abstract EntityThrowRPGItem getThrowEntity(World world, EntityLivingBase entityliving,
+        ItemStack itemstack);
 }

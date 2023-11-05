@@ -1,24 +1,22 @@
 package mixac1.dangerrpg.capability.ea;
 
-import java.util.UUID;
-
 import mixac1.dangerrpg.api.entity.EntityAttributeE;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 
-public class EAHealth extends EntityAttributeE
-{
-    public EAHealth(String name, UUID ID, IAttribute attribute)
-    {
+import java.util.UUID;
+
+public class EAHealth extends EntityAttributeE {
+
+    public EAHealth(String name, UUID ID, IAttribute attribute) {
         super(name, ID, attribute);
     }
 
     @Override
     @Deprecated
-    public boolean setValueRaw(Float value, EntityLivingBase entity)
-    {
+    public boolean setValueRaw(Float value, EntityLivingBase entity) {
         if (!value.equals(getValueRaw(entity)) && !entity.worldObj.isRemote) {
             float tmp = entity.getHealth() / entity.getMaxHealth();
 
@@ -36,9 +34,9 @@ public class EAHealth extends EntityAttributeE
         }
         return false;
     }
+
     @Override
-    public void setModificatorValue(Float value, EntityLivingBase entity, UUID ID)
-    {
+    public void setModificatorValue(Float value, EntityLivingBase entity, UUID ID) {
         if (!entity.worldObj.isRemote) {
             float tmp = entity.getHealth() / entity.getMaxHealth();
             super.setModificatorValue(value, entity, ID);
@@ -47,8 +45,7 @@ public class EAHealth extends EntityAttributeE
     }
 
     @Override
-    public void removeModificator(EntityLivingBase entity, UUID ID)
-    {
+    public void removeModificator(EntityLivingBase entity, UUID ID) {
         if (!entity.worldObj.isRemote) {
             float tmp = entity.getHealth() / entity.getMaxHealth();
             super.removeModificator(entity, ID);

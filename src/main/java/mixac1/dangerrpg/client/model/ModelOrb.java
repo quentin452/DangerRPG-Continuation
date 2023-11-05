@@ -5,18 +5,19 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
-public class ModelOrb extends ModelProjectile
-{
+public class ModelOrb extends ModelProjectile {
+
     public static final ModelOrb INSTANCE = new ModelOrb();
-    public static final ResourceLocation TEXTURE = new ResourceLocation(DangerRPG.MODID, "textures/models/entities/orb.png");
+    public static final ResourceLocation TEXTURE = new ResourceLocation(
+        DangerRPG.MODID,
+        "textures/models/entities/orb.png");
 
     public ModelRenderer shape1;
     public ModelRenderer shape2;
     public ModelRenderer shape3;
     public ModelRenderer shape4;
 
-    public ModelOrb()
-    {
+    public ModelOrb() {
         this.textureWidth = 16;
         this.textureHeight = 8;
         this.shape2 = new ModelRenderer(this, 0, 0);
@@ -38,24 +39,21 @@ public class ModelOrb extends ModelProjectile
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
-    {
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.shape2.render(f5);
         this.shape3.render(f5);
         this.shape4.render(f5);
         this.shape1.render(f5);
     }
 
-    public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z)
-    {
+    public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
         modelRenderer.rotateAngleX = x;
         modelRenderer.rotateAngleY = y;
         modelRenderer.rotateAngleZ = z;
     }
 
     @Override
-    public ResourceLocation getTexture()
-    {
+    public ResourceLocation getTexture() {
         return TEXTURE;
     }
 }

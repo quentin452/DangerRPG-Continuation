@@ -11,8 +11,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 
-public class MsgUseItemExtra implements IMessage
-{
+public class MsgUseItemExtra implements IMessage {
+
     public MsgUseItemExtra() {}
 
     @Override
@@ -21,16 +21,16 @@ public class MsgUseItemExtra implements IMessage
     @Override
     public void toBytes(ByteBuf buf) {}
 
-    public static class Handler implements IMessageHandler<MsgUseItemExtra, IMessage>
-    {
+    public static class Handler implements IMessageHandler<MsgUseItemExtra, IMessage> {
+
         @Override
-        public IMessage onMessage(MsgUseItemExtra message, MessageContext ctx)
-        {
+        public IMessage onMessage(MsgUseItemExtra message, MessageContext ctx) {
             EntityPlayer player = DangerRPG.proxy.getPlayer(ctx);
             if (player.inventory.currentItem >= 0 && player.inventory.currentItem <= 8) {
                 ItemStack stack = player.getCurrentEquippedItem();
                 if (stack != null && stack.getItem() instanceof IUseItemExtra) {
-                    ItemStack resStack = ((IUseItemExtra) stack.getItem()).onItemUseExtra(stack, player.worldObj, player);
+                    ItemStack resStack = ((IUseItemExtra) stack.getItem())
+                        .onItemUseExtra(stack, player.worldObj, player);
                     if (resStack != stack || resStack.stackSize != stack.stackSize) {
                         player.inventory.mainInventory[player.inventory.currentItem] = resStack;
                         if (resStack == null || resStack.stackSize <= 0) {
@@ -44,4 +44,3 @@ public class MsgUseItemExtra implements IMessage
         }
     }
 }
-

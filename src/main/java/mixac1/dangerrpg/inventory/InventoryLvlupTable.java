@@ -6,34 +6,30 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
-public class InventoryLvlupTable implements IInventory
-{
+public class InventoryLvlupTable implements IInventory {
+
     public static final String NAME = "lvlup_table";
 
     public ItemStack[] inv = new ItemStack[4];
 
     private ContainerLvlupTable eventHandler;
 
-    public InventoryLvlupTable(ContainerLvlupTable eventHandler)
-    {
+    public InventoryLvlupTable(ContainerLvlupTable eventHandler) {
         this.eventHandler = eventHandler;
     }
 
     @Override
-    public int getSizeInventory()
-    {
+    public int getSizeInventory() {
         return inv.length;
     }
 
     @Override
-    public ItemStack getStackInSlot(int index)
-    {
+    public ItemStack getStackInSlot(int index) {
         return index < 0 || index >= getSizeInventory() ? null : inv[index];
     }
 
     @Override
-    public ItemStack decrStackSize(int index, int count)
-    {
+    public ItemStack decrStackSize(int index, int count) {
         ItemStack stack = getStackInSlot(index);
         if (stack != null) {
             ItemStack itemstack;
@@ -41,8 +37,7 @@ public class InventoryLvlupTable implements IInventory
             if (stack.stackSize <= count) {
                 itemstack = stack;
                 setInventorySlotContents(index, null);
-            }
-            else {
+            } else {
                 itemstack = stack.splitStack(count);
                 if (stack.stackSize == 0) {
                     stack = null;
@@ -54,8 +49,7 @@ public class InventoryLvlupTable implements IInventory
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int index)
-    {
+    public ItemStack getStackInSlotOnClosing(int index) {
         ItemStack stack = getStackInSlot(index);
         if (stack != null) {
             ItemStack itemstack = stack;
@@ -66,8 +60,7 @@ public class InventoryLvlupTable implements IInventory
     }
 
     @Override
-    public void setInventorySlotContents(int index, ItemStack stack)
-    {
+    public void setInventorySlotContents(int index, ItemStack stack) {
         if (index < 0 || index >= getSizeInventory()) {
             return;
         }
@@ -77,20 +70,17 @@ public class InventoryLvlupTable implements IInventory
     }
 
     @Override
-    public String getInventoryName()
-    {
+    public String getInventoryName() {
         return NAME;
     }
 
     @Override
-    public boolean hasCustomInventoryName()
-    {
+    public boolean hasCustomInventoryName() {
         return true;
     }
 
     @Override
-    public int getInventoryStackLimit()
-    {
+    public int getInventoryStackLimit() {
         return 64;
     }
 
@@ -98,8 +88,7 @@ public class InventoryLvlupTable implements IInventory
     public void markDirty() {}
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player)
-    {
+    public boolean isUseableByPlayer(EntityPlayer player) {
         return true;
     }
 
@@ -110,13 +99,11 @@ public class InventoryLvlupTable implements IInventory
     public void closeInventory() {}
 
     @Override
-    public boolean isItemValidForSlot(int index, ItemStack stack)
-    {
+    public boolean isItemValidForSlot(int index, ItemStack stack) {
         if (stack == null) {
             if (index != 0) {
                 return true;
-            }
-            else {
+            } else {
                 for (int i = 1; i < inv.length; ++i) {
                     if (inv[i] != null) {
                         return false;

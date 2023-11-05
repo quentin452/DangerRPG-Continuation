@@ -5,10 +5,9 @@ import mixac1.dangerrpg.item.gem.GemPassiveAttribute;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-public class GTPassiveAttribute extends GemType
-{
-    public GTPassiveAttribute()
-    {
+public class GTPassiveAttribute extends GemType {
+
+    public GTPassiveAttribute() {
         super("pa");
     }
 
@@ -16,8 +15,7 @@ public class GTPassiveAttribute extends GemType
      * Activate
      */
     @Override
-    public void activate1(ItemStack stack, EntityPlayer player, Object... meta)
-    {
+    public void activate1(ItemStack stack, EntityPlayer player, Object... meta) {
         if (stack.getItem() instanceof GemPassiveAttribute) {
             ((GemPassiveAttribute) stack.getItem()).activate(stack, player);
         }
@@ -27,8 +25,7 @@ public class GTPassiveAttribute extends GemType
      * Deactivate
      */
     @Override
-    public void activate2(ItemStack stack, EntityPlayer player, Object... meta)
-    {
+    public void activate2(ItemStack stack, EntityPlayer player, Object... meta) {
         if (stack.getItem() instanceof GemPassiveAttribute) {
             ((GemPassiveAttribute) stack.getItem()).deactivate(stack, player);
         }

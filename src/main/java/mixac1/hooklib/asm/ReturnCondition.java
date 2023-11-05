@@ -1,7 +1,7 @@
 package mixac1.hooklib.asm;
 
-public enum ReturnCondition
-{
+public enum ReturnCondition {
+
     NEVER(false),
 
     ALWAYS(false),
@@ -14,8 +14,7 @@ public enum ReturnCondition
 
     public final boolean requiresCondition;
 
-    ReturnCondition(boolean requiresCondition)
-    {
+    ReturnCondition(boolean requiresCondition) {
         this.requiresCondition = requiresCondition;
     }
 }

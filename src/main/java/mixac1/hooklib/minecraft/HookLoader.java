@@ -1,20 +1,19 @@
 package mixac1.hooklib.minecraft;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Map;
-
-import org.apache.commons.io.IOUtils;
-
 import cpw.mods.fml.common.asm.transformers.DeobfuscationTransformer;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import mixac1.hooklib.asm.AsmHook;
 import mixac1.hooklib.asm.HookClassTransformer;
 import mixac1.hooklib.asm.ReadClassHelper;
+import org.apache.commons.io.IOUtils;
 
-public abstract class HookLoader implements IFMLLoadingPlugin
-{
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Map;
+
+public abstract class HookLoader implements IFMLLoadingPlugin {
+
     private static DeobfuscationTransformer deobfuscationTransformer;
 
     static {
@@ -23,19 +22,16 @@ public abstract class HookLoader implements IFMLLoadingPlugin
         }
     }
 
-    public static HookClassTransformer getTransformer()
-    {
+    public static HookClassTransformer getTransformer() {
         return PrimaryClassTransformer.instance.registeredSecondTransformer ? MinecraftClassTransformer.instance
-                : PrimaryClassTransformer.instance;
+            : PrimaryClassTransformer.instance;
     }
 
-    public static void registerHook(AsmHook hook)
-    {
+    public static void registerHook(AsmHook hook) {
         getTransformer().registerHook(hook);
     }
 
-    public static void registerHookContainer(String className)
-    {
+    public static void registerHookContainer(String className) {
         try {
             InputStream classData = ReadClassHelper.getClassData(className);
             byte[] bytes = IOUtils.toByteArray(classData);
@@ -45,46 +41,39 @@ public abstract class HookLoader implements IFMLLoadingPlugin
             }
             ByteArrayInputStream newData = new ByteArrayInputStream(bytes);
             getTransformer().registerHookContainer(newData);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     // 1.6.x only
-    public String[] getLibraryRequestClass()
-    {
+    public String[] getLibraryRequestClass() {
         return null;
     }
 
     // 1.7.x only
     @Override
-    public String getAccessTransformerClass()
-    {
+    public String getAccessTransformerClass() {
         return null;
     }
 
     @Override
-    public String[] getASMTransformerClass()
-    {
+    public String[] getASMTransformerClass() {
         return null;
     }
 
     @Override
-    public String getModContainerClass()
-    {
+    public String getModContainerClass() {
         return null;
     }
 
     @Override
-    public String getSetupClass()
-    {
+    public String getSetupClass() {
         return null;
     }
 
     @Override
-    public void injectData(Map<String, Object> data)
-    {
+    public void injectData(Map<String, Object> data) {
         registerHooks();
     }
 

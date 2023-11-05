@@ -5,8 +5,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-public interface IHasBooksInfo
-{
+public interface IHasBooksInfo {
+
     @SideOnly(Side.CLIENT)
     public String getInformationToInfoBook(ItemStack item, EntityPlayer player);
 }

@@ -7,11 +7,10 @@ import mixac1.dangerrpg.init.RPGNetwork;
 import mixac1.dangerrpg.network.MsgSyncConfig;
 import net.minecraft.entity.player.EntityPlayerMP;
 
-public class EventHandlerCommon
-{
+public class EventHandlerCommon {
+
     @SubscribeEvent
-    public void onPlayerLoggedInEvent(PlayerLoggedInEvent e)
-    {
+    public void onPlayerLoggedInEvent(PlayerLoggedInEvent e) {
         if (MainConfig.d.mainEnableTransferConfig) {
             RPGNetwork.net.sendTo(new MsgSyncConfig(), (EntityPlayerMP) e.player);
         }

@@ -16,12 +16,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 
-public class ItemRPGSpade extends ItemSpade implements IRPGItemTool, IHasBooksInfo
-{
+public class ItemRPGSpade extends ItemSpade implements IRPGItemTool, IHasBooksInfo {
+
     RPGToolMaterial toolMaterial;
 
-    public ItemRPGSpade(RPGToolMaterial toolMaterial)
-    {
+    public ItemRPGSpade(RPGToolMaterial toolMaterial) {
         super(toolMaterial.material);
         this.toolMaterial = toolMaterial;
         setUnlocalizedName(RPGItems.getRPGName(getItemComponent(this), getToolMaterial(this)));
@@ -31,26 +30,22 @@ public class ItemRPGSpade extends ItemSpade implements IRPGItemTool, IHasBooksIn
     }
 
     @Override
-    public String getInformationToInfoBook(ItemStack item, EntityPlayer player)
-    {
+    public String getInformationToInfoBook(ItemStack item, EntityPlayer player) {
         return null;
     }
 
     @Override
-    public RPGToolComponent getItemComponent(Item item)
-    {
+    public RPGToolComponent getItemComponent(Item item) {
         return RPGItemComponent.SHOVEL;
     }
 
     @Override
-    public RPGToolMaterial getToolMaterial(Item item)
-    {
+    public RPGToolMaterial getToolMaterial(Item item) {
         return toolMaterial;
     }
 
     @Override
-    public void registerAttributes(Item item, RPGItemData map)
-    {
+    public void registerAttributes(Item item, RPGItemData map) {
         RPGItemHelper.registerParamsItemTool(item, map);
     }
 }

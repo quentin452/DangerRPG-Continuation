@@ -8,16 +8,14 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class ItemRPGTomahawk extends ItemRPGThrowable
-{
-    public ItemRPGTomahawk(RPGToolMaterial toolMaterial, RPGToolComponent toolComponent)
-    {
+public class ItemRPGTomahawk extends ItemRPGThrowable {
+
+    public ItemRPGTomahawk(RPGToolMaterial toolMaterial, RPGToolComponent toolComponent) {
         super(toolMaterial, toolComponent);
     }
 
     @Override
-    protected EntityThrowRPGItem getThrowEntity(World world, EntityLivingBase entityliving, ItemStack itemstack)
-    {
+    protected EntityThrowRPGItem getThrowEntity(World world, EntityLivingBase entityliving, ItemStack itemstack) {
         return new EntityThrowTomahawk(world, entityliving, itemstack, 1.1F, 3F);
     }
 }

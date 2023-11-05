@@ -4,11 +4,11 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mixac1.dangerrpg.api.item.IRPGItem;
 import mixac1.dangerrpg.api.item.IRPGItem.IRPGItemBow;
-import mixac1.dangerrpg.capability.RPGItemHelper;
 import mixac1.dangerrpg.capability.ItemAttributes;
+import mixac1.dangerrpg.capability.RPGItemHelper;
 import mixac1.hooklib.asm.Hook;
-import mixac1.hooklib.asm.ReturnCondition;
 import mixac1.hooklib.asm.Hook.ReturnValue;
+import mixac1.hooklib.asm.ReturnCondition;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -25,37 +25,33 @@ import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 
-public class HookItemBow
-{
+public class HookItemBow {
+
     @SideOnly(Side.CLIENT)
     @Hook(injectOnExit = true, returnCondition = ReturnCondition.ALWAYS)
-    public static IIcon getItemIcon(EntityPlayer player, ItemStack stack, int par, @ReturnValue IIcon returnValue)
-    {
-        if (RPGItemHelper.isRPGable(stack) && player.getItemInUse() != null &&
-            stack.getItem() instanceof ItemBow && ItemAttributes.SHOT_SPEED.hasIt(stack)) {
+    public static IIcon getItemIcon(EntityPlayer player, ItemStack stack, int par, @ReturnValue IIcon returnValue) {
+        if (RPGItemHelper.isRPGable(stack) && player.getItemInUse() != null
+            && stack.getItem() instanceof ItemBow
+            && ItemAttributes.SHOT_SPEED.hasIt(stack)) {
             int ticks = stack.getMaxItemUseDuration() - player.getItemInUseCount();
             float speed = ItemAttributes.SHOT_SPEED.get(stack, player);
             ItemBow bow = (ItemBow) stack.getItem();
             try {
                 if (ticks >= speed) {
                     return bow.getItemIconForUseDuration(2);
-                }
-                else if (ticks > speed / 2) {
+                } else if (ticks > speed / 2) {
                     return bow.getItemIconForUseDuration(1);
-                }
-                else if (ticks > 0) {
+                } else if (ticks > 0) {
                     return bow.getItemIconForUseDuration(0);
                 }
-            }
-            catch (NullPointerException e) {}
+            } catch (NullPointerException e) {}
         }
         return returnValue;
     }
 
     @SideOnly(Side.CLIENT)
     @Hook(injectOnExit = true, returnCondition = ReturnCondition.ALWAYS)
-    public static float getFOVMultiplier(EntityPlayerSP player)
-    {
+    public static float getFOVMultiplier(EntityPlayerSP player) {
         float f = 1.0F;
 
         if (player.capabilities.isFlying) {
@@ -63,7 +59,7 @@ public class HookItemBow
         }
 
         IAttributeInstance attrInst = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
-        f = (float)(f * ((attrInst.getAttributeValue() / player.capabilities.getWalkSpeed() + 1.0D) / 2.0D));
+        f = (float) (f * ((attrInst.getAttributeValue() / player.capabilities.getWalkSpeed() + 1.0D) / 2.0D));
 
         if (player.capabilities.getWalkSpeed() == 0.0F || Float.isNaN(f) || Float.isInfinite(f)) {
             f = 1.0F;
@@ -77,8 +73,7 @@ public class HookItemBow
 
             if (f1 > 1.0F) {
                 f1 = 1.0F;
-            }
-            else {
+            } else {
                 f1 *= f1;
             }
 
@@ -89,8 +84,7 @@ public class HookItemBow
     }
 
     @Hook(returnCondition = ReturnCondition.ALWAYS)
-    public static void onPlayerStoppedUsing(ItemBow bow, ItemStack stack, World world, EntityPlayer player, int par)
-    {
+    public static void onPlayerStoppedUsing(ItemBow bow, ItemStack stack, World world, EntityPlayer player, int par) {
         int useDuration = bow.getMaxItemUseDuration(stack) - par;
         ArrowLooseEvent event = new ArrowLooseEvent(player, stack, useDuration);
         MinecraftForge.EVENT_BUS.post(new ArrowLooseEvent(player, stack, useDuration));
@@ -102,19 +96,18 @@ public class HookItemBow
         if (RPGItemHelper.isRPGable(stack)) {
             if (bow instanceof IRPGItemBow) {
                 ((IRPGItemBow) bow).onStoppedUsing(stack, world, player, useDuration);
-            }
-            else {
+            } else {
                 IRPGItem.DEFAULT_BOW.onStoppedUsing(stack, world, player, useDuration);
             }
-        }
-        else {
+        } else {
             onPlayerStoppedUsingDefault(bow, stack, world, player, useDuration);
         }
     }
 
-    public static void onPlayerStoppedUsingDefault(ItemBow bow, ItemStack stack, World world, EntityPlayer player, float useDuration)
-    {
-        boolean flag = player.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, stack) > 0;
+    public static void onPlayerStoppedUsingDefault(ItemBow bow, ItemStack stack, World world, EntityPlayer player,
+        float useDuration) {
+        boolean flag = player.capabilities.isCreativeMode
+            || EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, stack) > 0;
 
         if (flag || player.inventory.hasItem(Items.arrow)) {
             float f = useDuration / 20.0F;
@@ -151,12 +144,15 @@ public class HookItemBow
             }
 
             stack.damageItem(1, player);
-            world.playSoundAtEntity(player, "random.bow", 1.0F, 1.0F / (bow.itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+            world.playSoundAtEntity(
+                player,
+                "random.bow",
+                1.0F,
+                1.0F / (bow.itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
 
             if (flag) {
                 entityarrow.canBePickedUp = 2;
-            }
-            else {
+            } else {
                 player.inventory.consumeInventoryItem(Items.arrow);
             }
 

@@ -13,8 +13,7 @@ public class EAMana extends EntityAttribute.EAFloat {
     }
 
     @Override
-    public void setValue(Float value, EntityLivingBase entity)
-    {
+    public void setValue(Float value, EntityLivingBase entity) {
         if (isValid(value, entity)) {
             float max = getValue(entity);
             setValueRaw(value, entity);

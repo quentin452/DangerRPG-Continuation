@@ -1,9 +1,5 @@
 package mixac1.dangerrpg.client.gui;
 
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mixac1.dangerrpg.DangerRPG;
@@ -23,14 +19,18 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+
 @SideOnly(Side.CLIENT)
-public class GuiInfoBookContentStack extends GuiInfoBookContent
-{
+public class GuiInfoBookContentStack extends GuiInfoBookContent {
+
     private final ItemStack stack;
     private EntityPlayer player;
 
-    public GuiInfoBookContentStack(Minecraft mc, int width, int height, int top, int size, int left, GuiInfoBook parent, ItemStack stack)
-    {
+    public GuiInfoBookContentStack(Minecraft mc, int width, int height, int top, int size, int left, GuiInfoBook parent,
+        ItemStack stack) {
         super(mc, width, height, top, size, left, mc.fontRenderer.FONT_HEIGHT + 2, parent);
         this.stack = stack;
         if (parent.target instanceof EntityPlayer) {
@@ -39,8 +39,7 @@ public class GuiInfoBookContentStack extends GuiInfoBookContent
     }
 
     @Override
-    public void init()
-    {
+    public void init() {
         super.init();
 
         if (stack == null) {
@@ -54,21 +53,25 @@ public class GuiInfoBookContentStack extends GuiInfoBookContent
 
         Item item = stack.getItem();
 
-        addCenteredString(stack.getDisplayName().toUpperCase());
+        addCenteredString(
+            stack.getDisplayName()
+                .toUpperCase());
         addString("");
 
         boolean isRPGable = RPGItemHelper.isRPGable(stack);
         if (isRPGable) {
 
-            addString(String.format("%s: %d\n", ItemAttributes.LEVEL.getDispayName(),
-                                                (int) ItemAttributes.LEVEL.get(stack)));
+            addString(
+                String.format("%s: %d\n", ItemAttributes.LEVEL.getDispayName(), (int) ItemAttributes.LEVEL.get(stack)));
 
             if (ItemAttributes.LEVEL.isMax(stack)) {
                 addString(DangerRPG.trans("rpgstr.max"));
-            }
-            else {
+            } else {
                 if (ItemAttributes.MAX_EXP.hasIt(stack)) {
-                    addString(String.format("%s: %d/%d", ItemAttributes.CURR_EXP.getDispayName(),
+                    addString(
+                        String.format(
+                            "%s: %d/%d",
+                            ItemAttributes.CURR_EXP.getDispayName(),
                             (int) ItemAttributes.CURR_EXP.get(stack),
                             (int) ItemAttributes.MAX_EXP.get(stack)));
                 }
@@ -76,13 +79,18 @@ public class GuiInfoBookContentStack extends GuiInfoBookContent
 
             if (ItemAttributes.MAX_DURABILITY.hasIt(stack)) {
                 if (!stack.isItemStackDamageable()) {
-                    addString(String.format("%s: %s", ItemAttributes.DURABILITY.getDispayName(),
-                              DangerRPG.trans("rpgstr.unbreakable")));
-                }
-                else {
-                    addString(String.format("%s: %s/%s", ItemAttributes.DURABILITY.getDispayName(),
-                              ItemAttributes.DURABILITY.getDispayValue(stack, player),
-                              ItemAttributes.MAX_DURABILITY.getDispayValue(stack, player)));
+                    addString(
+                        String.format(
+                            "%s: %s",
+                            ItemAttributes.DURABILITY.getDispayName(),
+                            DangerRPG.trans("rpgstr.unbreakable")));
+                } else {
+                    addString(
+                        String.format(
+                            "%s: %s/%s",
+                            ItemAttributes.DURABILITY.getDispayName(),
+                            ItemAttributes.DURABILITY.getDispayValue(stack, player),
+                            ItemAttributes.MAX_DURABILITY.getDispayValue(stack, player)));
                 }
             }
             addString("");
@@ -91,7 +99,9 @@ public class GuiInfoBookContentStack extends GuiInfoBookContent
         if (stack.getItem() instanceof IHasBooksInfo) {
             String s = ((IHasBooksInfo) stack.getItem()).getInformationToInfoBook(stack, player);
             if (s != null) {
-                addCenteredString(DangerRPG.trans("rpgstr.description").toUpperCase());
+                addCenteredString(
+                    DangerRPG.trans("rpgstr.description")
+                        .toUpperCase());
                 addString("");
                 addString(s);
                 addString("");
@@ -105,8 +115,7 @@ public class GuiInfoBookContentStack extends GuiInfoBookContent
                 for (ItemType it : gem.itemTypes) {
                     addString(Utils.toString("- ", it.getDisplayName()));
                 }
-            }
-            else {
+            } else {
                 addString(Utils.toString("- ", ItemType.getDisplayNameAll()));
             }
             addString("");
@@ -124,7 +133,9 @@ public class GuiInfoBookContentStack extends GuiInfoBookContent
             attrs.remove(ItemAttributes.DURABILITY);
             attrs.remove(ItemAttributes.MAX_DURABILITY);
             if (!attrs.isEmpty()) {
-                addCenteredString(DangerRPG.trans("rpgstr.parametres").toUpperCase());
+                addCenteredString(
+                    DangerRPG.trans("rpgstr.parametres")
+                        .toUpperCase());
                 addString("");
                 boolean flag = false;
 
@@ -156,7 +167,7 @@ public class GuiInfoBookContentStack extends GuiInfoBookContent
 
                 flag |= addAttribute(ItemAttributes.EFFICIENCY, attrs);
                 flag |= addAttribute(ItemAttributes.ENCHANTABILITY, attrs);
-                for(ItemAttribute iter : attrs) {
+                for (ItemAttribute iter : attrs) {
                     if (iter.isVisibleInInfoBook(stack)) {
                         addString(String.format("%s : %s", iter.getDispayName(), iter.getDispayValue(stack, player)));
                     }
@@ -171,22 +182,26 @@ public class GuiInfoBookContentStack extends GuiInfoBookContent
                     initGem(it, gemType);
                 }
             }
-        }
-        else if (!(item instanceof ItemBlock)) {
+        } else if (!(item instanceof ItemBlock)) {
             if (stack.isItemStackDamageable()) {
-                 addString(String.format("%s: %d/%d", ItemAttributes.DURABILITY.getDispayName(),
-                     stack.getMaxDamage() - stack.getItemDamage(), stack.getMaxDamage()));
-            }
-            else {
-                 addString(String.format("%s: %s", ItemAttributes.DURABILITY.getDispayName(),
-                         DangerRPG.trans("rpgstr.unbreakable")));
+                addString(
+                    String.format(
+                        "%s: %d/%d",
+                        ItemAttributes.DURABILITY.getDispayName(),
+                        stack.getMaxDamage() - stack.getItemDamage(),
+                        stack.getMaxDamage()));
+            } else {
+                addString(
+                    String.format(
+                        "%s: %s",
+                        ItemAttributes.DURABILITY.getDispayName(),
+                        DangerRPG.trans("rpgstr.unbreakable")));
             }
             addString("");
         }
     }
 
-    private void initGem(ItemStack stack, GemType gemType)
-    {
+    private void initGem(ItemStack stack, GemType gemType) {
         if (stack == null || !(stack.getItem() instanceof Gem) || !RPGItemHelper.isRPGable(stack)) {
             return;
         }
@@ -195,20 +210,25 @@ public class GuiInfoBookContentStack extends GuiInfoBookContent
         String tmp;
 
         addCenteredString("----------------------------------------------------------------");
-        addCenteredString(DangerRPG.trans("rpgstr.gem").toUpperCase());
+        addCenteredString(
+            DangerRPG.trans("rpgstr.gem")
+                .toUpperCase());
         addString("");
         addString(Utils.toString(DangerRPG.trans("rpgstr.name"), ": ", stack.getDisplayName()));
         addString(Utils.toString(DangerRPG.trans("rpgstr.type"), ": ", gemType.getDispayName()));
         addString("");
 
         tmp = ItemAttributes.LEVEL.isMax(stack) ? Utils.toString(" (", DangerRPG.trans("rpgstr.max"), ")") : "";
-        addString(Utils.toString(ItemAttributes.LEVEL.getDispayName(), ": ", (int) ItemAttributes.LEVEL.get(stack), tmp));
+        addString(
+            Utils.toString(ItemAttributes.LEVEL.getDispayName(), ": ", (int) ItemAttributes.LEVEL.get(stack), tmp));
         addString("");
 
         if (stack.getItem() instanceof IHasBooksInfo) {
             String s = ((IHasBooksInfo) stack.getItem()).getInformationToInfoBook(stack, player);
             if (s != null) {
-                addCenteredString(DangerRPG.trans("rpgstr.description").toUpperCase());
+                addCenteredString(
+                    DangerRPG.trans("rpgstr.description")
+                        .toUpperCase());
                 addString("");
                 addString(s);
                 addString("");
@@ -218,10 +238,12 @@ public class GuiInfoBookContentStack extends GuiInfoBookContent
         Set<ItemAttribute> attrs = new LinkedHashSet<ItemAttribute>(RPGItemHelper.getItemAttributes(stack));
         attrs.remove(ItemAttributes.LEVEL);
         if (!attrs.isEmpty()) {
-            addCenteredString(DangerRPG.trans("rpgstr.parametres").toUpperCase());
+            addCenteredString(
+                DangerRPG.trans("rpgstr.parametres")
+                    .toUpperCase());
             addString("");
 
-            for(ItemAttribute iter : attrs) {
+            for (ItemAttribute iter : attrs) {
                 if (iter.isVisibleInInfoBook(stack)) {
                     addString(String.format("%s : %s", iter.getDispayName(), iter.getDispayValue(stack, player)));
                 }
@@ -230,18 +252,15 @@ public class GuiInfoBookContentStack extends GuiInfoBookContent
         }
     }
 
-    private void addString(String str)
-    {
+    private void addString(String str) {
         list.addAll(mc.fontRenderer.listFormattedStringToWidth(str, listWidth - 15));
     }
 
-    private void addCenteredString(String str)
-    {
+    private void addCenteredString(String str) {
         list.add(new CenteredString(str));
     }
 
-    private boolean addAttribute(ItemAttribute attr, Set<ItemAttribute> set)
-    {
+    private boolean addAttribute(ItemAttribute attr, Set<ItemAttribute> set) {
         if (attr.hasIt(stack) && attr.isVisibleInInfoBook(stack)) {
             addString(String.format("%s : %s", attr.getDispayName(), attr.getDispayValue(stack, player)));
             set.remove(attr);
@@ -252,20 +271,22 @@ public class GuiInfoBookContentStack extends GuiInfoBookContent
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float par3)
-    {
+    public void drawScreen(int mouseX, int mouseY, float par3) {
         super.drawScreen(mouseX, mouseY, par3);
 
         String s = DangerRPG.trans("rpgstr.item_info");
-        mc.fontRenderer.drawStringWithShadow(s, left + (listWidth - mc.fontRenderer.getStringWidth(s)) / 2, top - mc.fontRenderer.FONT_HEIGHT - 4, 0xffffff);
+        mc.fontRenderer.drawStringWithShadow(
+            s,
+            left + (listWidth - mc.fontRenderer.getStringWidth(s)) / 2,
+            top - mc.fontRenderer.FONT_HEIGHT - 4,
+            0xffffff);
     }
 
     @Override
     protected void elementClicked(int index, boolean doubleClick) {}
 
     @Override
-    protected boolean isSelected(int index)
-    {
+    protected boolean isSelected(int index) {
         return false;
     }
 
@@ -273,28 +294,24 @@ public class GuiInfoBookContentStack extends GuiInfoBookContent
     protected void drawBackground() {}
 
     @Override
-    protected void drawSlot(int var1, int var2, int var3, int var4, Tessellator var5)
-    {
+    protected void drawSlot(int var1, int var2, int var3, int var4, Tessellator var5) {
         Object obj = list.get(var1);
         if (obj instanceof CenteredString) {
             ((CenteredString) obj).draw(left, var3, 0xffffff);
-        }
-        else {
+        } else {
             mc.fontRenderer.drawString(obj.toString(), left + 5, var3, 0xffffff);
         }
     }
 
-    public class CenteredString
-    {
+    public class CenteredString {
+
         String str;
 
-        public CenteredString(String str)
-        {
+        public CenteredString(String str) {
             this.str = str;
         }
 
-        public void draw(int x, int y, int color)
-        {
+        public void draw(int x, int y, int color) {
             String s = mc.fontRenderer.trimStringToWidth(str, listWidth);
             mc.fontRenderer.drawString(s, x + (listWidth - mc.fontRenderer.getStringWidth(s)) / 2, y, color);
         }

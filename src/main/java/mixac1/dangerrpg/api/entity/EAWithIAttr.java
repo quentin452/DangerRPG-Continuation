@@ -1,7 +1,5 @@
 package mixac1.dangerrpg.api.entity;
 
-import java.util.UUID;
-
 import mixac1.dangerrpg.api.entity.EntityAttribute.EAFloat;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -10,25 +8,25 @@ import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class EAWithIAttr extends EAFloat
-{
+import java.util.UUID;
+
+public class EAWithIAttr extends EAFloat {
+
     public IAttribute attribute;
 
-    public EAWithIAttr(String name)
-    {
+    public EAWithIAttr(String name) {
         this(name, new RPGAttribute(name));
     }
 
-    public EAWithIAttr(String name, IAttribute attribute)
-    {
+    public EAWithIAttr(String name, IAttribute attribute) {
         super(name);
         this.attribute = attribute;
     }
 
     @Override
-    public void init(EntityLivingBase entity)
-    {
-        entity.getAttributeMap().registerAttribute(attribute);
+    public void init(EntityLivingBase entity) {
+        entity.getAttributeMap()
+            .registerAttribute(attribute);
         LvlEAProvider lvlProvider = getLvlProvider(entity);
         if (lvlProvider != null) {
             lvlProvider.init(entity);
@@ -37,37 +35,35 @@ public class EAWithIAttr extends EAFloat
 
     @Override
     @Deprecated
-    public Float getValueRaw(EntityLivingBase entity)
-    {
-        return (float) entity.getEntityAttribute(attribute).getAttributeValue();
+    public Float getValueRaw(EntityLivingBase entity) {
+        return (float) entity.getEntityAttribute(attribute)
+            .getAttributeValue();
     }
 
     @Override
     @Deprecated
-    public boolean setValueRaw(Float value, EntityLivingBase entity)
-    {
+    public boolean setValueRaw(Float value, EntityLivingBase entity) {
         if (!value.equals(getValueRaw(entity)) && !entity.worldObj.isRemote) {
-            entity.getEntityAttribute(attribute).setBaseValue(value);
+            entity.getEntityAttribute(attribute)
+                .setBaseValue(value);
             return true;
         }
         return false;
     }
 
     @Override
-    public Float getBaseValue(EntityLivingBase entity)
-    {
-        return (float) entity.getEntityAttribute(attribute).getBaseValue();
+    public Float getBaseValue(EntityLivingBase entity) {
+        return (float) entity.getEntityAttribute(attribute)
+            .getBaseValue();
     }
 
-    public Float getModificatorValue(EntityLivingBase entity, UUID ID)
-    {
+    public Float getModificatorValue(EntityLivingBase entity, UUID ID) {
         IAttributeInstance attr = entity.getEntityAttribute(attribute);
         AttributeModifier mod = attr.getModifier(ID);
         return mod == null ? 0 : (float) mod.getAmount();
     }
 
-    public void setModificatorValue(Float value, EntityLivingBase entity, UUID ID)
-    {
+    public void setModificatorValue(Float value, EntityLivingBase entity, UUID ID) {
         if (!entity.worldObj.isRemote) {
             IAttributeInstance attr = entity.getEntityAttribute(attribute);
             AttributeModifier mod = attr.getModifier(ID);
@@ -79,8 +75,7 @@ public class EAWithIAttr extends EAFloat
         }
     }
 
-    public void removeModificator(EntityLivingBase entity, UUID ID)
-    {
+    public void removeModificator(EntityLivingBase entity, UUID ID) {
         if (!entity.worldObj.isRemote) {
             IAttributeInstance attr = entity.getEntityAttribute(attribute);
             AttributeModifier mod = attr.getModifier(ID);
@@ -91,27 +86,23 @@ public class EAWithIAttr extends EAFloat
     }
 
     @Override
-    public String getDisplayValue(EntityLivingBase entity)
-    {
+    public String getDisplayValue(EntityLivingBase entity) {
         float mod = getModifierValue(entity);
         String baseStr = getValueToString(getBaseValue(entity), entity);
         if (mod == 0) {
             return String.format("%s", baseStr);
-        }
-        else {
+        } else {
             String modStr = getValueToString(mod, entity);
             if (mod > 0f) {
                 return String.format("%s + %s", baseStr, modStr);
-            }
-            else {
+            } else {
                 return String.format("%s - %s", baseStr, modStr);
             }
         }
     }
 
     @Override
-    public void toNBTforMsg(NBTTagCompound nbt, EntityLivingBase entity)
-    {
+    public void toNBTforMsg(NBTTagCompound nbt, EntityLivingBase entity) {
         NBTTagCompound tmp = new NBTTagCompound();
         LvlEAProvider lvlProvider = getLvlProvider(entity);
         if (lvlProvider != null) {
@@ -121,60 +112,52 @@ public class EAWithIAttr extends EAFloat
     }
 
     @Override
-    public void fromNBTforMsg(NBTTagCompound nbt, EntityLivingBase entity)
-    {
+    public void fromNBTforMsg(NBTTagCompound nbt, EntityLivingBase entity) {
         NBTTagCompound tmp = (NBTTagCompound) nbt.getTag(name);
         if (tmp != null) {
             LvlEAProvider lvlProvider = getLvlProvider(entity);
             if (lvlProvider != null) {
                 lvlProvider.setLvl(tmp.getInteger("lvl"), entity);
             }
-        }
-        else {
+        } else {
             serverInit(entity);
         }
     }
 
     /********************************************************************/
 
-    public static class RPGAttribute extends RangedAttribute
-    {
-        public RPGAttribute(String name)
-        {
+    public static class RPGAttribute extends RangedAttribute {
+
+        public RPGAttribute(String name) {
             super(name, 0.0D, -Double.MAX_VALUE, Double.MAX_VALUE);
         }
 
         @Override
-        public boolean getShouldWatch()
-        {
+        public boolean getShouldWatch() {
             return true;
         }
     }
 
-    public static class EAMotion extends EAFloat
-    {
-        public EAMotion(String name)
-        {
+    public static class EAMotion extends EAFloat {
+
+        public EAMotion(String name) {
             super(name);
         }
 
         @Override
-        public String getValueToString(Float value, EntityLivingBase entity)
-        {
+        public String getValueToString(Float value, EntityLivingBase entity) {
             return String.format("%.3f", Math.abs(value));
         }
     }
 
-    public static class EAPercent extends EAFloat
-    {
-        public EAPercent(String name)
-        {
+    public static class EAPercent extends EAFloat {
+
+        public EAPercent(String name) {
             super(name);
         }
 
         @Override
-        public String getValueToString(Float value, EntityLivingBase entity)
-        {
+        public String getValueToString(Float value, EntityLivingBase entity) {
             return String.format("%d%c", Math.round(value * 100), '%');
         }
     }

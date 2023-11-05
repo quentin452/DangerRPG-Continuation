@@ -1,5 +1,7 @@
 package mixac1.hooklib.helper;
 
+import org.apache.commons.io.FileUtils;
+
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -7,12 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
+public class DictionaryGenerator {
 
-public class DictionaryGenerator
-{
-    public static void main(String[] args) throws Exception
-    {
+    public static void main(String[] args) throws Exception {
         List<String> lines = FileUtils.readLines(new File("methods.csv"));
         lines.remove(0);
         HashMap<Integer, String> map = new HashMap<Integer, String>();

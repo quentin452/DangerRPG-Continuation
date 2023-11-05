@@ -1,7 +1,5 @@
 package mixac1.dangerrpg.recipe;
 
-import java.util.HashMap;
-
 import mixac1.dangerrpg.inventory.ContainerRPGWorkbench;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
@@ -11,8 +9,10 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-public class LargeShapedRecipe implements IRecipe
-{
+import java.util.HashMap;
+
+public class LargeShapedRecipe implements IRecipe {
+
     public static String NAME = "large_shaped";
 
     public final int recipeWidth;
@@ -22,8 +22,7 @@ public class LargeShapedRecipe implements IRecipe
 
     private ItemStack recipeOutput;
 
-    public LargeShapedRecipe(int recipeWidth, int recipeHeight, ItemStack[] recipeItems, ItemStack recipeOutput)
-    {
+    public LargeShapedRecipe(int recipeWidth, int recipeHeight, ItemStack[] recipeItems, ItemStack recipeOutput) {
         this.recipeWidth = recipeWidth;
         this.recipeHeight = recipeHeight;
         this.recipeItems = recipeItems;
@@ -31,14 +30,12 @@ public class LargeShapedRecipe implements IRecipe
     }
 
     @Override
-    public ItemStack getRecipeOutput()
-    {
+    public ItemStack getRecipeOutput() {
         return recipeOutput;
     }
 
     @Override
-    public boolean matches(InventoryCrafting inv, World world)
-    {
+    public boolean matches(InventoryCrafting inv, World world) {
         for (int i = 0; i <= ContainerRPGWorkbench.craftSize - recipeWidth; ++i) {
             for (int j = 0; j <= ContainerRPGWorkbench.craftSize - recipeHeight; ++j) {
                 if (checkMatch(inv, i, j, true)) {
@@ -54,8 +51,7 @@ public class LargeShapedRecipe implements IRecipe
         return false;
     }
 
-    private boolean checkMatch(InventoryCrafting inv, int column, int row, boolean par)
-    {
+    private boolean checkMatch(InventoryCrafting inv, int column, int row, boolean par) {
         for (int k = 0; k < ContainerRPGWorkbench.craftSize; ++k) {
             for (int l = 0; l < ContainerRPGWorkbench.craftSize; ++l) {
                 int i1 = k - column;
@@ -65,8 +61,7 @@ public class LargeShapedRecipe implements IRecipe
                 if (i1 >= 0 && j1 >= 0 && i1 < recipeWidth && j1 < recipeHeight) {
                     if (par) {
                         itemstack = recipeItems[recipeWidth - i1 - 1 + j1 * recipeWidth];
-                    }
-                    else {
+                    } else {
                         itemstack = recipeItems[i1 + j1 * recipeWidth];
                     }
                 }
@@ -93,15 +88,14 @@ public class LargeShapedRecipe implements IRecipe
     }
 
     @Override
-    public ItemStack getCraftingResult(InventoryCrafting inv)
-    {
+    public ItemStack getCraftingResult(InventoryCrafting inv) {
         ItemStack itemstack = getRecipeOutput().copy();
 
         for (int i = 0; i < inv.getSizeInventory(); ++i) {
             ItemStack itemstack1 = inv.getStackInSlot(i);
 
             if (itemstack1 != null && itemstack1.hasTagCompound()) {
-                itemstack.setTagCompound((NBTTagCompound)itemstack1.stackTagCompound.copy());
+                itemstack.setTagCompound((NBTTagCompound) itemstack1.stackTagCompound.copy());
             }
         }
 
@@ -109,30 +103,27 @@ public class LargeShapedRecipe implements IRecipe
     }
 
     @Override
-    public int getRecipeSize()
-    {
+    public int getRecipeSize() {
         return recipeWidth * recipeHeight;
     }
 
-    public static LargeShapedRecipe create(ItemStack stack, Object ... objs)
-    {
+    public static LargeShapedRecipe create(ItemStack stack, Object... objs) {
         String s = "";
         int i = 0;
         int j = 0;
         int k = 0;
 
         if (objs[i] instanceof String[]) {
-            String[] astring = ((String[])objs[i++]);
+            String[] astring = ((String[]) objs[i++]);
 
             for (String s1 : astring) {
                 ++k;
                 j = s1.length();
                 s = s + s1;
             }
-        }
-        else {
+        } else {
             while (objs[i] instanceof String) {
-                String s2 = (String)objs[i++];
+                String s2 = (String) objs[i++];
                 ++k;
                 j = s2.length();
                 s = s + s2;
@@ -142,17 +133,15 @@ public class LargeShapedRecipe implements IRecipe
         HashMap hashmap;
 
         for (hashmap = new HashMap(); i < objs.length; i += 2) {
-            Character character = (Character)objs[i];
+            Character character = (Character) objs[i];
             ItemStack itemstack1 = null;
 
             if (objs[i + 1] instanceof Item) {
-                itemstack1 = new ItemStack((Item)objs[i + 1]);
-            }
-            else if (objs[i + 1] instanceof Block) {
-                itemstack1 = new ItemStack((Block)objs[i + 1], 1, 32767);
-            }
-            else if (objs[i + 1] instanceof ItemStack) {
-                itemstack1 = (ItemStack)objs[i + 1];
+                itemstack1 = new ItemStack((Item) objs[i + 1]);
+            } else if (objs[i + 1] instanceof Block) {
+                itemstack1 = new ItemStack((Block) objs[i + 1], 1, 32767);
+            } else if (objs[i + 1] instanceof ItemStack) {
+                itemstack1 = (ItemStack) objs[i + 1];
             }
 
             hashmap.put(character, itemstack1);
@@ -164,9 +153,8 @@ public class LargeShapedRecipe implements IRecipe
             char c0 = s.charAt(i1);
 
             if (hashmap.containsKey(Character.valueOf(c0))) {
-                aitemstack[i1] = ((ItemStack)hashmap.get(Character.valueOf(c0))).copy();
-            }
-            else {
+                aitemstack[i1] = ((ItemStack) hashmap.get(Character.valueOf(c0))).copy();
+            } else {
                 aitemstack[i1] = null;
             }
         }

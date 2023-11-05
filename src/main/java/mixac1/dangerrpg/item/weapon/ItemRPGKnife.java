@@ -8,16 +8,14 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class ItemRPGKnife extends ItemRPGThrowable
-{
-    public ItemRPGKnife(RPGToolMaterial toolMaterial, RPGToolComponent toolComponent)
-    {
+public class ItemRPGKnife extends ItemRPGThrowable {
+
+    public ItemRPGKnife(RPGToolMaterial toolMaterial, RPGToolComponent toolComponent) {
         super(toolMaterial, toolComponent);
     }
 
     @Override
-    protected EntityThrowRPGItem getThrowEntity(World world, EntityLivingBase entityliving, ItemStack itemstack)
-    {
+    protected EntityThrowRPGItem getThrowEntity(World world, EntityLivingBase entityliving, ItemStack itemstack) {
         return new EntityThrowKnife(world, entityliving, itemstack, 1.3F, 3F);
     }
 }

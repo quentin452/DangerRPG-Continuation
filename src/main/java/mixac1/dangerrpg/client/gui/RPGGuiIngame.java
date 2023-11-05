@@ -1,7 +1,5 @@
 package mixac1.dangerrpg.client.gui;
 
-import org.lwjgl.opengl.GL11;
-
 import mixac1.dangerrpg.DangerRPG;
 import mixac1.dangerrpg.api.entity.IRPGEntity;
 import mixac1.dangerrpg.capability.EntityAttributes;
@@ -30,17 +28,20 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 import java.util.Objects;
 
-public class RPGGuiIngame extends Gui
-{
+public class RPGGuiIngame extends Gui {
+
     public static final RPGGuiIngame INSTANCE = new RPGGuiIngame();
 
     public Minecraft mc = Minecraft.getMinecraft();
     public FontRenderer fr = mc.fontRenderer;
 
-    public static final ResourceLocation TEXTURE = new ResourceLocation(DangerRPG.MODID, "textures/gui/gui_in_game.png");
+    public static final ResourceLocation TEXTURE = new ResourceLocation(
+        DangerRPG.MODID,
+        "textures/gui/gui_in_game.png");
 
     private int part1X;
     private int part1Y;
@@ -84,14 +85,12 @@ public class RPGGuiIngame extends Gui
 
     private GuiModeType mode;
 
-    public RPGGuiIngame()
-    {
+    public RPGGuiIngame() {
         update(GuiModeType.NORMAL);
         update(GuiMode.curr());
     }
 
-    public void update(GuiModeType type)
-    {
+    public void update(GuiModeType type) {
         mode = type;
         if (!mode.isSimple) {
             part1X = 0;
@@ -133,8 +132,7 @@ public class RPGGuiIngame extends Gui
             chargeH = 5;
             chargeU = 0;
             chargeV = 68;
-        }
-        else {
+        } else {
             part2X = part1X;
             part2Y = part1Y;
             part3X = part2W + 1;
@@ -147,8 +145,7 @@ public class RPGGuiIngame extends Gui
         }
     }
 
-    public void renderGameOverlay(ScaledResolution res)
-    {
+    public void renderGameOverlay(ScaledResolution res) {
         mc.mcProfiler.startSection("rpgBar");
         GL11.glPushMatrix();
         GL11.glDisable(GL11.GL_BLEND);
@@ -157,8 +154,15 @@ public class RPGGuiIngame extends Gui
         int width = res.getScaledWidth();
         int height = res.getScaledHeight();
 
-        renderEntityBar(mc.thePlayer, ClientConfig.d.guiPlayerHUDOffsetX, ClientConfig.d.guiPlayerHUDOffsetY, ClientConfig.d.guiPlayerHUDIsInvert, res);
-        renderChargeBar(ClientConfig.d.guiChargeIsCentered ? (width - chargeW) / 2 : ClientConfig.d.guiChargeOffsetX, height - ClientConfig.d.guiChargeOffsetY);
+        renderEntityBar(
+            mc.thePlayer,
+            ClientConfig.d.guiPlayerHUDOffsetX,
+            ClientConfig.d.guiPlayerHUDOffsetY,
+            ClientConfig.d.guiPlayerHUDIsInvert,
+            res);
+        renderChargeBar(
+            ClientConfig.d.guiChargeIsCentered ? (width - chargeW) / 2 : ClientConfig.d.guiChargeOffsetX,
+            height - ClientConfig.d.guiChargeOffsetY);
         renderEnemyBar(ClientConfig.d.guiEnemyHUDOffsetX, ClientConfig.d.guiEnemyHUDOffsetY, res);
 
         GL11.glDisable(GL11.GL_ALPHA_TEST);
@@ -167,8 +171,8 @@ public class RPGGuiIngame extends Gui
         mc.mcProfiler.endSection();
     }
 
-    private void renderEntityBar(EntityLivingBase entity, int offsetX, int offsetY, boolean isInverted, ScaledResolution res)
-    {
+    private void renderEntityBar(EntityLivingBase entity, int offsetX, int offsetY, boolean isInverted,
+        ScaledResolution res) {
         this.isInvert = isInverted;
 
         if (isInverted) {
@@ -179,18 +183,54 @@ public class RPGGuiIngame extends Gui
             GuiInventory.func_147046_a(offsetX + invert(18), offsetY + 37, 16, invert(30), 00f, entity);
 
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            mc.getTextureManager().bindTexture(TEXTURE);
+            mc.getTextureManager()
+                .bindTexture(TEXTURE);
 
-            drawTexturedModalRect(offsetX + invert(part1X), offsetY + part1Y, part1U, part1V, part1Width, part1H, isInverted);
-            drawTexturedModalRect(offsetX + invert(part2X), offsetY + part2Y, part2U, part2V, part2W, part2H, isInverted);
-            drawTexturedModalRect(offsetX + invert(part3X), offsetY + part3Y, part3U, part3V, part3W, part3H, isInverted);
-        }
-        else {
+            drawTexturedModalRect(
+                offsetX + invert(part1X),
+                offsetY + part1Y,
+                part1U,
+                part1V,
+                part1Width,
+                part1H,
+                isInverted);
+            drawTexturedModalRect(
+                offsetX + invert(part2X),
+                offsetY + part2Y,
+                part2U,
+                part2V,
+                part2W,
+                part2H,
+                isInverted);
+            drawTexturedModalRect(
+                offsetX + invert(part3X),
+                offsetY + part3Y,
+                part3U,
+                part3V,
+                part3W,
+                part3H,
+                isInverted);
+        } else {
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            mc.getTextureManager().bindTexture(TEXTURE);
+            mc.getTextureManager()
+                .bindTexture(TEXTURE);
 
-            drawTexturedModalRect(offsetX + invert(part2X), offsetY + part2Y, part2U, part2V, part2W, part2H, isInverted);
-            drawTexturedModalRect(offsetX + invert(part3X), offsetY + part3Y, part3U, part3V, part3W, part3H, isInverted);
+            drawTexturedModalRect(
+                offsetX + invert(part2X),
+                offsetY + part2Y,
+                part2U,
+                part2V,
+                part2W,
+                part2H,
+                isInverted);
+            drawTexturedModalRect(
+                offsetX + invert(part3X),
+                offsetY + part3Y,
+                part3U,
+                part3V,
+                part3W,
+                part3H,
+                isInverted);
         }
 
         int yFal = 0, proc;
@@ -210,8 +250,12 @@ public class RPGGuiIngame extends Gui
             boolean isPlayer = entity instanceof EntityPlayer;
             boolean hasMeleeDamage = iRPG != null && (iRPG.getEAMeleeDamage(entity) != null || isPlayer);
             boolean hasRangeDamage = iRPG != null && iRPG.getEARangeDamage(entity) != null;
-            boolean hasFood = !ClientConfig.d.guiEnableDefaultFoodBar && entity == mc.thePlayer && Objects.requireNonNull(mc.thePlayer).getFoodStats().getFoodLevel() < 20;
-            boolean hasAir = entity == mc.thePlayer && Objects.requireNonNull(mc.thePlayer).getAir() < 300;
+            boolean hasFood = !ClientConfig.d.guiEnableDefaultFoodBar && entity == mc.thePlayer
+                && Objects.requireNonNull(mc.thePlayer)
+                    .getFoodStats()
+                    .getFoodLevel() < 20;
+            boolean hasAir = entity == mc.thePlayer && Objects.requireNonNull(mc.thePlayer)
+                .getAir() < 300;
 
             int offsetHealth;
             int offsetMana = 0;
@@ -219,26 +263,74 @@ public class RPGGuiIngame extends Gui
             int offsetRangeDmg = 0;
 
             if (isPlayer && ClientConfig.d.guiTwiceHealthManaBar) {
-                drawTexturedModalRect(offsetX + invert(barIconX), offsetY + barIconY + yFal, barIconU, barIconV + barIconH * 2, barIconW, barIconH, isInverted);
-                drawTexturedModalRect(offsetX + invert(barX), offsetY + barY + yFal - 2, barU, barV, barW, barH, isInverted);
-                drawTexturedModalRect(offsetX + invert(barX), offsetY + barY + yFal + 2, barU, barV, barW, barH, isInverted);
+                drawTexturedModalRect(
+                    offsetX + invert(barIconX),
+                    offsetY + barIconY + yFal,
+                    barIconU,
+                    barIconV + barIconH * 2,
+                    barIconW,
+                    barIconH,
+                    isInverted);
+                drawTexturedModalRect(
+                    offsetX + invert(barX),
+                    offsetY + barY + yFal - 2,
+                    barU,
+                    barV,
+                    barW,
+                    barH,
+                    isInverted);
+                drawTexturedModalRect(
+                    offsetX + invert(barX),
+                    offsetY + barY + yFal + 2,
+                    barU,
+                    barV,
+                    barW,
+                    barH,
+                    isInverted);
 
                 renderHealthBar(entity, offsetX, offsetY + yFal - 2, isInverted);
                 renderManaBar(entity, offsetX, offsetY + yFal + 2, isInverted);
 
                 offsetHealth = offsetMana = offsetY + barY + yFal;
                 yFal += barIconH;
-            }
-            else {
-                drawTexturedModalRect(offsetX + invert(barIconX), offsetY + barIconY + yFal, barIconU, barIconV, barIconW, barIconH, isInverted);
-                drawTexturedModalRect(offsetX + invert(barX), offsetY + barY + yFal, barU, barV, barW, barH, isInverted);
+            } else {
+                drawTexturedModalRect(
+                    offsetX + invert(barIconX),
+                    offsetY + barIconY + yFal,
+                    barIconU,
+                    barIconV,
+                    barIconW,
+                    barIconH,
+                    isInverted);
+                drawTexturedModalRect(
+                    offsetX + invert(barX),
+                    offsetY + barY + yFal,
+                    barU,
+                    barV,
+                    barW,
+                    barH,
+                    isInverted);
                 renderHealthBar(entity, offsetX, offsetY + yFal, isInverted);
 
                 offsetHealth = offsetY + barY + yFal;
                 yFal += barIconH;
                 if (isPlayer) {
-                    drawTexturedModalRect(offsetX + invert(barIconX), offsetY + barIconY + yFal, barIconU, barIconV + barIconH, barIconW, barIconH, isInverted);
-                    drawTexturedModalRect(offsetX + invert(barX), offsetY + barY + yFal, barU, barV, barW, barH, isInverted);
+                    drawTexturedModalRect(
+                        offsetX + invert(barIconX),
+                        offsetY + barIconY + yFal,
+                        barIconU,
+                        barIconV + barIconH,
+                        barIconW,
+                        barIconH,
+                        isInverted);
+                    drawTexturedModalRect(
+                        offsetX + invert(barX),
+                        offsetY + barY + yFal,
+                        barU,
+                        barV,
+                        barW,
+                        barH,
+                        isInverted);
                     renderManaBar(entity, offsetX, offsetY + yFal, isInverted);
 
                     offsetMana = offsetY + barY + yFal;
@@ -247,115 +339,248 @@ public class RPGGuiIngame extends Gui
             }
 
             if (isPlayer) {
-                drawTexturedModalRect(offsetX + invert(barIconX), offsetY + barIconY + yFal, barIconU, barIconV + barIconH * 3, barIconW, barIconH, isInverted);
-                drawTexturedModalRect(offsetX + invert(barX), offsetY + barY + yFal - 2, barU, barV, barW, barH, isInverted);
-                drawTexturedModalRect(offsetX + invert(barX), offsetY + barY + yFal + 2, barU, barV, barW, barH, isInverted);
+                drawTexturedModalRect(
+                    offsetX + invert(barIconX),
+                    offsetY + barIconY + yFal,
+                    barIconU,
+                    barIconV + barIconH * 3,
+                    barIconW,
+                    barIconH,
+                    isInverted);
+                drawTexturedModalRect(
+                    offsetX + invert(barX),
+                    offsetY + barY + yFal - 2,
+                    barU,
+                    barV,
+                    barW,
+                    barH,
+                    isInverted);
+                drawTexturedModalRect(
+                    offsetX + invert(barX),
+                    offsetY + barY + yFal + 2,
+                    barU,
+                    barV,
+                    barW,
+                    barH,
+                    isInverted);
 
                 curr = HookArmorSystem.getTotalPhisicArmor();
                 proc = getProcent(curr, 100F, barW);
                 if (proc > 0) {
-                    drawTexturedModalRect(offsetX + invert(barX), offsetY + barY + yFal - 2, barU, barV + barH * 6, proc, barH, isInverted);
-                }
-                else if (proc < 0) {
-                    drawTexturedModalRect(offsetX + invert(barX), offsetY + barY + yFal - 2, barU, barV + barH * 4, -proc, barH, isInverted);
+                    drawTexturedModalRect(
+                        offsetX + invert(barX),
+                        offsetY + barY + yFal - 2,
+                        barU,
+                        barV + barH * 6,
+                        proc,
+                        barH,
+                        isInverted);
+                } else if (proc < 0) {
+                    drawTexturedModalRect(
+                        offsetX + invert(barX),
+                        offsetY + barY + yFal - 2,
+                        barU,
+                        barV + barH * 4,
+                        -proc,
+                        barH,
+                        isInverted);
                 }
 
                 curr = HookArmorSystem.getTotalMagicArmor();
                 proc = getProcent(curr, 100F, barW);
                 if (proc > 0) {
-                    drawTexturedModalRect(offsetX + invert(barX), offsetY + barY + yFal + 2, barU, barV + barH * 7, proc, barH, isInverted);
-                }
-                else if (proc < 0) {
-                    drawTexturedModalRect(offsetX + invert(barX), offsetY + barY + yFal - 2, barU, barV + barH * 4, -proc, barH, isInverted);
+                    drawTexturedModalRect(
+                        offsetX + invert(barX),
+                        offsetY + barY + yFal + 2,
+                        barU,
+                        barV + barH * 7,
+                        proc,
+                        barH,
+                        isInverted);
+                } else if (proc < 0) {
+                    drawTexturedModalRect(
+                        offsetX + invert(barX),
+                        offsetY + barY + yFal - 2,
+                        barU,
+                        barV + barH * 4,
+                        -proc,
+                        barH,
+                        isInverted);
                 }
 
                 yFal += barIconH;
             }
 
             if (hasFood && hasAir) {
-                drawTexturedModalRect(offsetX + invert(barIconX), offsetY + barIconY + yFal, barIconU, barIconV + barIconH * 6, barIconW, barIconH, isInverted);
+                drawTexturedModalRect(
+                    offsetX + invert(barIconX),
+                    offsetY + barIconY + yFal,
+                    barIconU,
+                    barIconV + barIconH * 6,
+                    barIconW,
+                    barIconH,
+                    isInverted);
                 if (mc.thePlayer.isPotionActive(Potion.hunger)) {
-                    drawTexturedModalRect(offsetX + invert(barIconX), offsetY + barIconY + yFal, barIconU, barIconV + barIconH * 5, barIconW, barIconH, isInverted);
-                }
-                else {
-                    drawTexturedModalRect(offsetX + invert(barIconX), offsetY + barIconY + yFal, barIconU, barIconV + barIconH * 4, barIconW, barIconH, isInverted);
+                    drawTexturedModalRect(
+                        offsetX + invert(barIconX),
+                        offsetY + barIconY + yFal,
+                        barIconU,
+                        barIconV + barIconH * 5,
+                        barIconW,
+                        barIconH,
+                        isInverted);
+                } else {
+                    drawTexturedModalRect(
+                        offsetX + invert(barIconX),
+                        offsetY + barIconY + yFal,
+                        barIconU,
+                        barIconV + barIconH * 4,
+                        barIconW,
+                        barIconH,
+                        isInverted);
                 }
                 renderFoodBar(offsetX, offsetY + yFal - 2, isInverted);
                 renderAirBar(offsetX, offsetY + yFal + 2, isInverted);
                 yFal += barIconH;
-            }
-            else {
+            } else {
                 if (hasFood) {
                     if (mc.thePlayer.isPotionActive(Potion.hunger)) {
-                        drawTexturedModalRect(offsetX + invert(barIconX), offsetY + barIconY + yFal, barIconU, barIconV + barIconH * 5, barIconW, barIconH, isInverted);
-                    }
-                    else {
-                        drawTexturedModalRect(offsetX + invert(barIconX), offsetY + barIconY + yFal, barIconU, barIconV + barIconH * 4, barIconW, barIconH, isInverted);
+                        drawTexturedModalRect(
+                            offsetX + invert(barIconX),
+                            offsetY + barIconY + yFal,
+                            barIconU,
+                            barIconV + barIconH * 5,
+                            barIconW,
+                            barIconH,
+                            isInverted);
+                    } else {
+                        drawTexturedModalRect(
+                            offsetX + invert(barIconX),
+                            offsetY + barIconY + yFal,
+                            barIconU,
+                            barIconV + barIconH * 4,
+                            barIconW,
+                            barIconH,
+                            isInverted);
                     }
                     renderFoodBar(offsetX, offsetY + yFal, isInverted);
                     yFal += barIconH;
                 }
                 if (hasAir) {
-                    drawTexturedModalRect(offsetX + invert(barIconX), offsetY + barIconY + yFal, barIconU, barIconV + barIconH * 6, barIconW, barIconH, isInverted);
+                    drawTexturedModalRect(
+                        offsetX + invert(barIconX),
+                        offsetY + barIconY + yFal,
+                        barIconU,
+                        barIconV + barIconH * 6,
+                        barIconW,
+                        barIconH,
+                        isInverted);
                     renderAirBar(offsetX, offsetY + yFal + 2, isInverted);
                     yFal += barIconH;
                 }
             }
 
             if (hasMeleeDamage && mode.isDigital) {
-                drawTexturedModalRect(offsetX + invert(barIconX), offsetY + barIconY + yFal, barIconU, barIconV + barIconH * 7, barIconW, barIconH, isInverted);
+                drawTexturedModalRect(
+                    offsetX + invert(barIconX),
+                    offsetY + barIconY + yFal,
+                    barIconU,
+                    barIconV + barIconH * 7,
+                    barIconW,
+                    barIconH,
+                    isInverted);
 
                 offsetMeleeDmg = offsetY + barIconY + yFal;
                 yFal += barIconH;
             }
 
             if (hasRangeDamage && mode.isDigital) {
-                drawTexturedModalRect(offsetX + invert(barIconX), offsetY + barIconY + yFal, barIconU, barIconV + barIconH * 8, barIconW, barIconH, isInverted);
+                drawTexturedModalRect(
+                    offsetX + invert(barIconX),
+                    offsetY + barIconY + yFal,
+                    barIconU,
+                    barIconV + barIconH * 8,
+                    barIconW,
+                    barIconH,
+                    isInverted);
 
                 offsetRangeDmg = offsetY + barIconY + yFal;
             }
 
             if (mode.isDigital) {
                 if (isPlayer && ClientConfig.d.guiTwiceHealthManaBar) {
-                    s = Utils.toString(genValueStr(entity.getHealth() + entity.getAbsorptionAmount()), "/", genValueStr(PlayerAttributes.CURR_MANA.getValue(entity)));
-                    fr.drawStringWithShadow(s, offsetX + getOffsetX(s, barX + barW + 4, isInverted), offsetHealth + (barIconH - fr.FONT_HEIGHT) / 2 - 1, 0xFFFFFF);
-                }
-                else {
+                    s = Utils.toString(
+                        genValueStr(entity.getHealth() + entity.getAbsorptionAmount()),
+                        "/",
+                        genValueStr(PlayerAttributes.CURR_MANA.getValue(entity)));
+                    fr.drawStringWithShadow(
+                        s,
+                        offsetX + getOffsetX(s, barX + barW + 4, isInverted),
+                        offsetHealth + (barIconH - fr.FONT_HEIGHT) / 2 - 1,
+                        0xFFFFFF);
+                } else {
                     s = genValueStr(entity.getHealth() + entity.getAbsorptionAmount());
-                    fr.drawStringWithShadow(s, offsetX + getOffsetX(s, barX + barW + 4, isInverted), offsetHealth + (barIconH - fr.FONT_HEIGHT) / 2 - 1, 0xFFFFFF);
+                    fr.drawStringWithShadow(
+                        s,
+                        offsetX + getOffsetX(s, barX + barW + 4, isInverted),
+                        offsetHealth + (barIconH - fr.FONT_HEIGHT) / 2 - 1,
+                        0xFFFFFF);
                     if (isPlayer) {
                         s = genValueStr(PlayerAttributes.CURR_MANA.getValue(entity));
-                        fr.drawStringWithShadow(s, offsetX + getOffsetX(s, barX + barW + 4, isInverted), offsetMana + (barIconH - fr.FONT_HEIGHT) / 2 - 1, 0xFFFFFF);
+                        fr.drawStringWithShadow(
+                            s,
+                            offsetX + getOffsetX(s, barX + barW + 4, isInverted),
+                            offsetMana + (barIconH - fr.FONT_HEIGHT) / 2 - 1,
+                            0xFFFFFF);
                     }
                 }
             }
 
             if (hasMeleeDamage && mode.isDigital) {
-                s = genValueStr(iRPG.getEAMeleeDamage(entity).getValue(entity));
-                fr.drawStringWithShadow(s, offsetX + getOffsetX(s, barX, isInverted), offsetMeleeDmg + (barIconH - fr.FONT_HEIGHT) / 2 + 1, 0xFFFFFF);
+                s = genValueStr(
+                    iRPG.getEAMeleeDamage(entity)
+                        .getValue(entity));
+                fr.drawStringWithShadow(
+                    s,
+                    offsetX + getOffsetX(s, barX, isInverted),
+                    offsetMeleeDmg + (barIconH - fr.FONT_HEIGHT) / 2 + 1,
+                    0xFFFFFF);
             }
 
             if (hasRangeDamage && mode.isDigital) {
-                s = genValueStr(iRPG.getEARangeDamage(entity).getValue(entity));
-                fr.drawStringWithShadow(s, offsetX + getOffsetX(s, barX, isInverted), offsetRangeDmg + (barIconH - fr.FONT_HEIGHT) / 2 + 1, 0xFFFFFF);
+                s = genValueStr(
+                    iRPG.getEARangeDamage(entity)
+                        .getValue(entity));
+                fr.drawStringWithShadow(
+                    s,
+                    offsetX + getOffsetX(s, barX, isInverted),
+                    offsetRangeDmg + (barIconH - fr.FONT_HEIGHT) / 2 + 1,
+                    0xFFFFFF);
             }
         }
 
         // T0D0: name
         {
             s = entity.getCommandSenderName();
-            fr.drawStringWithShadow(s, offsetX + getOffsetX(s, part2X + 1, part2W - 6, isInverted), offsetY + part2Y + (part2H - fr.FONT_HEIGHT) / 2 + 2, 0xFFFFFF);
+            fr.drawStringWithShadow(
+                s,
+                offsetX + getOffsetX(s, part2X + 1, part2W - 6, isInverted),
+                offsetY + part2Y + (part2H - fr.FONT_HEIGHT) / 2 + 2,
+                0xFFFFFF);
         }
 
         // T0D0: lvl
         if (iRPG != null) {
             s = String.valueOf((int) EntityAttributes.LVL.getValue(entity));
-            fr.drawStringWithShadow(s, offsetX + getOffsetX(s, part3X, part3W, isInverted), offsetY + part3Y + (part3H - fr.FONT_HEIGHT) / 2 + 1, 0xFFFFFF);
+            fr.drawStringWithShadow(
+                s,
+                offsetX + getOffsetX(s, part3X, part3W, isInverted),
+                offsetY + part3Y + (part3H - fr.FONT_HEIGHT) / 2 + 1,
+                0xFFFFFF);
         }
     }
 
-    private void renderHealthBar(EntityLivingBase entity, int offsetX, int offsetY, boolean isInverted)
-    {
+    private void renderHealthBar(EntityLivingBase entity, int offsetX, int offsetY, boolean isInverted) {
         float curr = entity.getHealth();
         float absorbHealth = entity.getAbsorptionAmount();
         float max = EntityAttributes.HEALTH.getSafe(entity, entity.getMaxHealth() + absorbHealth);
@@ -363,67 +588,119 @@ public class RPGGuiIngame extends Gui
             int proc = getProcent(curr, max, barW);
             int procAbsorb = getProcent(absorbHealth, max, barW);
             if (entity.isPotionActive(Potion.wither)) {
-                drawTexturedModalRect(offsetX + invert(barX), offsetY + barY, barU, barV + barH * 4, barW, barH, isInverted);
-            }
-            else {
+                drawTexturedModalRect(
+                    offsetX + invert(barX),
+                    offsetY + barY,
+                    barU,
+                    barV + barH * 4,
+                    barW,
+                    barH,
+                    isInverted);
+            } else {
                 if (proc > 0) {
                     if (entity.isPotionActive(Potion.poison)) {
-                        drawTexturedModalRect(offsetX + invert(barX), offsetY + barY, barU, barV + barH * 3, proc, barH, isInverted);
-                    }
-                    else {
-                        drawTexturedModalRect(offsetX + invert(barX), offsetY + barY, barU, barV + barH, proc, barH, isInverted);
+                        drawTexturedModalRect(
+                            offsetX + invert(barX),
+                            offsetY + barY,
+                            barU,
+                            barV + barH * 3,
+                            proc,
+                            barH,
+                            isInverted);
+                    } else {
+                        drawTexturedModalRect(
+                            offsetX + invert(barX),
+                            offsetY + barY,
+                            barU,
+                            barV + barH,
+                            proc,
+                            barH,
+                            isInverted);
                     }
                 }
                 if (procAbsorb > 0) {
-                    drawTexturedModalRect(offsetX + invert(barX) + proc, offsetY + barY, barU + proc, barV + barH * 2, procAbsorb, barH, isInverted);
+                    drawTexturedModalRect(
+                        offsetX + invert(barX) + proc,
+                        offsetY + barY,
+                        barU + proc,
+                        barV + barH * 2,
+                        procAbsorb,
+                        barH,
+                        isInverted);
                 }
             }
         }
     }
 
-    private void renderManaBar(EntityLivingBase entity, int offsetX, int offsetY, boolean isInverted)
-    {
+    private void renderManaBar(EntityLivingBase entity, int offsetX, int offsetY, boolean isInverted) {
         float curr = PlayerAttributes.CURR_MANA.getValue(entity);
         float max = PlayerAttributes.MANA.getValue(entity);
         if (max > 0) {
             int proc = getProcent(curr, max, barW);
             if (proc > 0) {
-                drawTexturedModalRect(offsetX + invert(barX), offsetY + barY, barU, barV + barH * 5, proc, barH, isInverted);
+                drawTexturedModalRect(
+                    offsetX + invert(barX),
+                    offsetY + barY,
+                    barU,
+                    barV + barH * 5,
+                    proc,
+                    barH,
+                    isInverted);
             }
         }
     }
 
-    private void renderFoodBar(int offsetX, int offsetY, boolean isInverted)
-    {
-        float curr = mc.thePlayer.getFoodStats().getFoodLevel();
+    private void renderFoodBar(int offsetX, int offsetY, boolean isInverted) {
+        float curr = mc.thePlayer.getFoodStats()
+            .getFoodLevel();
         int proc = getProcent(curr, 20F, barW);
         if (curr < 20) {
             drawTexturedModalRect(offsetX + invert(barX), offsetY + barY, barU, barV, barW, barH, isInverted);
             if (mc.thePlayer.isPotionActive(Potion.hunger)) {
-                drawTexturedModalRect(offsetX + invert(barX), offsetY + barY, barU, barV + barH * 9, proc, barH, isInverted);
-            }
-            else {
-                drawTexturedModalRect(offsetX + invert(barX), offsetY + barY, barU, barV + barH * 8, proc, barH, isInverted);
+                drawTexturedModalRect(
+                    offsetX + invert(barX),
+                    offsetY + barY,
+                    barU,
+                    barV + barH * 9,
+                    proc,
+                    barH,
+                    isInverted);
+            } else {
+                drawTexturedModalRect(
+                    offsetX + invert(barX),
+                    offsetY + barY,
+                    barU,
+                    barV + barH * 8,
+                    proc,
+                    barH,
+                    isInverted);
             }
         }
     }
 
-    private void renderAirBar(int offsetX, int offsetY, boolean isInverted)
-    {
+    private void renderAirBar(int offsetX, int offsetY, boolean isInverted) {
         float curr = mc.thePlayer.getAir();
         int proc = getProcent(curr, 300F, barW);
         if (curr < 300) {
             drawTexturedModalRect(offsetX + invert(barX), offsetY + barY, barU, barV, barW, barH, isInverted);
-            drawTexturedModalRect(offsetX + invert(barX), offsetY + barY, barU, barV + barH * 10, proc, barH, isInverted);
+            drawTexturedModalRect(
+                offsetX + invert(barX),
+                offsetY + barY,
+                barU,
+                barV + barH * 10,
+                proc,
+                barH,
+                isInverted);
         }
     }
 
-    public void renderChargeBar(int offsetX, int offsetY)
-    {
+    public void renderChargeBar(int offsetX, int offsetY) {
         ItemStack stack;
-        if ((stack = mc.thePlayer.getItemInUse()) != null && stack.getItemUseAction() == EnumAction.bow && ItemAttributes.SHOT_SPEED.hasIt(stack)) {
+        if ((stack = mc.thePlayer.getItemInUse()) != null && stack.getItemUseAction() == EnumAction.bow
+            && ItemAttributes.SHOT_SPEED.hasIt(stack)) {
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            mc.getTextureManager().bindTexture(TEXTURE);
+            mc.getTextureManager()
+                .bindTexture(TEXTURE);
             drawTexturedModalRect(offsetX, offsetY, chargeU, chargeV, chargeW, chargeH);
 
             int useDuration = mc.thePlayer.getItemInUseDuration();
@@ -443,25 +720,27 @@ public class RPGGuiIngame extends Gui
         }
     }
 
-    private void renderEnemyBar(int offsetX, int offsetY, ScaledResolution res)
-    {
+    private void renderEnemyBar(int offsetX, int offsetY, ScaledResolution res) {
         MovingObjectPosition mop = RPGHelper.getMouseOver(0, 10);
         if (mop != null && mop.entityHit != null) {
             if (mop.entityHit instanceof EntityDragonPart) {
                 if (((EntityDragonPart) mop.entityHit).entityDragonObj instanceof EntityDragon) {
-                    renderEntityBar((EntityDragon) ((EntityDragonPart) mop.entityHit).entityDragonObj, offsetX, offsetY, true, res);
+                    renderEntityBar(
+                        (EntityDragon) ((EntityDragonPart) mop.entityHit).entityDragonObj,
+                        offsetX,
+                        offsetY,
+                        true,
+                        res);
                 }
-            }
-            else if (mop.entityHit instanceof EntityLivingBase) {
+            } else if (mop.entityHit instanceof EntityLivingBase) {
                 renderEntityBar((EntityLivingBase) mop.entityHit, offsetX, offsetY, true, res);
             }
         }
     }
 
-    private int getProcent(float curr, float max, int width)
-    {
+    private int getProcent(float curr, float max, int width) {
         curr = curr > max ? max : Math.max(curr, -max);
-        return (int) Utils.alignment(curr /  max * width, -width, width);
+        return (int) Utils.alignment(curr / max * width, -width, width);
     }
 
     private String genValueStr(final double value) {
@@ -488,48 +767,43 @@ public class RPGGuiIngame extends Gui
 
     private boolean isInvert = true;
 
-    private int invert(int value)
-    {
+    private int invert(int value) {
         return (int) Utils.invert(value, isInvert);
     }
 
-    private int getOffsetX(String s, int offset, int width, boolean isInverted)
-    {
+    private int getOffsetX(String s, int offset, int width, boolean isInverted) {
         s = fr.trimStringToWidth(s, width);
         int size = fr.getStringWidth(s);
         int value = (offset + (width - size) / 2);
         if (isInverted) {
-            return - (value + size);
+            return -(value + size);
         }
         return value;
     }
 
-    private int getOffsetX(String s, int offset, boolean isInverted)
-    {
+    private int getOffsetX(String s, int offset, boolean isInverted) {
         if (isInverted) {
             int size = fr.getStringWidth(s);
-            return - (offset + size);
+            return -(offset + size);
         }
         return offset;
     }
 
-    public void drawTexturedModalRect(int x, int y, int u, int v, int width, int heght, boolean isInverted)
-    {
+    public void drawTexturedModalRect(int x, int y, int u, int v, int width, int heght, boolean isInverted) {
         float f = 0.00390625F;
         Tessellator tessellator = Tessellator.instance;
         tessellator.startDrawingQuads();
 
         if (!isInverted) {
-            tessellator.addVertexWithUV(x,      y + heght,  this.zLevel, (u) * f,       (v + heght) * f);
-            tessellator.addVertexWithUV(x + width,  y + heght,  this.zLevel, (u + width) * f,   (v + heght) * f);
-            tessellator.addVertexWithUV(x + width, y,      this.zLevel, (u + width) * f,   (v) * f);
-            tessellator.addVertexWithUV(x, y,      this.zLevel, (u) * f,       (v) * f);
-        }
-        else {
-            tessellator.addVertexWithUV(x - width,  y + heght,  this.zLevel, (u + width) * f,   (v + heght) * f);
-            tessellator.addVertexWithUV(x,      y + heght,  this.zLevel, (u) * f,       (v + heght) * f);
-            tessellator.addVertexWithUV(x, y,      this.zLevel, (u) * f,       (v) * f);
-            tessellator.addVertexWithUV(x - width, y,      this.zLevel, (u + width) * f,   (v) * f);
+            tessellator.addVertexWithUV(x, y + heght, this.zLevel, (u) * f, (v + heght) * f);
+            tessellator.addVertexWithUV(x + width, y + heght, this.zLevel, (u + width) * f, (v + heght) * f);
+            tessellator.addVertexWithUV(x + width, y, this.zLevel, (u + width) * f, (v) * f);
+            tessellator.addVertexWithUV(x, y, this.zLevel, (u) * f, (v) * f);
+        } else {
+            tessellator.addVertexWithUV(x - width, y + heght, this.zLevel, (u + width) * f, (v + heght) * f);
+            tessellator.addVertexWithUV(x, y + heght, this.zLevel, (u) * f, (v + heght) * f);
+            tessellator.addVertexWithUV(x, y, this.zLevel, (u) * f, (v) * f);
+            tessellator.addVertexWithUV(x - width, y, this.zLevel, (u + width) * f, (v) * f);
         }
 
         tessellator.draw();

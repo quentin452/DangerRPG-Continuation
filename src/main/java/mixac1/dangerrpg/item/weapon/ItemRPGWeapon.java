@@ -15,13 +15,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 
-public class ItemRPGWeapon extends ItemSword implements IRPGItemTool, IHasBooksInfo
-{
+public class ItemRPGWeapon extends ItemSword implements IRPGItemTool, IHasBooksInfo {
+
     public RPGToolMaterial toolMaterial;
     public RPGToolComponent toolComponent;
 
-    public ItemRPGWeapon(RPGToolMaterial toolMaterial, RPGToolComponent toolComponent)
-    {
+    public ItemRPGWeapon(RPGToolMaterial toolMaterial, RPGToolComponent toolComponent) {
         super(toolMaterial.material);
         this.toolMaterial = toolMaterial;
         this.toolComponent = toolComponent;
@@ -31,34 +30,29 @@ public class ItemRPGWeapon extends ItemSword implements IRPGItemTool, IHasBooksI
         setMaxStackSize(1);
     }
 
-    public ItemRPGWeapon(RPGToolMaterial toolMaterial, RPGToolComponent toolComponent, String name)
-    {
+    public ItemRPGWeapon(RPGToolMaterial toolMaterial, RPGToolComponent toolComponent, String name) {
         this(toolMaterial, toolComponent);
         setUnlocalizedName(name);
         setTextureName(DangerRPG.MODID + ":weapons/melee/" + unlocalizedName);
     }
 
     @Override
-    public String getInformationToInfoBook(ItemStack item, EntityPlayer player)
-    {
+    public String getInformationToInfoBook(ItemStack item, EntityPlayer player) {
         return null;
     }
 
     @Override
-    public RPGToolComponent getItemComponent(Item item)
-    {
+    public RPGToolComponent getItemComponent(Item item) {
         return toolComponent;
     }
 
     @Override
-    public RPGToolMaterial getToolMaterial(Item item)
-    {
+    public RPGToolMaterial getToolMaterial(Item item) {
         return toolMaterial;
     }
 
     @Override
-    public void registerAttributes(Item item, RPGItemData map)
-    {
+    public void registerAttributes(Item item, RPGItemData map) {
         RPGItemHelper.registerParamsItemSword(item, map);
     }
 }

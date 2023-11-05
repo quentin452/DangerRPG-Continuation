@@ -1,7 +1,5 @@
 package mixac1.dangerrpg.item.gem;
 
-import java.util.HashSet;
-
 import mixac1.dangerrpg.capability.GemAttributes;
 import mixac1.dangerrpg.capability.data.RPGItemRegister.RPGItemData;
 import mixac1.dangerrpg.init.RPGConfig.MainConfig;
@@ -14,27 +12,26 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class GemAMCrit extends GemAttackModifier
-{
-    public GemAMCrit(String name)
-    {
+import java.util.HashSet;
+
+public class GemAMCrit extends GemAttackModifier {
+
+    public GemAMCrit(String name) {
         super(name);
     }
 
     @Override
-    public void registerAttributes(Item item, RPGItemData map)
-    {
+    public void registerAttributes(Item item, RPGItemData map) {
         super.registerAttributes(item, map);
         map.registerIADynamic(GemAttributes.CHANCE, 0.05f, new MultiplierAdd(0.05f));
         map.registerIADynamic(GemAttributes.PERCENT, 1f, new MultiplierAdd(0f));
     }
 
     @Override
-    public void onEntityHit(ItemStack gem, EntityPlayer player, EntityLivingBase target, Stub<Float> damage, HashSet<Class<? extends GemAttackModifier>> disableSet)
-    {
+    public void onEntityHit(ItemStack gem, EntityPlayer player, EntityLivingBase target, Stub<Float> damage,
+        HashSet<Class<? extends GemAttackModifier>> disableSet) {
         float rand = (float) RPGOther.rand.nextDouble();
-        if (!checkDisabling(disableSet, getClass())
-            && GemAttributes.CHANCE.hasIt(gem)
+        if (!checkDisabling(disableSet, getClass()) && GemAttributes.CHANCE.hasIt(gem)
             && GemAttributes.PERCENT.hasIt(gem)
             && GemAttributes.CHANCE.get(gem, player) >= rand) {
             float value = damage.value1 * GemAttributes.PERCENT.get(gem, player);
@@ -48,5 +45,6 @@ public class GemAMCrit extends GemAttackModifier
     }
 
     @Override
-    public void onDealtDamage(ItemStack gem, EntityPlayer player, EntityLivingBase target, Stub<Float> damage, HashSet<Class<? extends GemAttackModifier>> disableSet) {}
+    public void onDealtDamage(ItemStack gem, EntityPlayer player, EntityLivingBase target, Stub<Float> damage,
+        HashSet<Class<? extends GemAttackModifier>> disableSet) {}
 }

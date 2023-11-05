@@ -11,14 +11,13 @@ import mixac1.dangerrpg.capability.data.RPGEntityProperties;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class MsgSyncEA implements IMessage
-{
+public class MsgSyncEA implements IMessage {
+
     public NBTTagCompound nbt;
 
     public MsgSyncEA() {}
 
-    public MsgSyncEA(EntityAttribute attr, EntityLivingBase entity)
-    {
+    public MsgSyncEA(EntityAttribute attr, EntityLivingBase entity) {
         nbt = new NBTTagCompound();
 
         nbt.setInteger("hash", attr.hash);
@@ -27,25 +26,23 @@ public class MsgSyncEA implements IMessage
     }
 
     @Override
-    public void toBytes(ByteBuf buf)
-    {
+    public void toBytes(ByteBuf buf) {
         ByteBufUtils.writeTag(buf, nbt);
     }
 
     @Override
-    public void fromBytes(ByteBuf buf)
-    {
+    public void fromBytes(ByteBuf buf) {
         nbt = ByteBufUtils.readTag(buf);
     }
 
-    public static class Handler implements IMessageHandler<MsgSyncEA, IMessage>
-    {
+    public static class Handler implements IMessageHandler<MsgSyncEA, IMessage> {
+
         @Override
-        public IMessage onMessage(MsgSyncEA msg, MessageContext ctx)
-        {
+        public IMessage onMessage(MsgSyncEA msg, MessageContext ctx) {
             EntityLivingBase entity = (EntityLivingBase) DangerRPG.proxy.getEntityByID(ctx, msg.nbt.getInteger("id"));
             if (entity != null) {
-                EntityAttribute attr = RPGEntityProperties.get(entity).getEntityAttribute(msg.nbt.getInteger("hash"));
+                EntityAttribute attr = RPGEntityProperties.get(entity)
+                    .getEntityAttribute(msg.nbt.getInteger("hash"));
                 if (attr != null) {
                     attr.fromNBTforMsg(msg.nbt, entity);
                 }
@@ -54,4 +51,3 @@ public class MsgSyncEA implements IMessage
         }
     }
 }
-

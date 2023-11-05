@@ -1,38 +1,43 @@
 package mixac1.dangerrpg.client.render.entity;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import mixac1.dangerrpg.entity.projectile.EntityRPGArrow;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
-public class RenderArrowRPG extends Render
-{
+public class RenderArrowRPG extends Render {
+
     public static final RenderArrowRPG INSTANCE = new RenderArrowRPG();
 
     private static final ResourceLocation TEXTURE = new ResourceLocation("textures/entity/arrow.png");
 
     @Override
-    protected ResourceLocation getEntityTexture(Entity entity)
-    {
+    protected ResourceLocation getEntityTexture(Entity entity) {
         return TEXTURE;
     }
 
     @Override
-    public void doRender(Entity entity, double x, double y, double z, float yaw, float pitch)
-    {
+    public void doRender(Entity entity, double x, double y, double z, float yaw, float pitch) {
         if (entity instanceof EntityRPGArrow) {
             EntityRPGArrow entityArrow = (EntityRPGArrow) entity;
 
             bindEntityTexture(entityArrow);
             GL11.glPushMatrix();
-            GL11.glTranslatef((float)x, (float)y, (float)z);
-            GL11.glRotatef(entityArrow.prevRotationYaw + (entityArrow.rotationYaw - entityArrow.prevRotationYaw) * pitch - 90.0F, 0.0F, 1.0F, 0.0F);
-            GL11.glRotatef(entityArrow.prevRotationPitch + (entityArrow.rotationPitch - entityArrow.prevRotationPitch) * pitch, 0.0F, 0.0F, 1.0F);
+            GL11.glTranslatef((float) x, (float) y, (float) z);
+            GL11.glRotatef(
+                entityArrow.prevRotationYaw + (entityArrow.rotationYaw - entityArrow.prevRotationYaw) * pitch - 90.0F,
+                0.0F,
+                1.0F,
+                0.0F);
+            GL11.glRotatef(
+                entityArrow.prevRotationPitch + (entityArrow.rotationPitch - entityArrow.prevRotationPitch) * pitch,
+                0.0F,
+                0.0F,
+                1.0F);
             Tessellator tess = Tessellator.instance;
 
             byte b0 = 0;

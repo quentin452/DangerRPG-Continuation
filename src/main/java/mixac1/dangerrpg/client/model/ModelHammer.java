@@ -4,8 +4,8 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class ModelHammer extends ModelBase
-{
+public class ModelHammer extends ModelBase {
+
     public static final ModelHammer INSTANCE = new ModelHammer();
 
     public ModelRenderer shape1;
@@ -32,8 +32,7 @@ public class ModelHammer extends ModelBase
     public ModelRenderer shape26;
     public ModelRenderer shape27;
 
-    public ModelHammer()
-    {
+    public ModelHammer() {
         this.textureWidth = 36;
         this.textureHeight = 32;
         this.shape8 = new ModelRenderer(this, 0, 10);
@@ -113,8 +112,7 @@ public class ModelHammer extends ModelBase
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
-    {
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.shape8.render(f5);
         this.shape31.render(f5);
         this.shape82.render(f5);
@@ -140,8 +138,7 @@ public class ModelHammer extends ModelBase
         this.shape25.render(f5);
     }
 
-    public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z)
-    {
+    public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
         modelRenderer.rotateAngleX = x;
         modelRenderer.rotateAngleY = y;
         modelRenderer.rotateAngleZ = z;

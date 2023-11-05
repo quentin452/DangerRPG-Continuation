@@ -1,10 +1,5 @@
 package mixac1.dangerrpg.capability.data;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
-
 import cpw.mods.fml.relauncher.Side;
 import mixac1.dangerrpg.DangerRPG;
 import mixac1.dangerrpg.api.entity.EntityAttribute;
@@ -25,30 +20,32 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import net.minecraftforge.common.MinecraftForge;
 
-public class RPGEntityProperties implements IExtendedEntityProperties
-{
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+
+public class RPGEntityProperties implements IExtendedEntityProperties {
+
     protected static final String ID = "RPGEntityProperties";
 
     public final EntityLivingBase entity;
 
     public HashMap<Integer, Stub> attributeMap = new HashMap<Integer, Stub>();
-    public HashMap<Integer, Integer>  lvlMap       = new HashMap<Integer, Integer>();
+    public HashMap<Integer, Integer> lvlMap = new HashMap<Integer, Integer>();
 
-    public RPGEntityProperties(EntityLivingBase entity)
-    {
+    public RPGEntityProperties(EntityLivingBase entity) {
         this.entity = entity;
     }
 
     @Override
-    public void init(Entity entity, World world)
-    {
+    public void init(Entity entity, World world) {
         for (EntityAttribute iter : getEntityAttributes()) {
             iter.init((EntityLivingBase) entity);
         }
     }
 
-    public void serverInit()
-    {
+    public void serverInit() {
         if (isServerSide(entity) && !EntityAttributes.LVL.isInitedEntity(entity)) {
             for (EntityAttribute iter : getEntityAttributes()) {
                 iter.serverInit(entity);
@@ -60,38 +57,32 @@ public class RPGEntityProperties implements IExtendedEntityProperties
         }
     }
 
-    public static void register(EntityLivingBase entity)
-    {
+    public static void register(EntityLivingBase entity) {
         entity.registerExtendedProperties(ID, new RPGEntityProperties(entity));
     }
 
-    public static RPGEntityProperties get(EntityLivingBase entity)
-    {
+    public static RPGEntityProperties get(EntityLivingBase entity) {
         return (RPGEntityProperties) entity.getExtendedProperties(ID);
     }
 
-    public static boolean isServerSide(EntityLivingBase entity)
-    {
+    public static boolean isServerSide(EntityLivingBase entity) {
         return !entity.worldObj.isRemote;
     }
 
-    public boolean checkValid()
-    {
+    public boolean checkValid() {
         boolean result = EntityAttributes.LVL.isInitedEntity(entity);
         if (!result) {
             if (isServerSide(entity)) {
                 init(entity, entity.worldObj);
                 RPGNetwork.net.sendToAll(new MsgSyncEntityData(entity, this));
-            }
-            else if (DangerRPG.proxy.getTick(Side.CLIENT) % 100 == 0) {
+            } else if (DangerRPG.proxy.getTick(Side.CLIENT) % 100 == 0) {
                 RPGNetwork.net.sendToServer(new MsgSyncEntityData(entity));
             }
         }
         return result;
     }
 
-    public void rebuildOnDeath()
-    {
+    public void rebuildOnDeath() {
         int count = 0;
         int lvl;
 
@@ -109,16 +100,17 @@ public class RPGEntityProperties implements IExtendedEntityProperties
 
         for (int i = 0; i < count; ++i) {
             int rand = RPGOther.rand.nextInt(pas.size());
-            pas.get(rand).up(entity, null, false);
-            if (pas.get(rand).getLvl(entity) <= 1) {
+            pas.get(rand)
+                .up(entity, null, false);
+            if (pas.get(rand)
+                .getLvl(entity) <= 1) {
                 pas.remove(rand);
             }
         }
     }
 
     @Override
-    public void saveNBTData(NBTTagCompound nbt)
-    {
+    public void saveNBTData(NBTTagCompound nbt) {
         NBTTagCompound tmp = new NBTTagCompound();
         for (EntityAttribute iter : getEntityAttributes()) {
             iter.toNBT(tmp, entity);
@@ -127,8 +119,7 @@ public class RPGEntityProperties implements IExtendedEntityProperties
     }
 
     @Override
-    public void loadNBTData(NBTTagCompound nbt)
-    {
+    public void loadNBTData(NBTTagCompound nbt) {
         NBTTagCompound tmp = (NBTTagCompound) nbt.getTag(ID);
         if (tmp != null) {
             for (EntityAttribute iter : getEntityAttributes()) {
@@ -137,25 +128,21 @@ public class RPGEntityProperties implements IExtendedEntityProperties
         }
     }
 
-    public EntityAttribute getEntityAttribute(int hash)
-    {
+    public EntityAttribute getEntityAttribute(int hash) {
         EntityAttribute attr = RPGCapability.mapIntToEntityAttribute.get(hash);
         return RPGCapability.rpgEntityRegistr.get(entity).attributes.containsKey(attr) ? attr : null;
     }
 
-    public LvlEAProvider getLvlProvider(int hash)
-    {
+    public LvlEAProvider getLvlProvider(int hash) {
         EntityAttribute attr = getEntityAttribute(hash);
         return attr != null ? attr.getLvlProvider(entity) : null;
     }
 
-    public Set<EntityAttribute> getEntityAttributes()
-    {
+    public Set<EntityAttribute> getEntityAttributes() {
         return RPGCapability.rpgEntityRegistr.get(entity).attributes.keySet();
     }
 
-    public List<LvlEAProvider> getLvlProviders()
-    {
+    public List<LvlEAProvider> getLvlProviders() {
         return RPGCapability.rpgEntityRegistr.get(entity).lvlProviders;
     }
 }

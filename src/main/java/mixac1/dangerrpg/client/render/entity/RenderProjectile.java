@@ -1,16 +1,14 @@
 package mixac1.dangerrpg.client.render.entity;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
-public abstract class RenderProjectile extends Render
-{
+public abstract class RenderProjectile extends Render {
+
     @Override
-    public void doRender(Entity entity, double x, double y, double z, float yaw, float pitch)
-    {
+    public void doRender(Entity entity, double x, double y, double z, float yaw, float pitch) {
         GL11.glPushMatrix();
         preRender(entity);
         GL11.glPopMatrix();
@@ -20,8 +18,16 @@ public abstract class RenderProjectile extends Render
         bindEntityTexture(entity);
 
         GL11.glTranslated(x, y, z);
-        GL11.glRotatef((entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * yaw) - 90F, 0.0F, 1.0F, 0.0F);
-        GL11.glRotatef(entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * pitch, 0.0F, 0.0F, 1.0F);
+        GL11.glRotatef(
+            (entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * yaw) - 90F,
+            0.0F,
+            1.0F,
+            0.0F);
+        GL11.glRotatef(
+            entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * pitch,
+            0.0F,
+            0.0F,
+            1.0F);
 
         doRender(entity);
 
@@ -38,13 +44,11 @@ public abstract class RenderProjectile extends Render
 
     protected abstract void doRender(Entity entity);
 
-    protected void preRender(Entity entity)
-    {
+    protected void preRender(Entity entity) {
 
     }
 
-    protected void postRender(Entity entity)
-    {
+    protected void postRender(Entity entity) {
 
     }
 }

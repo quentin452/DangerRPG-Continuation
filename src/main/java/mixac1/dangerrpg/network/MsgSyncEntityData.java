@@ -13,51 +13,46 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class MsgSyncEntityData implements IMessage
-{
+public class MsgSyncEntityData implements IMessage {
+
     public NBTTagCompound data;
     public int entityId;
     public boolean isPlayer;
 
-    public MsgSyncEntityData () {}
+    public MsgSyncEntityData() {}
 
-    public MsgSyncEntityData(EntityLivingBase entity)
-    {
+    public MsgSyncEntityData(EntityLivingBase entity) {
         this.entityId = entity.getEntityId();
         this.isPlayer = entity instanceof EntityPlayer;
     }
 
-    public MsgSyncEntityData(EntityLivingBase entity, RPGEntityProperties entityData)
-    {
+    public MsgSyncEntityData(EntityLivingBase entity, RPGEntityProperties entityData) {
         this(entity);
         this.data = new NBTTagCompound();
         entityData.saveNBTData(this.data);
     }
 
     @Override
-    public void fromBytes(ByteBuf buf)
-    {
+    public void fromBytes(ByteBuf buf) {
         this.data = ByteBufUtils.readTag(buf);
         this.entityId = buf.readInt();
         this.isPlayer = buf.readBoolean();
     }
 
     @Override
-    public void toBytes(ByteBuf buf)
-    {
+    public void toBytes(ByteBuf buf) {
         ByteBufUtils.writeTag(buf, this.data);
         buf.writeInt(this.entityId);
         buf.writeBoolean(this.isPlayer);
     }
 
-    public static abstract class Handler implements IMessageHandler<MsgSyncEntityData, IMessage>
-    {
+    public static abstract class Handler implements IMessageHandler<MsgSyncEntityData, IMessage> {
+
         protected EntityLivingBase target;
         protected EntityPlayer player;
         protected RPGEntityProperties data;
 
-        protected void init(MsgSyncEntityData msg, MessageContext ctx)
-        {
+        protected void init(MsgSyncEntityData msg, MessageContext ctx) {
             target = (EntityLivingBase) DangerRPG.proxy.getEntityByID(ctx, msg.entityId);
             player = DangerRPG.proxy.getPlayer(ctx);
             data = null;
@@ -73,11 +68,10 @@ public class MsgSyncEntityData implements IMessage
         }
     }
 
-    public static class HandlerClient extends Handler
-    {
+    public static class HandlerClient extends Handler {
+
         @Override
-        public IMessage onMessage(MsgSyncEntityData msg, MessageContext ctx)
-        {
+        public IMessage onMessage(MsgSyncEntityData msg, MessageContext ctx) {
             init(msg, ctx);
             if (data != null) {
                 data.loadNBTData(msg.data);
@@ -86,11 +80,10 @@ public class MsgSyncEntityData implements IMessage
         }
     }
 
-    public static class HandlerServer extends Handler
-    {
+    public static class HandlerServer extends Handler {
+
         @Override
-        public IMessage onMessage(MsgSyncEntityData msg, MessageContext ctx)
-        {
+        public IMessage onMessage(MsgSyncEntityData msg, MessageContext ctx) {
             init(msg, ctx);
             if (data != null) {
                 RPGNetwork.net.sendTo(new MsgSyncEntityData(target, data), (EntityPlayerMP) player);

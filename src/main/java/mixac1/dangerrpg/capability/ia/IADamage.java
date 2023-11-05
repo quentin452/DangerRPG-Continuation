@@ -7,29 +7,26 @@ import mixac1.dangerrpg.util.RPGHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-public class IADamage extends IAStatic
-{
-    public IADamage(String name)
-    {
+public class IADamage extends IAStatic {
+
+    public IADamage(String name) {
         super(name);
     }
 
     @Override
-    public float get(ItemStack stack, EntityPlayer player)
-    {
-        return getChecked(stack) + PlayerAttributes.STRENGTH.getValue(player) * ItemAttributes.STR_MUL.get(stack, player);
+    public float get(ItemStack stack, EntityPlayer player) {
+        return getChecked(stack)
+            + PlayerAttributes.STRENGTH.getValue(player) * ItemAttributes.STR_MUL.get(stack, player);
     }
 
-    public static class IAMeleeDamage extends IADamage
-    {
-        public IAMeleeDamage(String name)
-        {
+    public static class IAMeleeDamage extends IADamage {
+
+        public IAMeleeDamage(String name) {
             super(name);
         }
 
         @Override
-        public float get(ItemStack stack, EntityPlayer player)
-        {
+        public float get(ItemStack stack, EntityPlayer player) {
             return RPGHelper.getPlayerDamage(stack, player);
         }
     }

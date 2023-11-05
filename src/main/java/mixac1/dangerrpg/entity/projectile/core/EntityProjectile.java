@@ -1,7 +1,5 @@
 package mixac1.dangerrpg.entity.projectile.core;
 
-import java.util.List;
-
 import cpw.mods.fml.common.registry.IThrowableEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -22,8 +20,10 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
-public class EntityProjectile extends EntityArrow implements IThrowableEntity
-{
+import java.util.List;
+
+public class EntityProjectile extends EntityArrow implements IThrowableEntity {
+
     protected boolean beenInGround;
     protected int lifespan;
 
@@ -38,66 +38,67 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity
         setSize(0.5F, 0.5F);
     }
 
-    public EntityProjectile(World world)
-    {
+    public EntityProjectile(World world) {
         super(world);
     }
 
-    public EntityProjectile(World world, double x, double y, double z)
-    {
+    public EntityProjectile(World world, double x, double y, double z) {
         super(world, x, y, z);
     }
 
-    public EntityProjectile(World world, EntityLivingBase thrower, float speed, float deviation)
-    {
+    public EntityProjectile(World world, EntityLivingBase thrower, float speed, float deviation) {
         this(world);
         this.thrower = thrower;
 
-        setLocationAndAngles(thrower.posX, thrower.posY + thrower.getEyeHeight(), thrower.posZ, thrower.rotationYaw, thrower.rotationPitch);
+        setLocationAndAngles(
+            thrower.posX,
+            thrower.posY + thrower.getEyeHeight(),
+            thrower.posZ,
+            thrower.rotationYaw,
+            thrower.rotationPitch);
 
-        posX -= MathHelper.cos(rotationYaw / 180.0F * (float)Math.PI) * 0.16F;
+        posX -= MathHelper.cos(rotationYaw / 180.0F * (float) Math.PI) * 0.16F;
         posY -= 0.1;
-        posZ -= MathHelper.sin(rotationYaw / 180.0F * (float)Math.PI) * 0.16F;
+        posZ -= MathHelper.sin(rotationYaw / 180.0F * (float) Math.PI) * 0.16F;
         setPosition(posX, posY, posZ);
 
         yOffset = 0.0F;
-        motionX = -MathHelper.sin(rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(rotationPitch / 180.0F * (float)Math.PI);
-        motionZ =  MathHelper.cos(rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(rotationPitch / 180.0F * (float)Math.PI);
-        motionY = -MathHelper.sin(rotationPitch / 180.0F * (float)Math.PI);
+        motionX = -MathHelper.sin(rotationYaw / 180.0F * (float) Math.PI)
+            * MathHelper.cos(rotationPitch / 180.0F * (float) Math.PI);
+        motionZ = MathHelper.cos(rotationYaw / 180.0F * (float) Math.PI)
+            * MathHelper.cos(rotationPitch / 180.0F * (float) Math.PI);
+        motionY = -MathHelper.sin(rotationPitch / 180.0F * (float) Math.PI);
         setThrowableHeading(motionX, motionY, motionZ, speed, deviation);
     }
 
-    public EntityProjectile(World world, EntityLivingBase thrower, EntityLivingBase target, float speed, float deviation)
-    {
+    public EntityProjectile(World world, EntityLivingBase thrower, EntityLivingBase target, float speed,
+        float deviation) {
         super(world, thrower, target, speed, deviation);
         this.thrower = thrower;
     }
 
     @Override
-    public void entityInit()
-    {
+    public void entityInit() {
         super.entityInit();
     }
 
     @Override
-    public void setThrowableHeading(double x, double y, double z, float speed, float deviation)
-    {
+    public void setThrowableHeading(double x, double y, double z, float speed, float deviation) {
         super.setThrowableHeading(x, y, z, speed, deviation);
         lifespan = 0;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void setVelocity(double x, double y, double z)
-    {
+    public void setVelocity(double x, double y, double z) {
         motionX = x;
         motionY = y;
         motionZ = z;
 
         if (needAimRotation() && prevRotationPitch == 0.0F && prevRotationYaw == 0.0F) {
             float f = MathHelper.sqrt_double(x * x + z * z);
-            prevRotationYaw = rotationYaw = (float)(Math.atan2(x, z) * 180.0D / Math.PI);
-            prevRotationPitch = rotationPitch = (float)(Math.atan2(y, f) * 180.0D / Math.PI);
+            prevRotationYaw = rotationYaw = (float) (Math.atan2(x, z) * 180.0D / Math.PI);
+            prevRotationPitch = rotationPitch = (float) (Math.atan2(y, f) * 180.0D / Math.PI);
             prevRotationPitch = rotationPitch;
             prevRotationYaw = rotationYaw;
             setLocationAndAngles(posX, posY, posZ, rotationYaw, rotationPitch);
@@ -105,14 +106,12 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity
     }
 
     @Override
-    public void onUpdate()
-    {
+    public void onUpdate() {
         onEntityUpdate();
     }
 
     @Override
-    public void onEntityUpdate()
-    {
+    public void onEntityUpdate() {
         super.onEntityUpdate();
 
         if (getMaxLifespan() > 0 && ++lifespan >= getMaxLifespan()) {
@@ -131,7 +130,8 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity
         Block i = worldObj.getBlock(field_145791_d, field_145792_e, field_145789_f);
         if (i != null) {
             i.setBlockBoundsBasedOnState(worldObj, field_145791_d, field_145792_e, field_145789_f);
-            AxisAlignedBB axisalignedbb = i.getCollisionBoundingBoxFromPool(worldObj, field_145791_d, field_145792_e, field_145789_f);
+            AxisAlignedBB axisalignedbb = i
+                .getCollisionBoundingBoxFromPool(worldObj, field_145791_d, field_145792_e, field_145789_f);
             if (axisalignedbb != null && axisalignedbb.isVecInside(Vec3.createVectorHelper(posX, posY, posZ))) {
                 inGround = true;
             }
@@ -140,8 +140,7 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity
         if (inGround) {
             Block j = worldObj.getBlock(field_145791_d, field_145792_e, field_145789_f);
             int k = worldObj.getBlockMetadata(field_145791_d, field_145792_e, field_145789_f);
-            if (j == field_145790_g && k == inData) {}
-            else {
+            if (j == field_145790_g && k == inData) {} else {
                 inGround = false;
                 motionX *= rand.nextFloat() * 0.2F;
                 motionY *= rand.nextFloat() * 0.2F;
@@ -158,8 +157,7 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity
                 if (dieAfterEntityHit()) {
                     setDead();
                 }
-            }
-            else {
+            } else {
                 onGroundHit(mop);
                 if (dieAfterGroundHit()) {
                     setDead();
@@ -177,9 +175,8 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity
             float tmp = MathHelper.sqrt_double(motionX * motionX + motionZ * motionZ);
             rotationYaw = (float) (Math.atan2(motionX, motionZ) * 180.0D / Math.PI);
 
-            for (rotationPitch = (float) (Math.atan2(motionY, tmp) * 180.0D / Math.PI);
-                 rotationPitch - prevRotationPitch < -180.0F;
-                 prevRotationPitch -= 360.0F) {}
+            for (rotationPitch = (float) (Math.atan2(motionY, tmp) * 180.0D / Math.PI); rotationPitch
+                - prevRotationPitch < -180.0F; prevRotationPitch -= 360.0F) {}
 
             for (; rotationPitch - prevRotationPitch >= 180.0F; prevRotationPitch += 360.0F) {}
 
@@ -211,15 +208,13 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity
         func_145775_I();
     }
 
-    public void makeAimRotation()
-    {
+    public void makeAimRotation() {
         float f = MathHelper.sqrt_double(motionX * motionX + motionZ * motionZ);
         prevRotationYaw = rotationYaw = (float) (Math.atan2(motionX, motionZ) * 180D / Math.PI);
         prevRotationPitch = rotationPitch = (float) (Math.atan2(motionY, f) * 180D / Math.PI);
     }
 
-    public MovingObjectPosition findMovingObjectPosition()
-    {
+    public MovingObjectPosition findMovingObjectPosition() {
         Vec3 vec31 = Vec3.createVectorHelper(posX, posY, posZ);
         Vec3 vec32 = Vec3.createVectorHelper(posX + motionX, posY + motionY, posZ + motionZ);
         MovingObjectPosition mop = worldObj.func_147447_a(vec31, vec32, false, true, false);
@@ -231,10 +226,14 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity
 
         Entity entity = null;
         @SuppressWarnings("unchecked")
-        List<Entity> list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.addCoord(motionX, motionY, motionZ).expand(1.0D, 1.0D, 1.0D));
+        List<Entity> list = worldObj.getEntitiesWithinAABBExcludingEntity(
+            this,
+            boundingBox.addCoord(motionX, motionY, motionZ)
+                .expand(1.0D, 1.0D, 1.0D));
         double d = 0.0D;
         for (Entity iterEntity : list) {
-            if (!iterEntity.canBeCollidedWith() || !(iterEntity instanceof EntityLivingBase) || iterEntity == thrower && lifespan < 5) {
+            if (!iterEntity.canBeCollidedWith() || !(iterEntity instanceof EntityLivingBase)
+                || iterEntity == thrower && lifespan < 5) {
                 continue;
             }
             float f4 = 0.3F;
@@ -254,7 +253,8 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity
             mop = new MovingObjectPosition(entity);
             if (mop.entityHit instanceof EntityPlayer) {
                 EntityPlayer entityplayer = (EntityPlayer) mop.entityHit;
-                if (entityplayer.capabilities.disableDamage || thrower instanceof EntityPlayer && thrower != null && !((EntityPlayer)thrower).canAttackPlayer(entityplayer)) {
+                if (entityplayer.capabilities.disableDamage || thrower instanceof EntityPlayer && thrower != null
+                    && !((EntityPlayer) thrower).canAttackPlayer(entityplayer)) {
                     mop = null;
                 }
             }
@@ -263,26 +263,22 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity
         return mop;
     }
 
-    public void preInpact(MovingObjectPosition mop)
-    {
+    public void preInpact(MovingObjectPosition mop) {
 
     }
 
-    public void postInpact(MovingObjectPosition mop)
-    {
+    public void postInpact(MovingObjectPosition mop) {
 
     }
 
-    public void onEntityHit(EntityLivingBase entity)
-    {
+    public void onEntityHit(EntityLivingBase entity) {
         if (!worldObj.isRemote) {
             applyEntityHitEffects(entity, getDamageMul());
         }
         bounceBack();
     }
 
-    public void applyEntityHitEffects(EntityLivingBase entity, float dmgMul)
-    {
+    public void applyEntityHitEffects(EntityLivingBase entity, float dmgMul) {
         if (isBurning() && !(entity instanceof EntityEnderman)) {
             entity.setFire(5);
         }
@@ -306,8 +302,7 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity
         playHitSound();
     }
 
-    public void onGroundHit(MovingObjectPosition mop)
-    {
+    public void onGroundHit(MovingObjectPosition mop) {
         field_145791_d = mop.blockX;
         field_145792_e = mop.blockY;
         field_145789_f = mop.blockZ;
@@ -334,10 +329,16 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity
         }
     }
 
-    public void onCollideWithWater()
-    {
+    public void onCollideWithWater() {
         for (int i = 0; i < 4; ++i) {
-            worldObj.spawnParticle("bubble", posX - motionX * 0.25F, posY - motionY * 0.25F, posZ - motionZ * 0.25F, motionX, motionY, motionZ);
+            worldObj.spawnParticle(
+                "bubble",
+                posX - motionX * 0.25F,
+                posY - motionY * 0.25F,
+                posZ - motionZ * 0.25F,
+                motionX,
+                motionY,
+                motionZ);
         }
         motionX *= getWaterResistance();
         motionY *= getWaterResistance();
@@ -348,21 +349,18 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity
     @Override
     public void onCollideWithPlayer(EntityPlayer player) {}
 
-    protected void bounceBack()
-    {
+    protected void bounceBack() {
         motionX *= -0.05D;
         motionY *= -0.05D;
         motionZ *= -0.05D;
     }
 
-    public float getDamageMul()
-    {
+    public float getDamageMul() {
         return 1;
     }
 
     @Override
-    public Entity getThrower()
-    {
+    public Entity getThrower() {
         if (thrower == null && throwerName != null && throwerName.length() > 0) {
             thrower = worldObj.getPlayerEntityByName(throwerName);
         }
@@ -370,8 +368,7 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity
     }
 
     @Override
-    public void setThrower(Entity entity)
-    {
+    public void setThrower(Entity entity) {
         if (entity instanceof EntityLivingBase) {
             thrower = (EntityLivingBase) entity;
         }
@@ -379,85 +376,69 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity
 
     @Override
     @SideOnly(Side.CLIENT)
-    public float getShadowSize()
-    {
+    public float getShadowSize() {
         return 0.0F;
     }
 
     @Override
-    public boolean canTriggerWalking()
-    {
+    public boolean canTriggerWalking() {
         return false;
     }
 
-    public float getAirResistance()
-    {
+    public float getAirResistance() {
         return 1F;
     }
 
-    public float getWaterResistance()
-    {
+    public float getWaterResistance() {
         return 1F;
     }
 
-    public float getGravity()
-    {
+    public float getGravity() {
         return 0.00F;
     }
 
-    public int getMaxUntouchability()
-    {
+    public int getMaxUntouchability() {
         return 7;
     }
 
-    public boolean dieAfterEntityHit()
-    {
+    public boolean dieAfterEntityHit() {
         return true;
     }
 
-    public boolean dieAfterGroundHit()
-    {
+    public boolean dieAfterGroundHit() {
         return false;
     }
 
-    public boolean canRotation()
-    {
+    public boolean canRotation() {
         return !beenInGround;
     }
 
-    public float getRotationOnPitch()
-    {
+    public float getRotationOnPitch() {
         return 0.0F;
     }
 
-    public float getRotationOnYaw()
-    {
+    public float getRotationOnYaw() {
         return 0.0F;
     }
 
-    public boolean needAimRotation()
-    {
+    public boolean needAimRotation() {
         return inGround || !inGround && (!canRotation() || getRotationOnYaw() == 0f && getRotationOnPitch() == 0f);
     }
 
-    public int getMaxLifespan()
-    {
+    public int getMaxLifespan() {
         return 6000;
     }
 
-    public void playHitSound()
-    {
+    public void playHitSound() {
 
     }
 
-    public void playOnUpdateSound()
-    {
+    public void playOnUpdateSound() {
 
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound nbt)
-    {
+    public void writeEntityToNBT(NBTTagCompound nbt) {
         super.writeEntityToNBT(nbt);
         nbt.setBoolean("beenInGround", beenInGround);
         nbt.setInteger("lifespan", lifespan);
@@ -469,8 +450,7 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound nbt)
-    {
+    public void readEntityFromNBT(NBTTagCompound nbt) {
         super.readEntityFromNBT(nbt);
         beenInGround = nbt.getBoolean("beenInGrond");
         lifespan = nbt.getInteger("lifespan");

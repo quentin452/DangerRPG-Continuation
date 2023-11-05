@@ -1,29 +1,27 @@
 package mixac1.dangerrpg.capability.data;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-
 import mixac1.dangerrpg.capability.data.RPGDataRegister.ElementData;
 import mixac1.dangerrpg.util.Tuple.Pair;
 import mixac1.dangerrpg.util.Utils;
 
-public abstract class RPGDataRegister<Key, Data extends ElementData<Key, TransferData>, TransferKey, TransferData> extends HashMap<Key, Data>
-{
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+
+public abstract class RPGDataRegister<Key, Data extends ElementData<Key, TransferData>, TransferKey, TransferData>
+    extends HashMap<Key, Data> {
+
     private byte[] transferData;
 
-    public boolean isActivated(Key key)
-    {
+    public boolean isActivated(Key key) {
         return containsKey(key) && get(key).isActivated;
     }
 
-    public boolean isSupported(Key key)
-    {
+    public boolean isSupported(Key key) {
         return containsKey(key) && get(key).isSupported;
     }
 
-    public Map<Key, Data> getActiveElements()
-    {
+    public Map<Key, Data> getActiveElements() {
         HashMap<Key, Data> map = new HashMap<Key, Data>();
         for (Entry<Key, Data> entry : entrySet()) {
             if (entry.getValue().isActivated) {
@@ -37,26 +35,27 @@ public abstract class RPGDataRegister<Key, Data extends ElementData<Key, Transfe
 
     protected abstract Key decodingKey(TransferKey key);
 
-    public void createTransferData()
-    {
+    public void createTransferData() {
         LinkedList<Pair<TransferKey, TransferData>> list = new LinkedList<Pair<TransferKey, TransferData>>();
         for (Entry<Key, Data> entry : getActiveElements().entrySet()) {
             TransferKey key = codingKey(entry.getKey());
             if (key != null) {
-                list.add(new Pair<TransferKey, TransferData>(key, entry.getValue() != null ? entry.getValue().getTransferData(entry.getKey()) : null));
+                list.add(
+                    new Pair<TransferKey, TransferData>(
+                        key,
+                        entry.getValue() != null ? entry.getValue()
+                            .getTransferData(entry.getKey()) : null));
             }
         }
 
         transferData = Utils.serialize(list);
     }
 
-    public byte[] getTransferData()
-    {
+    public byte[] getTransferData() {
         return transferData;
     }
 
-    public void extractTransferData(byte[] tranferData)
-    {
+    public void extractTransferData(byte[] tranferData) {
         for (Entry<Key, Data> entry : entrySet()) {
             entry.getValue().isActivated = false;
         }
@@ -65,7 +64,7 @@ public abstract class RPGDataRegister<Key, Data extends ElementData<Key, Transfe
         for (Pair<TransferKey, TransferData> data : list) {
             Key key = decodingKey(data.value1);
             if (key != null) {
-          //  if (key != null && containsKey(key)) {
+                // if (key != null && containsKey(key)) {
                 if (data.value2 != null) {
                     get(key).unpackTransferData(data.value2);
                 }
@@ -74,8 +73,8 @@ public abstract class RPGDataRegister<Key, Data extends ElementData<Key, Transfe
         }
     }
 
-    public static abstract class ElementData<Key, TransferData>
-    {
+    public static abstract class ElementData<Key, TransferData> {
+
         public boolean isActivated;
         public boolean isSupported;
 

@@ -1,45 +1,40 @@
 package mixac1.hooklib.asm;
 
+import mixac1.dangerrpg.DangerRPG;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassWriter;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassWriter;
+public class HookClassTransformer {
 
-import mixac1.dangerrpg.DangerRPG;
-
-public class HookClassTransformer
-{
     public HashMap<String, List<AsmHook>> hooksMap = new HashMap<String, List<AsmHook>>();
     private HookContainerParser containerParser = new HookContainerParser(this);
 
-    public void registerHook(AsmHook hook)
-    {
+    public void registerHook(AsmHook hook) {
         if (hooksMap.containsKey(hook.getTargetClassName())) {
-            hooksMap.get(hook.getTargetClassName()).add(hook);
-        }
-        else {
+            hooksMap.get(hook.getTargetClassName())
+                .add(hook);
+        } else {
             List<AsmHook> list = new ArrayList<AsmHook>(2);
             list.add(hook);
             hooksMap.put(hook.getTargetClassName(), list);
         }
     }
 
-    public void registerHookContainer(String className)
-    {
+    public void registerHookContainer(String className) {
         containerParser.parseHooks(className);
     }
 
-    public void registerHookContainer(InputStream classData)
-    {
+    public void registerHookContainer(InputStream classData) {
         containerParser.parseHooks(classData);
     }
 
-    public byte[] transform(String className, byte[] bytecode)
-    {
+    public byte[] transform(String className, byte[] bytecode) {
         List<AsmHook> hooks = hooksMap.get(className);
 
         if (hooks != null) {
@@ -48,7 +43,10 @@ public class HookClassTransformer
                 int numHooks = hooks.size();
 
                 for (AsmHook hook : hooks) {
-                    DangerRPG.infoLog(String.format("Hook: patching method %s#%s", hook.getTargetClassName(),
+                    DangerRPG.infoLog(
+                        String.format(
+                            "Hook: patching method %s#%s",
+                            hook.getTargetClassName(),
                             hook.getTargetMethodName()));
                 }
 
@@ -62,13 +60,15 @@ public class HookClassTransformer
 
                 int numInjectedHooks = numHooks - hooksWriter.hooks.size();
                 for (AsmHook hook : hooks) {
-                    DangerRPG.infoLog(String.format("Warning: unsuccesfull pathing method %s#%s",
-                            hook.getTargetClassName(), hook.getTargetMethodName()));
+                    DangerRPG.infoLog(
+                        String.format(
+                            "Warning: unsuccesfull pathing method %s#%s",
+                            hook.getTargetClassName(),
+                            hook.getTargetMethodName()));
                 }
 
                 return cw.toByteArray();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 DangerRPG.logger.error("A problem has occured during transformation of class " + className + ".");
                 DangerRPG.logger.error("Attached hooks:");
                 for (AsmHook hook : hooks) {
@@ -80,13 +80,11 @@ public class HookClassTransformer
         return bytecode;
     }
 
-    protected HookInjectorClassVisitor createInjectorClassVisitor(ClassWriter cw, List<AsmHook> hooks)
-    {
+    protected HookInjectorClassVisitor createInjectorClassVisitor(ClassWriter cw, List<AsmHook> hooks) {
         return new HookInjectorClassVisitor(cw, hooks);
     }
 
-    protected ClassWriter createClassWriter(int flags)
-    {
+    protected ClassWriter createClassWriter(int flags) {
         return new SafeClassWriter(flags);
     }
 }

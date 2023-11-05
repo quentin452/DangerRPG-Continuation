@@ -12,14 +12,13 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-public class BlockRPGWorkbench extends Block
-{
-    public static final String NAME  = "rpg_workbench";
+public class BlockRPGWorkbench extends Block {
 
-    public IIcon[]             icons = new IIcon[2];
+    public static final String NAME = "rpg_workbench";
 
-    public BlockRPGWorkbench()
-    {
+    public IIcon[] icons = new IIcon[2];
+
+    public BlockRPGWorkbench() {
         super(Material.iron);
         setBlockName(NAME);
         setBlockTextureName(Utils.toString(DangerRPG.MODID, ":", NAME));
@@ -30,26 +29,22 @@ public class BlockRPGWorkbench extends Block
     }
 
     @Override
-    public void registerBlockIcons(IIconRegister reg)
-    {
+    public void registerBlockIcons(IIconRegister reg) {
         blockIcon = reg.registerIcon(getTextureName() + "_side");
-        icons[0]  = reg.registerIcon(getTextureName() + "_top");
-        icons[1]  = reg.registerIcon(getTextureName() + "_front");
+        icons[0] = reg.registerIcon(getTextureName() + "_top");
+        icons[1] = reg.registerIcon(getTextureName() + "_front");
     }
 
     @Override
-    public IIcon getIcon(int side, int meta)
-    {
+    public IIcon getIcon(int side, int meta) {
         return side == 1 ? icons[0]
-                : side == 0 ? Blocks.iron_block.getBlockTextureFromSide(side)
-                        : side != 2 && side != 4 ? blockIcon
-                                : icons[1];
+            : side == 0 ? Blocks.iron_block.getBlockTextureFromSide(side)
+                : side != 2 && side != 4 ? blockIcon : icons[1];
     }
 
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par1, float par2,
-                                    float par3, float par4)
-    {
+        float par3, float par4) {
         if (!world.isRemote) {
             player.openGui(DangerRPG.instance, RPGGuiHandlers.GUI_RPG_WORKBENCH, world, x, y, z);
         }

@@ -1,7 +1,6 @@
 package mixac1.hooklib.asm;
 
-public enum ReturnValue
-{
+public enum ReturnValue {
     VOID,
 
     PRIMITIVE_CONSTANT,

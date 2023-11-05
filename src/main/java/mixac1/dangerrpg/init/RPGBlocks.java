@@ -8,23 +8,21 @@ import mixac1.dangerrpg.block.BlockRPGWorkbench;
 import mixac1.dangerrpg.block.BlockSyntheticBedrock;
 import net.minecraft.block.Block;
 
-public abstract class RPGBlocks
-{
+public abstract class RPGBlocks {
+
     public static Block modificationTable;
     public static Block lvlupTable;
     public static Block rpgWorkbench;
     public static Block syntheticBedrock;
 
-    public static void load(FMLPreInitializationEvent e)
-    {
+    public static void load(FMLPreInitializationEvent e) {
         registerBlock(modificationTable = new BlockModificationTable());
-        registerBlock(lvlupTable        = new BlockLvlupTable());
-        registerBlock(rpgWorkbench      = new BlockRPGWorkbench());
-        registerBlock(syntheticBedrock  = new BlockSyntheticBedrock());
+        registerBlock(lvlupTable = new BlockLvlupTable());
+        registerBlock(rpgWorkbench = new BlockRPGWorkbench());
+        registerBlock(syntheticBedrock = new BlockSyntheticBedrock());
     }
 
-    private static void registerBlock(Block block)
-    {
+    private static void registerBlock(Block block) {
         GameRegistry.registerBlock(block, block.getUnlocalizedName());
     }
 }

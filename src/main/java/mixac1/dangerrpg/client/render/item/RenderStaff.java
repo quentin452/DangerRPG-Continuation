@@ -8,34 +8,30 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-public class RenderStaff extends RenderNormalModel
-{
+public class RenderStaff extends RenderNormalModel {
+
     public static final RenderStaff INSTANCE = new RenderStaff();
 
     @Override
-    public float specific(ItemRenderType type, ItemStack stack, EntityLivingBase entity)
-    {
+    public float specific(ItemRenderType type, ItemStack stack, EntityLivingBase entity) {
         float tmp = super.specific(type, stack, entity);
-        if (entity instanceof EntityPlayer
-            && ((EntityPlayer) entity).isUsingItem()) {
+        if (entity instanceof EntityPlayer && ((EntityPlayer) entity).isUsingItem()) {
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
         }
         return tmp;
     }
 
     @Override
-    public ModelBase getModel()
-    {
+    public ModelBase getModel() {
         return ModelStaff.INSTANCE;
     }
 
-    public static class RenderPowerStaff extends RenderStaff
-    {
+    public static class RenderPowerStaff extends RenderStaff {
+
         public static final RenderPowerStaff INSTANCE = new RenderPowerStaff();
 
         @Override
-        public ModelBase getModel()
-        {
+        public ModelBase getModel() {
             return ModelPowerStaff.INSTANCE;
         }
     }

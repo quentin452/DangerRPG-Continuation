@@ -4,82 +4,72 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-public class RandomContainer<Type>
-{
-	private static class TypeItem<Type>
-	{
-		public final Type obj;
-		public final double chanceRaw;
-		public double chance;
+public class RandomContainer<Type> {
 
-		public TypeItem(Type obj, double chanceRaw)
-		{
-			this.obj = obj;
-			this.chanceRaw = chanceRaw;
-		}
-	}
+    private static class TypeItem<Type> {
 
-	private List<TypeItem<Type>> list = new LinkedList<TypeItem<Type>>();
+        public final Type obj;
+        public final double chanceRaw;
+        public double chance;
 
-	public RandomContainer() {}
+        public TypeItem(Type obj, double chanceRaw) {
+            this.obj = obj;
+            this.chanceRaw = chanceRaw;
+        }
+    }
 
-	public RandomContainer(Type[] objs, double[] chances)
-	{
-		add(objs, chances);
-	}
+    private List<TypeItem<Type>> list = new LinkedList<TypeItem<Type>>();
 
-	private boolean addRaw(Type obj, double chance)
-	{
-	    return obj != null && chance > 0 && list.add(new TypeItem(obj, chance));
-	}
+    public RandomContainer() {}
 
-	private void normalize()
-	{
-		double sum = 0;
-		for (TypeItem<Type> it : list) {
-			sum += it.chanceRaw;
-		}
-		for (TypeItem<Type> it : list) {
-		    it.chance = it.chanceRaw / sum;
-		}
-	}
+    public RandomContainer(Type[] objs, double[] chances) {
+        add(objs, chances);
+    }
 
-	public void add(Type[] objs, double[] chances)
-	{
-		if (objs != null && chances != null && objs.length == chances.length) {
-			for (int i = 0; i < objs.length; ++i) {
-				addRaw(objs[i], chances[i]);
-			}
-			normalize();
-		}
-	}
+    private boolean addRaw(Type obj, double chance) {
+        return obj != null && chance > 0 && list.add(new TypeItem(obj, chance));
+    }
 
-	public void add(Type obj, double chance)
-	{
-		addRaw(obj, chance);
-		normalize();
-	}
+    private void normalize() {
+        double sum = 0;
+        for (TypeItem<Type> it : list) {
+            sum += it.chanceRaw;
+        }
+        for (TypeItem<Type> it : list) {
+            it.chance = it.chanceRaw / sum;
+        }
+    }
 
-	public Type get(Random rand)
-	{
-		return get(rand.nextDouble());
-	}
+    public void add(Type[] objs, double[] chances) {
+        if (objs != null && chances != null && objs.length == chances.length) {
+            for (int i = 0; i < objs.length; ++i) {
+                addRaw(objs[i], chances[i]);
+            }
+            normalize();
+        }
+    }
 
-	public Type get()
-    {
+    public void add(Type obj, double chance) {
+        addRaw(obj, chance);
+        normalize();
+    }
+
+    public Type get(Random rand) {
+        return get(rand.nextDouble());
+    }
+
+    public Type get() {
         return get(Math.random());
     }
 
-	public Type get(double randomValue)
-	{
-		for (TypeItem<Type> it : list) {
-			if (it.chance >= randomValue) {
-				return it.obj;
-			}
-			else {
-				randomValue -= it.chance;
-			}
-		}
-		return null;
-	}
+    public Type get(double randomValue) {
+        for (TypeItem<Type> it : list) {
+            if (it.chance >= randomValue) {
+                return it.obj;
+            } else {
+                randomValue -= it.chance;
+            }
+        }
+        return null;
+    }
 }

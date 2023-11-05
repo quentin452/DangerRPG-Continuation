@@ -5,16 +5,14 @@ import mixac1.dangerrpg.capability.PlayerAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-public class IAEfficiency extends IADynamic
-{
-    public IAEfficiency(String name)
-    {
+public class IAEfficiency extends IADynamic {
+
+    public IAEfficiency(String name) {
         super(name);
     }
 
     @Override
-    public float get(ItemStack stack, EntityPlayer player)
-    {
+    public float get(ItemStack stack, EntityPlayer player) {
         return getChecked(stack) + PlayerAttributes.EFFICIENCY.getValue(player);
     }
 }

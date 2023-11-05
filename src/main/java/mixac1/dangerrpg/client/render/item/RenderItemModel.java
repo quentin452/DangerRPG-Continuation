@@ -1,7 +1,5 @@
 package mixac1.dangerrpg.client.render.item;
 
-import org.lwjgl.opengl.GL11;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mixac1.dangerrpg.client.RPGRenderHelper;
@@ -12,25 +10,23 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
+import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
-public abstract class RenderItemModel implements IItemRenderer
-{
+public abstract class RenderItemModel implements IItemRenderer {
+
     @Override
-    public boolean handleRenderType(ItemStack item, ItemRenderType type)
-    {
+    public boolean handleRenderType(ItemStack item, ItemRenderType type) {
         return type == ItemRenderType.EQUIPPED || type == ItemRenderType.EQUIPPED_FIRST_PERSON;
     }
 
     @Override
-    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper)
-    {
+    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
         return false;
     }
 
     @Override
-    public void renderItem(ItemRenderType type, ItemStack stack, Object... data)
-    {
+    public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
         GL11.glPushMatrix();
         EntityLivingBase entityliving = (EntityLivingBase) data[1];
         RPGRenderHelper.mc.renderEngine.bindTexture(getTexture(stack));
@@ -39,15 +35,13 @@ public abstract class RenderItemModel implements IItemRenderer
         GL11.glPopMatrix();
     }
 
-    public float specific(ItemRenderType type, ItemStack stack, EntityLivingBase entity)
-    {
+    public float specific(ItemRenderType type, ItemStack stack, EntityLivingBase entity) {
         return 0.0625F;
     }
 
     public abstract ModelBase getModel();
 
-    public ResourceLocation getTexture(ItemStack stack)
-    {
+    public ResourceLocation getTexture(ItemStack stack) {
         return RPGRenderers.modelTextures.get(stack.getItem());
     }
 }

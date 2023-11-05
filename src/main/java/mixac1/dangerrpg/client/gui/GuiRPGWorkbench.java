@@ -12,9 +12,11 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 @SideOnly(Side.CLIENT)
-public class GuiRPGWorkbench extends GuiContainer
-{
-    public static final ResourceLocation TEXTURE = new ResourceLocation(DangerRPG.MODID, "textures/gui/container/gui_rpg_workbench.png");
+public class GuiRPGWorkbench extends GuiContainer {
+
+    public static final ResourceLocation TEXTURE = new ResourceLocation(
+        DangerRPG.MODID,
+        "textures/gui/container/gui_rpg_workbench.png");
 
     public static int textureW = 176;
     public static int textureH = 227;
@@ -24,8 +26,7 @@ public class GuiRPGWorkbench extends GuiContainer
     public static int invStrX = 8;
     public static int invStrY = 133;
 
-    public GuiRPGWorkbench(InventoryPlayer inventory, World world, int x, int y, int z)
-    {
+    public GuiRPGWorkbench(InventoryPlayer inventory, World world, int x, int y, int z) {
         super(new ContainerRPGWorkbench(inventory, world, x, y, z));
 
         xSize = textureW;
@@ -33,15 +34,14 @@ public class GuiRPGWorkbench extends GuiContainer
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
-    {
-        mc.getTextureManager().bindTexture(TEXTURE);
+    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+        mc.getTextureManager()
+            .bindTexture(TEXTURE);
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
-    {
+    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         String s1 = StatCollector.translateToLocal(RPGBlocks.rpgWorkbench.getLocalizedName());
         String s2 = StatCollector.translateToLocal("key.inventory");
         fontRendererObj.drawString(s1, (xSize - fontRendererObj.getStringWidth(s1)) / 2, nameStrY, 0x404040);

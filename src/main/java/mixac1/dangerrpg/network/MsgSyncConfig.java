@@ -7,13 +7,12 @@ import io.netty.buffer.ByteBuf;
 import mixac1.dangerrpg.init.RPGCapability;
 import mixac1.dangerrpg.init.RPGConfig;
 
-public class MsgSyncConfig implements IMessage
-{
+public class MsgSyncConfig implements IMessage {
+
     public MsgSyncConfig() {}
 
     @Override
-    public void fromBytes(ByteBuf buf)
-    {
+    public void fromBytes(ByteBuf buf) {
         byte[] bytes;
 
         bytes = bytesFromBytes(buf);
@@ -58,8 +57,7 @@ public class MsgSyncConfig implements IMessage
     }
 
     @Override
-    public void toBytes(ByteBuf buf)
-    {
+    public void toBytes(ByteBuf buf) {
         bytesToBytes(buf, RPGCapability.rpgItemRegistr.getTransferData());
         bytesToBytes(buf, RPGCapability.rpgEntityRegistr.getTransferData());
 
@@ -68,19 +66,16 @@ public class MsgSyncConfig implements IMessage
         bytesToBytes(buf, RPGConfig.entityConfig.getTransferData());
     }
 
-    public void bytesToBytes(ByteBuf buf, byte[] bytes)
-    {
+    public void bytesToBytes(ByteBuf buf, byte[] bytes) {
         if (bytes != null && bytes.length != 0) {
             buf.writeInt(bytes.length);
             buf.writeBytes(bytes);
-        }
-        else {
+        } else {
             buf.writeInt(0);
         }
     }
 
-    public byte[] bytesFromBytes(ByteBuf buf)
-    {
+    public byte[] bytesFromBytes(ByteBuf buf) {
         byte[] bytes = null;
         int size;
 
@@ -92,11 +87,10 @@ public class MsgSyncConfig implements IMessage
         return bytes;
     }
 
-    public static class Handler implements IMessageHandler<MsgSyncConfig, IMessage>
-    {
+    public static class Handler implements IMessageHandler<MsgSyncConfig, IMessage> {
+
         @Override
-        public IMessage onMessage(MsgSyncConfig msg, MessageContext ctx)
-        {
+        public IMessage onMessage(MsgSyncConfig msg, MessageContext ctx) {
             return null;
         }
     }

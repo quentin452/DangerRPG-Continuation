@@ -5,11 +5,10 @@ import codechicken.nei.api.IConfigureNEI;
 import mixac1.dangerrpg.DangerRPG;
 import mixac1.dangerrpg.client.gui.GuiRPGWorkbench;
 
-public class NEIConfig implements IConfigureNEI
-{
+public class NEIConfig implements IConfigureNEI {
+
     @Override
-    public void loadConfig()
-    {
+    public void loadConfig() {
         API.registerRecipeHandler(new LargeShapedRecipeHandler());
         API.registerUsageHandler(new LargeShapedRecipeHandler());
 
@@ -20,14 +19,12 @@ public class NEIConfig implements IConfigureNEI
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return DangerRPG.MODNAME;
     }
 
     @Override
-    public String getVersion()
-    {
+    public String getVersion() {
         return DangerRPG.VERSION;
     }
 }

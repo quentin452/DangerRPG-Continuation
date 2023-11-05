@@ -1,7 +1,6 @@
 package mixac1.dangerrpg.hook;
 
 import com.google.common.collect.Multimap;
-
 import mixac1.dangerrpg.capability.ItemAttributes;
 import mixac1.dangerrpg.capability.PlayerAttributes;
 import mixac1.dangerrpg.capability.RPGItemHelper;
@@ -21,44 +20,45 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class HookItems
-{
+public class HookItems {
+
     /**
      * Hook to creating {@link ItemStack}
      * Add to stack lvlable and gemable parametres
      */
     @Hook(injectOnExit = true, targetMethod = "<init>")
-    public static void ItemStack(ItemStack stack, Item item, int size, int metadata)
-    {
+    public static void ItemStack(ItemStack stack, Item item, int size, int metadata) {
         if (RPGItemHelper.isRPGable(stack)) {
             RPGItemHelper.initRPGItem(stack);
         }
     }
 
     @Hook(injectOnExit = true, returnCondition = ReturnCondition.ALWAYS)
-    public static void readFromNBT(ItemStack stack, NBTTagCompound nbt)
-    {
+    public static void readFromNBT(ItemStack stack, NBTTagCompound nbt) {
         if (RPGItemHelper.isRPGable(stack)) {
             RPGItemHelper.reinitRPGItem(stack);
         }
     }
 
     @Hook(injectOnExit = true, returnCondition = ReturnCondition.ALWAYS)
-    public static Multimap getAttributeModifiers(Item item, ItemStack stack, @ReturnValue Multimap returnValue)
-    {
+    public static Multimap getAttributeModifiers(Item item, ItemStack stack, @ReturnValue Multimap returnValue) {
         if (RPGItemHelper.isRPGable(stack)) {
             if (ItemAttributes.MELEE_DAMAGE.hasIt(stack)) {
                 returnValue.removeAll(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName());
-                returnValue.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(RPGUUIDs.DEFAULT_DAMAGE, "Weapon modifier",
-                        ItemAttributes.MELEE_DAMAGE.get(stack), 0));
+                returnValue.put(
+                    SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(),
+                    new AttributeModifier(
+                        RPGUUIDs.DEFAULT_DAMAGE,
+                        "Weapon modifier",
+                        ItemAttributes.MELEE_DAMAGE.get(stack),
+                        0));
             }
         }
         return returnValue;
     }
 
     @Hook(injectOnExit = true, returnCondition = ReturnCondition.ALWAYS)
-    public static int getItemEnchantability(Item item, ItemStack stack, @ReturnValue int returnValue)
-    {
+    public static int getItemEnchantability(Item item, ItemStack stack, @ReturnValue int returnValue) {
         if (RPGItemHelper.isRPGable(stack)) {
             if (ItemAttributes.ENCHANTABILITY.hasIt(stack)) {
                 return (int) ItemAttributes.ENCHANTABILITY.get(stack);
@@ -68,8 +68,7 @@ public class HookItems
     }
 
     @Hook(injectOnExit = true, returnCondition = ReturnCondition.ALWAYS)
-    public static int getMaxDamage(ItemStack stack, @ReturnValue int returnValue)
-    {
+    public static int getMaxDamage(ItemStack stack, @ReturnValue int returnValue) {
         if (RPGItemHelper.isRPGable(stack)) {
             if (returnValue > 0 && ItemAttributes.MAX_DURABILITY.hasIt(stack)) {
                 return (int) ItemAttributes.MAX_DURABILITY.get(stack);
@@ -79,8 +78,7 @@ public class HookItems
     }
 
     @Hook(returnCondition = ReturnCondition.ALWAYS)
-    public static boolean onEntitySwing(Item item, EntityLivingBase entity, ItemStack stack)
-    {
+    public static boolean onEntitySwing(Item item, EntityLivingBase entity, ItemStack stack) {
         if (entity instanceof EntityPlayer && RPGItemHelper.isRPGable(stack)) {
             return PlayerAttributes.SPEED_COUNTER.getValue(entity) > 0;
         }
@@ -88,11 +86,9 @@ public class HookItems
     }
 
     @Hook(injectOnExit = true, returnCondition = ReturnCondition.ALWAYS)
-    public static EnumRarity getRarity(Item item, ItemStack stack, @ReturnValue EnumRarity returnValue)
-    {
+    public static EnumRarity getRarity(Item item, ItemStack stack, @ReturnValue EnumRarity returnValue) {
         if (RPGItemHelper.isRPGable(stack)
-                && (returnValue == EnumRarity.common
-                || stack.isItemEnchanted() && returnValue == EnumRarity.rare)) {
+            && (returnValue == EnumRarity.common || stack.isItemEnchanted() && returnValue == EnumRarity.rare)) {
             IMaterialSpecial mat = RPGHelper.getMaterialSpecial(stack);
             if (mat != null) {
                 return mat.getItemRarity();
@@ -101,14 +97,11 @@ public class HookItems
 
         if (returnValue == EnumRarity.uncommon) {
             return RPGItemRarity.uncommon;
-        }
-        else if (returnValue == EnumRarity.rare) {
+        } else if (returnValue == EnumRarity.rare) {
             return RPGItemRarity.rare;
-        }
-        else if (returnValue == EnumRarity.epic) {
+        } else if (returnValue == EnumRarity.epic) {
             return RPGItemRarity.epic;
         }
         return returnValue;
     }
 }
-

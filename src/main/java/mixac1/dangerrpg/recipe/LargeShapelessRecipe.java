@@ -1,9 +1,5 @@
 package mixac1.dangerrpg.recipe;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import mixac1.dangerrpg.inventory.ContainerRPGWorkbench;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
@@ -12,28 +8,29 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 
-public class LargeShapelessRecipe implements IRecipe
-{
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+public class LargeShapelessRecipe implements IRecipe {
+
     public static String NAME = "large_shapeless";
 
     private final ItemStack recipeOutput;
     public final List recipeItems;
 
-    public LargeShapelessRecipe(ItemStack recipeOutput, List recipeItems)
-    {
+    public LargeShapelessRecipe(ItemStack recipeOutput, List recipeItems) {
         this.recipeOutput = recipeOutput;
         this.recipeItems = recipeItems;
     }
 
     @Override
-    public ItemStack getRecipeOutput()
-    {
+    public ItemStack getRecipeOutput() {
         return this.recipeOutput;
     }
 
     @Override
-    public boolean matches(InventoryCrafting inv, World world)
-    {
+    public boolean matches(InventoryCrafting inv, World world) {
         ArrayList list = new ArrayList(this.recipeItems);
 
         for (int i = 0; i < ContainerRPGWorkbench.craftSize; ++i) {
@@ -45,9 +42,10 @@ public class LargeShapelessRecipe implements IRecipe
                     Iterator iterator = list.iterator();
 
                     while (iterator.hasNext()) {
-                        ItemStack iterStack = (ItemStack)iterator.next();
+                        ItemStack iterStack = (ItemStack) iterator.next();
 
-                        if (stack.getItem() == iterStack.getItem() && (iterStack.getItemDamage() == 32767 || stack.getItemDamage() == iterStack.getItemDamage())) {
+                        if (stack.getItem() == iterStack.getItem() && (iterStack.getItemDamage() == 32767
+                            || stack.getItemDamage() == iterStack.getItemDamage())) {
                             flag = true;
                             list.remove(iterStack);
                             break;
@@ -65,19 +63,16 @@ public class LargeShapelessRecipe implements IRecipe
     }
 
     @Override
-    public ItemStack getCraftingResult(InventoryCrafting inv)
-    {
+    public ItemStack getCraftingResult(InventoryCrafting inv) {
         return this.recipeOutput.copy();
     }
 
     @Override
-    public int getRecipeSize()
-    {
+    public int getRecipeSize() {
         return this.recipeItems.size();
     }
 
-    public static LargeShapelessRecipe create(ItemStack stack, Object ... objs)
-    {
+    public static LargeShapelessRecipe create(ItemStack stack, Object... objs) {
         ArrayList arraylist = new ArrayList();
         Object[] aobject = objs;
         int i = objs.length;
@@ -86,17 +81,15 @@ public class LargeShapelessRecipe implements IRecipe
             Object object1 = aobject[j];
 
             if (object1 instanceof ItemStack) {
-                arraylist.add(((ItemStack)object1).copy());
-            }
-            else if (object1 instanceof Item) {
-                arraylist.add(new ItemStack((Item)object1));
-            }
-            else {
+                arraylist.add(((ItemStack) object1).copy());
+            } else if (object1 instanceof Item) {
+                arraylist.add(new ItemStack((Item) object1));
+            } else {
                 if (!(object1 instanceof Block)) {
                     throw new RuntimeException("Invalid shapeless recipy!");
                 }
 
-                arraylist.add(new ItemStack((Block)object1));
+                arraylist.add(new ItemStack((Block) object1));
             }
         }
 

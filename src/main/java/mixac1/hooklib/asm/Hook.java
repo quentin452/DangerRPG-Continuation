@@ -4,8 +4,8 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
-public @interface Hook
-{
+public @interface Hook {
+
     ReturnCondition returnCondition() default ReturnCondition.NEVER;
 
     HookPriority priority() default HookPriority.NORMAL;
@@ -42,13 +42,11 @@ public @interface Hook
     String stringReturnConstant() default "";
 
     @Target(ElementType.PARAMETER)
-    @interface LocalVariable
-    {
+    @interface LocalVariable {
+
         int value();
     }
 
     @Target(ElementType.PARAMETER)
-    @interface ReturnValue
-    {
-    }
+    @interface ReturnValue {}
 }

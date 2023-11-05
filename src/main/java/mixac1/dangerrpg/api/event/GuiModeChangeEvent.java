@@ -6,12 +6,11 @@ import mixac1.dangerrpg.client.gui.GuiMode.GuiModeType;
 /**
  * It is fires whenever changed GuiMode
  */
-public class GuiModeChangeEvent extends Event
-{
+public class GuiModeChangeEvent extends Event {
+
     public GuiModeType type;
 
-    public GuiModeChangeEvent(GuiModeType type)
-    {
+    public GuiModeChangeEvent(GuiModeType type) {
         this.type = type;
     }
 }

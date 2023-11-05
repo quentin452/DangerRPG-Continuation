@@ -13,64 +13,55 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
-public class EntityMaterial extends EntityWithStack
-{
-    public static final int    PICKUP_NO = 0,
-                               PICKUP_ALL = 1,
-                               PICKUP_CREATIVE = 2,
-                               PICKUP_OWNER = 3;
+public class EntityMaterial extends EntityWithStack {
+
+    public static final int PICKUP_NO = 0, PICKUP_ALL = 1, PICKUP_CREATIVE = 2, PICKUP_OWNER = 3;
 
     public int pickupMode;
     public float phisicDamage;
 
-    public EntityMaterial(World world)
-    {
+    public EntityMaterial(World world) {
         super(world);
     }
 
-    public EntityMaterial(World world, ItemStack stack)
-    {
+    public EntityMaterial(World world, ItemStack stack) {
         super(world, stack);
     }
 
-    public EntityMaterial(World world, ItemStack stack, double x, double y, double z)
-    {
+    public EntityMaterial(World world, ItemStack stack, double x, double y, double z) {
         super(world, stack, x, y, z);
     }
 
-    public EntityMaterial(World world, EntityLivingBase thrower, ItemStack stack, float speed, float deviation)
-    {
+    public EntityMaterial(World world, EntityLivingBase thrower, ItemStack stack, float speed, float deviation) {
         super(world, thrower, stack, speed, deviation);
     }
 
-    public EntityMaterial(World world, EntityLivingBase thrower, EntityLivingBase target, ItemStack stack, float speed, float deviation)
-    {
+    public EntityMaterial(World world, EntityLivingBase thrower, EntityLivingBase target, ItemStack stack, float speed,
+        float deviation) {
         super(world, thrower, target, stack, speed, deviation);
     }
 
     @Override
-    public void entityInit()
-    {
+    public void entityInit() {
         super.entityInit();
         pickupMode = PICKUP_ALL;
     }
 
     @Override
-    public void applyEntityHitEffects(EntityLivingBase entity, float dmgMul)
-    {
+    public void applyEntityHitEffects(EntityLivingBase entity, float dmgMul) {
         DangerRPG.log(thrower, '\n', shootingEntity);
-        DamageSource dmgSource =
-            (thrower == null) ?
-                DamageSource.causeThrownDamage(this, this) :
-                (thrower instanceof EntityPlayer) ?
-                    DamageSource.causePlayerDamage((EntityPlayer) thrower) :
-                    DamageSource.causeMobDamage(thrower);
+        DamageSource dmgSource = (thrower == null) ? DamageSource.causeThrownDamage(this, this)
+            : (thrower instanceof EntityPlayer) ? DamageSource.causePlayerDamage((EntityPlayer) thrower)
+                : DamageSource.causeMobDamage(thrower);
         entity.attackEntityFrom(dmgSource, (phisicDamage + getMeleeHitDamage(entity)) * dmgMul);
 
         if (thrower != null) {
             int knockback = EnchantmentHelper.getKnockbackModifier(thrower, entity);
             if (knockback != 0) {
-                entity.addVelocity(-MathHelper.sin(rotationYaw * (float) Math.PI / 180.0F) * knockback * 0.5F, 0.1D, MathHelper.cos(rotationYaw * (float) Math.PI / 180.0F) * knockback * 0.5F);
+                entity.addVelocity(
+                    -MathHelper.sin(rotationYaw * (float) Math.PI / 180.0F) * knockback * 0.5F,
+                    0.1D,
+                    MathHelper.cos(rotationYaw * (float) Math.PI / 180.0F) * knockback * 0.5F);
                 motionX *= 0.6D;
                 motionZ *= 0.6D;
                 setSprinting(false);
@@ -81,8 +72,7 @@ public class EntityMaterial extends EntityWithStack
     }
 
     @Override
-    public void onCollideWithPlayer(EntityPlayer player)
-    {
+    public void onCollideWithPlayer(EntityPlayer player) {
         super.onCollideWithPlayer(player);
         if (inGround && arrowShake <= 0) {
             if (!worldObj.isRemote) {
@@ -90,7 +80,11 @@ public class EntityMaterial extends EntityWithStack
                     if (!player.capabilities.isCreativeMode) {
                         player.inventory.addItemStackToInventory(getStack());
                     }
-                    worldObj.playSoundAtEntity(this, "random.pop", 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+                    worldObj.playSoundAtEntity(
+                        this,
+                        "random.pop",
+                        0.2F,
+                        ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
                     onItemPickup(player);
                     setDead();
                 }
@@ -98,29 +92,24 @@ public class EntityMaterial extends EntityWithStack
         }
     }
 
-    protected boolean canPickup(EntityPlayer entityplayer)
-    {
+    protected boolean canPickup(EntityPlayer entityplayer) {
         if (pickupMode == PICKUP_ALL) {
             return true;
-        }
-        else if (pickupMode == PICKUP_CREATIVE) {
+        } else if (pickupMode == PICKUP_CREATIVE) {
             return entityplayer.capabilities.isCreativeMode;
-        }
-        else if (pickupMode == PICKUP_OWNER) {
+        } else if (pickupMode == PICKUP_OWNER) {
             return entityplayer == thrower;
-        }
-        else {
+        } else {
             return false;
         }
     }
 
-    protected void onItemPickup(EntityPlayer player)
-    {
-        ((WorldServer)this.worldObj).getEntityTracker().func_151247_a(this, new S0DPacketCollectItem(this.getEntityId(), player.getEntityId()));
+    protected void onItemPickup(EntityPlayer player) {
+        ((WorldServer) this.worldObj).getEntityTracker()
+            .func_151247_a(this, new S0DPacketCollectItem(this.getEntityId(), player.getEntityId()));
     }
 
-    public float getMeleeHitDamage(Entity entity)
-    {
+    public float getMeleeHitDamage(Entity entity) {
         if (entity instanceof EntityLivingBase && thrower != null) {
             return EnchantmentHelper.getEnchantmentModifierLiving(thrower, (EntityLivingBase) entity);
         }
@@ -128,52 +117,44 @@ public class EntityMaterial extends EntityWithStack
     }
 
     @Override
-    public float getAirResistance()
-    {
+    public float getAirResistance() {
         return 0.95F;
     }
 
     @Override
-    public float getWaterResistance()
-    {
+    public float getWaterResistance() {
         return 0.8F;
     }
 
     @Override
-    public float getGravity()
-    {
+    public float getGravity() {
         return 0.05F;
     }
 
     @Override
-    public boolean dieAfterEntityHit()
-    {
+    public boolean dieAfterEntityHit() {
         return false;
     }
 
     @Override
-    public boolean dieAfterGroundHit()
-    {
+    public boolean dieAfterGroundHit() {
         return false;
     }
 
     @Override
-    public void playHitSound()
-    {
+    public void playHitSound() {
         this.playSound("random.bowhit", 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound nbt)
-    {
+    public void writeEntityToNBT(NBTTagCompound nbt) {
         super.writeEntityToNBT(nbt);
         nbt.setByte("pickupMode", (byte) pickupMode);
         nbt.setFloat("phisicDamage", phisicDamage);
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound nbt)
-    {
+    public void readEntityFromNBT(NBTTagCompound nbt) {
         super.readEntityFromNBT(nbt);
         pickupMode = nbt.getByte("pickupMode") & 0xFF;
         phisicDamage = nbt.getFloat("phisicDamage");

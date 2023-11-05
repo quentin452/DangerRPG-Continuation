@@ -1,10 +1,5 @@
 package mixac1.dangerrpg.client.gui;
 
-import java.util.List;
-
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mixac1.dangerrpg.DangerRPG;
@@ -24,9 +19,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
+
+import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class GuiInfoBook extends GuiScreen {
+
     public static final ResourceLocation TEXTURE = new ResourceLocation(DangerRPG.MODID, "textures/gui/info_book.png");
 
     public EntityPlayer player;
@@ -67,7 +67,9 @@ public class GuiInfoBook extends GuiScreen {
         this.player = player;
 
         MovingObjectPosition mop = RPGHelper.getMouseOver(0, 10);
-        if (mop != null && mop.entityHit != null && mop.entityHit instanceof EntityPlayer && RPGEntityHelper.isRPGable((EntityLivingBase) mop.entityHit)) {
+        if (mop != null && mop.entityHit != null
+            && mop.entityHit instanceof EntityPlayer
+            && RPGEntityHelper.isRPGable((EntityLivingBase) mop.entityHit)) {
             target = (EntityLivingBase) mop.entityHit;
             isTargetPlayer = true;
         } else {
@@ -75,7 +77,8 @@ public class GuiInfoBook extends GuiScreen {
             isTargetPlayer = true;
         }
 
-        attributes = RPGEntityProperties.get(target).getLvlProviders();
+        attributes = RPGEntityProperties.get(target)
+            .getLvlProviders();
     }
 
     @Override
@@ -88,13 +91,8 @@ public class GuiInfoBook extends GuiScreen {
 
         if (isTargetPlayer) {
             EntityPlayer tmp = (EntityPlayer) target;
-            stacks = new ItemStack[] {
-                tmp.getCurrentEquippedItem(),
-                tmp.getCurrentArmor(3),
-                tmp.getCurrentArmor(2),
-                tmp.getCurrentArmor(1),
-                tmp.getCurrentArmor(0)
-            };
+            stacks = new ItemStack[] { tmp.getCurrentEquippedItem(), tmp.getCurrentArmor(3), tmp.getCurrentArmor(2),
+                tmp.getCurrentArmor(1), tmp.getCurrentArmor(0) };
         } else {
             stacks = new ItemStack[5];
         }
@@ -102,12 +100,39 @@ public class GuiInfoBook extends GuiScreen {
         offsetX = (width - bookImageW) / 2;
         offsetY = (height - bookImageH) / 2;
 
-        content[0] = new GuiInfoBookContentEntity(mc, bookImageW - contentX * 2, 0, offsetY + contentY, contentS, offsetX + contentX, this);
+        content[0] = new GuiInfoBookContentEntity(
+            mc,
+            bookImageW - contentX * 2,
+            0,
+            offsetY + contentY,
+            contentS,
+            offsetX + contentX,
+            this);
         for (int i = 1; i < content.length; ++i) {
-            content[i] = new GuiInfoBookContentStack(mc, bookImageW - contentX * 2, 0, offsetY + contentY, contentS, offsetX + contentX, this, stacks[i - 1]);
+            content[i] = new GuiInfoBookContentStack(
+                mc,
+                bookImageW - contentX * 2,
+                0,
+                offsetY + contentY,
+                contentS,
+                offsetX + contentX,
+                this,
+                stacks[i - 1]);
         }
-        buttonList.add(buttonDown = new LevelUpButton(100, false, offsetX + contentX + GuiInfoBookContentEntity.butX, offsetY + contentY + contentS + GuiInfoBookContentEntity.butY - GuiInfoBookContentEntity.imageH, (GuiInfoBookContentEntity) content[0]));
-        buttonList.add(buttonUp = new LevelUpButton(101, true, offsetX + contentX + GuiInfoBookContentEntity.butX + GuiInfoBookContentEntity.butW, offsetY + contentY + contentS + GuiInfoBookContentEntity.butY - GuiInfoBookContentEntity.imageH, (GuiInfoBookContentEntity) content[0]));
+        buttonList.add(
+            buttonDown = new LevelUpButton(
+                100,
+                false,
+                offsetX + contentX + GuiInfoBookContentEntity.butX,
+                offsetY + contentY + contentS + GuiInfoBookContentEntity.butY - GuiInfoBookContentEntity.imageH,
+                (GuiInfoBookContentEntity) content[0]));
+        buttonList.add(
+            buttonUp = new LevelUpButton(
+                101,
+                true,
+                offsetX + contentX + GuiInfoBookContentEntity.butX + GuiInfoBookContentEntity.butW,
+                offsetY + contentY + contentS + GuiInfoBookContentEntity.butY - GuiInfoBookContentEntity.imageH,
+                (GuiInfoBookContentEntity) content[0]));
 
         content[currContent].init();
     }
@@ -122,14 +147,19 @@ public class GuiInfoBook extends GuiScreen {
         int i = 0;
         butContent = new GuiInfoBook.SelectContentButton[6];
         for (int k = 0; k < 6; ++k) {
-            buttonList.add(butContent[k] = new GuiInfoBook.SelectContentButton(i++, offsetX + butContentX + (butContentS + butContentI) * k, offsetY + butContentY));
+            buttonList.add(
+                butContent[k] = new GuiInfoBook.SelectContentButton(
+                    i++,
+                    offsetX + butContentX + (butContentS + butContentI) * k,
+                    offsetY + butContentY));
         }
     }
 
     @Override
     protected void keyTyped(char c, int keyCode) {
         super.keyTyped(c, keyCode);
-        if (keyCode == Keyboard.KEY_ESCAPE || keyCode == Keyboard.KEY_E || keyCode == RPGKeyBinds.infoBookKey.getKeyCode()) {
+        if (keyCode == Keyboard.KEY_ESCAPE || keyCode == Keyboard.KEY_E
+            || keyCode == RPGKeyBinds.infoBookKey.getKeyCode()) {
             mc.thePlayer.closeScreen();
         }
     }
@@ -149,18 +179,29 @@ public class GuiInfoBook extends GuiScreen {
         for (int k = 0; k < stacks.length; ++k) {
             if (stacks[k] != null) {
                 RenderHelper.enableGUIStandardItemLighting();
-                GuiScreen.itemRender.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.getTextureManager(), stacks[k], butContent[k + 1].xPosition + 2, butContent[k + 1].yPosition + 2);
+                GuiScreen.itemRender.renderItemAndEffectIntoGUI(
+                    mc.fontRenderer,
+                    mc.getTextureManager(),
+                    stacks[k],
+                    butContent[k + 1].xPosition + 2,
+                    butContent[k + 1].yPosition + 2);
                 // Disabling this line fix https://github.com/quentin452/DangerRPG-Continuation/issues/34
-                // GuiScreen.itemRender.renderItemOverlayIntoGUI(mc.fontRenderer, mc.getTextureManager(), stacks[k], butContent[k + 1].xPosition + 2, butContent[k + 1].yPosition + 2);
+                // GuiScreen.itemRender.renderItemOverlayIntoGUI(mc.fontRenderer, mc.getTextureManager(), stacks[k],
+                // butContent[k + 1].xPosition + 2, butContent[k + 1].yPosition + 2);
             }
         }
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        mc.getTextureManager().bindTexture(TEXTURE);
+        mc.getTextureManager()
+            .bindTexture(TEXTURE);
         drawTexturedModalRect(offsetX, offsetY, 0, 0, bookImageW, bookImageH);
 
         String title = Utils.toString(DangerRPG.trans("rpgstr.info_about"), " ", target.getCommandSenderName());
-        fontRendererObj.drawStringWithShadow(title, offsetX + (bookImageW - fontRendererObj.getStringWidth(title)) / 2, offsetY + (titleHeight - fontRendererObj.FONT_HEIGHT) / 2 + 2, 0xffffff);
+        fontRendererObj.drawStringWithShadow(
+            title,
+            offsetX + (bookImageW - fontRendererObj.getStringWidth(title)) / 2,
+            offsetY + (titleHeight - fontRendererObj.FONT_HEIGHT) / 2 + 2,
+            0xffffff);
 
         content[currContent].drawScreen(mouseX, mouseY, par3);
 
@@ -170,6 +211,7 @@ public class GuiInfoBook extends GuiScreen {
     }
 
     class SelectContentButton extends GuiButton {
+
         public SelectContentButton(int id, int x, int y) {
             super(id, x, y, butContentS, butContentS, "");
         }
@@ -177,19 +219,40 @@ public class GuiInfoBook extends GuiScreen {
         @Override
         public void drawButton(Minecraft mc, int par1, int par2) {
             if (this.visible) {
-                boolean flag = par1 >= xPosition && par2 >= yPosition && par1 < xPosition + width && par2 < yPosition + height;
+                boolean flag = par1 >= xPosition && par2 >= yPosition
+                    && par1 < xPosition + width
+                    && par2 < yPosition + height;
 
                 GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-                mc.getTextureManager().bindTexture(TEXTURE);
+                mc.getTextureManager()
+                    .bindTexture(TEXTURE);
 
                 if (id == currContent) {
-                    this.drawTexturedModalRect(xPosition, yPosition, butContentU, butContentV + butContentS, butContentS, butContentS);
+                    this.drawTexturedModalRect(
+                        xPosition,
+                        yPosition,
+                        butContentU,
+                        butContentV + butContentS,
+                        butContentS,
+                        butContentS);
                 } else if (flag && this.enabled) {
-                    this.drawTexturedModalRect(xPosition, yPosition, butContentU, butContentV, butContentS, butContentS);
+                    this.drawTexturedModalRect(
+                        xPosition,
+                        yPosition,
+                        butContentU,
+                        butContentV,
+                        butContentS,
+                        butContentS);
                 }
 
                 if (!(id != 0 && stacks[id - 1] != null)) {
-                    drawTexturedModalRect(xPosition + 2, yPosition + 2, emptyIconU + (isTargetPlayer ? 0 : 16), emptyIconV + id * 16, 16, 16);
+                    drawTexturedModalRect(
+                        xPosition + 2,
+                        yPosition + 2,
+                        emptyIconU + (isTargetPlayer ? 0 : 16),
+                        emptyIconV + id * 16,
+                        16,
+                        16);
                 }
             }
         }

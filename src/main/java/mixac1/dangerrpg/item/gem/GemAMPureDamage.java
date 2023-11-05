@@ -1,7 +1,5 @@
 package mixac1.dangerrpg.item.gem;
 
-import java.util.HashSet;
-
 import mixac1.dangerrpg.capability.GemAttributes;
 import mixac1.dangerrpg.capability.data.RPGItemRegister.RPGItemData;
 import mixac1.dangerrpg.init.RPGConfig.MainConfig;
@@ -14,26 +12,27 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class GemAMPureDamage extends GemAttackModifier
-{
-    public GemAMPureDamage(String name)
-    {
+import java.util.HashSet;
+
+public class GemAMPureDamage extends GemAttackModifier {
+
+    public GemAMPureDamage(String name) {
         super(name);
     }
 
     @Override
-    public void registerAttributes(Item item, RPGItemData map)
-    {
+    public void registerAttributes(Item item, RPGItemData map) {
         super.registerAttributes(item, map);
         map.registerIADynamic(GemAttributes.PERCENT, 0.10f, new MultiplierAdd(0.05f));
     }
 
     @Override
-    public void onEntityHit(ItemStack gem, EntityPlayer player, EntityLivingBase target, Stub<Float> damage, HashSet<Class<? extends GemAttackModifier>> disableSet) {}
+    public void onEntityHit(ItemStack gem, EntityPlayer player, EntityLivingBase target, Stub<Float> damage,
+        HashSet<Class<? extends GemAttackModifier>> disableSet) {}
 
     @Override
-    public void onDealtDamage(ItemStack gem, EntityPlayer player, EntityLivingBase target, Stub<Float> damage, HashSet<Class<? extends GemAttackModifier>> disableSet)
-    {
+    public void onDealtDamage(ItemStack gem, EntityPlayer player, EntityLivingBase target, Stub<Float> damage,
+        HashSet<Class<? extends GemAttackModifier>> disableSet) {
         if (GemAttributes.PERCENT.hasIt(gem)) {
             float tmp = target.getHealth();
             if (tmp > 0) {
@@ -41,7 +40,8 @@ public class GemAMPureDamage extends GemAttackModifier
                 target.setHealth(tmp - value);
 
                 if (MainConfig.d.mainEnableGemEventsToChat) {
-                    RPGHelper.msgToChat(player, String.format("%s: additional damage %.2f", gem.getDisplayName(), value));
+                    RPGHelper
+                        .msgToChat(player, String.format("%s: additional damage %.2f", gem.getDisplayName(), value));
                 }
             }
         }

@@ -1,9 +1,5 @@
 package mixac1.dangerrpg.item.gem;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import mixac1.dangerrpg.DangerRPG;
 import mixac1.dangerrpg.api.item.GemType;
 import mixac1.dangerrpg.api.item.IRPGItem;
@@ -21,8 +17,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public abstract class Gem extends Item implements IRPGItem, IHasBooksInfo
-{
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public abstract class Gem extends Item implements IRPGItem, IHasBooksInfo {
+
     protected static final MultiplierAdd LVL_STEP = new MultiplierAdd((float) ItemConfig.d.gemLvlUpStep);
 
     /**
@@ -30,8 +30,7 @@ public abstract class Gem extends Item implements IRPGItem, IHasBooksInfo
      */
     public List<ItemType> itemTypes = new ArrayList<ItemType>();
 
-    public Gem(String name)
-    {
+    public Gem(String name) {
         super();
         this.setTextureName(Utils.toString(DangerRPG.MODID, ":gems/", name));
         this.setUnlocalizedName(name);
@@ -43,27 +42,25 @@ public abstract class Gem extends Item implements IRPGItem, IHasBooksInfo
 
     public abstract GemType getGemType();
 
-    public Gem addItemTypes(ItemType... types)
-    {
+    public Gem addItemTypes(ItemType... types) {
         itemTypes.addAll(Arrays.asList(types));
         return this;
     }
 
     @Override
-    public void registerAttributes(Item item, RPGItemData map)
-    {
+    public void registerAttributes(Item item, RPGItemData map) {
         map.registerIADynamic(ItemAttributes.LEVEL, ItemConfig.d.gemStartLvl, LVL_STEP);
     }
 
     @Override
-    public String getInformationToInfoBook(ItemStack item, EntityPlayer player)
-    {
+    public String getInformationToInfoBook(ItemStack item, EntityPlayer player) {
         return null;
     }
 
-    public static boolean areGemsEqual(ItemStack stack1, ItemStack stack2)
-    {
-        if (stack1 == null || stack2 == null || !(stack1.getItem() instanceof Gem) || !(stack2.getItem() instanceof Gem)) {
+    public static boolean areGemsEqual(ItemStack stack1, ItemStack stack2) {
+        if (stack1 == null || stack2 == null
+            || !(stack1.getItem() instanceof Gem)
+            || !(stack2.getItem() instanceof Gem)) {
             return false;
         }
 

@@ -1,19 +1,17 @@
 package mixac1.hooklib.disk;
 
+import mixac1.hooklib.asm.HookClassTransformer;
+import org.apache.commons.io.IOUtils;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.IOUtils;
+public class DiskHookLib {
 
-import mixac1.hooklib.asm.HookClassTransformer;
-
-public class DiskHookLib
-{
-    public static void main(String[] args) throws IOException
-    {
+    public static void main(String[] args) throws IOException {
         new DiskHookLib().process();
     }
 
@@ -21,8 +19,7 @@ public class DiskHookLib
     File transformedDir = new File("transformed");
     File hooksDir = new File("hooks");
 
-    void process() throws IOException
-    {
+    void process() throws IOException {
         HookClassTransformer transformer = new HookClassTransformer();
         for (File file : getFiles(".class", hooksDir)) {
             transformer.registerHookContainer(new FileInputStream(file));
@@ -35,18 +32,18 @@ public class DiskHookLib
         }
     }
 
-    private static List<File> getFiles(String postfix, File dir) throws IOException
-    {
+    private static List<File> getFiles(String postfix, File dir) throws IOException {
         ArrayList<File> files = new ArrayList<File>();
         File[] filesArray = dir.listFiles();
         if (filesArray != null) {
             for (File file : dir.listFiles()) {
                 if (file.isDirectory()) {
                     files.addAll(getFiles(postfix, file));
-                }
-                else if (file.getName().toLowerCase().endsWith(postfix)) {
-                    files.add(file);
-                }
+                } else if (file.getName()
+                    .toLowerCase()
+                    .endsWith(postfix)) {
+                        files.add(file);
+                    }
             }
         }
         return files;

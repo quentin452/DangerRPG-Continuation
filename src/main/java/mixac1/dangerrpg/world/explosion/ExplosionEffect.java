@@ -1,45 +1,42 @@
 package mixac1.dangerrpg.world.explosion;
 
-import java.util.ArrayList;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mixac1.dangerrpg.DangerRPG;
 import mixac1.dangerrpg.entity.projectile.EntityMagicOrb;
 import mixac1.dangerrpg.world.RPGEntityFXManager;
 
-public abstract class ExplosionEffect
-{
+import java.util.ArrayList;
+
+public abstract class ExplosionEffect {
+
     static int counter = 0;
     static public ArrayList<ExplosionEffect> list = new ArrayList<ExplosionEffect>();
 
     private int id;
 
-    protected ExplosionEffect()
-    {
+    protected ExplosionEffect() {
         this.id = counter++;
         list.add(this);
     }
 
-    public int getId()
-    {
+    public int getId() {
         return id;
     }
 
     @SideOnly(Side.CLIENT)
     public abstract void doEffect(double x, double y, double z, double size, Object[] meta);
 
-    public static final ExplosionEffect EMPTY = new ExplosionEffect()
-    {
+    public static final ExplosionEffect EMPTY = new ExplosionEffect() {
+
         @Override
         public void doEffect(double x, double y, double z, double size, Object[] meta) {}
     };
 
-    public static final ExplosionEffect MAGIC_POWER_ORB = new ExplosionEffect()
-    {
+    public static final ExplosionEffect MAGIC_POWER_ORB = new ExplosionEffect() {
+
         @Override
-        public void doEffect(double x, double y, double z, double size, Object[] meta)
-        {
+        public void doEffect(double x, double y, double z, double size, Object[] meta) {
             int color = (meta == null ? EntityMagicOrb.DEFAULT_COLOR : (Integer) meta[0]);
             double frec = Math.PI / (6 * size);
             double x1, y1, z1, tmp;

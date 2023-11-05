@@ -10,24 +10,23 @@ import mixac1.dangerrpg.event.EventHandlerEntity;
 import mixac1.dangerrpg.event.EventHandlerItem;
 import net.minecraftforge.common.MinecraftForge;
 
-public abstract class RPGEvents
-{
-    public static void load(FMLInitializationEvent e)
-    {
+public abstract class RPGEvents {
+
+    public static void load(FMLInitializationEvent e) {
         registerEvent(new EventHandlerCommon());
         registerEvent(new EventHandlerEntity());
         registerEvent(new EventHandlerItem());
     }
 
     @SideOnly(Side.CLIENT)
-    public static void loadClient(FMLInitializationEvent e)
-    {
+    public static void loadClient(FMLInitializationEvent e) {
         registerEvent(new EventHandlerClient());
     }
 
-    public static void registerEvent(Object obj)
-    {
-        FMLCommonHandler.instance().bus().register(obj);
+    public static void registerEvent(Object obj) {
+        FMLCommonHandler.instance()
+            .bus()
+            .register(obj);
         MinecraftForge.EVENT_BUS.register(obj);
     }
 }

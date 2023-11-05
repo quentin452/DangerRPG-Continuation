@@ -15,8 +15,8 @@ import net.minecraft.entity.player.EntityPlayer;
 /**
  * Class provides lvl for {@link EntityAttribute}
  */
-public class LvlEAProvider<Type>
-{
+public class LvlEAProvider<Type> {
+
     public EntityAttribute<Type> attr;
 
     public IMultiplierE<Type> mulValue;
@@ -24,55 +24,46 @@ public class LvlEAProvider<Type>
     public int startExpCost;
     public Multiplier mulExpCost;
 
-    public LvlEAProvider(int startExpCost, int maxLvl, IMultiplierE<Type> mulValue, Multiplier mulExpCost)
-    {
+    public LvlEAProvider(int startExpCost, int maxLvl, IMultiplierE<Type> mulValue, Multiplier mulExpCost) {
         this.mulValue = mulValue;
         this.maxLvl = maxLvl;
         this.startExpCost = startExpCost;
         this.mulExpCost = mulExpCost;
     }
 
-    public void init(EntityLivingBase entity)
-    {
+    public void init(EntityLivingBase entity) {
         attr.getEntityData(entity).lvlMap.put(attr.hash, 0);
     }
 
-    public int getLvl(EntityLivingBase entity)
-    {
+    public int getLvl(EntityLivingBase entity) {
         int t = attr.getEntityData(entity).lvlMap.get(attr.hash);
         return attr.getEntityData(entity).lvlMap.get(attr.hash);
     }
 
     @Deprecated
-    public int setLvl(int lvl, EntityLivingBase entity)
-    {
+    public int setLvl(int lvl, EntityLivingBase entity) {
         return attr.getEntityData(entity).lvlMap.put(attr.hash, lvl);
     }
 
-    public int getExpUp(EntityLivingBase entity)
-    {
+    public int getExpUp(EntityLivingBase entity) {
         return (int) RPGHelper.multyMul(startExpCost, getLvl(entity), mulExpCost);
     }
 
-    public boolean isMaxLvl(EntityLivingBase entity)
-    {
+    public boolean isMaxLvl(EntityLivingBase entity) {
         return getLvl(entity) >= maxLvl;
     }
 
-    public boolean canUp(EntityLivingBase target, EntityPlayer upper)
-    {
-        return (upper.capabilities.isCreativeMode || upper.experienceLevel >= getExpUp(target))
-               && !isMaxLvl(target) && target == upper;
+    public boolean canUp(EntityLivingBase target, EntityPlayer upper) {
+        return (upper.capabilities.isCreativeMode || upper.experienceLevel >= getExpUp(target)) && !isMaxLvl(target)
+            && target == upper;
     }
 
-    public boolean canDown(EntityLivingBase target, EntityPlayer upper)
-    {
-        return (upper.capabilities.isCreativeMode || EntityConfig.d.playerCanLvlDownAttr)
-               && getLvl(target) > 0 && target == upper;
+    public boolean canDown(EntityLivingBase target, EntityPlayer upper) {
+        return (upper.capabilities.isCreativeMode || EntityConfig.d.playerCanLvlDownAttr) && getLvl(target) > 0
+            && target == upper;
     }
 
-    public boolean tryUp(EntityLivingBase target, EntityPlayer upper, boolean isUp)
-    {
+    public boolean tryUp(EntityLivingBase target, EntityPlayer upper, boolean isUp) {
         if (upper.capabilities.isCreativeMode) {
             return up(target, upper, isUp);
         }
@@ -85,8 +76,7 @@ public class LvlEAProvider<Type>
                 }
                 return up(target, upper, isUp);
             }
-        }
-        else {
+        } else {
             if (EntityConfig.d.playerCanLvlDownAttr && up(target, upper, isUp)) {
                 if (RPGEntityProperties.isServerSide(target)) {
                     upper.addExperienceLevel((int) (getExpUp(target) * EntityConfig.d.playerPercentLoseExpPoints));
@@ -98,8 +88,7 @@ public class LvlEAProvider<Type>
     }
 
     @Deprecated
-    public boolean up(EntityLivingBase target, EntityPlayer upper, boolean isUp)
-    {
+    public boolean up(EntityLivingBase target, EntityPlayer upper, boolean isUp) {
         if (RPGEntityProperties.isServerSide(target)) {
             int lvl = getLvl(target);
             if (isUp) {
@@ -109,8 +98,7 @@ public class LvlEAProvider<Type>
                     attr.setValue(mulValue.up(attr.getBaseValue(target), target), target);
                     return true;
                 }
-            }
-            else {
+            } else {
                 if (lvl > 0) {
                     setLvl(lvl - 1, target);
                     EntityAttributes.LVL.addValue(-1, target);
@@ -118,8 +106,7 @@ public class LvlEAProvider<Type>
                     return true;
                 }
             }
-        }
-        else {
+        } else {
             RPGNetwork.net.sendToServer(new MsgReqUpEA(attr.hash, target.getEntityId(), upper.getEntityId(), isUp));
             return true;
         }
@@ -127,15 +114,13 @@ public class LvlEAProvider<Type>
     }
 
     @Override
-    public final int hashCode()
-    {
+    public final int hashCode() {
         return attr.hash;
     }
 
-    public static class DafailtLvlEAProvider extends LvlEAProvider<Float>
-    {
-        public DafailtLvlEAProvider(int startExpCost, int maxLvl, Multiplier mulValue)
-        {
+    public static class DafailtLvlEAProvider extends LvlEAProvider<Float> {
+
+        public DafailtLvlEAProvider(int startExpCost, int maxLvl, Multiplier mulValue) {
             super(startExpCost, maxLvl, mulValue, IMultiplier.ADD_1);
         }
     }

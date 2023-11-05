@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
  * It is fires whenever needs up equipment {@link ItemStack} stack by the points.<br>
  * You can spend this points for your own needs,
  * remainder will be shared equally on all equipment stacks that need it.<br>
- *<br>
+ * <br>
  * boolean needUp[5]<br>
  * 0 - equipment itemstack<br>
  * 1 - equipment boots<br>
@@ -17,17 +17,16 @@ import net.minecraft.item.ItemStack;
  * 3 - equipment chestplate<br>
  * 4 - equipment helmet<br>
  */
-public class UpEquipmentEvent extends Event
-{
+public class UpEquipmentEvent extends Event {
+
     public EntityPlayer player;
     public EntityLivingBase target;
     public ItemStack stack;
     public float points;
 
-    public boolean[] needUp = new boolean[] {true, true, true, true, true};
+    public boolean[] needUp = new boolean[] { true, true, true, true, true };
 
-    public UpEquipmentEvent(EntityPlayer player, ItemStack stack, float points)
-    {
+    public UpEquipmentEvent(EntityPlayer player, ItemStack stack, float points) {
         this.player = player;
         this.stack = stack;
         this.points = points;

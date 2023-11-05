@@ -21,36 +21,30 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 
 @SideOnly(Side.CLIENT)
-public class EventHandlerClient
-{
+public class EventHandlerClient {
+
     public static Minecraft mc = Minecraft.getMinecraft();
 
     @SubscribeEvent
-    public void renderRPGGuiIngame(RenderGameOverlayEvent.Post event)
-    {
-        if (!event.isCancelable() &&
-             event.type == ElementType.ALL &&
-             ClientConfig.d.guiEnableHUD) {
-             RPGGuiIngame.INSTANCE.renderGameOverlay(event.resolution);
+    public void renderRPGGuiIngame(RenderGameOverlayEvent.Post event) {
+        if (!event.isCancelable() && event.type == ElementType.ALL && ClientConfig.d.guiEnableHUD) {
+            RPGGuiIngame.INSTANCE.renderGameOverlay(event.resolution);
         }
     }
 
     @SubscribeEvent
-    public void renderDisableOldBars(RenderGameOverlayEvent.Pre event)
-    {
+    public void renderDisableOldBars(RenderGameOverlayEvent.Pre event) {
         if (ClientConfig.d.guiEnableHUD) {
-            if (event.type == ElementType.HEALTH ||
-                event.type == ElementType.ARMOR ||
-                (!ClientConfig.d.guiEnableDefaultFoodBar && event.type == ElementType.FOOD) ||
-                event.type == ElementType.AIR) {
+            if (event.type == ElementType.HEALTH || event.type == ElementType.ARMOR
+                || (!ClientConfig.d.guiEnableDefaultFoodBar && event.type == ElementType.FOOD)
+                || event.type == ElementType.AIR) {
                 event.setCanceled(true);
             }
         }
     }
 
     @SubscribeEvent
-    public void onKeyInput(KeyInputEvent event)
-    {
+    public void onKeyInput(KeyInputEvent event) {
         if (Minecraft.getMinecraft().inGameHasFocus) {
             EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
 
@@ -59,24 +53,25 @@ public class EventHandlerClient
             }
 
             ItemStack stack = player.getCurrentEquippedItem();
-            if (RPGKeyBinds.extraItemKey.getIsKeyPressed() &&
-                     stack != null &&
-                     stack.getItem() instanceof IUseItemExtra) {
+            if (RPGKeyBinds.extraItemKey.getIsKeyPressed() && stack != null
+                && stack.getItem() instanceof IUseItemExtra) {
                 RPGNetwork.net.sendToServer(new MsgUseItemExtra());
-            }
-            else if (RPGKeyBinds.infoBookKey.getIsKeyPressed()) {
-                player.openGui(DangerRPG.instance, RPGGuiHandlers.GUI_INFO_BOOK, player.worldObj,
-                               (int) player.posX, (int) player.posY, (int) player.posZ);
-            }
-            else if (RPGKeyBinds.guiModeKey.getIsKeyPressed()) {
+            } else if (RPGKeyBinds.infoBookKey.getIsKeyPressed()) {
+                player.openGui(
+                    DangerRPG.instance,
+                    RPGGuiHandlers.GUI_INFO_BOOK,
+                    player.worldObj,
+                    (int) player.posX,
+                    (int) player.posY,
+                    (int) player.posZ);
+            } else if (RPGKeyBinds.guiModeKey.getIsKeyPressed()) {
                 GuiMode.change();
             }
         }
     }
 
     @SubscribeEvent
-    public void onGuiModeChange(GuiModeChangeEvent e)
-    {
+    public void onGuiModeChange(GuiModeChangeEvent e) {
         RPGGuiIngame.INSTANCE.update(e.type);
     }
 }

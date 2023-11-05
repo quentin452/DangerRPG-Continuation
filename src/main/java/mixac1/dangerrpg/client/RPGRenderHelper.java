@@ -1,7 +1,5 @@
 package mixac1.dangerrpg.client;
 
-import org.lwjgl.opengl.GL11;
-
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -16,16 +14,20 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
-public abstract class RPGRenderHelper
-{
-    public static Minecraft mc = FMLClientHandler.instance().getClient();
+public abstract class RPGRenderHelper {
 
-    public static final ResourceLocation ENCHANTMENT_GLINT = new ResourceLocation("minecraft", "textures/misc/enchanted_item_glint.png");
+    public static Minecraft mc = FMLClientHandler.instance()
+        .getClient();
 
-    public enum Color
-    {
+    public static final ResourceLocation ENCHANTMENT_GLINT = new ResourceLocation(
+        "minecraft",
+        "textures/misc/enchanted_item_glint.png");
+
+    public enum Color {
+
         R(2),
         G(1),
         B(0),
@@ -34,19 +36,17 @@ public abstract class RPGRenderHelper
 
         private int i;
 
-        Color(int i)
-        {
+        Color(int i) {
             this.i = i;
         }
 
-        public float get(int color)
-        {
+        public float get(int color) {
             return (color >> (8 * i) & 255) / 255.0F;
         }
     }
 
-    public static void renderEnchantEffect(Tessellator tessellator, ItemStack item, int iconwidth, int iconheight, float thickness)
-    {
+    public static void renderEnchantEffect(Tessellator tessellator, ItemStack item, int iconwidth, int iconheight,
+        float thickness) {
         if (item != null && item.hasEffect(0)) {
             GL11.glDepthFunc(GL11.GL_EQUAL);
             GL11.glDisable(GL11.GL_LIGHTING);
@@ -78,27 +78,24 @@ public abstract class RPGRenderHelper
         }
     }
 
-    public static void copyModelBiped(ModelBiped from, ModelBiped to)
-    {
-        to.bipedBody.showModel     = from.bipedBody.showModel;
-        to.bipedHead.showModel     = from.bipedHead.showModel;
+    public static void copyModelBiped(ModelBiped from, ModelBiped to) {
+        to.bipedBody.showModel = from.bipedBody.showModel;
+        to.bipedHead.showModel = from.bipedHead.showModel;
         to.bipedHeadwear.showModel = false;
-        to.bipedLeftArm.showModel  = from.bipedLeftArm.showModel;
-        to.bipedLeftLeg.showModel  = from.bipedLeftLeg.showModel;
+        to.bipedLeftArm.showModel = from.bipedLeftArm.showModel;
+        to.bipedLeftLeg.showModel = from.bipedLeftLeg.showModel;
         to.bipedRightArm.showModel = from.bipedRightArm.showModel;
         to.bipedRightLeg.showModel = from.bipedRightLeg.showModel;
     }
 
-    public static void copyModelRenderer(ModelRenderer from, ModelRenderer to)
-    {
+    public static void copyModelRenderer(ModelRenderer from, ModelRenderer to) {
         to.rotateAngleX = from.rotateAngleX;
         to.rotateAngleY = from.rotateAngleY;
         to.rotateAngleZ = from.rotateAngleZ;
         to.setRotationPoint(from.rotationPointX, from.rotationPointY, from.rotationPointZ);
     }
 
-    public static ModelBiped modelBipedInit(EntityLivingBase entity, ModelBiped model, int slot)
-    {
+    public static ModelBiped modelBipedInit(EntityLivingBase entity, ModelBiped model, int slot) {
         model.bipedHead.showModel = slot == 0;
         model.bipedHeadwear.showModel = slot == 0;
         model.bipedBody.showModel = slot == 1 || slot == 2;
@@ -114,12 +111,9 @@ public abstract class RPGRenderHelper
             model.heldItemRight = 1;
             if (entity instanceof EntityPlayer && ((EntityPlayer) entity).getItemInUseCount() > 0) {
                 EnumAction enumaction = stack.getItemUseAction();
-                if (enumaction == EnumAction.block)
-                {
+                if (enumaction == EnumAction.block) {
                     model.heldItemRight = 3;
-                }
-                else if (enumaction == EnumAction.bow)
-                {
+                } else if (enumaction == EnumAction.bow) {
                     model.aimedBow = true;
                 }
             }

@@ -1,22 +1,17 @@
 package mixac1.hooklib.asm;
 
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map.Entry;
-
-import org.objectweb.asm.AnnotationVisitor;
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
-
 import mixac1.dangerrpg.DangerRPG;
 import mixac1.dangerrpg.util.Utils;
 import mixac1.hooklib.asm.Hook.LocalVariable;
 import mixac1.hooklib.asm.Hook.ReturnValue;
+import org.objectweb.asm.*;
 
-public class HookContainerParser
-{
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map.Entry;
+
+public class HookContainerParser {
+
     private HookClassTransformer transformer;
     private String currentClassName;
     private String currentMethodName;
@@ -33,29 +28,24 @@ public class HookContainerParser
     private static final String LOCAL_DESC = Type.getDescriptor(LocalVariable.class);
     private static final String RETURN_DESC = Type.getDescriptor(ReturnValue.class);
 
-    public HookContainerParser(HookClassTransformer transformer)
-    {
+    public HookContainerParser(HookClassTransformer transformer) {
         this.transformer = transformer;
     }
 
-    protected void parseHooks(String className)
-    {
+    protected void parseHooks(String className) {
         parseHooks(ReadClassHelper.getClassData(className));
     }
 
-    protected void parseHooks(InputStream input)
-    {
+    protected void parseHooks(InputStream input) {
         ReadClassHelper.acceptVisitor(input, new HookClassVisitor());
     }
 
-    private void invalidHook(String message)
-    {
+    private void invalidHook(String message) {
         DangerRPG.logger.warn(Utils.toString("Found invalid hook ", currentClassName, "#", currentMethodName));
         DangerRPG.logger.warn(message);
     }
 
-    private void createHook()
-    {
+    private void createHook() {
         AsmHook.Builder builder = AsmHook.newBuilder();
         Type methodType = Type.getMethodType(currentMethodDesc);
         Type[] argumentTypes = methodType.getArgumentTypes();
@@ -66,13 +56,15 @@ public class HookContainerParser
         }
 
         if (argumentTypes.length < 1) {
-            invalidHook("Hook method has no parameters. First parameter of a "
+            invalidHook(
+                "Hook method has no parameters. First parameter of a "
                     + "hook method must belong the type of the target class.");
             return;
         }
 
         if (argumentTypes[0].getSort() != Type.OBJECT) {
-            invalidHook("First parameter of the hook method is not an object. First parameter of a "
+            invalidHook(
+                "First parameter of the hook method is not an object. First parameter of a "
                     + "hook method must belong the type of the target class.");
             return;
         }
@@ -81,8 +73,7 @@ public class HookContainerParser
 
         if (annotationValues.containsKey("targetMethod")) {
             builder.setTargetMethod((String) annotationValues.get("targetMethod"));
-        }
-        else {
+        } else {
             builder.setTargetMethod(currentMethodName);
         }
 
@@ -100,12 +91,10 @@ public class HookContainerParser
                 if (localId == -1) {
                     builder.setTargetMethodReturnType(argType);
                     builder.addReturnValueToHookMethodParameters();
-                }
-                else {
+                } else {
                     builder.addHookMethodParameter(argType, localId);
                 }
-            }
-            else {
+            } else {
                 builder.addTargetMethodParameters(argType);
                 builder.addHookMethodParameter(argType, currentParameterId);
                 currentParameterId += argType == Type.LONG_TYPE || argType == Type.DOUBLE_TYPE ? 2 : 1;
@@ -136,15 +125,12 @@ public class HookContainerParser
             if (primitiveConstant != null) {
                 builder.setReturnValue(mixac1.hooklib.asm.ReturnValue.PRIMITIVE_CONSTANT);
                 builder.setPrimitiveConstant(primitiveConstant);
-            }
-            else if (Boolean.TRUE.equals(annotationValues.get("returnNull"))) {
+            } else if (Boolean.TRUE.equals(annotationValues.get("returnNull"))) {
                 builder.setReturnValue(mixac1.hooklib.asm.ReturnValue.NULL);
-            }
-            else if (annotationValues.containsKey("returnAnotherMethod")) {
+            } else if (annotationValues.containsKey("returnAnotherMethod")) {
                 builder.setReturnValue(mixac1.hooklib.asm.ReturnValue.ANOTHER_METHOD_RETURN_VALUE);
                 builder.setReturnMethod((String) annotationValues.get("returnAnotherMethod"));
-            }
-            else if (methodType.getReturnType() != Type.VOID_TYPE) {
+            } else if (methodType.getReturnType() != Type.VOID_TYPE) {
                 builder.setReturnValue(mixac1.hooklib.asm.ReturnValue.HOOK_RETURN_VALUE);
             }
         }
@@ -154,8 +140,10 @@ public class HookContainerParser
             return;
         }
         if ((returnCondition == ReturnCondition.ON_NULL || returnCondition == ReturnCondition.ON_NOT_NULL)
-                && methodType.getReturnType().getSort() != Type.OBJECT
-                && methodType.getReturnType().getSort() != Type.ARRAY) {
+            && methodType.getReturnType()
+                .getSort() != Type.OBJECT
+            && methodType.getReturnType()
+                .getSort() != Type.ARRAY) {
             invalidHook("Hook method must return object if returnCodition is ON_NULL or ON_NOT_NULL.");
             return;
         }
@@ -169,32 +157,30 @@ public class HookContainerParser
         transformer.registerHook(builder.build());
     }
 
-    private Object getPrimitiveConstant()
-    {
+    private Object getPrimitiveConstant() {
         for (Entry<String, Object> entry : annotationValues.entrySet()) {
-            if (entry.getKey().endsWith("Constant")) {
+            if (entry.getKey()
+                .endsWith("Constant")) {
                 return entry.getValue();
             }
         }
         return null;
     }
 
-    private class HookClassVisitor extends ClassVisitor
-    {
-        public HookClassVisitor()
-        {
+    private class HookClassVisitor extends ClassVisitor {
+
+        public HookClassVisitor() {
             super(Opcodes.ASM5);
         }
 
         @Override
-        public void visit(int version, int access, String name, String signature, String superName, String[] interfaces)
-        {
+        public void visit(int version, int access, String name, String signature, String superName,
+            String[] interfaces) {
             currentClassName = name.replace('/', '.');
         }
 
         @Override
-        public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions)
-        {
+        public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
             currentMethodName = name;
             currentMethodDesc = desc;
             currentMethodPublicStatic = (access & Opcodes.ACC_PUBLIC) != 0 && (access & Opcodes.ACC_STATIC) != 0;
@@ -202,16 +188,14 @@ public class HookContainerParser
         }
     }
 
-    private class HookMethodVisitor extends MethodVisitor
-    {
-        public HookMethodVisitor()
-        {
+    private class HookMethodVisitor extends MethodVisitor {
+
+        public HookMethodVisitor() {
             super(Opcodes.ASM5);
         }
 
         @Override
-        public AnnotationVisitor visitAnnotation(String desc, boolean visible)
-        {
+        public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
             if (HOOK_DESC.equals(desc)) {
                 annotationValues = new HashMap<String, Object>();
                 inHookAnnotation = true;
@@ -220,17 +204,15 @@ public class HookContainerParser
         }
 
         @Override
-        public AnnotationVisitor visitParameterAnnotation(final int parameter, String desc, boolean visible)
-        {
+        public AnnotationVisitor visitParameterAnnotation(final int parameter, String desc, boolean visible) {
             if (RETURN_DESC.equals(desc)) {
                 parameterAnnotations.put(parameter, -1);
             }
             if (LOCAL_DESC.equals(desc)) {
-                return new AnnotationVisitor(Opcodes.ASM5)
-                {
+                return new AnnotationVisitor(Opcodes.ASM5) {
+
                     @Override
-                    public void visit(String name, Object value)
-                    {
+                    public void visit(String name, Object value) {
                         parameterAnnotations.put(parameter, (Integer) value);
                     }
                 };
@@ -239,8 +221,7 @@ public class HookContainerParser
         }
 
         @Override
-        public void visitEnd()
-        {
+        public void visitEnd() {
             if (annotationValues != null) {
                 createHook();
             }
@@ -251,30 +232,26 @@ public class HookContainerParser
         }
     }
 
-    private class HookAnnotationVisitor extends AnnotationVisitor
-    {
-        public HookAnnotationVisitor()
-        {
+    private class HookAnnotationVisitor extends AnnotationVisitor {
+
+        public HookAnnotationVisitor() {
             super(Opcodes.ASM5);
         }
 
         @Override
-        public void visit(String name, Object value)
-        {
+        public void visit(String name, Object value) {
             if (inHookAnnotation) {
                 annotationValues.put(name, value);
             }
         }
 
         @Override
-        public void visitEnum(String name, String desc, String value)
-        {
+        public void visitEnum(String name, String desc, String value) {
             visit(name, value);
         }
 
         @Override
-        public void visitEnd()
-        {
+        public void visitEnd() {
             inHookAnnotation = false;
         }
     }

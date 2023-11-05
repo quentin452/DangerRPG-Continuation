@@ -38,42 +38,40 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-public abstract class RPGCapability
-{
-    public static final RPGItemRegister   rpgItemRegistr   = new RPGItemRegister();
+public abstract class RPGCapability {
+
+    public static final RPGItemRegister rpgItemRegistr = new RPGItemRegister();
     public static final RPGEntityRegister rpgEntityRegistr = new RPGEntityRegister();
 
-    public static final Map<Integer, ItemAttribute>   mapIntToItemAttribute   = new HashMap<>();
-    public static final Map<Integer, GemType>         mapIntToGemType         = new HashMap<>();
+    public static final Map<Integer, ItemAttribute> mapIntToItemAttribute = new HashMap<>();
+    public static final Map<Integer, GemType> mapIntToGemType = new HashMap<>();
     public static final Map<Integer, EntityAttribute> mapIntToEntityAttribute = new HashMap<>();
-    public static final Set<Class<? extends EntityLivingBase>> blackListEntities = new HashSet<Class<? extends EntityLivingBase>>()
-    {{
-        add(EntityBat.class);
-        add(EntitySquid.class);
-    }};
+    public static final Set<Class<? extends EntityLivingBase>> blackListEntities = new HashSet<Class<? extends EntityLivingBase>>() {
 
-    public static void preLoad(FMLPostInitializationEvent e)
-    {
+        {
+            add(EntityBat.class);
+            add(EntitySquid.class);
+        }
+    };
+
+    public static void preLoad(FMLPostInitializationEvent e) {
         registerDefaultRPGItems();
 
         registerDefaultRPGEntities();
     }
 
-    public static void load(FMLPostInitializationEvent e)
-    {
+    public static void load(FMLPostInitializationEvent e) {
         loadEntities();
 
         loadItems();
     }
 
-    public static void postLoad(FMLPostInitializationEvent e)
-    {
+    public static void postLoad(FMLPostInitializationEvent e) {
         rpgItemRegistr.createTransferData();
         rpgEntityRegistr.createTransferData();
     }
 
-    private static void registerDefaultRPGItems()
-    {
+    private static void registerDefaultRPGItems() {
         for (Item value : (Iterable<Item>) GameData.getItemRegistry()) {
             if (value instanceof IRPGItem) {
                 RPGRegister.registerRPGItem(value, (IRPGItem) value);
@@ -144,8 +142,7 @@ public abstract class RPGCapability
         RPGRegister.registerRPGItem(Items.bow, IRPGItem.DEFAULT_BOW);
     }
 
-    private static void registerDefaultRPGEntities()
-    {
+    private static void registerDefaultRPGEntities() {
         RPGRegister.registerRPGEntity(EntityChicken.class, IRPGEntity.DEFAULT_LIVING);
         RPGRegister.registerRPGEntity(EntitySnowman.class, IRPGEntity.DEFAULT_LIVING);
         RPGRegister.registerRPGEntity(EntityCow.class, IRPGEntity.DEFAULT_LIVING);
@@ -172,15 +169,15 @@ public abstract class RPGCapability
         RPGRegister.registerRPGEntity(EntityWither.class, new RPGRangeEntityMob(8f));
 
         RPGRegister.registerRPGEntity(EntitySlime.class, new RPGCommonEntity(EntityAttributes.MELEE_DAMAGE_SLIME, 12f));
-        RPGRegister.registerRPGEntity(EntityMagmaCube.class, new RPGCommonEntity(EntityAttributes.MELEE_DAMAGE_SLIME, 16f));
+        RPGRegister
+            .registerRPGEntity(EntityMagmaCube.class, new RPGCommonEntity(EntityAttributes.MELEE_DAMAGE_SLIME, 16f));
 
         RPGRegister.registerRPGEntity(EntityWolf.class, new RPGCommonEntity(3f));
         RPGRegister.registerRPGEntity(EntityIronGolem.class, new RPGCommonEntity(14f));
         RPGRegister.registerRPGEntity(EntityDragon.class, new RPGCommonEntity(10f));
     }
 
-    private static void loadEntities()
-    {
+    private static void loadEntities() {
         for (Object obj : EntityList.classToStringMapping.entrySet()) {
             Entry<Class, String> entry = (Entry<Class, String>) obj;
             if (entry.getKey() != null && entry.getValue() != null) {
@@ -198,18 +195,21 @@ public abstract class RPGCapability
             RPGEntityHelper.registerEntityDefault(it.getKey(), it.getValue());
             it.getValue().rpgComponent.registerAttributes(it.getKey(), it.getValue());
             String entityName = (String) EntityList.classToStringMapping.get(it.getKey());
-            if (entityName != null && (EntityConfig.d.isAllEntitiesRPGable || EntityConfig.activeRPGEntities.contains(entityName))) {
+            if (entityName != null
+                && (EntityConfig.d.isAllEntitiesRPGable || EntityConfig.activeRPGEntities.contains(entityName))) {
                 rpgEntityRegistr.get(it.getKey()).isActivated = true;
-                DangerRPG.infoLog(String.format("Register RPG entity (sup from mod: %s): %s",
-                                  it.getValue().isSupported ? " true" : "false", EntityList.classToStringMapping.get(it.getKey())));
+                DangerRPG.infoLog(
+                    String.format(
+                        "Register RPG entity (sup from mod: %s): %s",
+                        it.getValue().isSupported ? " true" : "false",
+                        EntityList.classToStringMapping.get(it.getKey())));
             }
         }
 
         rpgEntityRegistr.get(EntityPlayer.class).isActivated = true;
     }
 
-    private static void loadItems()
-    {
+    private static void loadItems() {
         for (Item item : (Iterable<Item>) GameData.getItemRegistry()) {
             RPGItemHelper.registerRPGItem(item);
         }
@@ -217,10 +217,14 @@ public abstract class RPGCapability
         for (Entry<Item, RPGItemData> it : rpgItemRegistr.entrySet()) {
             RPGItemHelper.registerParamsDefault(it.getKey(), it.getValue());
             it.getValue().rpgComponent.registerAttributes(it.getKey(), it.getValue());
-            if (it.getKey() instanceof Gem || ItemConfig.d.isAllItemsRPGable || ItemConfig.activeRPGItems.contains(it.getKey().delegate.name())) {
+            if (it.getKey() instanceof Gem || ItemConfig.d.isAllItemsRPGable
+                || ItemConfig.activeRPGItems.contains(it.getKey().delegate.name())) {
                 rpgItemRegistr.get(it.getKey()).isActivated = true;
-                DangerRPG.infoLog(String.format("Register RPG item (sup from mod: %s): %s",
-                                  it.getValue().isSupported ? " true" : "false", it.getKey().delegate.name()));
+                DangerRPG.infoLog(
+                    String.format(
+                        "Register RPG item (sup from mod: %s): %s",
+                        it.getValue().isSupported ? " true" : "false",
+                        it.getKey().delegate.name()));
             }
         }
     }

@@ -1,9 +1,5 @@
 package mixac1.dangerrpg.inventory;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map.Entry;
-
 import mixac1.dangerrpg.api.item.GemType;
 import mixac1.dangerrpg.capability.ItemAttributes;
 import mixac1.dangerrpg.capability.RPGItemHelper;
@@ -15,22 +11,24 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
-public class InventoryModificationTable implements IInventory
-{
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map.Entry;
+
+public class InventoryModificationTable implements IInventory {
+
     public static final String NAME = "modification_table";
 
     public ItemStack main;
     public ItemStack[][] inv = new ItemStack[0][];
     private ContainerModificationTable eventHandler;
 
-    public InventoryModificationTable(ContainerModificationTable eventHandler)
-    {
+    public InventoryModificationTable(ContainerModificationTable eventHandler) {
         this.eventHandler = eventHandler;
     }
 
     @Override
-    public int getSizeInventory()
-    {
+    public int getSizeInventory() {
         int size = 1;
         for (ItemStack[] it : inv) {
             size += it.length;
@@ -38,8 +36,7 @@ public class InventoryModificationTable implements IInventory
         return size;
     }
 
-    public int[] getSizes()
-    {
+    public int[] getSizes() {
         int[] tmp = new int[inv.length];
         for (int i = 0; i < inv.length; ++i) {
             tmp[i] = inv[i].length;
@@ -48,20 +45,17 @@ public class InventoryModificationTable implements IInventory
     }
 
     @Override
-    public ItemStack getStackInSlot(int index)
-    {
+    public ItemStack getStackInSlot(int index) {
         if (index == 0) {
             return main;
-        }
-        else {
+        } else {
             --index;
         }
 
         for (ItemStack[] it : inv) {
             if (index >= it.length) {
                 index -= it.length;
-            }
-            else {
+            } else {
                 return it[index];
             }
         }
@@ -69,8 +63,7 @@ public class InventoryModificationTable implements IInventory
     }
 
     @Override
-    public ItemStack decrStackSize(int index, int count)
-    {
+    public ItemStack decrStackSize(int index, int count) {
         ItemStack stack = getStackInSlot(index);
         if (stack != null) {
             ItemStack itemstack;
@@ -78,8 +71,7 @@ public class InventoryModificationTable implements IInventory
             if (stack.stackSize <= count) {
                 itemstack = stack;
                 setInventorySlotContents(index, null);
-            }
-            else {
+            } else {
                 itemstack = stack.splitStack(count);
                 if (stack.stackSize == 0) {
                     stack = null;
@@ -91,8 +83,7 @@ public class InventoryModificationTable implements IInventory
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int index)
-    {
+    public ItemStack getStackInSlotOnClosing(int index) {
         ItemStack stack = getStackInSlot(index);
         if (stack != null) {
             ItemStack itemstack = stack;
@@ -103,15 +94,13 @@ public class InventoryModificationTable implements IInventory
     }
 
     @Override
-    public void setInventorySlotContents(int index, ItemStack stack)
-    {
+    public void setInventorySlotContents(int index, ItemStack stack) {
         if (index == 0) {
             if (main == null) {
                 if (stack != null && RPGItemHelper.isRPGable(stack)) {
                     detachGems(stack);
                 }
-            }
-            else {
+            } else {
                 if (stack == null && RPGItemHelper.isRPGable(main)) {
                     attachGems(main);
                 }
@@ -126,29 +115,28 @@ public class InventoryModificationTable implements IInventory
         for (ItemStack[] it : inv) {
             if (index >= it.length) {
                 index -= it.length;
-            }
-            else {
+            } else {
                 it[index] = stack;
                 return;
             }
         }
     }
 
-    private void detachGems(ItemStack stack)
-    {
-        HashMap<GemType, Stub<Integer>> map = (HashMap<GemType, Stub<Integer>>) RPGCapability.rpgItemRegistr.get(stack.getItem()).gems;
+    private void detachGems(ItemStack stack) {
+        HashMap<GemType, Stub<Integer>> map = (HashMap<GemType, Stub<Integer>>) RPGCapability.rpgItemRegistr
+            .get(stack.getItem()).gems;
         inv = new ItemStack[map.size()][];
 
         int i = 0;
         for (Entry<GemType, Stub<Integer>> entry : map.entrySet()) {
-            List<ItemStack> list = entry.getKey().detach(stack);
+            List<ItemStack> list = entry.getKey()
+                .detach(stack);
 
             inv[i++] = list.toArray(new ItemStack[entry.getValue().value1]);
         }
     }
 
-    private void attachGems(ItemStack stack)
-    {
+    private void attachGems(ItemStack stack) {
         int i = 0;
         for (GemType gemType : RPGItemHelper.getGemTypes(stack)) {
             gemType.attach(stack, inv[i]);
@@ -158,20 +146,17 @@ public class InventoryModificationTable implements IInventory
     }
 
     @Override
-    public String getInventoryName()
-    {
+    public String getInventoryName() {
         return NAME;
     }
 
     @Override
-    public boolean hasCustomInventoryName()
-    {
+    public boolean hasCustomInventoryName() {
         return true;
     }
 
     @Override
-    public int getInventoryStackLimit()
-    {
+    public int getInventoryStackLimit() {
         return 64;
     }
 
@@ -179,8 +164,7 @@ public class InventoryModificationTable implements IInventory
     public void markDirty() {}
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player)
-    {
+    public boolean isUseableByPlayer(EntityPlayer player) {
         return true;
     }
 
@@ -190,23 +174,20 @@ public class InventoryModificationTable implements IInventory
     @Override
     public void closeInventory() {}
 
-    private Pair<Integer, Integer> getRowColumn(int index)
-    {
+    private Pair<Integer, Integer> getRowColumn(int index) {
         int row = 0;
         for (ItemStack[] it : inv) {
             if (index >= it.length) {
                 index -= it.length;
                 ++row;
-            }
-            else {
+            } else {
                 return new Pair<>(row, index);
             }
         }
         return null;
     }
 
-    private GemType getGemType(int row)
-    {
+    private GemType getGemType(int row) {
         int i = 0;
         for (GemType it : RPGItemHelper.getGemTypes(main)) {
             if (i++ == row) {
@@ -217,8 +198,7 @@ public class InventoryModificationTable implements IInventory
     }
 
     @Override
-    public boolean isItemValidForSlot(int index, ItemStack stack)
-    {
+    public boolean isItemValidForSlot(int index, ItemStack stack) {
         if (stack == null) {
             return true;
         }
@@ -231,14 +211,13 @@ public class InventoryModificationTable implements IInventory
             GemType gemType = getGemTypeSlot(index);
             if (gemType != null) {
                 return gemType.isTrueGem((Gem) stack.getItem(), main)
-                        && ItemAttributes.LEVEL.get(main) >= ItemAttributes.LEVEL.get(stack);
+                    && ItemAttributes.LEVEL.get(main) >= ItemAttributes.LEVEL.get(stack);
             }
         }
         return false;
     }
 
-    public GemType getGemTypeSlot(int index)
-    {
+    public GemType getGemTypeSlot(int index) {
         if (index > 0 && RPGItemHelper.isRPGable(main)) {
             Pair<Integer, Integer> coords = getRowColumn(index - 1);
             if (coords != null) {

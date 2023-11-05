@@ -1,14 +1,6 @@
 package mixac1.dangerrpg.util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map.Entry;
-
 import com.google.common.collect.Multimap;
-
 import mixac1.dangerrpg.api.item.IRPGItem;
 import mixac1.dangerrpg.api.item.IRPGItem.IRPGItemArmor;
 import mixac1.dangerrpg.api.item.IRPGItem.IRPGItemTool;
@@ -31,25 +23,22 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 
-public abstract class RPGHelper
-{
-    public static void knockBack(EntityLivingBase entityliving, EntityLivingBase attacker, float knockback)
-    {
+import java.util.*;
+import java.util.Map.Entry;
+
+public abstract class RPGHelper {
+
+    public static void knockBack(EntityLivingBase entityliving, EntityLivingBase attacker, float knockback) {
         double i = Math.sqrt(knockback);
-        double x = -MathHelper.sin(attacker.rotationYaw / 180.0F * (float)Math.PI)   * 0.4;
-        double z =  MathHelper.cos(attacker.rotationYaw / 180.0F * (float)Math.PI)   * 0.4;
-        double y = -MathHelper.sin(attacker.rotationPitch / 180.0F * (float)Math.PI) * 0.1;
+        double x = -MathHelper.sin(attacker.rotationYaw / 180.0F * (float) Math.PI) * 0.4;
+        double z = MathHelper.cos(attacker.rotationYaw / 180.0F * (float) Math.PI) * 0.4;
+        double y = -MathHelper.sin(attacker.rotationPitch / 180.0F * (float) Math.PI) * 0.1;
         entityliving.addVelocity(x * i, y * i, z * i);
     }
 
-    public static void rebuildPlayerExp(EntityPlayer player)
-    {
+    public static void rebuildPlayerExp(EntityPlayer player) {
         int lvl = player.experienceLevel;
         int exp = (int) (player.xpBarCap() * player.experience);
         player.experience = 0.0F;
@@ -61,8 +50,7 @@ public abstract class RPGHelper
         player.addExperience(exp);
     }
 
-    public static void rebuildPlayerLvl(EntityPlayer player)
-    {
+    public static void rebuildPlayerLvl(EntityPlayer player) {
         int exp = player.experienceTotal;
         player.experience = 0.0F;
         player.experienceTotal = 0;
@@ -70,8 +58,7 @@ public abstract class RPGHelper
         player.addExperience(exp);
     }
 
-    public static MovingObjectPosition getMouseOver(float frame, float dist)
-    {
+    public static MovingObjectPosition getMouseOver(float frame, float dist) {
         Minecraft mc = Minecraft.getMinecraft();
         MovingObjectPosition mop = null;
         if (mc.renderViewEntity != null) {
@@ -88,7 +75,10 @@ public abstract class RPGHelper
                 Vec3 vec = pos.addVector(look.xCoord, look.yCoord, look.zCoord);
                 Entity pointedEntity = null;
                 @SuppressWarnings("unchecked")
-                List<Entity> list = mc.theWorld.getEntitiesWithinAABBExcludingEntity(mc.renderViewEntity, mc.renderViewEntity.boundingBox.addCoord(look.xCoord, look.yCoord, look.zCoord).expand(1.0F, 1.0F, 1.0F));
+                List<Entity> list = mc.theWorld.getEntitiesWithinAABBExcludingEntity(
+                    mc.renderViewEntity,
+                    mc.renderViewEntity.boundingBox.addCoord(look.xCoord, look.yCoord, look.zCoord)
+                        .expand(1.0F, 1.0F, 1.0F));
                 double d = calcDist;
 
                 for (Entity entity : list) {
@@ -102,8 +92,7 @@ public abstract class RPGHelper
                                 pointedEntity = entity;
                                 d = 0.0D;
                             }
-                        }
-                        else if (mop0 != null) {
+                        } else if (mop0 != null) {
                             double d1 = pos.distanceTo(mop0.hitVec);
                             if (d1 < d || d == 0.0D) {
                                 pointedEntity = entity;
@@ -121,8 +110,8 @@ public abstract class RPGHelper
         return mop;
     }
 
-    public static float getUsePower(EntityPlayer player, ItemStack stack, int useDuration, float defMaxPow, float defMinPow)
-    {
+    public static float getUsePower(EntityPlayer player, ItemStack stack, int useDuration, float defMaxPow,
+        float defMinPow) {
         float power = getUsePower(player, stack, useDuration, defMaxPow);
 
         float minPower = ItemAttributes.MIN_CUST_TIME.getSafe(stack, player, defMinPow);
@@ -132,8 +121,7 @@ public abstract class RPGHelper
         return power;
     }
 
-    public static float getUsePower(EntityPlayer player, ItemStack stack, int useDuration, float defMaxPow)
-    {
+    public static float getUsePower(EntityPlayer player, ItemStack stack, int useDuration, float defMaxPow) {
         float power = useDuration / ItemAttributes.SHOT_SPEED.getSafe(stack, player, defMaxPow);
         power = (power * power + power * 2.0F) / 3.0F;
 
@@ -143,22 +131,19 @@ public abstract class RPGHelper
         return power;
     }
 
-    public static IMaterialSpecial getMaterialSpecial(ItemStack stack)
-    {
+    public static IMaterialSpecial getMaterialSpecial(ItemStack stack) {
         if (stack != null && RPGItemHelper.isRPGable(stack)) {
             IRPGItem ilvl = RPGCapability.rpgItemRegistr.get(stack.getItem()).rpgComponent;
             if (ilvl instanceof IRPGItemArmor) {
                 return ((IRPGItemArmor) ilvl).getArmorMaterial(stack.getItem());
-            }
-            else if (ilvl instanceof IRPGItemTool) {
+            } else if (ilvl instanceof IRPGItemTool) {
                 return ((IRPGItemTool) ilvl).getToolMaterial(stack.getItem());
             }
         }
         return null;
     }
 
-    public static int getSpecialColor(ItemStack stack, int defaultColor)
-    {
+    public static int getSpecialColor(ItemStack stack, int defaultColor) {
         IMaterialSpecial mat = getMaterialSpecial(stack);
         if (mat != null && mat.hasSpecialColor()) {
             return mat.getSpecialColor();
@@ -166,8 +151,7 @@ public abstract class RPGHelper
         return defaultColor;
     }
 
-    public static Vec3 getFirePoint(EntityLivingBase thrower)
-    {
+    public static Vec3 getFirePoint(EntityLivingBase thrower) {
         Vec3 tmp = thrower.getLookVec();
 
         tmp.xCoord /= 2;
@@ -178,15 +162,14 @@ public abstract class RPGHelper
         tmp.yCoord += thrower.posY + thrower.getEyeHeight();
         tmp.zCoord += thrower.posZ;
 
-        tmp.xCoord -= MathHelper.cos(thrower.rotationYaw / 180.0F * (float)Math.PI) * 0.22F;
+        tmp.xCoord -= MathHelper.cos(thrower.rotationYaw / 180.0F * (float) Math.PI) * 0.22F;
         tmp.yCoord -= 0.3;
-        tmp.zCoord -= MathHelper.sin(thrower.rotationYaw / 180.0F * (float)Math.PI) * 0.22F;
+        tmp.zCoord -= MathHelper.sin(thrower.rotationYaw / 180.0F * (float) Math.PI) * 0.22F;
 
         return tmp;
     }
 
-    public static boolean spendMana(EntityPlayer player, float mana)
-    {
+    public static boolean spendMana(EntityPlayer player, float mana) {
         if (!player.capabilities.isCreativeMode) {
             if (PlayerAttributes.CURR_MANA.getValue(player) >= mana) {
                 PlayerAttributes.CURR_MANA.addValue(-mana, player);
@@ -197,8 +180,7 @@ public abstract class RPGHelper
         return true;
     }
 
-    public static ArrayList<String> getItemNames(Collection<Item> items, boolean needSort, boolean withGems)
-    {
+    public static ArrayList<String> getItemNames(Collection<Item> items, boolean needSort, boolean withGems) {
         ArrayList<String> names = new ArrayList<String>();
         for (Item item : items) {
             if (withGems || !(item instanceof Gem)) {
@@ -211,8 +193,8 @@ public abstract class RPGHelper
         return names;
     }
 
-    public static ArrayList<String> getEntityNames(Collection<Class<? extends EntityLivingBase>> set, boolean needSort)
-    {
+    public static ArrayList<String> getEntityNames(Collection<Class<? extends EntityLivingBase>> set,
+        boolean needSort) {
         String tmp;
         ArrayList<String> names = new ArrayList<String>();
         for (Class item : set) {
@@ -227,30 +209,31 @@ public abstract class RPGHelper
         return names;
     }
 
-    public static float getMeleeDamageHook(EntityLivingBase entity, float defaultDamage)
-    {
+    public static float getMeleeDamageHook(EntityLivingBase entity, float defaultDamage) {
         if (RPGEntityHelper.isRPGable(entity)) {
-            return RPGCapability.rpgEntityRegistr.get(entity).rpgComponent.getEAMeleeDamage(entity).getValue(entity);
+            return RPGCapability.rpgEntityRegistr.get(entity).rpgComponent.getEAMeleeDamage(entity)
+                .getValue(entity);
         }
         return defaultDamage;
     }
 
-    public static float getRangeDamageHook(EntityLivingBase entity, float defaultDamage)
-    {
+    public static float getRangeDamageHook(EntityLivingBase entity, float defaultDamage) {
         if (RPGEntityHelper.isRPGable(entity)) {
-            return RPGCapability.rpgEntityRegistr.get(entity).rpgComponent.getEARangeDamage(entity).getValue(entity);
+            return RPGCapability.rpgEntityRegistr.get(entity).rpgComponent.getEARangeDamage(entity)
+                .getValue(entity);
         }
         return defaultDamage;
     }
 
-    public static float getItemDamage(ItemStack stack, EntityPlayer player)
-    {
+    public static float getItemDamage(ItemStack stack, EntityPlayer player) {
         float value = 0;
 
-        Multimap map = stack.getItem().getAttributeModifiers(stack);
-        Iterator iterator = map.entries().iterator();
+        Multimap map = stack.getItem()
+            .getAttributeModifiers(stack);
+        Iterator iterator = map.entries()
+            .iterator();
         while (iterator.hasNext()) {
-            Entry entry = (Entry)iterator.next();
+            Entry entry = (Entry) iterator.next();
             if (((String) entry.getKey()).equals(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName())) {
                 value += ((AttributeModifier) entry.getValue()).getAmount();
             }
@@ -258,20 +241,17 @@ public abstract class RPGHelper
         return value;
     }
 
-    public static float getPlayerDamage(ItemStack stack, EntityPlayer player)
-    {
-        return getItemDamage(stack, player) + PlayerAttributes.STRENGTH.getValue(player) * ItemAttributes.STR_MUL.get(stack);
+    public static float getPlayerDamage(ItemStack stack, EntityPlayer player) {
+        return getItemDamage(stack, player)
+            + PlayerAttributes.STRENGTH.getValue(player) * ItemAttributes.STR_MUL.get(stack);
     }
 
-    public static float multyMul(float value, int count, Multiplier mul)
-    {
+    public static float multyMul(float value, int count, Multiplier mul) {
         if (mul instanceof MultiplierAdd) {
             return ((MultiplierAdd) mul).mul * count + value;
-        }
-        else if (mul instanceof MultiplierMul) {
+        } else if (mul instanceof MultiplierMul) {
             return ((MultiplierMul) mul).mul * count * value + value;
-        }
-        else {
+        } else {
             for (int i = 0; i < count; ++i) {
                 value = mul.up(value);
             }
@@ -279,8 +259,7 @@ public abstract class RPGHelper
         return value;
     }
 
-    public static void msgToChat(EntityPlayer player, Object... objs)
-    {
+    public static void msgToChat(EntityPlayer player, Object... objs) {
         player.addChatMessage(new ChatComponentText(Utils.toString(objs)));
     }
 }

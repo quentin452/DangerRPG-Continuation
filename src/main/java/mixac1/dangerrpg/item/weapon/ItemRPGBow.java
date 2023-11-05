@@ -17,13 +17,12 @@ import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class ItemRPGBow extends ItemBow implements IRPGItemBow, IHasBooksInfo
-{
+public class ItemRPGBow extends ItemBow implements IRPGItemBow, IHasBooksInfo {
+
     public RPGBowComponent bowComponent;
     protected EnumRarity rarity;
 
-    public ItemRPGBow(RPGBowComponent bowComponent, EnumRarity rarity)
-    {
+    public ItemRPGBow(RPGBowComponent bowComponent, EnumRarity rarity) {
         setUnlocalizedName(bowComponent.name);
         setTextureName(Utils.toString(DangerRPG.MODID, ":weapons/range/", unlocalizedName));
         setCreativeTab(RPGCreativeTabs.tabRPGAmmunitions);
@@ -32,38 +31,32 @@ public class ItemRPGBow extends ItemBow implements IRPGItemBow, IHasBooksInfo
     }
 
     @Override
-    public void registerAttributes(Item item, RPGItemData map)
-    {
+    public void registerAttributes(Item item, RPGItemData map) {
         RPGItemHelper.registerParamsItemBow(item, map);
     }
 
     @Override
-    public String getInformationToInfoBook(ItemStack item, EntityPlayer player)
-    {
+    public String getInformationToInfoBook(ItemStack item, EntityPlayer player) {
         return null;
     }
 
     @Override
-    public RPGBowComponent getItemComponent(Item item)
-    {
+    public RPGBowComponent getItemComponent(Item item) {
         return bowComponent;
     }
 
     @Override
-    public RPGToolMaterial getToolMaterial(Item item)
-    {
+    public RPGToolMaterial getToolMaterial(Item item) {
         return null;
     }
 
     @Override
-    public void onStoppedUsing(ItemStack stack, World world, EntityPlayer player, int useDuration)
-    {
+    public void onStoppedUsing(ItemStack stack, World world, EntityPlayer player, int useDuration) {
         IRPGItem.DEFAULT_BOW.onStoppedUsing(stack, world, player, useDuration);
     }
 
     @Override
-    public EnumRarity getRarity(ItemStack stack)
-    {
+    public EnumRarity getRarity(ItemStack stack) {
         return rarity;
     }
 }

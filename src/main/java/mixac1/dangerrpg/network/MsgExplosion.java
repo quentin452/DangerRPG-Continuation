@@ -1,15 +1,14 @@
 package mixac1.dangerrpg.network;
 
-import org.apache.commons.lang3.SerializationUtils;
-
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import mixac1.dangerrpg.world.explosion.ExplosionEffect;
+import org.apache.commons.lang3.SerializationUtils;
 
-public class MsgExplosion implements IMessage
-{
+public class MsgExplosion implements IMessage {
+
     int effectId;
     double x;
     double y;
@@ -19,8 +18,7 @@ public class MsgExplosion implements IMessage
 
     public MsgExplosion() {}
 
-    public MsgExplosion(int effectId, double x, double y, double z, double size, Object[] meta)
-    {
+    public MsgExplosion(int effectId, double x, double y, double z, double size, Object[] meta) {
         this.effectId = effectId;
         this.x = x;
         this.y = y;
@@ -30,8 +28,7 @@ public class MsgExplosion implements IMessage
     }
 
     @Override
-    public void fromBytes(ByteBuf buf)
-    {
+    public void fromBytes(ByteBuf buf) {
         effectId = buf.readInt();
         x = buf.readDouble();
         y = buf.readDouble();
@@ -43,8 +40,7 @@ public class MsgExplosion implements IMessage
     }
 
     @Override
-    public void toBytes(ByteBuf buf)
-    {
+    public void toBytes(ByteBuf buf) {
         buf.writeInt(effectId);
         buf.writeDouble(x);
         buf.writeDouble(y);
@@ -56,12 +52,12 @@ public class MsgExplosion implements IMessage
         buf.writeBytes(bytes);
     }
 
-    public static class Handler implements IMessageHandler<MsgExplosion, IMessage>
-    {
+    public static class Handler implements IMessageHandler<MsgExplosion, IMessage> {
+
         @Override
-        public IMessage onMessage(MsgExplosion msg, MessageContext ctx)
-        {
-            ExplosionEffect.list.get(msg.effectId).doEffect(msg.x, msg.y, msg.z, msg.size, msg.meta);
+        public IMessage onMessage(MsgExplosion msg, MessageContext ctx) {
+            ExplosionEffect.list.get(msg.effectId)
+                .doEffect(msg.x, msg.y, msg.z, msg.size, msg.meta);
             return null;
         }
     }

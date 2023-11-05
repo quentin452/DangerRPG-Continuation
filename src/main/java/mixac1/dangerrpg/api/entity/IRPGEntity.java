@@ -9,31 +9,28 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 
-public interface IRPGEntity
-{
+public interface IRPGEntity {
+
     public EAFloat getEAMeleeDamage(EntityLivingBase entity);
 
     public EAFloat getEARangeDamage(EntityLivingBase entity);
 
     public void registerAttributes(Class<? extends EntityLivingBase> entityClass, RPGEntityData set);
 
-    public static IRPGEntity DEFAULT_PLAYER = new IRPGEntity()
-    {
+    public static IRPGEntity DEFAULT_PLAYER = new IRPGEntity() {
+
         @Override
-        public EAFloat getEAMeleeDamage(EntityLivingBase entity)
-        {
+        public EAFloat getEAMeleeDamage(EntityLivingBase entity) {
             return EntityAttributes.MELEE_DAMAGE;
         }
 
         @Override
-        public EAFloat getEARangeDamage(EntityLivingBase entity)
-        {
+        public EAFloat getEARangeDamage(EntityLivingBase entity) {
             return null;
         }
 
         @Override
-        public void registerAttributes(Class<? extends EntityLivingBase> entityClass, RPGEntityData set)
-        {
+        public void registerAttributes(Class<? extends EntityLivingBase> entityClass, RPGEntityData set) {
             RPGEntityHelper.registerEntityPlayer((Class<? extends EntityPlayer>) entityClass, set);
         }
     };
@@ -42,68 +39,59 @@ public interface IRPGEntity
 
     public static IRPGEntity DEFAULT_MOB = new RPGEntityMob();
 
-    public static class RPGLivingEntity implements IRPGEntity
-    {
+    public static class RPGLivingEntity implements IRPGEntity {
+
         @Override
-        public EAFloat getEAMeleeDamage(EntityLivingBase entity)
-        {
+        public EAFloat getEAMeleeDamage(EntityLivingBase entity) {
             return null;
         }
 
         @Override
-        public EAFloat getEARangeDamage(EntityLivingBase entity)
-        {
+        public EAFloat getEARangeDamage(EntityLivingBase entity) {
             return null;
         }
 
         @Override
-        public void registerAttributes(Class<? extends EntityLivingBase> entityClass, RPGEntityData set)
-        {
+        public void registerAttributes(Class<? extends EntityLivingBase> entityClass, RPGEntityData set) {
             RPGEntityHelper.registerEntityLiving((Class<? extends EntityLiving>) entityClass, set);
         }
     };
 
-    public static class RPGEntityMob extends RPGLivingEntity
-    {
+    public static class RPGEntityMob extends RPGLivingEntity {
+
         @Override
-        public EAFloat getEAMeleeDamage(EntityLivingBase entity)
-        {
+        public EAFloat getEAMeleeDamage(EntityLivingBase entity) {
             return EntityAttributes.MELEE_DAMAGE;
         }
 
         @Override
-        public void registerAttributes(Class<? extends EntityLivingBase> entityClass, RPGEntityData set)
-        {
+        public void registerAttributes(Class<? extends EntityLivingBase> entityClass, RPGEntityData set) {
             super.registerAttributes(entityClass, set);
             RPGEntityHelper.registerEntityMob((Class<? extends EntityMob>) entityClass, set);
         }
     };
 
-    public static class RPGRangeEntityMob extends RPGEntityMob
-    {
+    public static class RPGRangeEntityMob extends RPGEntityMob {
+
         protected EAFloat rangeAttr;
         protected float rangeValue;
 
-        public RPGRangeEntityMob(EAFloat rangeAttr, float rangeValue)
-        {
+        public RPGRangeEntityMob(EAFloat rangeAttr, float rangeValue) {
             this.rangeAttr = rangeAttr;
             this.rangeValue = rangeValue;
         }
 
-        public RPGRangeEntityMob(float rangeValue)
-        {
+        public RPGRangeEntityMob(float rangeValue) {
             this(EntityAttributes.RANGE_DAMAGE, rangeValue);
         }
 
         @Override
-        public EAFloat getEARangeDamage(EntityLivingBase entity)
-        {
+        public EAFloat getEARangeDamage(EntityLivingBase entity) {
             return rangeAttr;
         }
 
         @Override
-        public void registerAttributes(Class<? extends EntityLivingBase> entityClass, RPGEntityData set)
-        {
+        public void registerAttributes(Class<? extends EntityLivingBase> entityClass, RPGEntityData set) {
             super.registerAttributes(entityClass, set);
             if (rangeAttr != null) {
                 set.registerEA(rangeAttr, rangeValue, RPGEntityHelper.DAMAGE_MUL);
@@ -111,47 +99,41 @@ public interface IRPGEntity
         }
     };
 
-    public static class RPGCommonEntity extends RPGLivingEntity
-    {
+    public static class RPGCommonEntity extends RPGLivingEntity {
+
         protected EAFloat meleeAttr;
         protected float meleeValue;
 
         protected EAFloat rangeAttr;
         protected float rangeValue;
 
-        public RPGCommonEntity(EAFloat meleeAttr, float meleeValue, EAFloat rangeAttr, float rangeValue)
-        {
+        public RPGCommonEntity(EAFloat meleeAttr, float meleeValue, EAFloat rangeAttr, float rangeValue) {
             this.meleeAttr = meleeAttr;
             this.meleeValue = meleeValue;
             this.rangeAttr = rangeAttr;
             this.rangeValue = rangeValue;
         }
 
-        public RPGCommonEntity(EAFloat meleeAttr, float meleeValue)
-        {
+        public RPGCommonEntity(EAFloat meleeAttr, float meleeValue) {
             this(meleeAttr, meleeValue, null, 0);
         }
 
-        public RPGCommonEntity(float meleeValue)
-        {
+        public RPGCommonEntity(float meleeValue) {
             this(EntityAttributes.MELEE_DAMAGE_STAB, meleeValue, null, 0);
         }
 
         @Override
-        public EAFloat getEAMeleeDamage(EntityLivingBase entity)
-        {
+        public EAFloat getEAMeleeDamage(EntityLivingBase entity) {
             return meleeAttr;
         }
 
         @Override
-        public EAFloat getEARangeDamage(EntityLivingBase entity)
-        {
+        public EAFloat getEARangeDamage(EntityLivingBase entity) {
             return rangeAttr;
         }
 
         @Override
-        public void registerAttributes(Class<? extends EntityLivingBase> entityClass, RPGEntityData set)
-        {
+        public void registerAttributes(Class<? extends EntityLivingBase> entityClass, RPGEntityData set) {
             super.registerAttributes(entityClass, set);
 
             if (meleeAttr != null) {
@@ -163,10 +145,9 @@ public interface IRPGEntity
         }
     };
 
-    public static class RPGCommonRangeEntity extends RPGCommonEntity
-    {
-        public RPGCommonRangeEntity(float value)
-        {
+    public static class RPGCommonRangeEntity extends RPGCommonEntity {
+
+        public RPGCommonRangeEntity(float value) {
             super(null, 0, EntityAttributes.RANGE_DAMAGE, value);
         }
     };

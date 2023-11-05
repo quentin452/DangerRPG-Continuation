@@ -3,17 +3,13 @@ package mixac1.dangerrpg.inventory;
 import mixac1.dangerrpg.init.RPGRecipes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryCraftResult;
-import net.minecraft.inventory.Slot;
-import net.minecraft.inventory.SlotCrafting;
+import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.world.World;
 
-public class ContainerRPGWorkbench extends Container
-{
+public class ContainerRPGWorkbench extends Container {
+
     public static int craftSize = 5;
 
     public static int playerInvX = 8;
@@ -29,15 +25,14 @@ public class ContainerRPGWorkbench extends Container
     public static int craftResY = 53;
 
     public InventoryRPGCrafting craftMatrix = new InventoryRPGCrafting(this, craftSize, craftSize);
-    public IInventory craftResult           = new InventoryCraftResult();
+    public IInventory craftResult = new InventoryCraftResult();
 
     protected World worldObj;
     protected int posX;
     protected int posY;
     protected int posZ;
 
-    public ContainerRPGWorkbench(InventoryPlayer inv, World world, int x, int y, int z)
-    {
+    public ContainerRPGWorkbench(InventoryPlayer inv, World world, int x, int y, int z) {
         worldObj = world;
         posX = x;
         posY = y;
@@ -69,8 +64,7 @@ public class ContainerRPGWorkbench extends Container
     }
 
     @Override
-    public void onCraftMatrixChanged(IInventory inv)
-    {
+    public void onCraftMatrixChanged(IInventory inv) {
         ItemStack stack = RPGRecipes.ownFindMatchingRecipe(craftMatrix, worldObj, craftSize, craftSize);
         craftResult.setInventorySlotContents(0, stack);
 
@@ -81,7 +75,8 @@ public class ContainerRPGWorkbench extends Container
         for (int i = 0; i < craftSize - 2; ++i) {
             for (int j = 0; j < craftSize - 2; ++j) {
                 if (craftMatrix.isValidCrafting(j, i)) {
-                    stack = CraftingManager.getInstance().findMatchingRecipe(craftMatrix.getCrafting(j, i), worldObj);
+                    stack = CraftingManager.getInstance()
+                        .findMatchingRecipe(craftMatrix.getCrafting(j, i), worldObj);
                     craftResult.setInventorySlotContents(0, stack);
                     return;
                 }
@@ -90,8 +85,7 @@ public class ContainerRPGWorkbench extends Container
     }
 
     @Override
-    public void onContainerClosed(EntityPlayer player)
-    {
+    public void onContainerClosed(EntityPlayer player) {
         super.onContainerClosed(player);
 
         if (!worldObj.isRemote) {
@@ -106,14 +100,12 @@ public class ContainerRPGWorkbench extends Container
     }
 
     @Override
-    public boolean canInteractWith(EntityPlayer player)
-    {
+    public boolean canInteractWith(EntityPlayer player) {
         return player.getDistanceSq(posX + 0.5D, posY + 0.5D, posZ + 0.5D) <= 64.0D;
     }
 
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int index)
-    {
+    public ItemStack transferStackInSlot(EntityPlayer player, int index) {
         ItemStack stack = null;
         Slot slot = (Slot) inventorySlots.get(index);
 
@@ -126,25 +118,21 @@ public class ContainerRPGWorkbench extends Container
                     return null;
                 }
                 slot.onSlotChange(newStack, stack);
-            }
-            else if (index >= 0 && index < 27) {
+            } else if (index >= 0 && index < 27) {
                 if (!mergeItemStack(newStack, 27, 36, false)) {
                     return null;
                 }
-            }
-            else if (index >= 27 && index < 36) {
+            } else if (index >= 27 && index < 36) {
                 if (!mergeItemStack(newStack, 0, 27, false)) {
                     return null;
                 }
-            }
-            else if (!mergeItemStack(newStack, 0, 36, false)) {
+            } else if (!mergeItemStack(newStack, 0, 36, false)) {
                 return null;
             }
 
             if (newStack.stackSize == 0) {
                 slot.putStack(null);
-            }
-            else {
+            } else {
                 slot.onSlotChanged();
             }
 
@@ -159,8 +147,7 @@ public class ContainerRPGWorkbench extends Container
     }
 
     @Override
-    public boolean func_94530_a(ItemStack stack, Slot slot)
-    {
+    public boolean func_94530_a(ItemStack stack, Slot slot) {
         return slot.inventory != craftResult && super.func_94530_a(stack, slot);
     }
 }

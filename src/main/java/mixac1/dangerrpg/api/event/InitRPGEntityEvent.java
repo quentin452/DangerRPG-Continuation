@@ -10,12 +10,11 @@ import net.minecraft.entity.EntityLivingBase;
  * first time and initializing own {@link EntityAttribute}s
  */
 @Cancelable
-public class InitRPGEntityEvent extends Event
-{
+public class InitRPGEntityEvent extends Event {
+
     public EntityLivingBase entity;
 
-    public InitRPGEntityEvent(EntityLivingBase entity)
-    {
+    public InitRPGEntityEvent(EntityLivingBase entity) {
         this.entity = entity;
     }
 }

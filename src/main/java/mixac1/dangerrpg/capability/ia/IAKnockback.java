@@ -6,16 +6,15 @@ import mixac1.dangerrpg.capability.PlayerAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-public class IAKnockback extends IAStatic
-{
-    public IAKnockback(String name)
-    {
+public class IAKnockback extends IAStatic {
+
+    public IAKnockback(String name) {
         super(name);
     }
 
     @Override
-    public float get(ItemStack stack, EntityPlayer player)
-    {
-        return getChecked(stack) + PlayerAttributes.KNOCKBACK.getValue(player) * ItemAttributes.KNBACK_MUL.get(stack, player);
+    public float get(ItemStack stack, EntityPlayer player) {
+        return getChecked(stack)
+            + PlayerAttributes.KNOCKBACK.getValue(player) * ItemAttributes.KNBACK_MUL.get(stack, player);
     }
 }

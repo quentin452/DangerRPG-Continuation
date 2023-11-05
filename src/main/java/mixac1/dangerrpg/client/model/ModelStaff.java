@@ -4,8 +4,8 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class ModelStaff extends ModelBase
-{
+public class ModelStaff extends ModelBase {
+
     public static final ModelStaff INSTANCE = new ModelStaff();
 
     public ModelRenderer shape28;
@@ -34,8 +34,7 @@ public class ModelStaff extends ModelBase
     public ModelRenderer shape24;
     public ModelRenderer shape3;
 
-    public ModelStaff()
-    {
+    public ModelStaff() {
         this.textureWidth = 32;
         this.textureHeight = 11;
         this.shape16 = new ModelRenderer(this, 0, 0);
@@ -116,8 +115,7 @@ public class ModelStaff extends ModelBase
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
-    {
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.shape16.render(f5);
         this.shape6.render(f5);
         this.shape13.render(f5);
@@ -145,8 +143,7 @@ public class ModelStaff extends ModelBase
         this.shape18.render(f5);
     }
 
-    public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z)
-    {
+    public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
         modelRenderer.rotateAngleX = x;
         modelRenderer.rotateAngleY = y;
         modelRenderer.rotateAngleZ = z;

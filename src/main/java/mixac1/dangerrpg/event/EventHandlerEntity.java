@@ -29,43 +29,42 @@ import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 
-public class EventHandlerEntity
-{
+public class EventHandlerEntity {
+
     @SubscribeEvent
-    public void onEntityConstructing(EntityConstructing e)
-    {
+    public void onEntityConstructing(EntityConstructing e) {
         if (e.entity instanceof EntityLivingBase && RPGEntityHelper.isRPGable((EntityLivingBase) e.entity)) {
             RPGEntityProperties.register((EntityLivingBase) e.entity);
         }
     }
 
     @SubscribeEvent
-    public void onEntityJoinWorld(EntityJoinWorldEvent e)
-    {
+    public void onEntityJoinWorld(EntityJoinWorldEvent e) {
         if (e.entity instanceof EntityLivingBase && RPGEntityHelper.isRPGable((EntityLivingBase) e.entity)) {
             if (e.entity.worldObj.isRemote) {
                 RPGNetwork.net.sendToServer(new MsgSyncEntityData((EntityLivingBase) e.entity));
-            }
-            else {
-                RPGEntityProperties.get((EntityLivingBase) e.entity).serverInit();
+            } else {
+                RPGEntityProperties.get((EntityLivingBase) e.entity)
+                    .serverInit();
             }
         }
     }
 
     @SubscribeEvent
-    public void onPlayerCloned(PlayerEvent.Clone e)
-    {
+    public void onPlayerCloned(PlayerEvent.Clone e) {
         if (e.wasDeath) {
-            RPGEntityProperties.get(e.original).rebuildOnDeath();
+            RPGEntityProperties.get(e.original)
+                .rebuildOnDeath();
         }
         NBTTagCompound nbt = new NBTTagCompound();
-        RPGEntityProperties.get(e.original).saveNBTData(nbt);
-        RPGEntityProperties.get(e.entityPlayer).loadNBTData(nbt);
+        RPGEntityProperties.get(e.original)
+            .saveNBTData(nbt);
+        RPGEntityProperties.get(e.entityPlayer)
+            .loadNBTData(nbt);
     }
 
     @SubscribeEvent
-    public void onInitRPGEntity(InitRPGEntityEvent e)
-    {
+    public void onInitRPGEntity(InitRPGEntityEvent e) {
         ChunkCoordinates spawn = e.entity.worldObj.getSpawnPoint();
         double distance = Utils.getDiagonal(e.entity.posX - spawn.posX, e.entity.posZ - spawn.posZ);
 
@@ -95,32 +94,30 @@ public class EventHandlerEntity
     }
 
     @SubscribeEvent
-    public void onLivingJump(LivingJumpEvent e)
-    {
+    public void onLivingJump(LivingJumpEvent e) {
         if (e.entityLiving instanceof EntityPlayer) {
             e.entityLiving.motionY += PlayerAttributes.JUMP_HEIGHT.getValue(e.entityLiving) * 14;
         }
     }
 
     @SubscribeEvent
-    public void onLivingFall(LivingFallEvent e)
-    {
+    public void onLivingFall(LivingFallEvent e) {
         if (e.entityLiving instanceof EntityPlayer) {
             e.distance -= PlayerAttributes.FALL_RESIST.getValue(e.entityLiving) * 10;
         }
     }
 
     @SubscribeEvent
-    public void onPlayerTick(TickEvent.PlayerTickEvent e)
-    {
+    public void onPlayerTick(TickEvent.PlayerTickEvent e) {
         if (e.phase == TickEvent.Phase.START) {
             DangerRPG.proxy.fireTick(e.side);
 
             float tmp1, tmp2;
             if (!e.player.worldObj.isRemote) {
                 if (DangerRPG.proxy.getTick(e.side) % 20 == 0) {
-                    if ((tmp1 = PlayerAttributes.CURR_MANA.getValue(e.player)) < PlayerAttributes.MANA.getValue(e.player) &&
-                        (tmp2 = PlayerAttributes.MANA_REGEN.getValue(e.player)) != 0) {
+                    if ((tmp1 = PlayerAttributes.CURR_MANA.getValue(e.player))
+                        < PlayerAttributes.MANA.getValue(e.player)
+                        && (tmp2 = PlayerAttributes.MANA_REGEN.getValue(e.player)) != 0) {
                         PlayerAttributes.CURR_MANA.setValue(tmp1 + tmp2, e.player);
                     }
                 }
@@ -137,8 +134,7 @@ public class EventHandlerEntity
                         MinecraftForge.EVENT_BUS.post(new StackChangedEvent(newStack, oldStack, i, e.player));
                     }
                 }
-            }
-            else {
+            } else {
 
             }
 

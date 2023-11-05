@@ -1,7 +1,5 @@
 package mixac1.dangerrpg.world.explosion;
 
-import java.util.List;
-
 import mixac1.dangerrpg.init.RPGNetwork;
 import mixac1.dangerrpg.network.MsgExplosion;
 import net.minecraft.block.Block;
@@ -15,29 +13,28 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.Explosion;
 
-public class ExplosionCommonRPG extends Explosion
-{
+import java.util.List;
+
+public class ExplosionCommonRPG extends Explosion {
+
     public float powerMul = 1;
     public float damage = 1;
 
     public boolean isDependDist = true;
     public boolean isBlockDestroy = false;
 
-    public ExplosionCommonRPG(Entity entity, double x, double y, double z, float explosionSize)
-    {
+    public ExplosionCommonRPG(Entity entity, double x, double y, double z, float explosionSize) {
         super(entity.worldObj, entity, x, y, z, explosionSize);
     }
 
-    public void init(boolean isBlockDestroy, float powerMul, float damage, boolean isDependDist)
-    {
+    public void init(boolean isBlockDestroy, float powerMul, float damage, boolean isDependDist) {
         this.isBlockDestroy = isBlockDestroy;
         this.powerMul = powerMul;
         this.damage = damage;
         this.isDependDist = isDependDist;
     }
 
-    public void doExplosion()
-    {
+    public void doExplosion() {
         if (!worldObj.isRemote) {
             if (net.minecraftforge.event.ForgeEventFactory.onExplosionStart(worldObj, this)) {
                 return;
@@ -48,28 +45,36 @@ public class ExplosionCommonRPG extends Explosion
             }
             explosionEntities();
 
-            RPGNetwork.net.sendToAll(new MsgExplosion(getExplosionEffect().getId(), explosionX, explosionY, explosionZ, explosionSize, getEffectMeta()));
+            RPGNetwork.net.sendToAll(
+                new MsgExplosion(
+                    getExplosionEffect().getId(),
+                    explosionX,
+                    explosionY,
+                    explosionZ,
+                    explosionSize,
+                    getEffectMeta()));
         }
     }
 
-    public ExplosionEffect getExplosionEffect()
-    {
+    public ExplosionEffect getExplosionEffect() {
         return ExplosionEffect.EMPTY;
     }
 
-    public Object[] getEffectMeta()
-    {
+    public Object[] getEffectMeta() {
         return null;
     }
 
-    public void explosionBlocksPre()
-    {
+    public void explosionBlocksPre() {
         double d0, d1, d2, d3, d4, d5, d6;
 
         for (int i = 0; i < field_77289_h; ++i) {
             for (int j = 0; j < field_77289_h; ++j) {
                 for (int k = 0; k < field_77289_h; ++k) {
-                    if (i == 0 || i == field_77289_h - 1 || j == 0 || j == field_77289_h - 1 || k == 0 || k == field_77289_h - 1) {
+                    if (i == 0 || i == field_77289_h - 1
+                        || j == 0
+                        || j == field_77289_h - 1
+                        || k == 0
+                        || k == field_77289_h - 1) {
                         d0 = i / (field_77289_h - 1.0F) * 2.0F - 1.0F;
                         d1 = j / (field_77289_h - 1.0F) * 2.0F - 1.0F;
                         d2 = k / (field_77289_h - 1.0F) * 2.0F - 1.0F;
@@ -89,7 +94,15 @@ public class ExplosionCommonRPG extends Explosion
                             Block block = worldObj.getBlock(j1, k1, l1);
 
                             if (block.getMaterial() != Material.air) {
-                                float f3 = block.getExplosionResistance(this.exploder, worldObj, j1, k1, l1, explosionX, explosionY, explosionZ);
+                                float f3 = block.getExplosionResistance(
+                                    this.exploder,
+                                    worldObj,
+                                    j1,
+                                    k1,
+                                    l1,
+                                    explosionX,
+                                    explosionY,
+                                    explosionZ);
                                 f1 -= (f3 + 0.3F) * f2;
                             }
 
@@ -107,8 +120,7 @@ public class ExplosionCommonRPG extends Explosion
         }
     }
 
-    public void explosionBlocksPost()
-    {
+    public void explosionBlocksPost() {
         for (Object obj : affectedBlockPositions) {
             ChunkPosition chunkposition = (ChunkPosition) obj;
             int i = chunkposition.chunkPosX;
@@ -118,22 +130,30 @@ public class ExplosionCommonRPG extends Explosion
 
             if (block.getMaterial() != Material.air) {
                 if (block.canDropFromExplosion(this)) {
-                    block.dropBlockAsItemWithChance(this.worldObj, i, j, k, this.worldObj.getBlockMetadata(i, j, k), 1.0F / explosionSize, 0);
+                    block.dropBlockAsItemWithChance(
+                        this.worldObj,
+                        i,
+                        j,
+                        k,
+                        this.worldObj.getBlockMetadata(i, j, k),
+                        1.0F / explosionSize,
+                        0);
                 }
                 block.onBlockExploded(this.worldObj, i, j, k, this);
             }
         }
     }
 
-    public void explosionEntities()
-    {
+    public void explosionEntities() {
         int minX = MathHelper.floor_double(explosionX - explosionSize - 1.0D);
         int maxX = MathHelper.floor_double(explosionX + explosionSize + 1.0D);
         int minY = MathHelper.floor_double(explosionY - explosionSize - 1.0D);
         int maxY = MathHelper.floor_double(explosionY + explosionSize + 1.0D);
         int minZ = MathHelper.floor_double(explosionZ - explosionSize - 1.0D);
         int maxZ = MathHelper.floor_double(explosionZ + explosionSize + 1.0D);
-        List list = worldObj.getEntitiesWithinAABBExcludingEntity(exploder, AxisAlignedBB.getBoundingBox(minX, minY, minZ, maxX, maxY, maxZ));
+        List list = worldObj.getEntitiesWithinAABBExcludingEntity(
+            exploder,
+            AxisAlignedBB.getBoundingBox(minX, minY, minZ, maxX, maxY, maxZ));
         Vec3 vec3 = Vec3.createVectorHelper(explosionX, explosionY, explosionZ);
 
         for (Object obj : list) {
@@ -159,8 +179,7 @@ public class ExplosionCommonRPG extends Explosion
         }
     }
 
-    public void applyEntityHitEffects(EntityLivingBase entity, float power)
-    {
+    public void applyEntityHitEffects(EntityLivingBase entity, float power) {
         entity.attackEntityFrom(DamageSource.magic, isDependDist ? damage * power : damage);
     }
 

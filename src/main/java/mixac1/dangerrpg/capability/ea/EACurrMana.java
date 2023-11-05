@@ -5,23 +5,20 @@ import mixac1.dangerrpg.capability.PlayerAttributes;
 import mixac1.dangerrpg.util.Utils;
 import net.minecraft.entity.EntityLivingBase;
 
-public class EACurrMana extends EAFloat
-{
-    public EACurrMana(String name)
-    {
+public class EACurrMana extends EAFloat {
+
+    public EACurrMana(String name) {
         super(name);
     }
 
     @Override
-    public void serverInit(EntityLivingBase entity)
-    {
+    public void serverInit(EntityLivingBase entity) {
         setValueRaw(PlayerAttributes.MANA.getValue(entity), entity);
     }
 
     @Override
     @Deprecated
-    public boolean setValueRaw(Float value, EntityLivingBase entity)
-    {
+    public boolean setValueRaw(Float value, EntityLivingBase entity) {
         return super.setValueRaw(Utils.alignment(value, 0f, PlayerAttributes.MANA.getValueRaw(entity)), entity);
     }
 }
