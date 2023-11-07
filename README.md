@@ -1,4 +1,4 @@
-# (For Dev) Code Contribution 
+# (For Dev) Code Contribution
 
 Go to the wiki : [Wiki](https://github.com/quentin452/DangerRPG-Continuation/wiki)
 
@@ -22,11 +22,13 @@ Go here : [Wiki](https://github.com/quentin452/DangerRPG-Continuation/wiki)
 
 # Requirement
 
-no requirements
+[Unimixins](https://legacy.curseforge.com/minecraft/mc-mods/unimixins/files/4600285)
+
+[FalsePatternLib](https://legacy.curseforge.com/minecraft/mc-mods/fplib/files/4701057)
 
 # Incompat
 
-This mod can cause problems with [Golem Tweaks](https://www.curseforge.com/minecraft/mc-mods/golem-tweaks) , see [#40](https://github.com/quentin452/DangerRPG-Continuation/issues/40) 
+This mod can cause problems with [Golem Tweaks](https://www.curseforge.com/minecraft/mc-mods/golem-tweaks) , see [#40](https://github.com/quentin452/DangerRPG-Continuation/issues/40)
 
 # Discord
 

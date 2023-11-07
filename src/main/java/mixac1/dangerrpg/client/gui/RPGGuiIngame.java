@@ -194,44 +194,28 @@ public class RPGGuiIngame extends Gui {
                 part1Width,
                 part1H,
                 isInverted);
-            drawTexturedModalRect(
-                offsetX + invert(part2X),
-                offsetY + part2Y,
-                part2U,
-                part2V,
-                part2W,
-                part2H,
-                isInverted);
-            drawTexturedModalRect(
-                offsetX + invert(part3X),
-                offsetY + part3Y,
-                part3U,
-                part3V,
-                part3W,
-                part3H,
-                isInverted);
         } else {
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             mc.getTextureManager()
                 .bindTexture(TEXTURE);
 
-            drawTexturedModalRect(
-                offsetX + invert(part2X),
-                offsetY + part2Y,
-                part2U,
-                part2V,
-                part2W,
-                part2H,
-                isInverted);
-            drawTexturedModalRect(
-                offsetX + invert(part3X),
-                offsetY + part3Y,
-                part3U,
-                part3V,
-                part3W,
-                part3H,
-                isInverted);
         }
+        drawTexturedModalRect(
+            offsetX + invert(part2X),
+            offsetY + part2Y,
+            part2U,
+            part2V,
+            part2W,
+            part2H,
+            isInverted);
+        drawTexturedModalRect(
+            offsetX + invert(part3X),
+            offsetY + part3Y,
+            part3U,
+            part3V,
+            part3W,
+            part3H,
+            isInverted);
 
         int yFal = 0, proc;
         float curr;

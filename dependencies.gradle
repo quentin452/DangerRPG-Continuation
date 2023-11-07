@@ -33,12 +33,22 @@
  *
  * For more details, see https://docs.gradle.org/8.0.1/userguide/java_library_plugin.html#sec:java_library_configurations_graph
  */
+
 dependencies {
+    //Dev-only deps
+    compileOnly("org.projectlombok:lombok:[1.18.24,1.19)") {
+        transitive = false
+    }
+    annotationProcessor("org.projectlombok:lombok:[1.18.24,1.19)")
+
+    implementation("org.joml:joml:1.10.5")
+
     implementation "curse.maven:notenoughitems-gtnh-358228:4826022-deobf-sources-api"
     implementation "curse.maven:codechickencore-unofficial-746279:4378043-deobf-sources-api"
     implementation "curse.maven:codechickenlib-unofficial-746280:4388255-deobf-sources-api"
     implementation "curse.maven:et-futurum-requiem-441392:4769523-deobf-sources-api"
     implementation "curse.maven:golem-tweaks-746411:4722766-deobf-sources-api"
+    implementation "curse.maven:fplib-665627:4824788-deobf-sources-api"
 
 }
 
