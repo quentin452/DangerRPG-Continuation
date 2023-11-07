@@ -1,13 +1,12 @@
 package mixac1.dangerrpg.hook;
 
-import cpw.mods.fml.common.Loader;
 import mixac1.dangerrpg.hook.core.*;
 import mixac1.dangerrpg.hook.mod.etfuturumrequiem.HookFixEntityAttributesETFUTURUM;
 import mixac1.dangerrpg.hook.mod.golemtweaks.HookFixEntityAttributesGolemTweaks;
 import mixac1.hooklib.minecraft.HookLoader;
 import mixac1.hooklib.minecraft.PrimaryClassTransformer;
 
-public class RPGHookLoaderVanilla extends HookLoader {
+public class RPGHookLoader extends HookLoader {
 
     @Override
     public String[] getASMTransformerClass() {
