@@ -40,9 +40,6 @@ public class DangerRPG {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        if(isGolemTweaksPresent()) {
-            throw new RuntimeException("GolemTweaks is incompatible with DangerRPG Continuation! PLS REMOVE IT");
-        }
         proxy.preInit(event);
     }
 
@@ -56,9 +53,6 @@ public class DangerRPG {
         proxy.postInit(event);
     }
 
-    private boolean isGolemTweaksPresent() {
-        return Loader.isModLoaded("golemtweaks");
-    }
     public static void log(Object... objs) {
         StringBuilder buf = new StringBuilder();
         for (Object obj : objs) {

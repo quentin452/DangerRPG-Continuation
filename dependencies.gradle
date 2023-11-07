@@ -38,6 +38,7 @@ dependencies {
     implementation "curse.maven:codechickencore-unofficial-746279:4378043-deobf-sources-api"
     implementation "curse.maven:codechickenlib-unofficial-746280:4388255-deobf-sources-api"
     implementation "curse.maven:et-futurum-requiem-441392:4769523-deobf-sources-api"
+    implementation "curse.maven:golem-tweaks-746411:4722766-deobf-sources-api"
 
 }
 

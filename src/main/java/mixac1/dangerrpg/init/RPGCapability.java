@@ -1,5 +1,6 @@
 package mixac1.dangerrpg.init;
 
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.registry.GameData;
 import ganymedes01.etfuturum.entities.EntityStray;
@@ -32,6 +33,8 @@ import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import rozmir.entity_extensions.IronGolemExtension;
+import rozmir.entity_extensions.SnowGolemExtension;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -166,18 +169,27 @@ public abstract class RPGCapability {
 
         RPGRegister.registerRPGEntity(EntityBlaze.class, new RPGRangeEntityMob(5f));
         RPGRegister.registerRPGEntity(EntitySkeleton.class, new RPGRangeEntityMob(2f));
-        RPGRegister.registerRPGEntity(EntityStray.class, new RPGRangeEntityMob(2f));
 
         RPGRegister.registerRPGEntity(EntityGhast.class, new RPGCommonRangeEntity(6f));
         RPGRegister.registerRPGEntity(EntityWither.class, new RPGRangeEntityMob(8f));
 
         RPGRegister.registerRPGEntity(EntitySlime.class, new RPGCommonEntity(EntityAttributes.MELEE_DAMAGE_SLIME, 12f));
-        RPGRegister
-            .registerRPGEntity(EntityMagmaCube.class, new RPGCommonEntity(EntityAttributes.MELEE_DAMAGE_SLIME, 16f));
+        RPGRegister.registerRPGEntity(EntityMagmaCube.class, new RPGCommonEntity(EntityAttributes.MELEE_DAMAGE_SLIME, 16f));
 
         RPGRegister.registerRPGEntity(EntityWolf.class, new RPGCommonEntity(3f));
         RPGRegister.registerRPGEntity(EntityIronGolem.class, new RPGCommonEntity(14f));
+
         RPGRegister.registerRPGEntity(EntityDragon.class, new RPGCommonEntity(10f));
+
+        // Check if the golemtweaks mod is loaded
+        if (Loader.isModLoaded("golemtweaks")) {
+            RPGRegister.registerRPGEntity(SnowGolemExtension.class, IRPGEntity.DEFAULT_LIVING);
+            RPGRegister.registerRPGEntity(IronGolemExtension.class, new RPGCommonEntity(14f));
+        }
+        // Check if the etfuturum mod is loaded
+        if (Loader.isModLoaded("etfuturum")) {
+            RPGRegister.registerRPGEntity(EntityStray.class, new RPGRangeEntityMob(2f));
+        }
     }
 
     private static void loadEntities() {
