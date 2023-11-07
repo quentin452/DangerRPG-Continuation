@@ -306,7 +306,7 @@ public class RPGConfig {
 
         public static class Data implements Serializable {
 
-            public boolean isAllItemsRPGable = false;
+            public boolean isAllItemsRPGable = true;
             public boolean canUpInTable = true;
             public int maxLevel = 15;
             public int startMaxExp = 100;
@@ -520,7 +520,7 @@ public class RPGConfig {
 
         public static class Data implements Serializable {
 
-            public boolean isAllEntitiesRPGable = false;
+            public boolean isAllEntitiesRPGable = true;
 
             public int playerLoseLvlCount = 3;
             public int playerStartManaValue = 10;
