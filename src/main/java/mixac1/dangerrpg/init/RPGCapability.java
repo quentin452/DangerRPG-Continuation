@@ -1,5 +1,6 @@
 package mixac1.dangerrpg.init;
 
+import com.emoniph.witchery.entity.EntityVillageGuard;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.registry.GameData;
@@ -180,6 +181,11 @@ public abstract class RPGCapability {
         RPGRegister.registerRPGEntity(EntityIronGolem.class, new RPGCommonEntity(14f));
 
         RPGRegister.registerRPGEntity(EntityDragon.class, new RPGCommonEntity(10f));
+
+        // Check if the witchery mod is loaded
+        if (Loader.isModLoaded("witchery")) {
+        RPGRegister.registerRPGEntity(EntityVillageGuard.class, new RPGRangeEntityMob(2f));
+        }
 
         // Check if the golemtweaks mod is loaded
         if (Loader.isModLoaded("golemtweaks")) {

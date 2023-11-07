@@ -3,6 +3,7 @@ package mixac1.dangerrpg.hook;
 import mixac1.dangerrpg.hook.core.*;
 import mixac1.dangerrpg.hook.mod.etfuturumrequiem.HookFixEntityAttributesETFUTURUM;
 import mixac1.dangerrpg.hook.mod.golemtweaks.HookFixEntityAttributesGolemTweaks;
+import mixac1.dangerrpg.hook.mod.witchery.HookFixEntityAttributesWitchery;
 import mixac1.hooklib.minecraft.HookLoader;
 import mixac1.hooklib.minecraft.PrimaryClassTransformer;
 
@@ -28,5 +29,7 @@ public class RPGHookLoader extends HookLoader {
 
         registerHookContainer(HookFixEntityAttributesETFUTURUM.class.getName());
         registerHookContainer(HookFixEntityAttributesGolemTweaks.class.getName());
+        registerHookContainer(HookFixEntityAttributesWitchery.class.getName());
+
     }
 }

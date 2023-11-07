@@ -49,6 +49,7 @@ dependencies {
     implementation "curse.maven:et-futurum-requiem-441392:4769523-deobf-sources-api"
     implementation "curse.maven:golem-tweaks-746411:4722766-deobf-sources-api"
     implementation "curse.maven:fplib-665627:4824788-deobf-sources-api"
+    implementation "curse.maven:witchery-69673:2234410-deobf-sources-api"
 
 }
 
