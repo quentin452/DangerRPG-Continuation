@@ -50,7 +50,7 @@ public abstract class RPGCapability {
     public static final Map<Integer, ItemAttribute> mapIntToItemAttribute = new HashMap<>();
     public static final Map<Integer, GemType> mapIntToGemType = new HashMap<>();
     public static final Map<Integer, EntityAttribute> mapIntToEntityAttribute = new HashMap<>();
-    public static final Set<Class<? extends EntityLivingBase>> blackListEntities = new HashSet<Class<? extends EntityLivingBase>>() {
+    public static final Set<Class<? extends EntityLivingBase>> blackListEntities = new HashSet<>() {
 
         {
             add(EntityBat.class);
