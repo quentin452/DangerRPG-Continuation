@@ -1,3 +1,7 @@
+# (For Dev) Code Contribution 
+
+Go to the wiki : [Wiki](https://github.com/quentin452/DangerRPG-Continuation/wiki)
+
 # Description
 
 Just a continuation of DangerRPG for minecraft 1.7.10
