@@ -8,7 +8,7 @@ import mixac1.dangerrpg.capability.PlayerAttributes;
 import mixac1.dangerrpg.capability.RPGEntityHelper;
 import mixac1.dangerrpg.capability.data.RPGEntityProperties;
 import mixac1.dangerrpg.client.gui.GuiMode.GuiModeType;
-import mixac1.dangerrpg.hook.HookArmorSystem;
+import mixac1.dangerrpg.hook.core.HookArmorSystem;
 import mixac1.dangerrpg.init.RPGCapability;
 import mixac1.dangerrpg.init.RPGConfig.ClientConfig;
 import mixac1.dangerrpg.util.RPGHelper;

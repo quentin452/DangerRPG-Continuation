@@ -1,4 +1,4 @@
-package mixac1.dangerrpg.hook;
+package mixac1.dangerrpg.hook.core;
 
 import mixac1.dangerrpg.api.event.ItemStackEvent.DealtDamageEvent;
 import mixac1.dangerrpg.api.event.ItemStackEvent.HitEntityEvent;

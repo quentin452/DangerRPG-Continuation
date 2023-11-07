@@ -2,6 +2,7 @@ package mixac1.dangerrpg.init;
 
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.registry.GameData;
+import ganymedes01.etfuturum.entities.EntityStray;
 import mixac1.dangerrpg.DangerRPG;
 import mixac1.dangerrpg.api.RPGRegister;
 import mixac1.dangerrpg.api.entity.EntityAttribute;
@@ -165,6 +166,8 @@ public abstract class RPGCapability {
 
         RPGRegister.registerRPGEntity(EntityBlaze.class, new RPGRangeEntityMob(5f));
         RPGRegister.registerRPGEntity(EntitySkeleton.class, new RPGRangeEntityMob(2f));
+        RPGRegister.registerRPGEntity(EntityStray.class, new RPGRangeEntityMob(2f));
+
         RPGRegister.registerRPGEntity(EntityGhast.class, new RPGCommonRangeEntity(6f));
         RPGRegister.registerRPGEntity(EntityWither.class, new RPGRangeEntityMob(8f));
 

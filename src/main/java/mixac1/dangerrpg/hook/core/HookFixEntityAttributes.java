@@ -1,4 +1,4 @@
-package mixac1.dangerrpg.hook;
+package mixac1.dangerrpg.hook.core;
 
 import mixac1.dangerrpg.entity.projectile.EntityRPGArrow;
 import mixac1.dangerrpg.init.RPGOther;

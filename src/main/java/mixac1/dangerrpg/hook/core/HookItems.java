@@ -1,4 +1,4 @@
-package mixac1.dangerrpg.hook;
+package mixac1.dangerrpg.hook.core;
 
 import com.google.common.collect.Multimap;
 import mixac1.dangerrpg.capability.ItemAttributes;

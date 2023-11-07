@@ -1,4 +1,4 @@
-package mixac1.dangerrpg.hook;
+package mixac1.dangerrpg.hook.core;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

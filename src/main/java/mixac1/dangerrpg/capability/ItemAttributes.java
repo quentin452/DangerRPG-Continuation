@@ -4,7 +4,7 @@ import mixac1.dangerrpg.api.item.IADynamic;
 import mixac1.dangerrpg.api.item.IAStatic;
 import mixac1.dangerrpg.capability.ia.*;
 import mixac1.dangerrpg.capability.ia.IADamage.IAMeleeDamage;
-import mixac1.dangerrpg.hook.HookArmorSystem;
+import mixac1.dangerrpg.hook.core.HookArmorSystem;
 import mixac1.dangerrpg.init.RPGOther.RPGDamageSource;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

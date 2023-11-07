@@ -9,7 +9,7 @@ import mixac1.dangerrpg.api.item.IRPGItem.*;
 import mixac1.dangerrpg.api.item.ItemAttribute;
 import mixac1.dangerrpg.capability.data.RPGItemRegister.ItemType;
 import mixac1.dangerrpg.capability.data.RPGItemRegister.RPGItemData;
-import mixac1.dangerrpg.hook.HookArmorSystem;
+import mixac1.dangerrpg.hook.core.HookArmorSystem;
 import mixac1.dangerrpg.init.RPGCapability;
 import mixac1.dangerrpg.init.RPGConfig.ItemConfig;
 import mixac1.dangerrpg.item.RPGArmorMaterial;
