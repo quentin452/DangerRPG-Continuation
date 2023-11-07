@@ -1,5 +1,6 @@
 package mixac1.dangerrpg;
 
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -7,6 +8,7 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import mixac1.dangerrpg.init.RPGConfig.MainConfig;
 import mixac1.dangerrpg.proxy.CommonProxy;
 import mixac1.dangerrpg.util.Utils;
@@ -37,6 +39,9 @@ public class DangerRPG {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        if(isGolemTweaksPresent()) {
+            throw new RuntimeException("GolemTweaks is incompatible with DangerRPG Continuation! PLS REMOVE IT");
+        }
         proxy.preInit(event);
     }
 
@@ -50,6 +55,9 @@ public class DangerRPG {
         proxy.postInit(event);
     }
 
+    private boolean isGolemTweaksPresent() {
+        return Loader.isModLoaded("golemtweaks");
+    }
     public static void log(Object... objs) {
         StringBuilder buf = new StringBuilder();
         for (Object obj : objs) {
