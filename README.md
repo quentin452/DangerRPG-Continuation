@@ -26,10 +26,6 @@ Go here : [Wiki](https://github.com/quentin452/DangerRPG-Continuation/wiki)
 
 [FalsePatternLib](https://legacy.curseforge.com/minecraft/mc-mods/fplib/files/4701057)
 
-# Incompat
-
-This mod can cause problems with [Golem Tweaks](https://www.curseforge.com/minecraft/mc-mods/golem-tweaks) , see [#40](https://github.com/quentin452/DangerRPG-Continuation/issues/40)
-
 # Discord
 
 Add me on discord : imacatfr
