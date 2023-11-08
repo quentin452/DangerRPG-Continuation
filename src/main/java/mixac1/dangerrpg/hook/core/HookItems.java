@@ -39,8 +39,8 @@ public class HookItems {
             RPGItemHelper.reinitRPGItem(stack);
         }
     }
-
-    @Hook(injectOnExit = true, returnCondition = ReturnCondition.ALWAYS)
+      // disabled due to making bugs + it seem that's unneeded , fix https://github.com/quentin452/DangerRPG-Continuation/issues/57 + fix https://github.com/quentin452/DangerRPG-Continuation/issues/59
+  /*  @Hook(injectOnExit = true, returnCondition = ReturnCondition.ALWAYS)
     public static Multimap getAttributeModifiers(Item item, ItemStack stack, @ReturnValue Multimap returnValue) {
         if (RPGItemHelper.isRPGable(stack)) {
             if (ItemAttributes.MELEE_DAMAGE.hasIt(stack)) {
@@ -57,22 +57,22 @@ public class HookItems {
         return returnValue;
     }
 
+   */
+
     @Hook(injectOnExit = true, returnCondition = ReturnCondition.ALWAYS)
     public static int getItemEnchantability(Item item, ItemStack stack, @ReturnValue int returnValue) {
-        if (RPGItemHelper.isRPGable(stack)) {
-            if (ItemAttributes.ENCHANTABILITY.hasIt(stack)) {
+        if (RPGItemHelper.isRPGable(stack) && (ItemAttributes.ENCHANTABILITY.hasIt(stack))) {
                 return (int) ItemAttributes.ENCHANTABILITY.get(stack);
-            }
+
         }
         return returnValue;
     }
 
     @Hook(injectOnExit = true, returnCondition = ReturnCondition.ALWAYS)
     public static int getMaxDamage(ItemStack stack, @ReturnValue int returnValue) {
-        if (RPGItemHelper.isRPGable(stack)) {
-            if (returnValue > 0 && ItemAttributes.MAX_DURABILITY.hasIt(stack)) {
+        if (RPGItemHelper.isRPGable(stack) && (returnValue > 0 && ItemAttributes.MAX_DURABILITY.hasIt(stack))) {
                 return (int) ItemAttributes.MAX_DURABILITY.get(stack);
-            }
+
         }
         return returnValue;
     }
