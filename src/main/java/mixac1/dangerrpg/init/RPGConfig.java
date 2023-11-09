@@ -169,7 +169,7 @@ public class RPGConfig {
             public int guiChargeOffsetX = 0;
             public int guiChargeOffsetY = 45;
             public boolean guiChargeIsCentered = true;
-            public boolean guiTwiceHealthManaBar = true;
+            public boolean guiTwiceHealthManaBar = false;
             public int guiDafaultHUDMode = 1;
             public int guiDamageForTestArmor = 25;
 
