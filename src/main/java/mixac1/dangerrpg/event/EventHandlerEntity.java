@@ -4,6 +4,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import mixac1.dangerrpg.DangerRPG;
 import mixac1.dangerrpg.api.entity.EntityAttribute.EAFloat;
+import mixac1.dangerrpg.api.entity.LvlEAProvider;
 import mixac1.dangerrpg.api.event.InitRPGEntityEvent;
 import mixac1.dangerrpg.api.event.ItemStackEvent.StackChangedEvent;
 import mixac1.dangerrpg.capability.EntityAttributes;
@@ -29,7 +30,24 @@ import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 
+import java.util.concurrent.TimeUnit;
+
 public class EventHandlerEntity {
+
+    // fix https://github.com/quentin452/DangerRPG-Continuation/issues/36
+    @SubscribeEvent
+    public void onDimensionChange(cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent event) {
+        if (event.player != null) {
+            LvlEAProvider<Float> healthLvlProvider = RPGEntityProperties.get(event.player).getLvlProvider(PlayerAttributes.HEALTH.hash);
+            healthLvlProvider.tryUpfixissue36(event.player, event.player, true);
+            try {
+                TimeUnit.MILLISECONDS.sleep(500); // Wait for 500 milliseconds = 0.5 seconde
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            healthLvlProvider.tryUpfixissue36(event.player, event.player, false);
+        }
+    }
 
     @SubscribeEvent
     public void onEntityConstructing(EntityConstructing e) {

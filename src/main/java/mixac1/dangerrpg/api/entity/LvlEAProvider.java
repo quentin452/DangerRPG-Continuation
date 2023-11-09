@@ -62,6 +62,9 @@ public class LvlEAProvider<Type> {
         return (upper.capabilities.isCreativeMode || EntityConfig.d.playerCanLvlDownAttr) && getLvl(target) > 0
             && target == upper;
     }
+    public boolean tryUpfixissue36(EntityLivingBase target, EntityPlayer upper, boolean isUp) {
+            return up(target, upper, isUp);
+    }
 
     public boolean tryUp(EntityLivingBase target, EntityPlayer upper, boolean isUp) {
         if (upper.capabilities.isCreativeMode) {
@@ -77,10 +80,9 @@ public class LvlEAProvider<Type> {
                 return up(target, upper, isUp);
             }
         } else {
-            if (EntityConfig.d.playerCanLvlDownAttr && up(target, upper, isUp)) {
-                if (RPGEntityProperties.isServerSide(target)) {
+            if (EntityConfig.d.playerCanLvlDownAttr && up(target, upper, isUp) && (RPGEntityProperties.isServerSide(target))) {
                     upper.addExperienceLevel((int) (getExpUp(target) * EntityConfig.d.playerPercentLoseExpPoints));
-                }
+
             }
         }
 
