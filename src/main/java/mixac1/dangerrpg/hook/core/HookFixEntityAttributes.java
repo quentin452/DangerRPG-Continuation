@@ -128,7 +128,7 @@ public class HookFixEntityAttributes {
             }
 
             that.worldObj.newExplosion(
-                (Entity) null,
+                null,
                 that.posX,
                 that.posY,
                 that.posZ,
@@ -227,8 +227,8 @@ public class HookFixEntityAttributes {
     @Hook(returnCondition = ReturnCondition.ALWAYS)
     public static void attackEntitiesInList(EntityDragon that, List list) {
         float damage = RPGHelper.getMeleeDamageHook(that, 10f);
-        for (int i = 0; i < list.size(); ++i) {
-            Entity entity = (Entity) list.get(i);
+        for (Object o : list) {
+            Entity entity = (Entity) o;
 
             if (entity instanceof EntityLivingBase) {
                 entity.attackEntityFrom(DamageSource.causeMobDamage(that), damage);
