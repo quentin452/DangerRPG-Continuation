@@ -4,6 +4,7 @@ import com.emoniph.witchery.entity.EntityVillageGuard;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.registry.GameData;
+import ganymedes01.etfuturum.entities.EntityShulker;
 import ganymedes01.etfuturum.entities.EntityStray;
 import mixac1.dangerrpg.DangerRPG;
 import mixac1.dangerrpg.api.RPGRegister;
@@ -184,7 +185,7 @@ public abstract class RPGCapability {
 
         // Check if the witchery mod is loaded
         if (Loader.isModLoaded("witchery")) {
-        RPGRegister.registerRPGEntity(EntityVillageGuard.class, new RPGRangeEntityMob(2f));
+            RPGRegister.registerRPGEntity(EntityVillageGuard.class, new RPGRangeEntityMob(2f));
         }
 
         // Check if the golemtweaks mod is loaded
@@ -195,6 +196,7 @@ public abstract class RPGCapability {
         // Check if the etfuturum mod is loaded
         if (Loader.isModLoaded("etfuturum")) {
             RPGRegister.registerRPGEntity(EntityStray.class, new RPGRangeEntityMob(2f));
+            RPGRegister.registerRPGEntity(EntityShulker.class, new RPGCommonRangeEntity(2f));
         }
     }
 
