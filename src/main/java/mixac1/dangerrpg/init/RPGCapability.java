@@ -4,7 +4,6 @@ import com.emoniph.witchery.entity.EntityVillageGuard;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.registry.GameData;
-import ganymedes01.etfuturum.entities.EntityShulker;
 import ganymedes01.etfuturum.entities.EntityStray;
 import mixac1.dangerrpg.DangerRPG;
 import mixac1.dangerrpg.api.RPGRegister;
@@ -52,7 +51,7 @@ public abstract class RPGCapability {
     public static final Map<Integer, ItemAttribute> mapIntToItemAttribute = new HashMap<>();
     public static final Map<Integer, GemType> mapIntToGemType = new HashMap<>();
     public static final Map<Integer, EntityAttribute> mapIntToEntityAttribute = new HashMap<>();
-    public static final Set<Class<? extends EntityLivingBase>> blackListEntities = new HashSet<Class<? extends EntityLivingBase>>() {
+    public static final Set<Class<? extends EntityLivingBase>> blackListEntities = new HashSet<>() {
 
         {
             add(EntityBat.class);
@@ -196,8 +195,6 @@ public abstract class RPGCapability {
         // Check if the etfuturum mod is loaded
         if (Loader.isModLoaded("etfuturum")) {
             RPGRegister.registerRPGEntity(EntityStray.class, new RPGRangeEntityMob(2f));
-            //todo :  fix the entity can't hit the player with their projectile
-          //  RPGRegister.registerRPGEntity(EntityShulker.class, new RPGCommonRangeEntity(2f));
         }
     }
 
