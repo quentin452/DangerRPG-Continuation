@@ -19,12 +19,16 @@ import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.event.entity.living.LivingEvent;
 
 @SideOnly(Side.CLIENT)
 public class EventHandlerClient {
 
     public static Minecraft mc = Minecraft.getMinecraft();
-
+    @SubscribeEvent
+    public void displayDamage(LivingEvent.LivingUpdateEvent event) {
+        DangerRPG.proxy.displayDamageDealt(event.entityLiving);
+    }
     @SubscribeEvent
     public void renderRPGGuiIngame(RenderGameOverlayEvent.Post event) {
         if (!event.isCancelable() && event.type == ElementType.ALL && ClientConfig.d.guiEnableHUD) {

@@ -9,12 +9,14 @@ import mixac1.dangerrpg.init.*;
 import mixac1.dangerrpg.util.RPGTicks;
 import mixac1.dangerrpg.world.RPGEntityFXManager.IEntityFXType;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class CommonProxy {
 
     protected RPGTicks serverTicks = new RPGTicks();
-
+    public void displayDamageDealt(EntityLivingBase entityLiving) {
+    }
     public void preInit(FMLPreInitializationEvent e) {
         RPGAnotherMods.load(e);
 
