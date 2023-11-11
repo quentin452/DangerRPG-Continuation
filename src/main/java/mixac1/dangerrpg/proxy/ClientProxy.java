@@ -16,6 +16,7 @@ import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.world.World;
 
@@ -24,39 +25,36 @@ public class ClientProxy extends CommonProxy {
     private RPGTicks clientTicks = new RPGTicks();
     @Override
     public void displayDamageDealt(EntityLivingBase entity) {
-
-        if (!entity.worldObj.isRemote)
-            return;
-        if (!RPGConfig.ClientConfig.Data.showDamageParticles)
+        if (!entity.worldObj.isRemote || !RPGConfig.ClientConfig.Data.showDamageParticles)
             return;
 
         int currentHealth = (int) Math.ceil(entity.getHealth());
 
-        if (entity.getEntityData().hasKey("health")) {
-            int entityHealth = ((NBTTagInt) entity.getEntityData().getTag("health")).func_150287_d();
+        NBTTagCompound entityData = entity.getEntityData();
+        if (entityData.hasKey("health")) {
+            int entityHealth = entityData.getInteger("health");
 
             if (entityHealth != currentHealth) {
                 displayParticle(entity, entityHealth - currentHealth);
             }
         }
 
-        entity.getEntityData().setTag("health", new NBTTagInt(currentHealth));
+        entityData.setInteger("health", currentHealth);
     }
 
     private void displayParticle(EntityLivingBase entity, int damage) {
-
-        if (damage == 0)
-            return;
-        if (!entity.canEntityBeSeen(Minecraft.getMinecraft().thePlayer) && !RPGConfig.ClientConfig.Data.showAlways)
+        if (damage == 0 || (!entity.canEntityBeSeen(Minecraft.getMinecraft().thePlayer) && !RPGConfig.ClientConfig.Data.showAlways))
             return;
 
         World world = entity.worldObj;
         double motionX = world.rand.nextGaussian() * 0.02;
         double motionY = 0.5f;
         double motionZ = world.rand.nextGaussian() * 0.02;
+
         EntityFX damageIndicator = new DamageParticles(damage, world, entity.posX, entity.posY + entity.height, entity.posZ, motionX, motionY, motionZ);
         Minecraft.getMinecraft().effectRenderer.addEffect(damageIndicator);
     }
+
     @Override
     public void preInit(FMLPreInitializationEvent e) {
         super.preInit(e);
