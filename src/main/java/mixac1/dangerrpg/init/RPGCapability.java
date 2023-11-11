@@ -185,7 +185,7 @@ public abstract class RPGCapability {
 
         // Check if the witchery mod is loaded
         if (Loader.isModLoaded("witchery")) {
-        RPGRegister.registerRPGEntity(EntityVillageGuard.class, new RPGRangeEntityMob(2f));
+            RPGRegister.registerRPGEntity(EntityVillageGuard.class, new RPGRangeEntityMob(2f));
         }
 
         // Check if the golemtweaks mod is loaded
@@ -196,8 +196,7 @@ public abstract class RPGCapability {
         // Check if the etfuturum mod is loaded
         if (Loader.isModLoaded("etfuturum")) {
             RPGRegister.registerRPGEntity(EntityStray.class, new RPGRangeEntityMob(2f));
-            //todo :  fix the entity can't hit the player with their projectile
-          //  RPGRegister.registerRPGEntity(EntityShulker.class, new RPGCommonRangeEntity(2f));
+            RPGRegister.registerRPGEntity(EntityShulker.class, new RPGCommonRangeEntity(2f));
         }
     }
 

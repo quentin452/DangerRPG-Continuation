@@ -10,4 +10,8 @@ public class DangerConfig {
     @Config.DefaultBoolean(true)
     @Config.RequiresWorldRestart
     public static boolean enablefixGuiissueswithOptifine;
+    @Config.Comment("Fix damage from Shulker Bullet to be scalable")
+    @Config.DefaultBoolean(true)
+    @Config.RequiresWorldRestart
+    public static boolean enablefixShulkerBulletDamage;
 }
