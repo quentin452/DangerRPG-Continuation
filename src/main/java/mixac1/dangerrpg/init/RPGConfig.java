@@ -174,6 +174,13 @@ public class RPGConfig {
             public int guiDamageForTestArmor = 25;
 
             public boolean neiShowShapedRecipe = false;
+            private static final String[] acceptedColors = new String[]{"RED", "GREEN", "BLUE", "YELLOW", "ORANGE", "WHITE", "BLACK", "PURPLE"};
+            public static Configuration config;
+            public static boolean showDamageParticles = true;
+            public static boolean showAlways = false;
+            public static Integer damageColor;
+            public static Integer healColor;
+            public static double size2 = 3.0;
         }
 
         public static Data d = new Data();
@@ -288,6 +295,12 @@ public class RPGConfig {
                 d.neiShowShapedRecipe,
                 "Is show default recipes in RPG workbench (need NEI) (true/false)");
 
+            d.showDamageParticles = config.getBoolean("Show Damage Particles", Configuration.CATEGORY_GENERAL, true, "Show Damage Indicators");
+            d.showAlways = config.getBoolean("Show Always Particles", Configuration.CATEGORY_GENERAL, false, "Show Always The Damage Particles");
+            d.size2 = config.get(Configuration.CATEGORY_GENERAL, "Particles Size", d.size2, "Particles Size [default: 3.0]").getDouble();
+            d.healColor = mapColor(config.getString("Heal Color", Configuration.CATEGORY_GENERAL, "GREEN", "Heal Text Color", d.acceptedColors));
+            d.damageColor = mapColor(config.getString("Damage Color", Configuration.CATEGORY_GENERAL, "RED", "Damage Text Color", d.acceptedColors));
+
             save();
         }
 
@@ -299,6 +312,27 @@ public class RPGConfig {
         @Override
         public void extractTransferData(byte[] transferData) {
             d = Utils.deserialize(transferData);
+        }
+
+        private static int mapColor(String color) {
+            switch (color) {
+                case "RED":
+                    return 0xff0000;
+                case "GREEN":
+                    return 0x00ff00;
+                case "BLUE":
+                    return 0x0000ff;
+                case "YELLOW":
+                    return 0xffff00;
+                case "ORANGE":
+                    return 0xffa500;
+                case "BLACK":
+                    return 0x000000;
+                case "PURPLE":
+                    return 0x960096;
+                default:
+                    return 0xffffff;
+            }
         }
     }
 
