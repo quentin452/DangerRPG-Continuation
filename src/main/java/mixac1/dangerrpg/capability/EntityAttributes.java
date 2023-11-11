@@ -3,6 +3,7 @@ package mixac1.dangerrpg.capability;
 import mixac1.dangerrpg.api.entity.EAWithIAttr;
 import mixac1.dangerrpg.api.entity.EntityAttribute;
 import mixac1.dangerrpg.api.entity.EntityAttributeE;
+import mixac1.dangerrpg.api.entity.EntityAttributeES;
 import mixac1.dangerrpg.capability.ea.EAHealth;
 import mixac1.dangerrpg.capability.ea.EALvl;
 import mixac1.dangerrpg.capability.ea.EASlimeDamage;
