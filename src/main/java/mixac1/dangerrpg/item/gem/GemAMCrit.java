@@ -1,5 +1,12 @@
 package mixac1.dangerrpg.item.gem;
 
+import java.util.HashSet;
+
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
 import mixac1.dangerrpg.capability.GemAttributes;
 import mixac1.dangerrpg.capability.data.RPGItemRegister.RPGItemData;
 import mixac1.dangerrpg.init.RPGConfig.MainConfig;
@@ -7,12 +14,6 @@ import mixac1.dangerrpg.init.RPGOther;
 import mixac1.dangerrpg.util.IMultiplier.MultiplierAdd;
 import mixac1.dangerrpg.util.RPGHelper;
 import mixac1.dangerrpg.util.Tuple.Stub;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
-import java.util.HashSet;
 
 public class GemAMCrit extends GemAttackModifier {
 

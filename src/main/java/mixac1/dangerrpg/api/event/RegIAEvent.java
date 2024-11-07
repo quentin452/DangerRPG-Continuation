@@ -1,9 +1,10 @@
 package mixac1.dangerrpg.api.event;
 
+import net.minecraft.item.*;
+
 import cpw.mods.fml.common.eventhandler.Event;
 import mixac1.dangerrpg.api.item.ItemAttribute;
 import mixac1.dangerrpg.capability.data.RPGItemRegister.RPGItemData;
-import net.minecraft.item.*;
 
 public class RegIAEvent extends Event {
 

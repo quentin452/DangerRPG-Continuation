@@ -1,5 +1,20 @@
 package mixac1.dangerrpg.nei;
 
+import static codechicken.lib.gui.GuiDraw.changeTexture;
+import static codechicken.lib.gui.GuiDraw.drawTexturedModalRect;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+
+import org.lwjgl.opengl.GL11;
+
 import codechicken.core.ReflectionManager;
 import codechicken.nei.NEIClientConfig;
 import codechicken.nei.NEIServerUtils;
@@ -11,19 +26,6 @@ import mixac1.dangerrpg.init.RPGConfig.ClientConfig;
 import mixac1.dangerrpg.inventory.ContainerRPGWorkbench;
 import mixac1.dangerrpg.recipe.LargeShapedRecipe;
 import mixac1.dangerrpg.util.Utils;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.ShapedRecipes;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import org.lwjgl.opengl.GL11;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static codechicken.lib.gui.GuiDraw.changeTexture;
-import static codechicken.lib.gui.GuiDraw.drawTexturedModalRect;
 
 public class LargeShapedRecipeHandler extends TemplateRecipeHandler {
 

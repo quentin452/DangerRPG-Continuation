@@ -1,16 +1,17 @@
 package mixac1.dangerrpg.world;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.EntityAuraFX;
+import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.EntityReddustFX;
+import net.minecraft.client.particle.EntitySmokeFX;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mixac1.dangerrpg.client.RPGParticles.EntityAuraFXE;
 import mixac1.dangerrpg.client.RPGParticles.EntityReddustFXE;
 import mixac1.dangerrpg.client.RPGParticles.EntitySmokeFXE;
 import mixac1.dangerrpg.client.RPGRenderHelper.Color;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EntityAuraFX;
-import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.particle.EntityReddustFX;
-import net.minecraft.client.particle.EntitySmokeFX;
 
 public class RPGEntityFXManager {
 

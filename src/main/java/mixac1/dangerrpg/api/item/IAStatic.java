@@ -1,7 +1,8 @@
 package mixac1.dangerrpg.api.item;
 
-import mixac1.dangerrpg.init.RPGCapability;
 import net.minecraft.item.ItemStack;
+
+import mixac1.dangerrpg.init.RPGCapability;
 
 /**
  * Extends this class for creating Static {@link ItemAttribute}<br>

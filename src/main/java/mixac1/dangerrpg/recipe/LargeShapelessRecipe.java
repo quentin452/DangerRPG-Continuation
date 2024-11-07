@@ -1,6 +1,9 @@
 package mixac1.dangerrpg.recipe;
 
-import mixac1.dangerrpg.inventory.ContainerRPGWorkbench;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
@@ -8,9 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import mixac1.dangerrpg.inventory.ContainerRPGWorkbench;
 
 public class LargeShapelessRecipe implements IRecipe {
 

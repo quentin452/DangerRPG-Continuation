@@ -1,15 +1,15 @@
 package mixac1.dangerrpg.capability;
 
+import java.util.UUID;
+
+import net.minecraft.entity.SharedMonsterAttributes;
+
 import mixac1.dangerrpg.api.entity.EAWithIAttr;
 import mixac1.dangerrpg.api.entity.EntityAttribute;
 import mixac1.dangerrpg.api.entity.EntityAttributeE;
-import mixac1.dangerrpg.api.entity.EntityAttributeES;
 import mixac1.dangerrpg.capability.ea.EAHealth;
 import mixac1.dangerrpg.capability.ea.EALvl;
 import mixac1.dangerrpg.capability.ea.EASlimeDamage;
-import net.minecraft.entity.SharedMonsterAttributes;
-
-import java.util.UUID;
 
 public class EntityAttributes {
 
@@ -25,5 +25,7 @@ public class EntityAttributes {
     public static final EntityAttribute.EAFloat RANGE_DAMAGE = new EntityAttribute.EAFloat("range_damage");
 
     public static final EntityAttribute.EAFloat MELEE_DAMAGE_STAB = new EntityAttribute.EAFloat("melee_damage");
-    public static final EAWithIAttr MELEE_DAMAGE_SLIME = new EASlimeDamage   ("melee_damage", SharedMonsterAttributes.attackDamage);
+    public static final EAWithIAttr MELEE_DAMAGE_SLIME = new EASlimeDamage(
+        "melee_damage",
+        SharedMonsterAttributes.attackDamage);
 }

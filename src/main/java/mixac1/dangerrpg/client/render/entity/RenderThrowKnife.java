@@ -1,6 +1,7 @@
 package mixac1.dangerrpg.client.render.entity;
 
 import net.minecraft.item.ItemStack;
+
 import org.lwjgl.opengl.GL11;
 
 public class RenderThrowKnife extends RenderMaterial {

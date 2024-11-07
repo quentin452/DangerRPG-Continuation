@@ -1,9 +1,10 @@
 package mixac1.dangerrpg.client.model;
 
-import mixac1.dangerrpg.DangerRPG;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+
+import mixac1.dangerrpg.DangerRPG;
 
 public class ModelOrb extends ModelProjectile {
 

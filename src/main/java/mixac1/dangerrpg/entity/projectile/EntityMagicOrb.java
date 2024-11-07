@@ -1,17 +1,18 @@
 package mixac1.dangerrpg.entity.projectile;
 
-import mixac1.dangerrpg.DangerRPG;
-import mixac1.dangerrpg.entity.projectile.core.EntityCommonMagic;
-import mixac1.dangerrpg.world.RPGEntityFXManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
+import mixac1.dangerrpg.DangerRPG;
+import mixac1.dangerrpg.entity.projectile.core.EntityCommonMagic;
+import mixac1.dangerrpg.world.RPGEntityFXManager;
+
 public class EntityMagicOrb extends EntityCommonMagic {
+
     private EntityLivingBase thrower;
     private EntityLivingBase target;
-
 
     public EntityMagicOrb(World world) {
         super(world);

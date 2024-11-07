@@ -1,5 +1,16 @@
 package mixac1.dangerrpg.item.weapon;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumAction;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
+import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
+
 import mixac1.dangerrpg.DangerRPG;
 import mixac1.dangerrpg.api.item.IRPGItem.IRPGItemStaff;
 import mixac1.dangerrpg.capability.ItemAttributes;
@@ -14,16 +25,6 @@ import mixac1.dangerrpg.item.RPGToolMaterial;
 import mixac1.dangerrpg.util.RPGHelper;
 import mixac1.dangerrpg.util.Utils;
 import mixac1.dangerrpg.world.RPGEntityFXManager;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumAction;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
 
 public class ItemRPGStaff extends ItemSword implements IRPGItemStaff, IHasBooksInfo {
 

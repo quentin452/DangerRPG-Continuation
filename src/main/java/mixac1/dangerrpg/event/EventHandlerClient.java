@@ -1,5 +1,12 @@
 package mixac1.dangerrpg.event;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.event.entity.living.LivingEvent;
+
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -14,21 +21,17 @@ import mixac1.dangerrpg.init.RPGKeyBinds;
 import mixac1.dangerrpg.init.RPGNetwork;
 import mixac1.dangerrpg.item.IUseItemExtra;
 import mixac1.dangerrpg.network.MsgUseItemExtra;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityClientPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
-import net.minecraftforge.event.entity.living.LivingEvent;
 
 @SideOnly(Side.CLIENT)
 public class EventHandlerClient {
 
     public static Minecraft mc = Minecraft.getMinecraft();
+
     @SubscribeEvent
     public void displayDamage(LivingEvent.LivingUpdateEvent event) {
         DangerRPG.proxy.displayDamageDealt(event.entityLiving);
     }
+
     @SubscribeEvent
     public void renderRPGGuiIngame(RenderGameOverlayEvent.Post event) {
         if (!event.isCancelable() && event.type == ElementType.ALL && ClientConfig.d.guiEnableHUD) {

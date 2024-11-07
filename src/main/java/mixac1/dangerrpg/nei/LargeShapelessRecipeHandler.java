@@ -1,20 +1,21 @@
 package mixac1.dangerrpg.nei;
 
-import codechicken.nei.NEIServerUtils;
-import codechicken.nei.PositionedStack;
-import mixac1.dangerrpg.DangerRPG;
-import mixac1.dangerrpg.init.RPGConfig.ClientConfig;
-import mixac1.dangerrpg.inventory.ContainerRPGWorkbench;
-import mixac1.dangerrpg.recipe.LargeShapelessRecipe;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import codechicken.nei.NEIServerUtils;
+import codechicken.nei.PositionedStack;
+import mixac1.dangerrpg.DangerRPG;
+import mixac1.dangerrpg.init.RPGConfig.ClientConfig;
+import mixac1.dangerrpg.inventory.ContainerRPGWorkbench;
+import mixac1.dangerrpg.recipe.LargeShapelessRecipe;
 
 public class LargeShapelessRecipeHandler extends LargeShapedRecipeHandler {
 

@@ -1,13 +1,12 @@
 package mixac1.dangerrpg.init;
 
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.registry.GameRegistry;
-import mixac1.dangerrpg.DangerRPG;
-import mixac1.dangerrpg.recipe.LargeShapedRecipe;
-import mixac1.dangerrpg.recipe.LargeShapelessRecipe;
-import mixac1.dangerrpg.recipe.RecipeColorArmorDyes;
-import mixac1.dangerrpg.recipe.RecipeCreator;
-import mixac1.dangerrpg.util.Utils;
+import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPED;
+import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPELESS;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -21,12 +20,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-
-import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPED;
-import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPELESS;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
+import mixac1.dangerrpg.DangerRPG;
+import mixac1.dangerrpg.recipe.LargeShapedRecipe;
+import mixac1.dangerrpg.recipe.LargeShapelessRecipe;
+import mixac1.dangerrpg.recipe.RecipeColorArmorDyes;
+import mixac1.dangerrpg.recipe.RecipeCreator;
+import mixac1.dangerrpg.util.Utils;
 
 public abstract class RPGRecipes {
 

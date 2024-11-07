@@ -1,14 +1,15 @@
 package mixac1.hooklib.asm;
 
-import mixac1.dangerrpg.DangerRPG;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassWriter;
-
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassWriter;
+
+import mixac1.dangerrpg.DangerRPG;
 
 public class HookClassTransformer {
 

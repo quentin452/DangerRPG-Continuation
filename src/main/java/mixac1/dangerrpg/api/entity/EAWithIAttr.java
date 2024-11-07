@@ -1,6 +1,7 @@
 package mixac1.dangerrpg.api.entity;
 
-import mixac1.dangerrpg.api.entity.EntityAttribute.EAFloat;
+import java.util.UUID;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttribute;
@@ -8,7 +9,7 @@ import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.nbt.NBTTagCompound;
 
-import java.util.UUID;
+import mixac1.dangerrpg.api.entity.EntityAttribute.EAFloat;
 
 public class EAWithIAttr extends EAFloat {
 

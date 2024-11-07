@@ -1,5 +1,9 @@
 package mixac1.dangerrpg.item.gem;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
 import mixac1.dangerrpg.DangerRPG;
 import mixac1.dangerrpg.api.entity.EntityAttribute;
 import mixac1.dangerrpg.api.item.GemType;
@@ -8,9 +12,6 @@ import mixac1.dangerrpg.capability.GemTypes;
 import mixac1.dangerrpg.capability.data.RPGItemRegister.RPGItemData;
 import mixac1.dangerrpg.util.IMultiplier.Multiplier;
 import mixac1.dangerrpg.util.Utils;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 
 public class GemPassiveAttribute extends Gem {
 

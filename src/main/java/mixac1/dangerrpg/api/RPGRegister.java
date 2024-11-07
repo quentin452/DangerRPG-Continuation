@@ -1,5 +1,10 @@
 package mixac1.dangerrpg.api;
 
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.MinecraftForgeClient;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mixac1.dangerrpg.api.entity.IRPGEntity;
@@ -10,10 +15,6 @@ import mixac1.dangerrpg.client.render.item.RenderItemModel;
 import mixac1.dangerrpg.init.RPGCapability;
 import mixac1.dangerrpg.init.RPGRenderers;
 import mixac1.dangerrpg.util.Utils;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.MinecraftForgeClient;
 
 public abstract class RPGRegister {
 

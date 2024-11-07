@@ -1,10 +1,11 @@
 package mixac1.dangerrpg.capability.ia;
 
+import net.minecraft.item.ItemStack;
+
 import mixac1.dangerrpg.api.item.IADynamic;
 import mixac1.dangerrpg.init.RPGCapability;
 import mixac1.dangerrpg.init.RPGConfig.ItemConfig;
 import mixac1.dangerrpg.util.Utils;
-import net.minecraft.item.ItemStack;
 
 public class IALevel extends IADynamic {
 

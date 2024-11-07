@@ -1,7 +1,7 @@
 package mixac1.dangerrpg.world.explosion;
 
-import mixac1.dangerrpg.init.RPGNetwork;
-import mixac1.dangerrpg.network.MsgExplosion;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -13,7 +13,8 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.Explosion;
 
-import java.util.List;
+import mixac1.dangerrpg.init.RPGNetwork;
+import mixac1.dangerrpg.network.MsgExplosion;
 
 public class ExplosionCommonRPG extends Explosion {
 

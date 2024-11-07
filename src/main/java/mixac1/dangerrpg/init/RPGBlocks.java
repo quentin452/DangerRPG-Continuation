@@ -1,12 +1,13 @@
 package mixac1.dangerrpg.init;
 
+import net.minecraft.block.Block;
+
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import mixac1.dangerrpg.block.BlockLvlupTable;
 import mixac1.dangerrpg.block.BlockModificationTable;
 import mixac1.dangerrpg.block.BlockRPGWorkbench;
 import mixac1.dangerrpg.block.BlockSyntheticBedrock;
-import net.minecraft.block.Block;
 
 public abstract class RPGBlocks {
 

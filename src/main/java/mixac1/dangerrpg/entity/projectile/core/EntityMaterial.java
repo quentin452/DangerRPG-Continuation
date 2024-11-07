@@ -1,6 +1,5 @@
 package mixac1.dangerrpg.entity.projectile.core;
 
-import mixac1.dangerrpg.DangerRPG;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -12,6 +11,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+
+import mixac1.dangerrpg.DangerRPG;
 
 public class EntityMaterial extends EntityWithStack {
 

@@ -1,5 +1,11 @@
 package mixac1.dangerrpg.capability;
 
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.common.MinecraftForge;
+
 import mixac1.dangerrpg.api.entity.IRPGEntity;
 import mixac1.dangerrpg.api.entity.LvlEAProvider.DafailtLvlEAProvider;
 import mixac1.dangerrpg.api.event.RegEAEvent;
@@ -10,11 +16,6 @@ import mixac1.dangerrpg.util.IMultiplier;
 import mixac1.dangerrpg.util.IMultiplier.Multiplier;
 import mixac1.dangerrpg.util.IMultiplier.MultiplierAdd;
 import mixac1.dangerrpg.util.IMultiplier.MultiplierMul;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.common.MinecraftForge;
 
 public abstract class RPGEntityHelper {
 

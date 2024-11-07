@@ -1,9 +1,5 @@
 package mixac1.dangerrpg.entity.projectile;
 
-import mixac1.dangerrpg.api.event.ItemStackEvent.DealtDamageEvent;
-import mixac1.dangerrpg.api.event.ItemStackEvent.HitEntityEvent;
-import mixac1.dangerrpg.capability.ItemAttributes;
-import mixac1.dangerrpg.entity.projectile.core.EntityMaterial;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -11,6 +7,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+
+import mixac1.dangerrpg.api.event.ItemStackEvent.DealtDamageEvent;
+import mixac1.dangerrpg.api.event.ItemStackEvent.HitEntityEvent;
+import mixac1.dangerrpg.capability.ItemAttributes;
+import mixac1.dangerrpg.entity.projectile.core.EntityMaterial;
 
 public class EntityRPGArrow extends EntityMaterial {
 

@@ -1,13 +1,13 @@
 package mixac1.hooklib.helper;
 
-import org.apache.commons.io.FileUtils;
-
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.io.FileUtils;
 
 public class DictionaryGenerator {
 

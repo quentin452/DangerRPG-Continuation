@@ -1,5 +1,7 @@
 package mixac1.dangerrpg.init;
 
+import net.minecraftforge.common.MinecraftForge;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -8,7 +10,6 @@ import mixac1.dangerrpg.event.EventHandlerClient;
 import mixac1.dangerrpg.event.EventHandlerCommon;
 import mixac1.dangerrpg.event.EventHandlerEntity;
 import mixac1.dangerrpg.event.EventHandlerItem;
-import net.minecraftforge.common.MinecraftForge;
 
 public abstract class RPGEvents {
 

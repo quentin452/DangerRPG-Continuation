@@ -1,12 +1,13 @@
 package mixac1.dangerrpg.inventory;
 
-import mixac1.dangerrpg.init.RPGRecipes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.world.World;
+
+import mixac1.dangerrpg.init.RPGRecipes;
 
 public class ContainerRPGWorkbench extends Container {
 

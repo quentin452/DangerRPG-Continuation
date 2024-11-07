@@ -1,16 +1,17 @@
 package mixac1.hooklib.minecraft;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Map;
+
+import org.apache.commons.io.IOUtils;
+
 import cpw.mods.fml.common.asm.transformers.DeobfuscationTransformer;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import mixac1.hooklib.asm.AsmHook;
 import mixac1.hooklib.asm.HookClassTransformer;
 import mixac1.hooklib.asm.ReadClassHelper;
-import org.apache.commons.io.IOUtils;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Map;
 
 public abstract class HookLoader implements IFMLLoadingPlugin {
 

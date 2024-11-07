@@ -1,13 +1,15 @@
 package mixac1.dangerrpg.client.render.entity;
 
+import net.minecraft.entity.Entity;
+
+import org.lwjgl.opengl.GL11;
+
 import cpw.mods.fml.relauncher.Side;
 import mixac1.dangerrpg.DangerRPG;
 import mixac1.dangerrpg.client.RPGRenderHelper.Color;
 import mixac1.dangerrpg.client.model.ModelOrb;
 import mixac1.dangerrpg.client.model.ModelProjectile;
 import mixac1.dangerrpg.entity.projectile.EntityMagicOrb;
-import net.minecraft.entity.Entity;
-import org.lwjgl.opengl.GL11;
 
 public class RenderMagicOrb extends RenderModel {
 

@@ -1,10 +1,11 @@
 package mixac1.dangerrpg.client.gui;
 
+import net.minecraftforge.common.MinecraftForge;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mixac1.dangerrpg.api.event.GuiModeChangeEvent;
 import mixac1.dangerrpg.util.Utils;
-import net.minecraftforge.common.MinecraftForge;
 
 @SideOnly(Side.CLIENT)
 public class GuiMode {

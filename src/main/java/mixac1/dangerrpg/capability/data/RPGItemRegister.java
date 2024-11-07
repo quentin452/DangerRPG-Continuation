@@ -1,5 +1,12 @@
 package mixac1.dangerrpg.capability.data;
 
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import net.minecraft.item.Item;
+
 import mixac1.dangerrpg.DangerRPG;
 import mixac1.dangerrpg.api.item.*;
 import mixac1.dangerrpg.capability.data.RPGItemRegister.ItemAttrParams;
@@ -8,12 +15,6 @@ import mixac1.dangerrpg.init.RPGCapability;
 import mixac1.dangerrpg.util.IMultiplier.Multiplier;
 import mixac1.dangerrpg.util.Tuple.Pair;
 import mixac1.dangerrpg.util.Tuple.Stub;
-import net.minecraft.item.Item;
-
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class RPGItemRegister extends
     RPGDataRegister<Item, RPGItemData, Integer, Pair<HashMap<Integer, ItemAttrParams>, HashMap<Integer, Integer>>> {

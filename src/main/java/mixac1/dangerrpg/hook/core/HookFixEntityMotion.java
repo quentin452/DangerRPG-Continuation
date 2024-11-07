@@ -1,17 +1,10 @@
 package mixac1.dangerrpg.hook.core;
 
-import com.google.common.base.Throwables;
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.network.ByteBufUtils;
-import cpw.mods.fml.common.network.internal.FMLMessage;
-import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
-import cpw.mods.fml.common.registry.IThrowableEntity;
-import cpw.mods.fml.relauncher.ReflectionHelper;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import mixac1.hooklib.asm.Hook;
-import mixac1.hooklib.asm.ReturnCondition;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -30,12 +23,22 @@ import net.minecraft.network.play.server.*;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.storage.MapData;
+
 import org.apache.logging.log4j.Level;
 
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import com.google.common.base.Throwables;
+
+import cpw.mods.fml.common.FMLLog;
+import cpw.mods.fml.common.network.ByteBufUtils;
+import cpw.mods.fml.common.network.internal.FMLMessage;
+import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import cpw.mods.fml.common.registry.IThrowableEntity;
+import cpw.mods.fml.relauncher.ReflectionHelper;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import mixac1.hooklib.asm.Hook;
+import mixac1.hooklib.asm.ReturnCondition;
 
 /**
  * Fix incorrect motion setting for {@link Entity}.

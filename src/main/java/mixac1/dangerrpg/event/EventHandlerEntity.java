@@ -1,5 +1,19 @@
 package mixac1.dangerrpg.event;
 
+import java.util.concurrent.TimeUnit;
+
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
+import net.minecraftforge.event.entity.living.LivingFallEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import mixac1.dangerrpg.DangerRPG;
@@ -18,19 +32,6 @@ import mixac1.dangerrpg.network.MsgSyncEntityData;
 import mixac1.dangerrpg.util.IMultiplier.Multiplier;
 import mixac1.dangerrpg.util.RPGHelper;
 import mixac1.dangerrpg.util.Utils;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
-import net.minecraftforge.event.entity.living.LivingFallEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-
-import java.util.concurrent.TimeUnit;
 
 public class EventHandlerEntity {
 
@@ -38,7 +39,8 @@ public class EventHandlerEntity {
     @SubscribeEvent
     public void onDimensionChange(cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent event) {
         if (event.player != null) {
-            LvlEAProvider<Float> healthLvlProvider = RPGEntityProperties.get(event.player).getLvlProvider(PlayerAttributes.HEALTH.hash);
+            LvlEAProvider<Float> healthLvlProvider = RPGEntityProperties.get(event.player)
+                .getLvlProvider(PlayerAttributes.HEALTH.hash);
             healthLvlProvider.tryUpfixissue36(event.player, event.player, true);
             try {
                 TimeUnit.MILLISECONDS.sleep(500); // Wait for 500 milliseconds = 0.5 seconde

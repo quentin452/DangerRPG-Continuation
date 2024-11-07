@@ -1,13 +1,15 @@
 package mixac1.dangerrpg.client.render.entity;
 
-import mixac1.dangerrpg.entity.projectile.EntityRPGArrow;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
+import mixac1.dangerrpg.entity.projectile.EntityRPGArrow;
 
 public class RenderArrowRPG extends Render {
 

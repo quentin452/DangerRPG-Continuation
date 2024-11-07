@@ -1,5 +1,8 @@
 package mixac1.dangerrpg.api.entity;
 
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+
 import mixac1.dangerrpg.capability.EntityAttributes;
 import mixac1.dangerrpg.capability.data.RPGEntityProperties;
 import mixac1.dangerrpg.init.RPGConfig.EntityConfig;
@@ -9,8 +12,6 @@ import mixac1.dangerrpg.util.IMultiplier;
 import mixac1.dangerrpg.util.IMultiplier.IMultiplierE;
 import mixac1.dangerrpg.util.IMultiplier.Multiplier;
 import mixac1.dangerrpg.util.RPGHelper;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 
 /**
  * Class provides lvl for {@link EntityAttribute}
@@ -62,8 +63,9 @@ public class LvlEAProvider<Type> {
         return (upper.capabilities.isCreativeMode || EntityConfig.d.playerCanLvlDownAttr) && getLvl(target) > 0
             && target == upper;
     }
+
     public boolean tryUpfixissue36(EntityLivingBase target, EntityPlayer upper, boolean isUp) {
-            return up(target, upper, isUp);
+        return up(target, upper, isUp);
     }
 
     public boolean tryUp(EntityLivingBase target, EntityPlayer upper, boolean isUp) {
@@ -80,8 +82,9 @@ public class LvlEAProvider<Type> {
                 return up(target, upper, isUp);
             }
         } else {
-            if (EntityConfig.d.playerCanLvlDownAttr && up(target, upper, isUp) && (RPGEntityProperties.isServerSide(target))) {
-                    upper.addExperienceLevel((int) (getExpUp(target) * EntityConfig.d.playerPercentLoseExpPoints));
+            if (EntityConfig.d.playerCanLvlDownAttr && up(target, upper, isUp)
+                && (RPGEntityProperties.isServerSide(target))) {
+                upper.addExperienceLevel((int) (getExpUp(target) * EntityConfig.d.playerPercentLoseExpPoints));
 
             }
         }

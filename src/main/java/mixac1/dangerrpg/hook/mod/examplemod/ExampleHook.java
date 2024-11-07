@@ -1,16 +1,18 @@
 package mixac1.dangerrpg.hook.mod.examplemod;
 
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityLivingBase;
+
 import ganymedes01.etfuturum.entities.EntityStray;
 import mixac1.dangerrpg.entity.projectile.EntityRPGArrow;
 import mixac1.dangerrpg.init.RPGOther;
 import mixac1.dangerrpg.util.RPGHelper;
 import mixac1.hooklib.asm.Hook;
 import mixac1.hooklib.asm.ReturnCondition;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EntityLivingBase;
 
 public class ExampleHook {
+
     // for more information go here https://github.com/quentin452/DangerRPG-Continuation/wiki/Contribution
     /**
      * Hook for {@link ganymedes01.etfuturum.entities.EntityStray}

@@ -1,9 +1,9 @@
 package mixac1.hooklib.asm;
 
+import java.io.InputStream;
+
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
-
-import java.io.InputStream;
 
 public class ReadClassHelper {
 

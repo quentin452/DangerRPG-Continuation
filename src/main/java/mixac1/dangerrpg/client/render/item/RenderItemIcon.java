@@ -1,15 +1,17 @@
 package mixac1.dangerrpg.client.render.item;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import mixac1.dangerrpg.client.RPGRenderHelper;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.IItemRenderer;
+
 import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import mixac1.dangerrpg.client.RPGRenderHelper;
 
 @SideOnly(Side.CLIENT)
 public class RenderItemIcon implements IItemRenderer {

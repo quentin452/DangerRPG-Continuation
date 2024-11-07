@@ -1,6 +1,23 @@
 package mixac1.dangerrpg.init;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.boss.EntityWither;
+import net.minecraft.entity.monster.*;
+import net.minecraft.entity.passive.*;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+
 import com.emoniph.witchery.entity.EntityVillageGuard;
+
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.registry.GameData;
@@ -26,23 +43,8 @@ import mixac1.dangerrpg.capability.data.RPGItemRegister.RPGItemData;
 import mixac1.dangerrpg.init.RPGConfig.EntityConfig;
 import mixac1.dangerrpg.init.RPGConfig.ItemConfig;
 import mixac1.dangerrpg.item.gem.Gem;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.boss.EntityDragon;
-import net.minecraft.entity.boss.EntityWither;
-import net.minecraft.entity.monster.*;
-import net.minecraft.entity.passive.*;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import rozmir.entity_extensions.IronGolemExtension;
 import rozmir.entity_extensions.SnowGolemExtension;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 public abstract class RPGCapability {
 
@@ -176,7 +178,8 @@ public abstract class RPGCapability {
         RPGRegister.registerRPGEntity(EntityWither.class, new RPGRangeEntityMob(8f));
 
         RPGRegister.registerRPGEntity(EntitySlime.class, new RPGCommonEntity(EntityAttributes.MELEE_DAMAGE_SLIME, 12f));
-        RPGRegister.registerRPGEntity(EntityMagmaCube.class, new RPGCommonEntity(EntityAttributes.MELEE_DAMAGE_SLIME, 16f));
+        RPGRegister
+            .registerRPGEntity(EntityMagmaCube.class, new RPGCommonEntity(EntityAttributes.MELEE_DAMAGE_SLIME, 16f));
 
         RPGRegister.registerRPGEntity(EntityWolf.class, new RPGCommonEntity(3f));
         RPGRegister.registerRPGEntity(EntityIronGolem.class, new RPGCommonEntity(14f));

@@ -1,10 +1,10 @@
 package mixac1.hooklib.asm;
 
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
 
 public class TypeHelper {
 

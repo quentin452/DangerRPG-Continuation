@@ -1,5 +1,7 @@
 package mixac1.dangerrpg.init;
 
+import net.minecraft.item.Item;
+
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import mixac1.dangerrpg.init.RPGOther.RPGItemRarity;
@@ -14,7 +16,6 @@ import mixac1.dangerrpg.item.armor.ItemRPGArmor;
 import mixac1.dangerrpg.item.tool.*;
 import mixac1.dangerrpg.item.weapon.*;
 import mixac1.dangerrpg.util.Utils;
-import net.minecraft.item.Item;
 
 public abstract class RPGItems {
 

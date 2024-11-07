@@ -1,14 +1,15 @@
 package mixac1.hooklib.asm;
 
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map.Entry;
+
+import org.objectweb.asm.*;
+
 import mixac1.dangerrpg.DangerRPG;
 import mixac1.dangerrpg.util.Utils;
 import mixac1.hooklib.asm.Hook.LocalVariable;
 import mixac1.hooklib.asm.Hook.ReturnValue;
-import org.objectweb.asm.*;
-
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map.Entry;
 
 public class HookContainerParser {
 

@@ -1,11 +1,13 @@
 package mixac1.dangerrpg.client.render.entity;
 
-import mixac1.dangerrpg.client.gui.GuiInfoBook;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
+
+import mixac1.dangerrpg.client.gui.GuiInfoBook;
 
 /**
  * Debug renderer

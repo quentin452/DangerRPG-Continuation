@@ -1,13 +1,14 @@
 package mixac1.dangerrpg.api.entity;
 
-import mixac1.dangerrpg.api.entity.EntityAttribute.EAFloat;
-import mixac1.dangerrpg.capability.EntityAttributes;
-import mixac1.dangerrpg.capability.RPGEntityHelper;
-import mixac1.dangerrpg.capability.data.RPGEntityRegister.RPGEntityData;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+
+import mixac1.dangerrpg.api.entity.EntityAttribute.EAFloat;
+import mixac1.dangerrpg.capability.EntityAttributes;
+import mixac1.dangerrpg.capability.RPGEntityHelper;
+import mixac1.dangerrpg.capability.data.RPGEntityRegister.RPGEntityData;
 
 public interface IRPGEntity {
 

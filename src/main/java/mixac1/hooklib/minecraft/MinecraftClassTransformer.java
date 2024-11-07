@@ -1,12 +1,5 @@
 package mixac1.hooklib.minecraft;
 
-import mixac1.dangerrpg.DangerRPG;
-import mixac1.hooklib.asm.AsmHook;
-import mixac1.hooklib.asm.HookClassTransformer;
-import mixac1.hooklib.asm.HookInjectorClassVisitor;
-import net.minecraft.launchwrapper.IClassTransformer;
-import org.objectweb.asm.ClassWriter;
-
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -14,6 +7,15 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import net.minecraft.launchwrapper.IClassTransformer;
+
+import org.objectweb.asm.ClassWriter;
+
+import mixac1.dangerrpg.DangerRPG;
+import mixac1.hooklib.asm.AsmHook;
+import mixac1.hooklib.asm.HookClassTransformer;
+import mixac1.hooklib.asm.HookInjectorClassVisitor;
 
 public class MinecraftClassTransformer extends HookClassTransformer implements IClassTransformer {
 

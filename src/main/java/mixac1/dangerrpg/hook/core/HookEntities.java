@@ -1,12 +1,5 @@
 package mixac1.dangerrpg.hook.core;
 
-import mixac1.dangerrpg.api.event.ItemStackEvent.DealtDamageEvent;
-import mixac1.dangerrpg.api.event.ItemStackEvent.HitEntityEvent;
-import mixac1.dangerrpg.capability.PlayerAttributes;
-import mixac1.dangerrpg.capability.RPGItemHelper;
-import mixac1.hooklib.asm.Hook;
-import mixac1.hooklib.asm.Hook.ReturnValue;
-import mixac1.hooklib.asm.ReturnCondition;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -23,6 +16,14 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
+
+import mixac1.dangerrpg.api.event.ItemStackEvent.DealtDamageEvent;
+import mixac1.dangerrpg.api.event.ItemStackEvent.HitEntityEvent;
+import mixac1.dangerrpg.capability.PlayerAttributes;
+import mixac1.dangerrpg.capability.RPGItemHelper;
+import mixac1.hooklib.asm.Hook;
+import mixac1.hooklib.asm.Hook.ReturnValue;
+import mixac1.hooklib.asm.ReturnCondition;
 
 public class HookEntities {
 

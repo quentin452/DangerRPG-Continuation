@@ -1,10 +1,11 @@
 package mixac1.dangerrpg.entity.projectile;
 
-import mixac1.dangerrpg.entity.projectile.core.EntityThrowRPGItem;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+
+import mixac1.dangerrpg.entity.projectile.core.EntityThrowRPGItem;
 
 public class EntityThrowTomahawk extends EntityThrowRPGItem {
 

@@ -1,7 +1,8 @@
 package mixac1.dangerrpg.capability.ea;
 
-import mixac1.dangerrpg.api.entity.EntityAttribute.EAFloat;
 import net.minecraft.entity.EntityLivingBase;
+
+import mixac1.dangerrpg.api.entity.EntityAttribute.EAFloat;
 
 public class EASpeedCounter extends EAFloat {
 

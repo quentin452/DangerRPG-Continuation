@@ -1,10 +1,10 @@
 package mixac1.hooklib.asm;
 
-import org.objectweb.asm.*;
-
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.objectweb.asm.*;
 
 public class VariableIdHelper {
 

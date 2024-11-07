@@ -1,11 +1,12 @@
 package mixac1.dangerrpg.client.render.entity;
 
-import mixac1.dangerrpg.client.RPGRenderHelper;
-import mixac1.dangerrpg.client.model.ModelProjectile;
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
-import javax.annotation.Nullable;
+import mixac1.dangerrpg.client.RPGRenderHelper;
+import mixac1.dangerrpg.client.model.ModelProjectile;
 
 public abstract class RenderModel extends RenderProjectile {
 

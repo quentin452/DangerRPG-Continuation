@@ -1,5 +1,13 @@
 package mixac1.dangerrpg.inventory;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map.Entry;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+
 import mixac1.dangerrpg.api.item.GemType;
 import mixac1.dangerrpg.capability.ItemAttributes;
 import mixac1.dangerrpg.capability.RPGItemHelper;
@@ -7,13 +15,6 @@ import mixac1.dangerrpg.init.RPGCapability;
 import mixac1.dangerrpg.item.gem.Gem;
 import mixac1.dangerrpg.util.Tuple.Pair;
 import mixac1.dangerrpg.util.Tuple.Stub;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map.Entry;
 
 public class InventoryModificationTable implements IInventory {
 

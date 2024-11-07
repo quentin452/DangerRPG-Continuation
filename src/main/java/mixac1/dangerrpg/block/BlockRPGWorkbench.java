@@ -1,9 +1,5 @@
 package mixac1.dangerrpg.block;
 
-import mixac1.dangerrpg.DangerRPG;
-import mixac1.dangerrpg.init.RPGGuiHandlers;
-import mixac1.dangerrpg.init.RPGOther.RPGCreativeTabs;
-import mixac1.dangerrpg.util.Utils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -11,6 +7,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+
+import mixac1.dangerrpg.DangerRPG;
+import mixac1.dangerrpg.init.RPGGuiHandlers;
+import mixac1.dangerrpg.init.RPGOther.RPGCreativeTabs;
+import mixac1.dangerrpg.util.Utils;
 
 public class BlockRPGWorkbench extends Block {
 

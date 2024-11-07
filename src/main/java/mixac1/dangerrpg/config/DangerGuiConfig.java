@@ -1,11 +1,11 @@
 package mixac1.dangerrpg.config;
 
-import mixac1.dangerrpg.DangerRPG;
 import net.minecraft.client.gui.GuiScreen;
 
 import com.falsepattern.lib.config.ConfigException;
 import com.falsepattern.lib.config.SimpleGuiConfig;
 
+import mixac1.dangerrpg.DangerRPG;
 
 public class DangerGuiConfig extends SimpleGuiConfig {
 

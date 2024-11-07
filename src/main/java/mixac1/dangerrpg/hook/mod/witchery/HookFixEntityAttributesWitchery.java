@@ -1,30 +1,32 @@
 package mixac1.dangerrpg.hook.mod.witchery;
 
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
+
 import com.emoniph.witchery.entity.EntityVillageGuard;
+
 import mixac1.dangerrpg.entity.projectile.EntityRPGArrow;
 import mixac1.dangerrpg.init.RPGOther;
 import mixac1.dangerrpg.util.RPGHelper;
 import mixac1.hooklib.asm.Hook;
 import mixac1.hooklib.asm.ReturnCondition;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
 
 public class HookFixEntityAttributesWitchery {
+
     /**
      * Hook for {@link EntityVillageGuard}
      */
     @Hook(returnCondition = ReturnCondition.ALWAYS)
     public static boolean attackEntityAsMob(EntityVillageGuard that, Entity entity) {
-      //  float f = (float)that.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue();
+        // float f = (float)that.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue();
         int i = 0;
         if (entity instanceof EntityLivingBase) {
-          //  f += EnchantmentHelper.getEnchantmentModifierLiving(that, (EntityLivingBase)entity);
-            i += EnchantmentHelper.getKnockbackModifier(that, (EntityLivingBase)entity);
+            // f += EnchantmentHelper.getEnchantmentModifierLiving(that, (EntityLivingBase)entity);
+            i += EnchantmentHelper.getKnockbackModifier(that, (EntityLivingBase) entity);
         }
         that.attackTime = 10;
         that.worldObj.setEntityState(that, (byte) 4);
@@ -32,7 +34,10 @@ public class HookFixEntityAttributesWitchery {
         boolean flag = entity.attackEntityFrom(DamageSource.causeMobDamage(that), damage);
         if (flag) {
             if (i > 0) {
-                entity.addVelocity(-MathHelper.sin(that.rotationYaw * 3.1415927F / 180.0F) * (float)i * 0.5F, 0.1, MathHelper.cos(that.rotationYaw * 3.1415927F / 180.0F) * (float)i * 0.5F);
+                entity.addVelocity(
+                    -MathHelper.sin(that.rotationYaw * 3.1415927F / 180.0F) * (float) i * 0.5F,
+                    0.1,
+                    MathHelper.cos(that.rotationYaw * 3.1415927F / 180.0F) * (float) i * 0.5F);
                 that.motionX *= 0.6;
                 that.motionZ *= 0.6;
             }
@@ -43,13 +48,14 @@ public class HookFixEntityAttributesWitchery {
             }
 
             if (entity instanceof EntityLivingBase) {
-                EnchantmentHelper.func_151384_a((EntityLivingBase)entity, that);
+                EnchantmentHelper.func_151384_a((EntityLivingBase) entity, that);
             }
 
             EnchantmentHelper.func_151385_b(that, entity);
         }
         return flag;
     }
+
     /**
      * Hook for {@link EntityVillageGuard}
      */

@@ -1,10 +1,12 @@
 package mixac1.dangerrpg.client.render.item;
 
-import mixac1.dangerrpg.client.model.ModelHammer;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+
 import org.lwjgl.opengl.GL11;
+
+import mixac1.dangerrpg.client.model.ModelHammer;
 
 public abstract class RenderNormalModel extends RenderItemModel {
 

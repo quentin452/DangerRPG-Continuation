@@ -1,12 +1,12 @@
 package mixac1.dangerrpg.capability.data;
 
-import mixac1.dangerrpg.capability.data.RPGDataRegister.ElementData;
-import mixac1.dangerrpg.util.Tuple.Pair;
-import mixac1.dangerrpg.util.Utils;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+
+import mixac1.dangerrpg.capability.data.RPGDataRegister.ElementData;
+import mixac1.dangerrpg.util.Tuple.Pair;
+import mixac1.dangerrpg.util.Utils;
 
 public abstract class RPGDataRegister<Key, Data extends ElementData<Key, TransferData>, TransferKey, TransferData>
     extends HashMap<Key, Data> {

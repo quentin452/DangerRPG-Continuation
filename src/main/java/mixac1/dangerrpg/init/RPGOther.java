@@ -1,14 +1,14 @@
 package mixac1.dangerrpg.init;
 
+import java.util.Random;
+import java.util.UUID;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.EnumHelper;
-
-import java.util.Random;
-import java.util.UUID;
 
 public abstract class RPGOther {
 

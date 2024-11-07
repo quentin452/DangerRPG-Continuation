@@ -1,11 +1,12 @@
 package mixac1.dangerrpg.recipe;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import mixac1.dangerrpg.init.RPGRecipes;
-import mixac1.dangerrpg.util.Tuple.Pair;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import cpw.mods.fml.common.registry.GameRegistry;
+import mixac1.dangerrpg.init.RPGRecipes;
+import mixac1.dangerrpg.util.Tuple.Pair;
 
 public abstract class RecipeCreator {
 

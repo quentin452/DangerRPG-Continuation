@@ -1,8 +1,9 @@
 package mixac1.dangerrpg.capability.ia;
 
+import net.minecraft.item.ItemStack;
+
 import mixac1.dangerrpg.api.item.IAStatic;
 import mixac1.dangerrpg.capability.ItemAttributes;
-import net.minecraft.item.ItemStack;
 
 public class IADurability extends IAStatic {
 

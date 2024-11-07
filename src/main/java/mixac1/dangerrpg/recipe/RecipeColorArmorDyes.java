@@ -1,6 +1,7 @@
 package mixac1.dangerrpg.recipe;
 
-import mixac1.dangerrpg.item.armor.IColorArmor;
+import java.util.ArrayList;
+
 import net.minecraft.block.BlockColored;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.init.Items;
@@ -10,7 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipesArmorDyes;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
+import mixac1.dangerrpg.item.armor.IColorArmor;
 
 public class RecipeColorArmorDyes extends RecipesArmorDyes {
 

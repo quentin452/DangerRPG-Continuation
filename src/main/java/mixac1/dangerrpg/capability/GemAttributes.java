@@ -1,9 +1,10 @@
 package mixac1.dangerrpg.capability;
 
-import mixac1.dangerrpg.api.item.IADynamic;
-import mixac1.dangerrpg.capability.ia.IAStrUUID;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+
+import mixac1.dangerrpg.api.item.IADynamic;
+import mixac1.dangerrpg.capability.ia.IAStrUUID;
 
 public abstract class GemAttributes {
 

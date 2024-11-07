@@ -1,8 +1,5 @@
 package mixac1.dangerrpg.client.ui;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import mixac1.dangerrpg.init.RPGConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.particle.EntityFX;
@@ -10,7 +7,12 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+
 import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import mixac1.dangerrpg.init.RPGConfig;
 
 @SideOnly(Side.CLIENT)
 public class DamageParticles extends EntityFX {
@@ -25,7 +27,8 @@ public class DamageParticles extends EntityFX {
     private final int damage;
     private boolean grow = true;
 
-    public DamageParticles(int damage, World world, double parX, double parY, double parZ, double parMotionX, double parMotionY, double parMotionZ) {
+    public DamageParticles(int damage, World world, double parX, double parY, double parZ, double parMotionX,
+        double parMotionY, double parMotionZ) {
         super(world, parX, parY, parZ, parMotionX, parMotionY, parMotionZ);
         particleTextureJitterX = 0.0F;
         particleTextureJitterY = 0.0F;
@@ -41,10 +44,11 @@ public class DamageParticles extends EntityFX {
     }
 
     @Override
-    public void renderParticle(Tessellator tessellator, float partialTicks, float p_70539_3_, float p_70539_4_, float p_70539_5_, float p_70539_6_, float p_70539_7_) {
-        float f11 = (float) (prevPosX + (posX - prevPosX) * (double) partialTicks  - interpPosX);
-        float f12 = (float) (prevPosY + (posY - prevPosY) * (double) partialTicks  - interpPosY);
-        float f13 = (float) (prevPosZ + (posZ - prevPosZ) * (double) partialTicks  - interpPosZ);
+    public void renderParticle(Tessellator tessellator, float partialTicks, float p_70539_3_, float p_70539_4_,
+        float p_70539_5_, float p_70539_6_, float p_70539_7_) {
+        float f11 = (float) (prevPosX + (posX - prevPosX) * (double) partialTicks - interpPosX);
+        float f12 = (float) (prevPosY + (posY - prevPosY) * (double) partialTicks - interpPosY);
+        float f13 = (float) (prevPosZ + (posZ - prevPosZ) * (double) partialTicks - interpPosZ);
 
         GL11.glPushMatrix();
         GL11.glDepthFunc(519);
@@ -53,7 +57,10 @@ public class DamageParticles extends EntityFX {
         GL11.glRotatef(mc.thePlayer.rotationPitch, 1.0F, 0.0F, 0.0F);
         GL11.glScalef(-1.0F, -1.0F, 1.0F);
         float scale = 1.0F;
-        GL11.glScaled(particleScale * PARTICLE_SCALE_FACTOR * scale, particleScale * PARTICLE_SCALE_FACTOR * scale, particleScale * PARTICLE_SCALE_FACTOR * scale);
+        GL11.glScaled(
+            particleScale * PARTICLE_SCALE_FACTOR * scale,
+            particleScale * PARTICLE_SCALE_FACTOR * scale,
+            particleScale * PARTICLE_SCALE_FACTOR * scale);
 
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 0.003662109F);
         GL11.glEnable(GL11.GL_TEXTURE_2D);
@@ -70,7 +77,11 @@ public class DamageParticles extends EntityFX {
 
         int color = damage < 0 ? RPGConfig.ClientConfig.Data.healColor : RPGConfig.ClientConfig.Data.damageColor;
         final FontRenderer fontRenderer = mc.fontRenderer;
-        fontRenderer.drawStringWithShadow(text, -MathHelper.floor_float(fontRenderer.getStringWidth(text) / 2.0F) + 1, -MathHelper.floor_float(fontRenderer.FONT_HEIGHT / 2.0F) + 1, color);
+        fontRenderer.drawStringWithShadow(
+            text,
+            -MathHelper.floor_float(fontRenderer.getStringWidth(text) / 2.0F) + 1,
+            -MathHelper.floor_float(fontRenderer.FONT_HEIGHT / 2.0F) + 1,
+            color);
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glDepthFunc(515);

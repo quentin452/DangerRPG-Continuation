@@ -1,7 +1,8 @@
 package mixac1.dangerrpg.world.explosion;
 
-import mixac1.dangerrpg.entity.projectile.core.EntityCommonMagic;
 import net.minecraft.entity.EntityLivingBase;
+
+import mixac1.dangerrpg.entity.projectile.core.EntityCommonMagic;
 
 public class ExplosionSpell extends ExplosionCommonRPG {
 

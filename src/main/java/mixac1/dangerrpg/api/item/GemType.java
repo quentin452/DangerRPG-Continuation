@@ -1,15 +1,16 @@
 package mixac1.dangerrpg.api.item;
 
-import mixac1.dangerrpg.DangerRPG;
-import mixac1.dangerrpg.capability.RPGItemHelper;
-import mixac1.dangerrpg.init.RPGCapability;
-import mixac1.dangerrpg.item.gem.Gem;
+import java.util.*;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
-import java.util.*;
+import mixac1.dangerrpg.DangerRPG;
+import mixac1.dangerrpg.capability.RPGItemHelper;
+import mixac1.dangerrpg.init.RPGCapability;
+import mixac1.dangerrpg.item.gem.Gem;
 
 public abstract class GemType {
 

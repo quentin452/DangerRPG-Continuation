@@ -1,11 +1,5 @@
 package mixac1.dangerrpg.client.gui;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import mixac1.dangerrpg.DangerRPG;
-import mixac1.dangerrpg.init.RPGBlocks;
-import mixac1.dangerrpg.inventory.ContainerLvlupTable;
-import mixac1.dangerrpg.item.gem.Gem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -15,8 +9,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import mixac1.dangerrpg.DangerRPG;
+import mixac1.dangerrpg.init.RPGBlocks;
+import mixac1.dangerrpg.inventory.ContainerLvlupTable;
+import mixac1.dangerrpg.item.gem.Gem;
 
 @SideOnly(Side.CLIENT)
 public class GuiLvlupTable extends GuiContainer {

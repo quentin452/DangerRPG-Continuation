@@ -1,5 +1,15 @@
 package mixac1.dangerrpg.capability.data;
 
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+
 import mixac1.dangerrpg.api.entity.EntityAttribute;
 import mixac1.dangerrpg.api.entity.IRPGEntity;
 import mixac1.dangerrpg.api.entity.LvlEAProvider;
@@ -9,15 +19,6 @@ import mixac1.dangerrpg.init.RPGCapability;
 import mixac1.dangerrpg.util.IMultiplier.IMultiplierE;
 import mixac1.dangerrpg.util.IMultiplier.Multiplier;
 import mixac1.dangerrpg.util.IMultiplier.MultiplierMul;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
 
 public class RPGEntityRegister extends
     RPGDataRegister<Class<? extends EntityLivingBase>, RPGEntityData, String, HashMap<Integer, EntityTransferData>> {

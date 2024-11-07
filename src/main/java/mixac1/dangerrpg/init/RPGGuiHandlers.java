@@ -1,5 +1,8 @@
 package mixac1.dangerrpg.init;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
+
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
@@ -11,8 +14,6 @@ import mixac1.dangerrpg.client.gui.GuiRPGWorkbench;
 import mixac1.dangerrpg.inventory.ContainerLvlupTable;
 import mixac1.dangerrpg.inventory.ContainerModificationTable;
 import mixac1.dangerrpg.inventory.ContainerRPGWorkbench;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
 
 public abstract class RPGGuiHandlers implements IGuiHandler {
 

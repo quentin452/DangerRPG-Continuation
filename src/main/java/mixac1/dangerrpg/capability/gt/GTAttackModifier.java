@@ -1,14 +1,15 @@
 package mixac1.dangerrpg.capability.gt;
 
-import mixac1.dangerrpg.api.item.GemType;
-import mixac1.dangerrpg.item.gem.GemAttackModifier;
-import mixac1.dangerrpg.util.Tuple.Stub;
+import java.util.HashSet;
+import java.util.List;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-import java.util.HashSet;
-import java.util.List;
+import mixac1.dangerrpg.api.item.GemType;
+import mixac1.dangerrpg.item.gem.GemAttackModifier;
+import mixac1.dangerrpg.util.Tuple.Stub;
 
 public class GTAttackModifier extends GemType {
 

@@ -1,9 +1,7 @@
 package mixac1.dangerrpg.entity.projectile.core;
 
-import cpw.mods.fml.common.registry.IThrowableEntity;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import mixac1.dangerrpg.init.RPGOther.RPGDamageSource;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -20,7 +18,10 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
-import java.util.List;
+import cpw.mods.fml.common.registry.IThrowableEntity;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import mixac1.dangerrpg.init.RPGOther.RPGDamageSource;
 
 public class EntityProjectile extends EntityArrow implements IThrowableEntity {
 

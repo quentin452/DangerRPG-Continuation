@@ -1,11 +1,5 @@
 package mixac1.dangerrpg.inventory;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import mixac1.dangerrpg.capability.ItemAttributes;
-import mixac1.dangerrpg.capability.RPGItemHelper;
-import mixac1.dangerrpg.item.gem.Gem;
-import mixac1.dangerrpg.util.RPGHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -13,6 +7,13 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import mixac1.dangerrpg.capability.ItemAttributes;
+import mixac1.dangerrpg.capability.RPGItemHelper;
+import mixac1.dangerrpg.item.gem.Gem;
+import mixac1.dangerrpg.util.RPGHelper;
 
 public class ContainerLvlupTable extends Container {
 

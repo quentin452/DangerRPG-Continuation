@@ -2,6 +2,7 @@ package mixac1.dangerrpg.client.render.item;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+
 import org.lwjgl.opengl.GL11;
 
 public class RenderKnife extends RenderItemIcon {

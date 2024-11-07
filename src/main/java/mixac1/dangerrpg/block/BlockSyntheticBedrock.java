@@ -1,8 +1,9 @@
 package mixac1.dangerrpg.block;
 
-import mixac1.dangerrpg.init.RPGOther.RPGCreativeTabs;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+
+import mixac1.dangerrpg.init.RPGOther.RPGCreativeTabs;
 
 public class BlockSyntheticBedrock extends Block {
 

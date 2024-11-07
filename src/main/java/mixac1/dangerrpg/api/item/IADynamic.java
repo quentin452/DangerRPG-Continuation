@@ -1,8 +1,9 @@
 package mixac1.dangerrpg.api.item;
 
+import net.minecraft.item.ItemStack;
+
 import mixac1.dangerrpg.capability.RPGItemHelper;
 import mixac1.dangerrpg.init.RPGCapability;
-import net.minecraft.item.ItemStack;
 
 /**
  * Extends this class for creating Dynamic {@link ItemAttribute}<br>

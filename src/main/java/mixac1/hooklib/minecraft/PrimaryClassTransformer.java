@@ -1,15 +1,17 @@
 package mixac1.hooklib.minecraft;
 
+import java.util.HashMap;
+import java.util.List;
+
+import net.minecraft.launchwrapper.IClassTransformer;
+
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Type;
+
 import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import mixac1.hooklib.asm.AsmHook;
 import mixac1.hooklib.asm.HookClassTransformer;
 import mixac1.hooklib.asm.HookInjectorClassVisitor;
-import net.minecraft.launchwrapper.IClassTransformer;
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.Type;
-
-import java.util.HashMap;
-import java.util.List;
 
 public class PrimaryClassTransformer extends HookClassTransformer implements IClassTransformer {
 

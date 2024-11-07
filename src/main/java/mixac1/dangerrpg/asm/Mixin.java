@@ -12,9 +12,10 @@ import mixac1.dangerrpg.config.DangerConfig;
 
 @RequiredArgsConstructor
 public enum Mixin implements IMixin {
+
     client_core_MixinRenderLiving(Side.CLIENT, m -> DangerConfig.enablefixGuiissueswithOptifine,
         "core.MixinRenderLiving"),
-    client_core_MixinFixShulkerBulletDamage(Side.COMMON , m -> DangerConfig.enablefixShulkerBulletDamage,
+    client_core_MixinFixShulkerBulletDamage(Side.COMMON, m -> DangerConfig.enablefixShulkerBulletDamage,
         "etfuturumrequiem.MixinFixShulkerBulletDamage"),
 
     ;

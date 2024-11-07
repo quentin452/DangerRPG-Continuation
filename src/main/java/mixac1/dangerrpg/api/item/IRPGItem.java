@@ -1,5 +1,12 @@
 package mixac1.dangerrpg.api.item;
 
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.*;
+import net.minecraft.world.World;
+
 import mixac1.dangerrpg.capability.ItemAttributes;
 import mixac1.dangerrpg.capability.RPGItemHelper;
 import mixac1.dangerrpg.capability.data.RPGItemRegister.RPGItemData;
@@ -11,12 +18,6 @@ import mixac1.dangerrpg.item.RPGItemComponent;
 import mixac1.dangerrpg.item.RPGItemComponent.*;
 import mixac1.dangerrpg.item.RPGToolMaterial;
 import mixac1.dangerrpg.util.RPGHelper;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.*;
-import net.minecraft.world.World;
 
 /**
  * Implements this interface for creating RPGableItem

@@ -1,18 +1,7 @@
 package mixac1.dangerrpg.client.gui;
 
-import mixac1.dangerrpg.DangerRPG;
-import mixac1.dangerrpg.api.entity.IRPGEntity;
-import mixac1.dangerrpg.capability.EntityAttributes;
-import mixac1.dangerrpg.capability.ItemAttributes;
-import mixac1.dangerrpg.capability.PlayerAttributes;
-import mixac1.dangerrpg.capability.RPGEntityHelper;
-import mixac1.dangerrpg.capability.data.RPGEntityProperties;
-import mixac1.dangerrpg.client.gui.GuiMode.GuiModeType;
-import mixac1.dangerrpg.hook.core.HookArmorSystem;
-import mixac1.dangerrpg.init.RPGCapability;
-import mixac1.dangerrpg.init.RPGConfig.ClientConfig;
-import mixac1.dangerrpg.util.RPGHelper;
-import mixac1.dangerrpg.util.Utils;
+import java.util.Objects;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -28,9 +17,22 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 
-import java.util.Objects;
+import mixac1.dangerrpg.DangerRPG;
+import mixac1.dangerrpg.api.entity.IRPGEntity;
+import mixac1.dangerrpg.capability.EntityAttributes;
+import mixac1.dangerrpg.capability.ItemAttributes;
+import mixac1.dangerrpg.capability.PlayerAttributes;
+import mixac1.dangerrpg.capability.RPGEntityHelper;
+import mixac1.dangerrpg.capability.data.RPGEntityProperties;
+import mixac1.dangerrpg.client.gui.GuiMode.GuiModeType;
+import mixac1.dangerrpg.hook.core.HookArmorSystem;
+import mixac1.dangerrpg.init.RPGCapability;
+import mixac1.dangerrpg.init.RPGConfig.ClientConfig;
+import mixac1.dangerrpg.util.RPGHelper;
+import mixac1.dangerrpg.util.Utils;
 
 public class RPGGuiIngame extends Gui {
 
@@ -200,22 +202,8 @@ public class RPGGuiIngame extends Gui {
                 .bindTexture(TEXTURE);
 
         }
-        drawTexturedModalRect(
-            offsetX + invert(part2X),
-            offsetY + part2Y,
-            part2U,
-            part2V,
-            part2W,
-            part2H,
-            isInverted);
-        drawTexturedModalRect(
-            offsetX + invert(part3X),
-            offsetY + part3Y,
-            part3U,
-            part3V,
-            part3W,
-            part3H,
-            isInverted);
+        drawTexturedModalRect(offsetX + invert(part2X), offsetY + part2Y, part2U, part2V, part2W, part2H, isInverted);
+        drawTexturedModalRect(offsetX + invert(part3X), offsetY + part3Y, part3U, part3V, part3W, part3H, isInverted);
 
         int yFal = 0, proc;
         float curr;

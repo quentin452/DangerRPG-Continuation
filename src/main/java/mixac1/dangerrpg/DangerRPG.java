@@ -1,5 +1,10 @@
 package mixac1.dangerrpg;
 
+import net.minecraft.util.StatCollector;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -8,14 +13,9 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import mixac1.dangerrpg.api.RPGRegister;
 import mixac1.dangerrpg.init.RPGConfig.MainConfig;
 import mixac1.dangerrpg.proxy.CommonProxy;
 import mixac1.dangerrpg.util.Utils;
-import net.minecraft.util.StatCollector;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 @Mod(
     modid = DangerRPG.MODID,
@@ -40,8 +40,9 @@ public class DangerRPG {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        if(Loader.isModLoaded("torohealthmod")) {
-            throw new RuntimeException("Custom Damage Particle mod is installed! Crashing the game Because DangerRPG add a thing like Custom Damage Particles mod, so pls remove DangerRPG or Custom Damage Particle");
+        if (Loader.isModLoaded("torohealthmod")) {
+            throw new RuntimeException(
+                "Custom Damage Particle mod is installed! Crashing the game Because DangerRPG add a thing like Custom Damage Particles mod, so pls remove DangerRPG or Custom Damage Particle");
         }
 
         proxy.preInit(event);

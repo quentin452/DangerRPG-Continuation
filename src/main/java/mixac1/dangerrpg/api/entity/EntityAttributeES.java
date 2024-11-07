@@ -1,12 +1,13 @@
 package mixac1.dangerrpg.api.entity;
 
-import mixac1.dangerrpg.init.RPGCapability;
+import java.util.UUID;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 
-import java.util.UUID;
+import mixac1.dangerrpg.init.RPGCapability;
 
 public class EntityAttributeES extends EntityAttribute.EAFloat {
 

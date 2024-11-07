@@ -1,12 +1,14 @@
 package mixac1.dangerrpg.client.gui;
 
+import java.util.ArrayList;
+
+import net.minecraft.client.Minecraft;
+
+import org.lwjgl.opengl.GL11;
+
 import cpw.mods.fml.client.GuiScrollingList;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.Minecraft;
-import org.lwjgl.opengl.GL11;
-
-import java.util.ArrayList;
 
 @SideOnly(Side.CLIENT)
 public abstract class GuiInfoBookContent extends GuiScrollingList {

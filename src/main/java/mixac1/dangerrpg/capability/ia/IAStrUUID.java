@@ -1,10 +1,11 @@
 package mixac1.dangerrpg.capability.ia;
 
-import mixac1.dangerrpg.init.RPGCapability;
-import mixac1.dangerrpg.item.gem.GemPassiveAttribute;
+import java.util.UUID;
+
 import net.minecraft.item.ItemStack;
 
-import java.util.UUID;
+import mixac1.dangerrpg.init.RPGCapability;
+import mixac1.dangerrpg.item.gem.GemPassiveAttribute;
 
 public class IAStrUUID {
 

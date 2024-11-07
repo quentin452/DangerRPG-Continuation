@@ -1,15 +1,16 @@
 package mixac1.dangerrpg.client.gui;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import mixac1.dangerrpg.DangerRPG;
-import mixac1.dangerrpg.init.RPGBlocks;
-import mixac1.dangerrpg.inventory.ContainerRPGWorkbench;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import mixac1.dangerrpg.DangerRPG;
+import mixac1.dangerrpg.init.RPGBlocks;
+import mixac1.dangerrpg.inventory.ContainerRPGWorkbench;
 
 @SideOnly(Side.CLIENT)
 public class GuiRPGWorkbench extends GuiContainer {

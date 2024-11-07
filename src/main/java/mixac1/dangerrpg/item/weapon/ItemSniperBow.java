@@ -1,5 +1,12 @@
 package mixac1.dangerrpg.item.weapon;
 
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
 import mixac1.dangerrpg.capability.ItemAttributes;
 import mixac1.dangerrpg.entity.projectile.EntitySniperArrow;
 import mixac1.dangerrpg.entity.projectile.core.EntityMaterial;
@@ -7,12 +14,6 @@ import mixac1.dangerrpg.init.RPGOther;
 import mixac1.dangerrpg.init.RPGOther.RPGItemRarity;
 import mixac1.dangerrpg.item.RPGItemComponent.RPGBowComponent;
 import mixac1.dangerrpg.util.RPGHelper;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
 public class ItemSniperBow extends ItemRPGBow {
 

@@ -1,12 +1,12 @@
 package mixac1.dangerrpg.hook.mod.golemtweaks;
 
-import cpw.mods.fml.common.Loader;
-import mixac1.dangerrpg.util.RPGHelper;
-import mixac1.hooklib.asm.Hook;
-import mixac1.hooklib.asm.ReturnCondition;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.util.DamageSource;
+
+import mixac1.dangerrpg.util.RPGHelper;
+import mixac1.hooklib.asm.Hook;
+import mixac1.hooklib.asm.ReturnCondition;
 
 public class HookFixEntityAttributesGolemTweaks {
 

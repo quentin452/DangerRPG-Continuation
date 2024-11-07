@@ -1,7 +1,8 @@
 package mixac1.dangerrpg.capability.ea;
 
-import mixac1.dangerrpg.api.entity.EntityAttribute.EAInteger;
 import net.minecraft.entity.EntityLivingBase;
+
+import mixac1.dangerrpg.api.entity.EntityAttribute.EAInteger;
 
 public class EALvl extends EAInteger {
 

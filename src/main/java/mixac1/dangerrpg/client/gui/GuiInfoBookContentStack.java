@@ -1,5 +1,16 @@
 package mixac1.dangerrpg.client.gui;
 
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mixac1.dangerrpg.DangerRPG;
@@ -12,16 +23,6 @@ import mixac1.dangerrpg.init.RPGCapability;
 import mixac1.dangerrpg.item.IHasBooksInfo;
 import mixac1.dangerrpg.item.gem.Gem;
 import mixac1.dangerrpg.util.Utils;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
 
 @SideOnly(Side.CLIENT)
 public class GuiInfoBookContentStack extends GuiInfoBookContent {

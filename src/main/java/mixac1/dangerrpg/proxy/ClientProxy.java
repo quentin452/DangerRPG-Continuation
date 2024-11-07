@@ -1,5 +1,13 @@
 package mixac1.dangerrpg.proxy;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.EntityFX;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -11,22 +19,14 @@ import mixac1.dangerrpg.init.*;
 import mixac1.dangerrpg.util.RPGTicks;
 import mixac1.dangerrpg.world.RPGEntityFXManager;
 import mixac1.dangerrpg.world.RPGEntityFXManager.IEntityFXType;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EntityFX;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagInt;
-import net.minecraft.world.World;
 
 public class ClientProxy extends CommonProxy {
 
     private RPGTicks clientTicks = new RPGTicks();
+
     @Override
     public void displayDamageDealt(EntityLivingBase entity) {
-        if (!entity.worldObj.isRemote || !RPGConfig.ClientConfig.Data.showDamageParticles)
-            return;
+        if (!entity.worldObj.isRemote || !RPGConfig.ClientConfig.Data.showDamageParticles) return;
 
         int currentHealth = (int) Math.ceil(entity.getHealth());
 
@@ -43,7 +43,8 @@ public class ClientProxy extends CommonProxy {
     }
 
     private void displayParticle(EntityLivingBase entity, int damage) {
-        if (damage == 0 || (!entity.canEntityBeSeen(Minecraft.getMinecraft().thePlayer) && !RPGConfig.ClientConfig.Data.showAlways))
+        if (damage == 0
+            || (!entity.canEntityBeSeen(Minecraft.getMinecraft().thePlayer) && !RPGConfig.ClientConfig.Data.showAlways))
             return;
 
         World world = entity.worldObj;
@@ -51,7 +52,15 @@ public class ClientProxy extends CommonProxy {
         double motionY = 0.5f;
         double motionZ = world.rand.nextGaussian() * 0.02;
 
-        EntityFX damageIndicator = new DamageParticles(damage, world, entity.posX, entity.posY + entity.height, entity.posZ, motionX, motionY, motionZ);
+        EntityFX damageIndicator = new DamageParticles(
+            damage,
+            world,
+            entity.posX,
+            entity.posY + entity.height,
+            entity.posZ,
+            motionX,
+            motionY,
+            motionZ);
         Minecraft.getMinecraft().effectRenderer.addEffect(damageIndicator);
     }
 

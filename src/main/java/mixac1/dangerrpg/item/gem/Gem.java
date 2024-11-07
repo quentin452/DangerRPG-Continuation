@@ -1,5 +1,13 @@
 package mixac1.dangerrpg.item.gem;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
 import mixac1.dangerrpg.DangerRPG;
 import mixac1.dangerrpg.api.item.GemType;
 import mixac1.dangerrpg.api.item.IRPGItem;
@@ -13,13 +21,6 @@ import mixac1.dangerrpg.init.RPGOther.RPGCreativeTabs;
 import mixac1.dangerrpg.item.IHasBooksInfo;
 import mixac1.dangerrpg.util.IMultiplier.MultiplierAdd;
 import mixac1.dangerrpg.util.Utils;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public abstract class Gem extends Item implements IRPGItem, IHasBooksInfo {
 

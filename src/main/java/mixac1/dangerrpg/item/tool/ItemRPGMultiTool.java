@@ -1,5 +1,18 @@
 package mixac1.dangerrpg.item.tool;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTool;
+import net.minecraft.world.World;
+
 import mixac1.dangerrpg.DangerRPG;
 import mixac1.dangerrpg.api.item.IRPGItem.IRPGItemTool;
 import mixac1.dangerrpg.capability.RPGItemHelper;
@@ -11,18 +24,6 @@ import mixac1.dangerrpg.item.RPGItemComponent;
 import mixac1.dangerrpg.item.RPGItemComponent.RPGToolComponent;
 import mixac1.dangerrpg.item.RPGToolMaterial;
 import mixac1.dangerrpg.util.Utils;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
-import net.minecraft.world.World;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 public class ItemRPGMultiTool extends ItemTool implements IRPGItemTool, IHasBooksInfo {
 

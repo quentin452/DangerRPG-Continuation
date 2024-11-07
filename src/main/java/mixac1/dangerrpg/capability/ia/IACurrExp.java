@@ -1,7 +1,8 @@
 package mixac1.dangerrpg.capability.ia;
 
-import mixac1.dangerrpg.api.item.IADynamic;
 import net.minecraft.item.ItemStack;
+
+import mixac1.dangerrpg.api.item.IADynamic;
 
 public class IACurrExp extends IADynamic {
 

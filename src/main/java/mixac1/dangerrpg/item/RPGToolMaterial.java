@@ -1,11 +1,12 @@
 package mixac1.dangerrpg.item;
 
-import mixac1.dangerrpg.init.RPGOther.RPGItemRarity;
+import java.util.HashMap;
+
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraftforge.common.util.EnumHelper;
 
-import java.util.HashMap;
+import mixac1.dangerrpg.init.RPGOther.RPGItemRarity;
 
 public class RPGToolMaterial implements IMaterialSpecial {
 

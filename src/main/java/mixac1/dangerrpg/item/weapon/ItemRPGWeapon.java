@@ -1,5 +1,10 @@
 package mixac1.dangerrpg.item.weapon;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
+
 import mixac1.dangerrpg.DangerRPG;
 import mixac1.dangerrpg.api.item.IRPGItem.IRPGItemTool;
 import mixac1.dangerrpg.capability.RPGItemHelper;
@@ -10,10 +15,6 @@ import mixac1.dangerrpg.item.IHasBooksInfo;
 import mixac1.dangerrpg.item.RPGItemComponent.RPGToolComponent;
 import mixac1.dangerrpg.item.RPGToolMaterial;
 import mixac1.dangerrpg.util.Utils;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
 
 public class ItemRPGWeapon extends ItemSword implements IRPGItemTool, IHasBooksInfo {
 

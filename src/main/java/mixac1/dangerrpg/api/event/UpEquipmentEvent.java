@@ -1,9 +1,10 @@
 package mixac1.dangerrpg.api.event;
 
-import cpw.mods.fml.common.eventhandler.Event;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+
+import cpw.mods.fml.common.eventhandler.Event;
 
 /**
  * It is fires whenever needs up equipment {@link ItemStack} stack by the points.<br>

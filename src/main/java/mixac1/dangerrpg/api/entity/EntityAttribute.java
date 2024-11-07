@@ -1,5 +1,11 @@
 package mixac1.dangerrpg.api.entity;
 
+import java.util.UUID;
+
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
 import mixac1.dangerrpg.DangerRPG;
 import mixac1.dangerrpg.capability.data.RPGEntityProperties;
 import mixac1.dangerrpg.init.RPGCapability;
@@ -8,11 +14,6 @@ import mixac1.dangerrpg.network.MsgSyncEA;
 import mixac1.dangerrpg.util.ITypeProvider;
 import mixac1.dangerrpg.util.Tuple.Stub;
 import mixac1.dangerrpg.util.Utils;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
-import java.util.UUID;
 
 /**
  * Default entity attribute. It supports any Type, but you must create {@link ITypeProvider} for this Type. <br>

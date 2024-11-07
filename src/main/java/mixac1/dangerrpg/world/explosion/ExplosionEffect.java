@@ -1,12 +1,12 @@
 package mixac1.dangerrpg.world.explosion;
 
+import java.util.ArrayList;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mixac1.dangerrpg.DangerRPG;
 import mixac1.dangerrpg.entity.projectile.EntityMagicOrb;
 import mixac1.dangerrpg.world.RPGEntityFXManager;
-
-import java.util.ArrayList;
 
 public abstract class ExplosionEffect {
 

@@ -1,5 +1,23 @@
 package mixac1.dangerrpg.init;
 
+import java.io.File;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map.Entry;
+
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraftforge.common.config.ConfigCategory;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
+
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.relauncher.FMLInjectionData;
@@ -20,23 +38,6 @@ import mixac1.dangerrpg.util.IMultiplier.Multiplier;
 import mixac1.dangerrpg.util.RPGHelper;
 import mixac1.dangerrpg.util.Tuple.Stub;
 import mixac1.dangerrpg.util.Utils;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraftforge.common.config.ConfigCategory;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
-
-import java.io.File;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map.Entry;
 
 public class RPGConfig {
 
@@ -174,7 +175,8 @@ public class RPGConfig {
             public int guiDamageForTestArmor = 25;
 
             public boolean neiShowShapedRecipe = false;
-            private static final String[] acceptedColors = new String[]{"RED", "GREEN", "BLUE", "YELLOW", "ORANGE", "WHITE", "BLACK", "PURPLE"};
+            private static final String[] acceptedColors = new String[] { "RED", "GREEN", "BLUE", "YELLOW", "ORANGE",
+                "WHITE", "BLACK", "PURPLE" };
             public static Configuration config;
             public static boolean showDamageParticles = true;
             public static boolean showAlways = false;
@@ -295,11 +297,30 @@ public class RPGConfig {
                 d.neiShowShapedRecipe,
                 "Is show default recipes in RPG workbench (need NEI) (true/false)");
 
-            d.showDamageParticles = config.getBoolean("Show Damage Particles", Configuration.CATEGORY_GENERAL, true, "Show Damage Indicators");
-            d.showAlways = config.getBoolean("Show Always Particles", Configuration.CATEGORY_GENERAL, false, "Show Always The Damage Particles");
-            d.size2 = config.get(Configuration.CATEGORY_GENERAL, "Particles Size", d.size2, "Particles Size [default: 3.0]").getDouble();
-            d.healColor = mapColor(config.getString("Heal Color", Configuration.CATEGORY_GENERAL, "GREEN", "Heal Text Color", d.acceptedColors));
-            d.damageColor = mapColor(config.getString("Damage Color", Configuration.CATEGORY_GENERAL, "RED", "Damage Text Color", d.acceptedColors));
+            d.showDamageParticles = config
+                .getBoolean("Show Damage Particles", Configuration.CATEGORY_GENERAL, true, "Show Damage Indicators");
+            d.showAlways = config.getBoolean(
+                "Show Always Particles",
+                Configuration.CATEGORY_GENERAL,
+                false,
+                "Show Always The Damage Particles");
+            d.size2 = config
+                .get(Configuration.CATEGORY_GENERAL, "Particles Size", d.size2, "Particles Size [default: 3.0]")
+                .getDouble();
+            d.healColor = mapColor(
+                config.getString(
+                    "Heal Color",
+                    Configuration.CATEGORY_GENERAL,
+                    "GREEN",
+                    "Heal Text Color",
+                    d.acceptedColors));
+            d.damageColor = mapColor(
+                config.getString(
+                    "Damage Color",
+                    Configuration.CATEGORY_GENERAL,
+                    "RED",
+                    "Damage Text Color",
+                    d.acceptedColors));
 
             save();
         }

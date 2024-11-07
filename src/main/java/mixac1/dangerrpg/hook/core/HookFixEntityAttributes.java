@@ -1,10 +1,7 @@
 package mixac1.dangerrpg.hook.core;
 
-import mixac1.dangerrpg.entity.projectile.EntityRPGArrow;
-import mixac1.dangerrpg.init.RPGOther;
-import mixac1.dangerrpg.util.RPGHelper;
-import mixac1.hooklib.asm.Hook;
-import mixac1.hooklib.asm.ReturnCondition;
+import java.util.List;
+
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -23,7 +20,11 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.EnumDifficulty;
 
-import java.util.List;
+import mixac1.dangerrpg.entity.projectile.EntityRPGArrow;
+import mixac1.dangerrpg.init.RPGOther;
+import mixac1.dangerrpg.util.RPGHelper;
+import mixac1.hooklib.asm.Hook;
+import mixac1.hooklib.asm.ReturnCondition;
 
 public class HookFixEntityAttributes {
 

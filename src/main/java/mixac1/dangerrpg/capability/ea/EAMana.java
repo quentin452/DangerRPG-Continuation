@@ -1,10 +1,11 @@
 package mixac1.dangerrpg.capability.ea;
 
-import mixac1.dangerrpg.api.entity.EntityAttribute;
-import mixac1.dangerrpg.capability.PlayerAttributes;
+import java.util.UUID;
+
 import net.minecraft.entity.EntityLivingBase;
 
-import java.util.UUID;
+import mixac1.dangerrpg.api.entity.EntityAttribute;
+import mixac1.dangerrpg.capability.PlayerAttributes;
 
 public class EAMana extends EntityAttribute.EAFloat {
 

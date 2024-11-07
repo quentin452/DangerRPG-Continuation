@@ -1,6 +1,21 @@
 package mixac1.dangerrpg.util;
 
+import java.util.*;
+import java.util.Map.Entry;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.*;
+
 import com.google.common.collect.Multimap;
+
 import mixac1.dangerrpg.api.item.IRPGItem;
 import mixac1.dangerrpg.api.item.IRPGItem.IRPGItemArmor;
 import mixac1.dangerrpg.api.item.IRPGItem.IRPGItemTool;
@@ -14,19 +29,6 @@ import mixac1.dangerrpg.item.gem.Gem;
 import mixac1.dangerrpg.util.IMultiplier.Multiplier;
 import mixac1.dangerrpg.util.IMultiplier.MultiplierAdd;
 import mixac1.dangerrpg.util.IMultiplier.MultiplierMul;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.*;
-
-import java.util.*;
-import java.util.Map.Entry;
 
 public abstract class RPGHelper {
 

@@ -1,5 +1,11 @@
 package mixac1.dangerrpg.init;
 
+import java.util.HashMap;
+
+import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.MinecraftForgeClient;
+
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -13,11 +19,6 @@ import mixac1.dangerrpg.client.render.item.RenderStaff.RenderPowerStaff;
 import mixac1.dangerrpg.entity.projectile.*;
 import mixac1.dangerrpg.entity.projectile.core.EntityMaterial;
 import mixac1.dangerrpg.entity.projectile.core.EntityProjectile;
-import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.MinecraftForgeClient;
-
-import java.util.HashMap;
 
 @SideOnly(Side.CLIENT)
 public abstract class RPGRenderers {

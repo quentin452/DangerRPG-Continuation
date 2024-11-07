@@ -1,14 +1,5 @@
 package mixac1.dangerrpg.hook.core;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import mixac1.dangerrpg.api.item.IRPGItem;
-import mixac1.dangerrpg.api.item.IRPGItem.IRPGItemBow;
-import mixac1.dangerrpg.capability.ItemAttributes;
-import mixac1.dangerrpg.capability.RPGItemHelper;
-import mixac1.hooklib.asm.Hook;
-import mixac1.hooklib.asm.Hook.ReturnValue;
-import mixac1.hooklib.asm.ReturnCondition;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -24,6 +15,16 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import mixac1.dangerrpg.api.item.IRPGItem;
+import mixac1.dangerrpg.api.item.IRPGItem.IRPGItemBow;
+import mixac1.dangerrpg.capability.ItemAttributes;
+import mixac1.dangerrpg.capability.RPGItemHelper;
+import mixac1.hooklib.asm.Hook;
+import mixac1.hooklib.asm.Hook.ReturnValue;
+import mixac1.hooklib.asm.ReturnCondition;
 
 public class HookItemBow {
 

@@ -1,5 +1,9 @@
 package mixac1.dangerrpg.proxy;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -8,15 +12,13 @@ import cpw.mods.fml.relauncher.Side;
 import mixac1.dangerrpg.init.*;
 import mixac1.dangerrpg.util.RPGTicks;
 import mixac1.dangerrpg.world.RPGEntityFXManager.IEntityFXType;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 
 public class CommonProxy {
 
     protected RPGTicks serverTicks = new RPGTicks();
-    public void displayDamageDealt(EntityLivingBase entityLiving) {
-    }
+
+    public void displayDamageDealt(EntityLivingBase entityLiving) {}
+
     public void preInit(FMLPreInitializationEvent e) {
         RPGAnotherMods.load(e);
 

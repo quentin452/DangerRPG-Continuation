@@ -1,9 +1,10 @@
 package mixac1.dangerrpg.capability.gt;
 
-import mixac1.dangerrpg.api.item.GemType;
-import mixac1.dangerrpg.item.gem.GemPassiveAttribute;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+
+import mixac1.dangerrpg.api.item.GemType;
+import mixac1.dangerrpg.item.gem.GemPassiveAttribute;
 
 public class GTPassiveAttribute extends GemType {
 

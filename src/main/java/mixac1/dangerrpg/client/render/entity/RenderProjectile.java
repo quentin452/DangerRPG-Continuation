@@ -3,6 +3,7 @@ package mixac1.dangerrpg.client.render.entity;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 
 public abstract class RenderProjectile extends Render {

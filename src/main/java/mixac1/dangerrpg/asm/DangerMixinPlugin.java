@@ -1,6 +1,5 @@
 package mixac1.dangerrpg.asm;
 
-import mixac1.dangerrpg.config.DangerConfig;
 import org.apache.logging.log4j.Logger;
 
 import com.falsepattern.lib.config.ConfigException;
@@ -10,6 +9,7 @@ import com.falsepattern.lib.mixin.IMixinPlugin;
 import com.falsepattern.lib.mixin.ITargetedMod;
 
 import lombok.Getter;
+import mixac1.dangerrpg.config.DangerConfig;
 
 public class DangerMixinPlugin implements IMixinPlugin {
 

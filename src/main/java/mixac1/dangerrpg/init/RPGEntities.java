@@ -1,5 +1,8 @@
 package mixac1.dangerrpg.init;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.tileentity.TileEntity;
+
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -9,8 +12,6 @@ import mixac1.dangerrpg.entity.projectile.core.EntityMaterial;
 import mixac1.dangerrpg.entity.projectile.core.EntityProjectile;
 import mixac1.dangerrpg.entity.projectile.core.EntityThrowRPGItem;
 import mixac1.dangerrpg.tileentity.TileEntityEmpty;
-import net.minecraft.entity.Entity;
-import net.minecraft.tileentity.TileEntity;
 
 public abstract class RPGEntities {
 

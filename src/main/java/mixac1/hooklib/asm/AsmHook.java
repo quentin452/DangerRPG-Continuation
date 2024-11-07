@@ -1,16 +1,17 @@
 package mixac1.hooklib.asm;
 
-import mixac1.hooklib.asm.HookInjectorFactory.MethodEnter;
-import mixac1.hooklib.asm.HookInjectorFactory.MethodExit;
-import org.objectweb.asm.Label;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
+import static org.objectweb.asm.Opcodes.*;
+import static org.objectweb.asm.Type.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.objectweb.asm.Opcodes.*;
-import static org.objectweb.asm.Type.*;
+import org.objectweb.asm.Label;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
+
+import mixac1.hooklib.asm.HookInjectorFactory.MethodEnter;
+import mixac1.hooklib.asm.HookInjectorFactory.MethodExit;
 
 public class AsmHook implements Cloneable, Comparable<AsmHook> {
 

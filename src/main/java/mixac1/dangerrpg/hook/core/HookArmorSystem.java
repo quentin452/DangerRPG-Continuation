@@ -1,14 +1,8 @@
 package mixac1.dangerrpg.hook.core;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import mixac1.dangerrpg.capability.ItemAttributes;
-import mixac1.dangerrpg.capability.PlayerAttributes;
-import mixac1.dangerrpg.init.RPGConfig.ClientConfig;
-import mixac1.dangerrpg.init.RPGOther.RPGDamageSource;
-import mixac1.dangerrpg.util.Utils;
-import mixac1.hooklib.asm.Hook;
-import mixac1.hooklib.asm.ReturnCondition;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,8 +12,15 @@ import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.ISpecialArmor;
 import net.minecraftforge.common.ISpecialArmor.ArmorProperties;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import mixac1.dangerrpg.capability.ItemAttributes;
+import mixac1.dangerrpg.capability.PlayerAttributes;
+import mixac1.dangerrpg.init.RPGConfig.ClientConfig;
+import mixac1.dangerrpg.init.RPGOther.RPGDamageSource;
+import mixac1.dangerrpg.util.Utils;
+import mixac1.hooklib.asm.Hook;
+import mixac1.hooklib.asm.ReturnCondition;
 
 public class HookArmorSystem {
 

@@ -1,5 +1,13 @@
 package mixac1.dangerrpg.capability;
 
+import java.util.ArrayList;
+import java.util.Set;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.*;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.MinecraftForge;
+
 import mixac1.dangerrpg.api.event.ItemStackEvent.UpMaxLevelEvent;
 import mixac1.dangerrpg.api.event.RegIAEvent;
 import mixac1.dangerrpg.api.event.UpEquipmentEvent;
@@ -20,13 +28,6 @@ import mixac1.dangerrpg.util.IMultiplier;
 import mixac1.dangerrpg.util.IMultiplier.Multiplier;
 import mixac1.dangerrpg.util.IMultiplier.MultiplierMul;
 import mixac1.dangerrpg.util.IMultiplier.MultiplierSQRT;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.*;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.MinecraftForge;
-
-import java.util.ArrayList;
-import java.util.Set;
 
 public abstract class RPGItemHelper {
 
